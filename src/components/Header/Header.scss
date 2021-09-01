@@ -1,0 +1,39 @@
+header {
+    background: #302f3d;
+    position: relative;
+    z-index: 20;
+    nav {
+        .container {
+            max-width: 100%;
+            padding: 0 16px;
+            font-weight: 500;
+            .header__nav {
+                color: #fff;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text-decoration: none;
+                img {
+                    margin-right: 10px;
+                }
+            }
+            #basic-navbar-nav a {
+                color: #fff;
+            }
+        }
+    }
+}
+@media (max-width: 575px) {
+    header {
+        font-size: 12px;
+        nav {
+            .container {
+                #basic-navbar-nav  {
+                    .button__login, .button__signup {
+                        font-size: 12px;
+                    }
+                }
+            }
+        }
+    }
+}
