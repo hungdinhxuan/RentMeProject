@@ -16,12 +16,12 @@ function Header() {
               height="50"
               className="d-inline-block align-top"
             />{" "}
-            <span>Rent Me</span>
+            <span style={{color: "orange"}}>Rent Me</span>
           </NavLink>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="#home">Home</Nav.Link>
+              <Nav.Link href="#home">StreamHub</Nav.Link>
               <Nav.Link href="#link">Link</Nav.Link>
             </Nav>
             <div className="justify-content-end">
