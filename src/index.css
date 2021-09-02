@@ -1,6 +1,8 @@
 
 :root{
   --text-hover: #7041e6;
+  --color-button: #21212C;
+  --button-hover: #4f4e60;
 }
 *{
   padding: 0;
@@ -19,7 +21,7 @@ body {
   font-size: 100%;
 }
 #root {
-  min-width: 1100px;
+  /* min-width: 1100px; */
 }
 
 #root,body, html {

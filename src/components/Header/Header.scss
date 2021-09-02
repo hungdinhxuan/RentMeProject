@@ -2,11 +2,13 @@ header {
     background: #302f3d;
     position: relative;
     z-index: 20;
+    width: 100%;
     nav {
         .container {
-            max-width: 100%;
             padding: 0 16px;
             font-weight: 500;
+            margin: 0;
+            max-width: 100%;
             .header__nav {
                 color: #fff;
                 display: flex;
@@ -17,19 +19,104 @@ header {
                     margin-right: 10px;
                 }
             }
-            #basic-navbar-nav a {
-                color: #fff;
+
+            #basic-navbar-nav {
+                position: relative;
+
+                .button__login,
+                .button__signup {
+                    border-radius: 4px;
+                    padding: 0 16px;
+                    border: none;
+                    min-width: 80px;
+                    box-shadow: none;
+                    color: #fff;
+                    font-weight: 500;
+                    height: 32px;
+                }
+                .button__login {
+                    background: var(--color-button);
+                    &:hover {
+                        background: var(--button-hover);
+                    }
+                }
+                .button__signup {
+                    background: var(--text-hover);
+                    &:hover {
+                        background: #8d65ea;
+                    }
+                }
+
+                
+                & a {
+                    color: #fff;
+                    text-decoration: none;
+                }
+                .nav__item {
+                    position: relative;
+                    transition: all 0.5s;
+                    &::after {
+                        content: "";
+                        position: absolute;
+                        left: 0;
+                        bottom: -20px;
+                        height: 5px;
+                        width: 0;
+                        opacity: 0;
+                        background: var(--text-hover);
+                        transition: all 0.5s;
+                    }
+                    &:hover {
+                        color: var(--text-hover);
+                        &::after {
+                            opacity: 1;
+                            width: 100%;
+                        }
+                        // border-bottom: 5px solid var(--text-hover);
+                    }
+                }
             }
         }
     }
 }
+
+@media (max-width: 991px) {
+    header {
+        font-size: 14px;
+        nav {
+            .container {
+                #basic-navbar-nav {
+                    .button__login,
+                    .button__signup {
+                        font-size: 14px;
+                    }
+                    .nav__item {
+                        &:hover {
+                            color: var(--text-hover);
+                            &::after {
+                                width: 0;
+                                opacity: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
 @media (max-width: 575px) {
     header {
         font-size: 12px;
         nav {
             .container {
-                #basic-navbar-nav  {
-                    .button__login, .button__signup {
+                .header__nav img {
+                    width: 30px;
+                    height: 30px;
+                }
+                #basic-navbar-nav {
+                    .button__login,
+                    .button__signup {
                         font-size: 12px;
                     }
                 }
