@@ -8,7 +8,7 @@ function App() {
     <div className="App">
       <Suspense fallback={<div>Loading...</div>}>
         <BrowserRouter>
-          {/* <Header /> */}
+          <Header />
           <CarouselHeader/>
         </BrowserRouter>
       </Suspense>
