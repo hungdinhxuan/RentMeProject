@@ -25,7 +25,7 @@ body {
 }
 
 #root,body, html {
-  /* overflow: hidden; */
+  overflow: hidden;
   background: #120E1B;
   height: 100%;
   margin: 0 auto;

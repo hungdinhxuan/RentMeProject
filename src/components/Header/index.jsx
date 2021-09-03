@@ -14,7 +14,7 @@ function Header() {
     <header>
       <Navbar expand="lg">
         <Container>
-          <NavLink to="/" className="header__nav">
+          <NavLink exact to="/" className="header__nav">
             <img
               alt="Logo Home"
               src="/player-dou-a.jpg"
@@ -27,33 +27,46 @@ function Header() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="/streamhub">
-                <NavLink to="/streamhub" className="nav__item">
+              <Nav.Link href="javascript:void(0)">
+                <NavLink
+                  to="/streamhub"
+                  className="nav__item"
+                  activeClassName="nav__item--active"
+                >
                   StreamHub
                 </NavLink>
               </Nav.Link>
-              <Nav.Link>
-                <NavLink to="/news" className="nav__item">
+              <Nav.Link href="javascript:void(0)">
+                <NavLink
+                  to="/news"
+                  className="nav__item"
+                  activeClassName="nav__item--active"
+                >
                   News
                 </NavLink>
               </Nav.Link>
-              <Nav.Link>
-                <NavLink to="/playerdou" className="nav__item">
+              <Nav.Link href="javascript:void(0)">
+                <NavLink
+                  to="/playerdou"
+                  className="nav__item"
+                  activeClassName="nav__item--active"
+                >
                   Thuê người chơi
                 </NavLink>
               </Nav.Link>
-              <Nav.Link>
-                <NavLink to="/bxh" className="nav__item">
+              <Nav.Link href="javascript:void(0)">
+                <NavLink
+                  to="/bxh"
+                  className="nav__item"
+                  activeClassName="nav__item--active"
+                >
                   BXH
                 </NavLink>
               </Nav.Link>
             </Nav>
             <div className="justify-content-end">
               <button className="button__login">Log in</button>
-              <button
-                style={{ marginLeft: "12px" }}
-                className="button__signup"
-              >
+              <button style={{ marginLeft: "12px" }} className="button__signup">
                 Sign up
               </button>
             </div>

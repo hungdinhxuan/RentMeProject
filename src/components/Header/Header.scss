@@ -22,7 +22,9 @@ header {
 
             #basic-navbar-nav {
                 position: relative;
-
+                .nav-link {
+                    cursor: context-menu;
+                }
                 .button__login,
                 .button__signup {
                     border-radius: 4px;
@@ -38,6 +40,7 @@ header {
                     background: var(--color-button);
                     &:hover {
                         background: var(--button-hover);
+                        border: 1px solid rgb(255, 255, 255);
                     }
                 }
                 .button__signup {
@@ -47,7 +50,6 @@ header {
                     }
                 }
 
-                
                 & a {
                     color: #fff;
                     text-decoration: none;
@@ -74,6 +76,21 @@ header {
                         }
                         // border-bottom: 5px solid var(--text-hover);
                     }
+                    &--active {
+                        color: var(--text-hover);
+                        position: relative;
+                        &::after {
+                            content: "";
+                            position: absolute;
+                            left: 0;
+                            bottom: -20px;
+                            height: 5px;
+                            width: 100%;
+                            opacity: 1;
+                            background: var(--text-hover);
+                            transition: all 0.5s;
+                        }
+                    }
                 }
             }
         }
@@ -98,6 +115,13 @@ header {
                                 opacity: 0;
                             }
                         }
+                        &--active {
+                            color: var(--text-hover);
+                            position: relative;
+                            &::after {
+                                display: none;
+                            }
+                        }
                     }
                 }
             }
@@ -119,6 +143,13 @@ header {
                     .button__signup {
                         font-size: 12px;
                     }
+                }
+                .navbar-toggler {
+                    width: 40px;
+                    height: 40px;
+                    justify-content: center;
+                    display: flex;
+                    align-items: center;
                 }
             }
         }
