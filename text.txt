@@ -1,0 +1,8 @@
+--Responsive: Desktop-first
+--Breakpoint: 
++ Small: 576px
++ Medium: 768px
++ large: 992px
++ extra: 1200px hoặc 1400px
+
+max-width của boostrap: 1920px
