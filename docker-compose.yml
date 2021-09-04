@@ -1,6 +1,20 @@
 version: "3.3"
 services:
+  jenkins:
+    image: jenkins/jenkins:lts-jdk11
+    container_name: jenkins
+    user: root
+    volumes:
+      - /var/jenkins_home:/var/jenkins_home
+      - /var/jenkins_home/log:/var/log
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - 8080:8080
+      - 50000:50000
+    networks:
+      - rentme-networks
   frontend:
+    container_name: frontend-rentme-react  
     build: .
     ports:
       - 80:80
@@ -9,6 +23,7 @@ services:
     networks:
       - rentme-networks
   backend:
+    container_name: backend-rentme-nestjs
     build: ./backend
     ports:
       - 4000:4000
