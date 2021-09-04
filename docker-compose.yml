@@ -1,5 +1,5 @@
-version: "3"
-servies:
+version: "3.3"
+services:
   frontend:
     build: .
     ports:
