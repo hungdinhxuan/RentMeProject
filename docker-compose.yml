@@ -1,9 +1,8 @@
 version: "3.3"
 services:
   jenkins:
-    image: jenkins/jenkins:lts-jdk11
+    build: ./jenkins
     container_name: jenkins
-    user: root
     volumes:
       - /var/jenkins_home:/var/jenkins_home
       - /var/jenkins_home/log:/var/log
