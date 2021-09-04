@@ -9,9 +9,11 @@ function App() {
       <Suspense fallback={<div>Loading...</div>}>
         <BrowserRouter>
           <Header />
+          
           <CarouselHeader/>
         </BrowserRouter>
       </Suspense>
+      <h1 className="text-center text-danger"> Test CI/CD Succesfully !!!</h1>
     </div>
   );
 }
