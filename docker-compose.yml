@@ -1,17 +1,5 @@
 version: "3.3"
 services:
-  jenkins:
-    build: ./jenkins
-    container_name: jenkins
-    volumes:
-      - /var/jenkins_home:/var/jenkins_home
-      - /var/jenkins_home/log:/var/log
-      - /var/run/docker.sock:/var/run/docker.sock
-    ports:
-      - 8080:8080
-      - 50000:50000
-    networks:
-      - rentme-networks
   frontend:
     container_name: frontend-rentme-react  
     build: .
