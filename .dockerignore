@@ -1,0 +1,7 @@
+node_modules
+README.md
+yarn.lock
+.git
+.gitignore
+backend
+build
