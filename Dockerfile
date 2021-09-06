@@ -19,4 +19,4 @@ RUN  apt-get update \
       && crontab /etc/cron.d/certbot-renew
 VOLUME /etc/letsencrypt
 CMD [ "sh", "-c", "cron && nginx -g 'daemon off;'" ]
-EXPOSE 3000
+

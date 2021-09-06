@@ -12,7 +12,7 @@ services:
       - 443:443
     volumes: 
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ./letsencrypt:/etc/letsencrypt
+      - letsencrypt:/etc/letsencrypt
     networks:
       - rentme-networks
     restart: always
@@ -25,4 +25,5 @@ services:
       - rentme-networks
 networks:
   rentme-networks:
-    
+volumes:
+    letsencrypt:
