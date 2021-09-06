@@ -1,10 +1,10 @@
-
-:root{
+:root {
   --text-hover: #7041e6;
-  --color-button: #21212C;
+  --color-button: #21212c;
   --button-hover: #4f4e60;
+  --button-hover1: #8d65ea;
 }
-*{
+* {
   padding: 0;
   margin: 0;
 }
@@ -24,9 +24,11 @@ body {
   /* min-width: 1100px; */
 }
 
-#root,body, html {
+#root,
+body,
+html {
   overflow: hidden;
-  background: #120E1B;
+  background: #120e1b;
   height: 100%;
   margin: 0 auto;
   padding: 0;
@@ -34,6 +36,15 @@ body {
 }
 .container {
   height: 100%;
+}
+
+.button {
+  padding: 0 16px;
+  min-width: 80px;
+  font-size: 100%;
+  font-weight: 500;
+  border-radius: 20px;
+  height: 32px;
 }
 
 code {
