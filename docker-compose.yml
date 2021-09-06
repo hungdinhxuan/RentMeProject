@@ -8,8 +8,13 @@ services:
       - 443:443
     volumes: 
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./letsencrypt:/etc/letsencrypt
     networks:
       - rentme-networks
+    args:
+      - CERTBOT_EMAIL=dinhhungGM@gmail.com
+      - DOMAIN_LIST=www.rentme.games,rentme.games
+    restart: always
   backend:
     container_name: backend-rentme-nestjs
     build: ./backend
