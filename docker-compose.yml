@@ -2,7 +2,11 @@ version: "3.3"
 services:
   frontend:
     container_name: frontend-rentme-react  
-    build: .
+    build:
+      context: .
+      args:
+      - CERTBOT_EMAIL=dinhhungGM@gmail.com
+      - DOMAIN_LIST=www.rentme.games,rentme.games
     ports:
       - 80:80
       - 443:443
@@ -11,9 +15,6 @@ services:
       - ./letsencrypt:/etc/letsencrypt
     networks:
       - rentme-networks
-    args:
-      - CERTBOT_EMAIL=dinhhungGM@gmail.com
-      - DOMAIN_LIST=www.rentme.games,rentme.games
     restart: always
   backend:
     container_name: backend-rentme-nestjs
