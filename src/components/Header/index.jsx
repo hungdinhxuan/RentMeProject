@@ -4,12 +4,13 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import { NavLink, useHistory, useLocation } from "react-router-dom";
 import "./Header.scss";
 
+
 function Header() {
   const [header, setHeader] = useState(false);
   const history = useHistory();
 
   const handleLogin = () => {
-    history.push("/SignIn");
+    history.push("/Login");
   };
 
   return (

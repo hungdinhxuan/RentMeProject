@@ -1,0 +1,21 @@
+.MuiGrid-root {
+    div {
+        img {
+            display: block;
+            font-size: 14px !important;
+        }
+    }
+    .MuiInput-underline:after {
+        border-bottom: none;
+        
+    }
+    .MuiInput-underline:not(.Mui-disabled):before{
+        border: none;
+    }
+    .MuiInput-underline:hover:not(.Mui-disabled):before {
+        border: none
+    }
+    .MuiTypography-h5 {
+        font-weight: 500;
+    }
+}
