@@ -1,14 +1,16 @@
+import PageNotFound from "components/PageNotFound";
 import React, { useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory, useLocation } from "react-router-dom";
 import "./Header.scss";
 
 function Header() {
   const [header, setHeader] = useState(false);
+  const history = useHistory();
 
-  // if (window.pageYOffset) {
-  //   setHeader(true);
-  // }
+  const handleLogin = () => {
+    history.push("/SignIn");
+  };
 
   return (
     <header>
@@ -65,7 +67,9 @@ function Header() {
               </Nav.Link>
             </Nav>
             <div className="justify-content-end">
-              <button className="button__login">Log in</button>
+              <button className="button__login" onClick={handleLogin}>
+                Log in
+              </button>
               <button style={{ marginLeft: "12px" }} className="button__signup">
                 Sign up
               </button>

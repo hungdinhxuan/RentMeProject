@@ -5,6 +5,7 @@ import Anh1 from "assets/Carousel/1.gif";
 import Anh2 from "assets/Carousel/2.gif";
 import Anh3 from "assets/Carousel/3.gif";
 import Anh4 from "assets/Carousel/4.gif";
+import Header from "components/Header";
 
 function CarouselHeader() {
   const handleChange = (e) => {
