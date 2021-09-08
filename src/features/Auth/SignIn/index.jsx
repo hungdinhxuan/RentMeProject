@@ -16,14 +16,19 @@ import { Link } from "react-router-dom";
 import "./SignIn.scss";
 import Google from "assets/google.png";
 import Facebook from "assets/facebook.png";
-import { FormLabel } from '@material-ui/core';
-
+import { FormLabel } from "@material-ui/core";
+import AnhBackGround from "assets/acct_creation_bg.jpg";
 
 function Copyright() {
   return (
-    <Typography variant="body2" color="textSecondary" align="center">
+    <Typography
+      variant="body2"
+      color="textSecondary"
+      align="center"
+      style={{ color: "#C4C3E6" }}
+    >
       {"Thuộc sở hữu © "}
-      <Link color="inherit" href="https://material-ui.com/">
+      <Link color="inherit" to="/">
         RentMe
       </Link>{" "}
       {new Date().getFullYear()}
@@ -35,23 +40,16 @@ function Copyright() {
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "100vh",
+    justifyContent: "center",
+    backgroundImage: `url(${AnhBackGround})`,
   },
-  image: {
-    backgroundImage: "url(https://source.unsplash.com/random)",
-    backgroundRepeat: "no-repeat",
-    backgroundColor:
-      theme.palette.type === "light"
-        ? theme.palette.grey[50]
-        : theme.palette.grey[900],
-    backgroundSize: "cover",
-    backgroundPosition: "center",
-  },
+
   paper: {
     margin: theme.spacing(8, 4),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    color: "#fff",
+    color: "#C4C3E6",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -93,9 +91,8 @@ export default function SignIn() {
   const classes = useStyles();
 
   return (
-    <Grid container component="main" className={classes.root}>
+    <Grid container component="main" maxWidth="xs" className={classes.root}>
       <CssBaseline />
-      <Grid item xs={false} sm={4} md={7} className={classes.image} />
       <Grid
         item
         xs={12}
@@ -153,7 +150,7 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link to="/SignUp" variant="body2">
+                <Link to="/SignUp" variant="body2" style={{ color: "#AF93EF" }}>
                   {"Đăng ký tài khoản"}
                 </Link>
               </Grid>
