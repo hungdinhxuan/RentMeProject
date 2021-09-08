@@ -5,7 +5,6 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-// import Link from "@material-ui/core/Link";
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
@@ -25,7 +24,7 @@ function Copyright() {
       variant="body2"
       color="textSecondary"
       align="center"
-      style={{ color: "#C4C3E6" }}
+      style={{ color: "#C4C3E6", fontSize: "20px" }}
     >
       {"Thuộc sở hữu © "}
       <Link color="inherit" to="/">
@@ -50,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     alignItems: "center",
     color: "#C4C3E6",
+    fontSize: "14px",
   },
   avatar: {
     margin: theme.spacing(1),
@@ -58,16 +58,25 @@ const useStyles = makeStyles((theme) => ({
   form: {
     width: "100%", // Fix IE 11 issue.
     marginTop: theme.spacing(1),
+    height: "40px",
+    fontSize: "14px",
     "& label": {
       color: "#a7a7c6",
+      fontSize: "14px",
     },
     "& input": {
       color: "#fff",
       border: "1px solid #4F4E60",
+      height: "28px",
+      borderRadius: "4px",
+    },
+    "& span": {
+      fontSize: "14px",
     },
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+    color: "#fff",
     background: "#8d65ea",
     "&:hover": {
       background: "#AF93EF",
@@ -84,6 +93,7 @@ const useStyles = makeStyles((theme) => ({
   },
   FormBackground: {
     backgroundColor: "#302F3D",
+    maxWidth: "500px",
   },
 }));
 
@@ -110,24 +120,21 @@ export default function SignIn() {
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <form className={classes.form} noValidate>
+          <form className={classes.form} noValidate autoComplete="off">
             <FormLabel>Tài Khoản</FormLabel>
             <TextField
-              margin="normal"
               fullWidth
               id="email"
               name="username"
               placeholder="Nhập tài khoản"
               autoFocus
             />
-            <FormLabel>Mật Khẩu</FormLabel>
+            <FormLabel className="mt-3">Mật Khẩu</FormLabel>
             <TextField
-              margin="normal"
               fullWidth
               name="password"
               type="password"
               id="password"
-              autoComplete="current-password"
               placeholder="Nhập mật khẩu"
             />
             <FormControlLabel
@@ -138,7 +145,6 @@ export default function SignIn() {
               type="submit"
               fullWidth
               variant="contained"
-              color="primary"
               className={classes.submit}
             >
               Đăng nhập
@@ -158,14 +164,14 @@ export default function SignIn() {
             <hr />
             <Grid container>
               <Grid item xs>
-                <Typography>Hoặc</Typography>
+                <Typography style={{ fontSize: "14px" }}>Hoặc</Typography>
               </Grid>
               <div className={classes.Anh}>
                 <img src={Google} alt="google" />
                 <img src={Facebook} alt="Facebook" />
               </div>
             </Grid>
-            <Box mt={5}>
+            <Box mt={8}>
               <Copyright />
             </Box>
           </form>
