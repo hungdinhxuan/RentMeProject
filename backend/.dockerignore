@@ -5,4 +5,3 @@ yarn.lock
 .gitignore
 .eslintrc.js
 .prettierrc
-build
