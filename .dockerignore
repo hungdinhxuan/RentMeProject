@@ -4,3 +4,4 @@ yarn.lock
 .git
 .gitignore
 backend
+build
