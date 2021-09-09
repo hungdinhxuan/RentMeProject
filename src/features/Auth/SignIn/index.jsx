@@ -117,7 +117,7 @@ export default function SignIn() {
     console.log(data);
     reset();
   };
-
+  
   const onCaptchaChange = (value) => {
     console.log("Captcha value:", value);
   }
@@ -210,7 +210,7 @@ export default function SignIn() {
                   }}
                 >
                   <ReCAPTCHA
-                    sitekey="6LcbfFYcAAAAAFqgi4EMnLAnF70_s37R5pj2tGke"
+                    sitekey={`${process.env.REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY}`}
                     onChange={onCaptchaChange}
                   />
                   
