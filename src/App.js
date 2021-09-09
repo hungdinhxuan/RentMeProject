@@ -6,6 +6,7 @@ import Applayout from "components/Applayout";
 import NotFound from "components/NotFound";
 import SignIn from "features/Auth/SignIn";
 import "bootstrap/dist/css/bootstrap.min.css";
+import SignUp from "features/Auth/SignUp";
 
 const CarouselHeader = lazy(() => import("features/Home/Carousel"));
 function App() {
@@ -23,7 +24,8 @@ function App() {
             render={({ location }) => {
               if (
                 location.pathname !== "/404" &&
-                location.pathname !== "/Login"
+                location.pathname !== "/Login" &&
+                location.pathname !== "/SignUp"
               )
                 return <Header />;
             }}
@@ -32,6 +34,7 @@ function App() {
           <Switch>
             <Route exact path="/" component={CarouselHeader} />
             <Route exact path="/Login" component={SignIn} />
+            <Route exact path="/SignUp" component={SignUp} />
             <Route exact path="/404" component={PageNotFound} />
             <Route path="*" component={NotFound} />
           </Switch>
