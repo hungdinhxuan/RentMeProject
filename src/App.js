@@ -34,6 +34,7 @@ function App() {
             <Route exact path="/" component={CarouselHeader} />
             <Route exact path="/signin" component={SignIn} />
             <Route exact path="/signup" component={SignUp} />
+            <Route exact path="/aduvip" render={() => <div><h1>Adu vip</h1></div> } />
             <Route exact path="/404" component={PageNotFound} />
             <Route path="*" component={NotFound} />
           </Switch>
