@@ -37,6 +37,8 @@
             font-weight: 900;
             color: #fff;
             line-height: 72px;
+            animation-name: animationTitle;
+            animation-duration: 2s;
         }
         &--search {
             .search__input {
@@ -152,6 +154,17 @@
                 }
             }
         }
+    }
+}
+
+@keyframes animationTitle {
+    0% {
+        opacity: 0;
+        transform: translateX(-150px)
+    }
+    50% {
+        opacity: 1;
+        transform:translateX(0);
     }
 }
 

@@ -1,0 +1,13 @@
+@media only screen and (max-width: 768px) {
+    .MuiGrid-root {
+        padding: 0 !important;
+        .capcha {
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        .MuiBox-root-9{
+            display: none;
+        }
+    }
+}

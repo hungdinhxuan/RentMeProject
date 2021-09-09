@@ -18,6 +18,9 @@ import Facebook from "assets/facebook.png";
 import { FormLabel } from "@material-ui/core";
 import AnhBackGround from "assets/acct_creation_bg.jpg";
 
+// React-hook-form
+import { useForm } from "react-hook-form";
+
 function Copyright() {
   return (
     <Typography
@@ -41,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
     height: "100vh",
     justifyContent: "center",
     backgroundImage: `url(${AnhBackGround})`,
+    padding: "130px 0",
   },
 
   paper: {
@@ -67,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
     "& input": {
       color: "#fff",
       border: "1px solid #4F4E60",
-      height: "28px",
+      height: "40px",
       borderRadius: "4px",
     },
     "& span": {
@@ -95,10 +99,25 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#302F3D",
     maxWidth: "500px",
   },
+  Hover: {
+    "&:hover": {
+      color: "#8d65ea !important",
+    },
+  },
 }));
 
 export default function SignIn() {
   const classes = useStyles();
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm();
+  const onSubmit = (data) => {
+    console.log(data);
+    reset();
+  };
 
   return (
     <Grid container component="main" maxWidth="xs" className={classes.root}>
@@ -118,9 +137,14 @@ export default function SignIn() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Đăng nhập
           </Typography>
-          <form className={classes.form} noValidate autoComplete="off">
+          <form
+            className={classes.form}
+            noValidate
+            autoComplete="off"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <FormLabel>Tài Khoản</FormLabel>
             <TextField
               fullWidth
@@ -128,6 +152,7 @@ export default function SignIn() {
               name="username"
               placeholder="Nhập tài khoản"
               autoFocus
+              {...register("username")}
             />
             <FormLabel className="mt-3">Mật Khẩu</FormLabel>
             <TextField
@@ -136,11 +161,13 @@ export default function SignIn() {
               type="password"
               id="password"
               placeholder="Nhập mật khẩu"
+              {...register("password")}
             />
-            <FormControlLabel
-              control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
-            />
+            <Grid item xs style={{ marginTop: "5px" }}>
+              <Link to="/forgot-password" style={{ color: "#AF93EF" }}>
+                Quên mật khẩu
+              </Link>
+            </Grid>
             <Button
               type="submit"
               fullWidth
@@ -151,22 +178,32 @@ export default function SignIn() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link to="/" style={{ color: "#AF93EF" }}>
+                <Link
+                  to="/"
+                  style={{ color: "#AF93EF" }}
+                  className={classes.Hover}
+                >
                   Trở về Trang Chủ
                 </Link>
               </Grid>
               <Grid item>
-                <Link to="/SignUp" variant="body2" style={{ color: "#AF93EF" }}>
+                <Link to="/signup" variant="body2" style={{ color: "#AF93EF" }} className={classes.Hover}>
                   {"Đăng ký tài khoản"}
                 </Link>
               </Grid>
             </Grid>
             <hr />
-            <Grid container>
+            <Grid container className="capcha">
               <Grid item xs>
-                <Typography style={{ fontSize: "14px" }}>Hoặc</Typography>
+                <div
+                  style={{
+                    height: "74px",
+                    width: "300px",
+                    border: "1px solid white",
+                  }}
+                ></div>
               </Grid>
-              <div className={classes.Anh}>
+              <div className={`${classes.Anh} align-items-center`}>
                 <img src={Google} alt="google" />
                 <img src={Facebook} alt="Facebook" />
               </div>

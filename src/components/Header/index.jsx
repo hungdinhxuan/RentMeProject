@@ -4,13 +4,16 @@ import { Container, Nav, Navbar } from "react-bootstrap";
 import { NavLink, useHistory, useLocation } from "react-router-dom";
 import "./Header.scss";
 
-
 function Header() {
   const [header, setHeader] = useState(false);
   const history = useHistory();
 
   const handleLogin = () => {
     history.push("/Login");
+  };
+
+  const handleSignUp = () => {
+    history.push("/SignUp");
   };
 
   return (
@@ -71,7 +74,11 @@ function Header() {
               <button className="button__login" onClick={handleLogin}>
                 Log in
               </button>
-              <button style={{ marginLeft: "12px" }} className="button__signup">
+              <button
+                style={{ marginLeft: "12px" }}
+                className="button__signup"
+                onClick={handleSignUp}
+              >
                 Sign up
               </button>
             </div>
