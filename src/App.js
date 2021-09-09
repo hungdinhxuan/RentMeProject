@@ -23,7 +23,7 @@ function App() {
             render={({ location }) => {
               if (
                 location.pathname !== "/404" &&
-                location.pathname !== "/Login"
+                location.pathname !== "/signin"
               )
                 return <Header />;
             }}
@@ -31,7 +31,8 @@ function App() {
           {/* <Header/> */}
           <Switch>
             <Route exact path="/" component={CarouselHeader} />
-            <Route exact path="/Login" component={SignIn} />
+            <Route exact path="/signin" component={SignIn} />
+            <Route exact path="/signup" component={SignIn} />
             <Route exact path="/404" component={PageNotFound} />
             <Route path="*" component={NotFound} />
           </Switch>
