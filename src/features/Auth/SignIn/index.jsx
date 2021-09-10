@@ -3,8 +3,6 @@ import Avatar from "@material-ui/core/Avatar";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import TextField from "@material-ui/core/TextField";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import Paper from "@material-ui/core/Paper";
 import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
@@ -17,6 +15,7 @@ import Google from "assets/google.png";
 import Facebook from "assets/facebook.png";
 import { FormLabel } from "@material-ui/core";
 import AnhBackGround from "assets/acct_creation_bg.jpg";
+import ReCAPTCHA from "react-google-recaptcha";
 
 // React-hook-form
 import { useForm } from "react-hook-form";
@@ -118,7 +117,10 @@ export default function SignIn() {
     console.log(data);
     reset();
   };
-
+  
+  const onCaptchaChange = (value) => {
+    console.log("Captcha value:", value);
+  }
   return (
     <Grid container component="main" maxWidth="xs" className={classes.root}>
       <CssBaseline />
@@ -187,7 +189,12 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link to="/SignUp" variant="body2" style={{ color: "#AF93EF" }} className={classes.Hover}>
+                <Link
+                  to="/signup"
+                  variant="body2"
+                  style={{ color: "#AF93EF" }}
+                  className={classes.Hover}
+                >
                   {"Đăng ký tài khoản"}
                 </Link>
               </Grid>
@@ -199,9 +206,15 @@ export default function SignIn() {
                   style={{
                     height: "74px",
                     width: "300px",
-                    border: "1px solid white",
+                    // border: "1px solid white",
                   }}
-                ></div>
+                >
+                  <ReCAPTCHA
+                    sitekey={`${process.env.REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY}`}
+                    onChange={onCaptchaChange}
+                  />
+                  
+                </div>
               </Grid>
               <div className={`${classes.Anh} align-items-center`}>
                 <img src={Google} alt="google" />

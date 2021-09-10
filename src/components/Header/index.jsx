@@ -9,11 +9,11 @@ function Header() {
   const history = useHistory();
 
   const handleLogin = () => {
-    history.push("/Login");
+    history.push("/signin");
   };
 
   const handleSignUp = () => {
-    history.push("/SignUp");
+    history.push("/signup");
   };
 
   return (
