@@ -207,7 +207,7 @@ export default function SignUp() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link to="/Login" variant="body2" style={{ color: "#AF93EF" }} className={classes.Hover}>
+                <Link to="/signin" variant="body2" style={{ color: "#AF93EF" }} className={classes.Hover}>
                   {"Đã có tài khoản? Đăng nhập"}
                 </Link>
               </Grid>
