@@ -22,12 +22,13 @@ body {
   font-size: 100%;
 }
 
+
 #root,
 body,
 html {
-  overflow: hidden;
+  /* overflow: hidden; */
   background: #120e1b;
-  min-height: 100vh;
+  height: 100vh;
   margin: 0 auto;
   padding: 0;
   font-size: 18px;
