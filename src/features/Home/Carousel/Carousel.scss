@@ -38,7 +38,7 @@
             color: #fff;
             line-height: 72px;
             animation-name: animationTitle;
-            animation-duration: 2s;
+            animation-duration: 1s;
         }
         &--search {
             .search__input {
@@ -159,12 +159,10 @@
 
 @keyframes animationTitle {
     0% {
-        opacity: 0;
-        transform: translateX(-150px)
+        transform: translateX(-500px);
     }
-    50% {
-        opacity: 1;
-        transform:translateX(0);
+    100% {
+        transform: translateX(0);
     }
 }
 

@@ -9,6 +9,8 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import SignUp from "features/Auth/SignUp";
 
 const CarouselHeader = lazy(() => import("features/Home/Carousel"));
+const Home = lazy(() => import("features/Home/index.jsx"))
+
 function App() {
   return (
     <div className="App">
@@ -20,7 +22,7 @@ function App() {
         }
       >
         <BrowserRouter>
-          <Route
+          {/* <Route
             render={({ location }) => {
               if (
                 location.pathname !== "/404" &&
@@ -29,10 +31,11 @@ function App() {
               )
                 return <Header />;
             }}
-          />
-          {/* <Header/> */}
+          /> */}
+          
           <Switch>
-            <Route exact path="/" component={CarouselHeader} />
+            <Route exact path="/" component={Home} />
+            
             <Route exact path="/Login" component={SignIn} />
             <Route exact path="/SignUp" component={SignUp} />
             <Route exact path="/404" component={PageNotFound} />
