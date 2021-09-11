@@ -8,12 +8,10 @@ services:
       - 443:443
     volumes: 
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      - .:/usr/src/app
     restart: always
   backend:
     container_name: backend-rentme-expressjs
     build: ./backend
     ports:
       - 4000:4000
-    volumes:
-      - ./backend:/app
+
