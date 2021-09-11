@@ -16,9 +16,9 @@ function ContentHome() {
             <div className="left__items col-6">
               <div>
                 <div className="left__items--games mb-3">
-                  <div className="game__title">* Games</div>
+                  <div className="game__title">* Trò chơi</div>
                   <div className="games__infor mt-2">
-                    <p>1 on 1, Coaching, Matching, Team up,Streamer</p>
+                    <p>1 on 1, Coaching, Matching, Team up, Streamer</p>
                     <div className="d-flex align-items-center">
                       <div className="game__infor--items">
                         <div>DUNGEON CRAWL</div>
@@ -48,7 +48,7 @@ function ContentHome() {
                   </div>
                 </div>
                 <div className="left__items--lifestyle mb-3">
-                  <div className="game__title">* Lifestyle</div>
+                  <div className="game__title">* Phong cách</div>
                   <div className="games__infor mt-2">
                     <p>Find ePals to carry and enrich your life</p>
                     <div className="d-flex align-items-center">
@@ -84,7 +84,7 @@ function ContentHome() {
                 <button
                   className="button-purple"
                   onClick={() => {
-                    history.push("/Login");
+                    history.push("/signin");
                   }}
                 >
                   <span>Try it out now</span>
@@ -101,6 +101,7 @@ function ContentHome() {
                   frameborder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
+                  className="youtube__video"
                 ></iframe>
               </div>
             </div>

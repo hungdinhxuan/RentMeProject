@@ -152,3 +152,58 @@
         }
     }
 }
+
+@media only screen and (max-width: 1280px) {
+    .container__content {
+        width: 90%;
+        .main__services {
+            .main__services--content {
+                .right__items {
+                    .video {
+                        .youtube__video {
+                            width: 100%;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    .container__content {
+        width: 80%;
+        .content__services {
+            .main__services {
+                .main__services--title {
+                    font-size: 32px;
+                }
+                .main__services--content {
+                    display: block;
+                    .left__items {
+                        display: none;
+                    }
+                    .right__items {
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 568px) {
+    .container__content {
+        width: 80%;
+        .content__services {
+            .main__services {
+                .main__services--title {
+                    font-size: 16px;
+                }
+                .right__items {
+                    width: 100%;
+                }
+            }
+        }
+    }
+}
