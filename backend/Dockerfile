@@ -1,7 +1,7 @@
 FROM node:16-alpine
 WORKDIR /usr/src/app
-COPY package.json ./
+COPY package.json yarn.lock ./
 RUN yarn install --production=true
 COPY . .
 EXPOSE 4000
-CMD [ "yarn", "start" ]
+CMD [ "node", "main.js" ]
