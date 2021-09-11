@@ -122,7 +122,7 @@ export default function SignIn() {
     console.log("Captcha value:", value);
   }
   return (
-    <Grid container component="main" maxWidth="xs" className={classes.root}>
+    <Grid container component="main" maxwidth="xs" className={classes.root}>
       <CssBaseline />
       <Grid
         item

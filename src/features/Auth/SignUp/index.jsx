@@ -97,7 +97,7 @@ const useStyles = makeStyles((theme) => ({
   },
   FormBackground: {
     backgroundColor: "#302F3D",
-    maxWidth: "500px",
+    width: "500px",
   },
   Hover: {
     "&:hover": {
@@ -120,7 +120,7 @@ export default function SignUp() {
   };
 
   return (
-    <Grid container component="main" maxWidth="xs" className={classes.root}>
+    <Grid container component="main" maxwidth="xs" className={classes.root}>
       <CssBaseline />
       <Grid
         item
