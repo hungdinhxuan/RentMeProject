@@ -1,0 +1,10 @@
+version: "3.9"
+services:
+  backend:
+    container_name: backend-rentme-expressjs
+    build: ./backend
+    ports:
+      - 4000:4000
+    volumes:
+      - ./backend:/usr/src/app
+    restart: always
