@@ -1,5 +1,18 @@
 .home__main {
     overflow: hidden;
+    .home__body {
+        position: relative;
+        .bg__home {
+            background-image: url("../../assets/bgLine.png");
+            position: absolute;
+            top: 380px;
+            // Ban đầu là 2000px
+            height: 1200px;
+            width: 100%;
+            background-size: cover;
+            background-position: 50%;
+        }
+    }
 }
 
 // Background của tổng thể thanh scroll

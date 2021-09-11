@@ -1,0 +1,69 @@
+.stories {
+    margin-top: 40px;
+    .stories__title {
+        font-size: 24px;
+        font-weight: 500;
+        line-height: 24px;
+    }
+    .stories__content {
+        width: 100%;
+        position: relative;
+        .mySwiper {
+            .stories__card {
+                .card__content {
+                    margin-top: 64px;
+                    padding-top: 36px;
+                    // width: 1260px;
+                    width: 100%;
+                    height: 240px;
+                    margin-left: 40px;
+                    position: relative;
+                    border-radius: 8px;
+                    background: #8d65ea;
+                    background-size: cover;
+                    .stories__card--avatar {
+                        position: absolute;
+                        top: -40px;
+                        left: -40px;
+                        div {
+                            width: 240px;
+                            height: 240px;
+                            line-height: 240px;
+                            font-size: 18px;
+                            .img-stories {
+                                display: inline-block;
+                                width: 100%;
+                                height: 100%;
+                                object-fit: cover;
+                            }
+                        }
+                    }
+                    .stories__card--infor {
+                        margin-left: 224px;
+                        .infor__name {
+                            font-size: 24px;
+                            font-weight: 400;
+                            color: #fff;
+                            line-height: 27px;
+                        }
+                        .infor__desc {
+                            width: 80%;
+                            margin-top: 24px;
+                            font-size: 18px;
+                            font-weight: 500;
+                            color: #fff;
+                            line-height: 27px;
+                            --webkit-word-wrap: break-word;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 767px) {
+    .stories {
+        display: none;
+    }
+}
