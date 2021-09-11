@@ -6,7 +6,9 @@ import NotFound from "components/NotFound";
 import SignIn from "features/Auth/SignIn";
 import "bootstrap/dist/css/bootstrap.min.css";
 import SignUp from "features/Auth/SignUp";
-const Home = lazy(() => import("features/Home/index.jsx"))
+import "aos/dist/aos.css";
+import Stories from "features/Home/Stories";
+const Home = lazy(() => import("features/Home/index.jsx"));
 
 function App() {
   return (
@@ -29,7 +31,7 @@ function App() {
                 return <Header />;
             }}
           /> */}
-          
+
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/signin" component={SignIn} />

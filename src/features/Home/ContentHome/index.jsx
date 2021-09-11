@@ -1,12 +1,12 @@
 import React from "react";
 import { useHistory } from "react-router";
 import "./ContentHome.scss";
+// import AOS from "aos";
 
 function ContentHome() {
   const history = useHistory();
-
   return (
-    <div className="container__content">
+    <div className="container__content" data-aos="fade-up" data-aos-duration="1000">
       <div className="content__services">
         <div className="main__services">
           <div className="main__services--title">
@@ -98,7 +98,7 @@ function ContentHome() {
                   height="360"
                   src="https://www.youtube.com/embed/En-BbdqsNmQ"
                   title="YouTube video player"
-                  frameborder="0"
+                  frameBorder="0"
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                   className="youtube__video"

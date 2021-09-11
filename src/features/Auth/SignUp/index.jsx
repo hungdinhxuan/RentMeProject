@@ -97,7 +97,7 @@ const useStyles = makeStyles((theme) => ({
   },
   FormBackground: {
     backgroundColor: "#302F3D",
-    width: "500px",
+    maxWidth: "500px",
   },
   Hover: {
     "&:hover": {
