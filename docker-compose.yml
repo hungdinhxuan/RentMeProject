@@ -14,6 +14,6 @@ services:
     container_name: backend-rentme-expressjs
     build: ./backend
     ports:
-      - 6000:4000
+      - 4000:4000
     volumes:
       - ./backend:/usr/src/app
