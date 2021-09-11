@@ -6,10 +6,7 @@ if(process.env.NODE_ENV !== 'production') {
 
 require('./services/mongo')();
 
-const swaggerUi = require('swagger-ui-express');
 const app = express();
-
-app.use('/api-docs', swaggerUi.serve);
 
 app.get('/api', (req, res) => {
     console.log(process.env);
