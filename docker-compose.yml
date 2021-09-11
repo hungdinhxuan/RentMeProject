@@ -17,4 +17,3 @@ services:
       - 4000:4000
     volumes:
       - ./backend:/usr/src/app
-    restart: always
