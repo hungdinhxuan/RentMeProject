@@ -1,7 +1,7 @@
-FROM node:16-alpine
+FROM node:16
 WORKDIR /app
 COPY package.json yarn.lock ./
 RUN yarn install
 COPY . .
 EXPOSE 4000
-CMD [ "node", "main.js" ]
+CMD [ "yarn", "start" ]
