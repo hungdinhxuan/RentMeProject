@@ -1,0 +1,26 @@
+.home__main {
+    overflow: hidden;
+    .home__body {
+        position: relative;
+        .bg__home {
+            background-image: url("../../assets/bgLine.png");
+            position: absolute;
+            top: 380px;
+            // Ban đầu là 2000px
+            height: 1200px;
+            width: 100%;
+            background-size: cover;
+            background-position: 50%;
+        }
+    }
+}
+
+// Background của tổng thể thanh scroll
+::-webkit-scrollbar {
+    width: 0;
+}
+
+// Màu sắc khi cuộn thanh scroll
+// ::-webkit-scrollbar-thumb {
+//     background: red !important;
+// }
