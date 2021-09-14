@@ -1,0 +1,89 @@
+footer {
+    margin-top: 40px;
+    background: #21212c;
+    .footer__container {
+        padding: 40px 0;
+        margin: 0 auto;
+        width: 80%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .intro {
+            // margin-left: 150px;
+            .intro--content {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                .logo__footer {
+                    width: 120px;
+                    height: 80px;
+                }
+                .desc {
+                    .title {
+                        font-size: 18px;
+                        font-weight: 500;
+                        color: var(--text-footer);
+                        line-height: 21px;
+                    }
+                    padding-left: 10px;
+                    font-size: 14px;
+                    font-weight: 400;
+                    color: var(--text-footer);
+                    line-height: 18px;
+                    p {
+                        margin: 0;
+                    }
+                }
+            }
+        }
+        .logo {
+            // margin-left: 150px;
+            .logo__img {
+                img {
+                    height: 35px;
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 1024px) {
+    footer {
+        .footer__container {
+            .intro {
+                .intro--content {
+                    .logo__footer {
+                        width: 100px;
+                        height: 62px;
+                    }
+                }
+            }
+            .logo {
+                .logo__img {
+                    img {
+                        height: 21px;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    footer {
+        .footer__container {
+            justify-content: center;
+            .intro {
+                .intro--content {
+                    .logo__footer {
+                        width: 100px;
+                        height: 70px;
+                    }
+                }
+            }
+            .logo {
+                display: none;
+            }
+        }
+    }
+}

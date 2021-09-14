@@ -21,8 +21,10 @@
     "react-redux": "^7.2.3",
     "react-router-dom": "^5.3.0",
     "react-scripts": "4.0.3",
+    "react-slick": "^0.28.1",
     "sass": "^1.38.2",
     "scss": "^0.2.4",
+    "slick-carousel": "^1.8.1",
     "swiper": "6.8.4"
   },
   "scripts": {
