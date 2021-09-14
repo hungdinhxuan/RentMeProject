@@ -1,8 +1,7 @@
 node_modules
 README.md
-yarn.lock
 .git
 .gitignore
 .eslintrc.js
 .prettierrc
-build
+dist
