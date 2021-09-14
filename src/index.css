@@ -4,6 +4,7 @@
   --color-button: #21212c;
   --button-hover: #4f4e60;
   --button-hover1: #8d65ea;
+  --text-footer: #c4c3e6;
 }
 * {
   padding: 0;
@@ -19,7 +20,6 @@ body {
   user-select: none;
   -webkit-user-select: none;
   -webkit-touch-callout: none;
-  font-size: 100%;
 }
 
 

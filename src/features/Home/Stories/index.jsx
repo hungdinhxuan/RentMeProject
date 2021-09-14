@@ -1,6 +1,6 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore, { Navigation } from "swiper";
+import SwiperCore, { Navigation,Autoplay } from "swiper";
 import "swiper/swiper.min.css";
 
 // // swiper core styles
@@ -14,7 +14,7 @@ import Ha from "assets/Ha.jpg";
 import Khoa from "assets/Khoa.jpg";
 import TeacherBa from "assets/TeacherBa.jpg";
 
-SwiperCore.use([Navigation]);
+SwiperCore.use([Navigation,Autoplay]);
 // SwiperCore.use([Navigation]);
 
 function Stories() {
@@ -28,7 +28,14 @@ function Stories() {
       <div className="stories">
         <div className="stories__title">Cảm nhận của người sử dụng</div>
         <div className="stories__content ">
-          <Swiper navigation={false} className="mySwiper">
+          <Swiper
+            navigation={false}
+            className="mySwiper"
+            autoplay={{
+              delay: 3000,
+              disableOnInteraction: false,
+            }}
+          >
             <SwiperSlide>
               <div className="stories__card">
                 <div className="card__content">
@@ -44,9 +51,10 @@ function Stories() {
                   <div className="stories__card--infor">
                     <div className="infor__name">Teacher Ba</div>
                     <div className="infor__desc">
-                      Đây là 1 trang web thú vị. Nó giúp mọi người gắn kết với
-                      nhau hơn, hãy tin Thầy rồi các em sẽ có những trải nghiệm
-                      tốt nhất.Chúng ta hãy chung tay để xây dựng 1 cộng đồng games lớn mạnh.
+                      💘 Đây là 1 trang web thú vị. Nó giúp mọi người gắn kết
+                      với nhau hơn, hãy tin Thầy rồi các em sẽ có những trải
+                      nghiệm tốt nhất.Chúng ta hãy chung tay để xây dựng 1 cộng
+                      đồng games lớn mạnh.💘
                     </div>
                   </div>
                 </div>

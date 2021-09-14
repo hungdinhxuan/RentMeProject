@@ -1,9 +1,12 @@
+import Footer from "components/Footer";
 import Header from "components/Header";
 import React from "react";
 import CarouselHeader from "./Carousel";
 import ContentHome from "./ContentHome";
 import "./Home.scss";
+import ListGame from "./ListGames";
 import Stories from "./Stories";
+import TryRentme from "./TryRentme";
 
 function Home() {
   return (
@@ -13,8 +16,11 @@ function Home() {
         <CarouselHeader />
         <ContentHome />
         <Stories />
+        <TryRentme/>
+        <ListGame/>
         <div className="bg__home"></div>
       </div>
+      <Footer/>
     </div>
   );
 }
