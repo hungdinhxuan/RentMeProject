@@ -6,8 +6,22 @@
             align-items: center;
             gap: 10px;
         }
-        .MuiBox-root-9{
+        .MuiBox-root-9 {
             display: none;
+        }
+        p {
+            margin-top: 5px;
+            margin-bottom: 0;
+            color: #ff4d4f;
+        }
+    }
+}
+@media only screen and (max-width: 576px) {
+    .MuiGrid-root {
+        .MuiInput-formControl {
+            input {
+                height: 20px;
+            }
         }
     }
 }
