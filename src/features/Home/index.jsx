@@ -9,6 +9,10 @@ import Stories from "./Stories";
 import TryRentme from "./TryRentme";
 
 function Home() {
+  window.onunload = () => {
+    window.scrollTo(0, 0);
+  };
+
   return (
     <div className="home__main">
       <Header />
@@ -16,11 +20,11 @@ function Home() {
         <CarouselHeader />
         <ContentHome />
         <Stories />
-        <TryRentme/>
-        <ListGame/>
+        <TryRentme />
+        <ListGame />
         <div className="bg__home"></div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   );
 }
