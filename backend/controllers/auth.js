@@ -1,13 +1,19 @@
+
+
 class Auth {
-    signin(req, res, next) {
+    login(req, res, next) {
 
     }
-    signup(req, res, next) {
+    register(req, res, next) {
+        return res.status(201).json({
+            success: true,
+            message: 'created successful !!'
+        })
+    }
+    resetPassword(req, res, next) {
 
     }
-    forgotPassword(req, res, next) {
-        
-    }
+    
 }
 
 module.exports = new Auth;
