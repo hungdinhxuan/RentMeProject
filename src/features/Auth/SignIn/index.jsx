@@ -17,9 +17,12 @@ import React from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 // React-hook-form
 import { useForm } from "react-hook-form";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
 import "./SignIn.scss";
+import {AsyncSignin} from '../AuthSlice'
+import { useDispatch } from "react-redux";
 
 function Copyright() {
   return (
@@ -129,8 +132,12 @@ export default function SignIn() {
     mode: "onChange",
   });
 
+  // Xử lý redux
+  const { user, loading, error } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
   const onSubmit = (data) => {
     console.log(data);
+    dispatch(AsyncSignin(data));
     reset();
   };
 

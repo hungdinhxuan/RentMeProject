@@ -5,14 +5,16 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 require('./services/mongo')();
-const session = require('express-session')
+const session = require('express-session');
 const app = express();
-const passport = require('passport')
-const routes = require('./routes')
+const passport = require('passport');
+const routes = require('./routes');
+const cors = require('cors');
+app.use(cors());
 
 app.use(express.urlencoded({ extended: true }));
-app.use(express.json())
-app.use(passport.initialize())
+app.use(express.json());
+app.use(passport.initialize());
 app.use(
   session({
     // secret sha256
@@ -20,18 +22,18 @@ app.use(
     resave: false,
     saveUninitialized: true,
     cookie: { secure: false },
-  })
-)
+  }),
+);
 
 passport.serializeUser(function (user, done) {
-  done(null, user)
-})
+  done(null, user);
+});
 
 passport.deserializeUser(function (user, done) {
-  done(null, user)
-})
+  done(null, user);
+});
 
-require('./services/passport')()
+require('./services/passport')();
 
 app.get('/api', (req, res) => {
   console.log(process.env);

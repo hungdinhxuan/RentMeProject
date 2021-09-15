@@ -8,7 +8,7 @@ const UsersSchema = new Schema(
     username: { type: 'string', required: true, minlength: 5, maxLength: 32 },
     email: { type: 'string', required: true, maxLength: 255 },
     password: { type: 'string', required: true },
-    name: { type: 'string', required: true },
+    fullName: { type: 'string', required: true },
     gender: {
       type: 'string',
       enum: ['male', 'female', 'other'],

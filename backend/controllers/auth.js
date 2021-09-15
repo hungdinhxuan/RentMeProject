@@ -13,7 +13,7 @@ class Auth {
       console.log(username);
       if (!user) {
         return res
-          .status(403)
+          .status(401)
           .json({
             success: false,
             message: 'username or password is not correct',
@@ -27,7 +27,7 @@ class Auth {
         return res.json({ success: true, message: 'Login succesful', token });
       }
       return res
-        .status(403)
+        .status(401)
         .json({
           success: false,
           message: 'username or password is not correct',
