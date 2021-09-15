@@ -1,11 +1,13 @@
 const express = require('express');
 const router = express.Router();
 const validate = require('../middleware/validate');
-const users = require('../models/users');
+const verifyRecaptcha = require('../middleware/verifyReptcha')
 const authController = require('../controllers/auth');
+
 
 router.post(
   '/login',
+  verifyRecaptcha,
   validate.validateLogin(),
   validate.handleValidationErrors,
   authController.login,
