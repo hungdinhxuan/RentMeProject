@@ -43,7 +43,7 @@ class Auth {
     }
   }
   async register(req, res, next) {
-    let {username, email, password, name} = req.body
+    let {username, email, password, fullName} = req.body
     try {
       let user = await User.findOne({username})
       if(user){
@@ -54,7 +54,7 @@ class Auth {
         return res.status(406).json({success: false, message: 'email is used'})
       }
       password = await argon2.hash(req.body.password)
-      user = await User.create({username, email, name, password})
+      user = await User.create({username, email, fullName, password})
       return res.status(201).json({
         success: true,
         message: 'created successful !!',

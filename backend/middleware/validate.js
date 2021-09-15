@@ -7,8 +7,13 @@ const validateRegisterUser = () => {
     check('username', 'username more than 6 degits').isLength({ min: 6 }),
     check('email', 'Invalid does not Empty').not().isEmpty(),
     check('email', 'Invalid email').isEmail(),
-    check('name', 'Invalid does not Empty').not().isEmpty(),
-    check('name', 'name must be Alphanumeric').isAlphanumeric(),
+    check('fullName', 'Invalid does not Empty').not().isEmpty(),
+    check(
+      'fullName',
+      'Full must be and min Length is 5 characters',
+    ).matches(/^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W|_]/g)
+    .isLength({ min: 5})
+      ,
     check(
       'password',
       'password is not strong, it should have minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1',

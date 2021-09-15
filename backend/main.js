@@ -14,6 +14,7 @@ app.use(cors());
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+
 app.use(passport.initialize());
 app.use(
   session({
