@@ -46,7 +46,8 @@ const useStyles = makeStyles((theme) => ({
     height: "100vh",
     justifyContent: "center",
     backgroundImage: `url(${AnhBackGround})`,
-    padding: "90px 0",
+    // padding: "90px 0",
+    padding: "40px 0",
   },
 
   paper: {
@@ -120,8 +121,8 @@ export default function SignUp() {
     email: "",
   };
   const schema = yup.object().shape({
-    username: yup.string().required("Không được để trống"),
-    password: yup.string().required("Không được để trống"),
+    username: yup.string().min(6,"Tài khoản phải trên 6 ký tự").required(),
+    password: yup.string().min(8, "Mật khẩu phải ít nhất 8 ký tự").required(),
     confirmPassword: yup
       .string()
       .oneOf([yup.ref("password"), null], "Mật khẩu không trùng khớp")
@@ -131,7 +132,7 @@ export default function SignUp() {
       .matches(/^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W|_]/g, "Họ tên không hợp lệ")
       .min(5, "Tên quá ngắn")
       .max(50, "Tên quá dài")
-      .required("Không được để trống"),
+      .required(),
     email: yup
       .string()
       .email("Không đúng định dạng email")
