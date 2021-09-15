@@ -1,24 +1,25 @@
-import React from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { FormLabel } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
+import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
-import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
+import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
-import "./SignIn.scss";
-import Google from "assets/google.png";
-import Facebook from "assets/facebook.png";
-import { FormLabel } from "@material-ui/core";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import AnhBackGround from "assets/acct_creation_bg.jpg";
+import Facebook from "assets/facebook.png";
+import Google from "assets/google.png";
+import React from "react";
 import ReCAPTCHA from "react-google-recaptcha";
-
 // React-hook-form
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
+import * as yup from "yup";
+import "./SignIn.scss";
 
 function Copyright() {
   return (
@@ -107,20 +108,37 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
   const classes = useStyles();
+
+  // Form
+  const initialValues = {
+    username: "",
+    password: "",
+  };
+  const schema = yup.object().shape({
+    username: yup.string().required("Không được để trống"),
+    password: yup.string().required("Không được để trống"),
+  });
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: initialValues,
+    mode: "onChange",
+  });
+
   const onSubmit = (data) => {
     console.log(data);
     reset();
   };
-  
+
+  // Capcha google
   const onCaptchaChange = (value) => {
     console.log("Captcha value:", value);
-  }
+  };
+
   return (
     <Grid container component="main" maxwidth="xs" className={classes.root}>
       <CssBaseline />
@@ -150,21 +168,24 @@ export default function SignIn() {
             <FormLabel>Tài Khoản</FormLabel>
             <TextField
               fullWidth
-              id="email"
+              id="username"
               name="username"
               placeholder="Nhập tài khoản"
               autoFocus
               {...register("username")}
             />
+
+            {errors.username && <p>{errors.username.message}</p>}
             <FormLabel className="mt-3">Mật Khẩu</FormLabel>
             <TextField
               fullWidth
+              id="password"
               name="password"
               type="password"
-              id="password"
               placeholder="Nhập mật khẩu"
               {...register("password")}
             />
+            {errors.password && <p>{errors.password.message}</p>}
             <Grid item xs style={{ marginTop: "5px" }}>
               <Link to="/forgot-password" style={{ color: "#AF93EF" }}>
                 Quên mật khẩu
@@ -213,7 +234,6 @@ export default function SignIn() {
                     sitekey={`${process.env.REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY}`}
                     onChange={onCaptchaChange}
                   />
-                  
                 </div>
               </Grid>
               <div className={`${classes.Anh} align-items-center`}>
