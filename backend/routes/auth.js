@@ -14,6 +14,7 @@ router.post(
 );
 
 router.post('/google', authController.googleLogin);
+router.post('/facebook', authController.facebookLogin);
 
 
 router.post(

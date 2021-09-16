@@ -9,6 +9,7 @@ services:
     volumes: 
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     restart: always
+    env_file: ./.env.production
   backend:
     container_name: backend-rentme-expressjs
     build: ./backend

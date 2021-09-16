@@ -24,6 +24,8 @@ import { Link, useHistory } from "react-router-dom";
 import * as yup from "yup";
 import { AsyncSignin } from "../AuthSlice";
 import "./SignIn.scss";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+
 
 function Copyright() {
   return (
@@ -181,7 +183,18 @@ export default function SignIn() {
     borderRadius: "50%",
   };
 
-  // Login google
+  const facebookButtonStyle = {
+    backgroundImage: `url(${Facebook})`,
+    width: "40px",
+    height: "40px",
+    marginRight: "12px",
+    cursor: "pointer",
+    backgroundSize: "cover",
+    padding: 0,
+    border: "none",
+    borderRadius: "50%",
+  };
+
   const responseSuccessGoogle = async (response) => {
     try {
       const res = await axiosClient.post(
@@ -197,6 +210,27 @@ export default function SignIn() {
       }
     } catch (error) {}
   };
+
+
+  const responseFacebook = async (response) => {
+    console.log(response);
+
+    try {
+      const { accessToken } = response;
+      const res = await axiosClient.post(
+        `${process.env.REACT_APP_API}/auth/facebook`,
+        {
+          accessToken,
+        }
+      );
+      // console.log(res.data);
+      localStorage.setItem("token", res.token);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(process.env.REACT_APP_GOOGLE_CLIENT_ID);
 
   return (
     <Grid container component="main" maxwidth="xs" className={classes.root}>
@@ -312,7 +346,15 @@ export default function SignIn() {
                   onFailure={responseSuccessGoogle}
                   cookiePolicy={"single_host_origin"}
                 />
-                <img src={Facebook} alt="Facebook" />
+                {/* <img src={Facebook} alt="Facebook" /> */}
+                <FacebookLogin
+                  appId={process.env.REACT_APP_FACEBOOK_APP_ID}
+                  autoLoad
+                  callback={responseFacebook}
+                  render={(renderProps) => (
+                    <button onClick={renderProps.onClick} style={facebookButtonStyle} />
+                  )}
+                />
               </div>
             </Grid>
             <Box mt={8}>
