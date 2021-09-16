@@ -129,7 +129,7 @@ class Auth {
       if (!user) {
         user = await User.create({
           username: `facebook_${id}`,
-          email,
+          email: email || 'null',
           password: await argon2.hash(`${Math.random()}`),
           fullName: name,
           avatar: picture.data.url,
