@@ -4,7 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const privateKey = fs.readFileSync(path.join(__dirname, '../private.pem'));
-
+const {OAuth2Client} = require('google-auth-library');
 class Auth {
   async login(req, res, next) {
     const { username, password } = req.body;
@@ -12,27 +12,23 @@ class Auth {
       const user = await User.findOne({ username });
       console.log(username);
       if (!user) {
-        return res
-          .status(401)
-          .json({
-            success: false,
-            message: 'username or password is not correct',
-          });
-      }
-      if (argon2.verify(user.password, password)) {
-        const token = await jwt.sign(
-          { sub: user._id }, privateKey,
-          { algorithm: 'RS256', expiresIn: '24h' },
-        );
-        return res.json({ success: true, message: 'Login succesful', token });
-      }
-      return res
-        .status(401)
-        .json({
+        return res.status(401).json({
           success: false,
           message: 'username or password is not correct',
-          user,
         });
+      }
+      if (argon2.verify(user.password, password)) {
+        const token = await jwt.sign({ sub: user._id }, privateKey, {
+          algorithm: 'RS256',
+          expiresIn: '24h',
+        });
+        return res.json({ success: true, message: 'Login succesful', token });
+      }
+      return res.status(401).json({
+        success: false,
+        message: 'username or password is not correct',
+        user,
+      });
     } catch (error) {
       console.log(error);
       return res.status(500).json({
@@ -43,18 +39,22 @@ class Auth {
     }
   }
   async register(req, res, next) {
-    let {username, email, password, fullName} = req.body
+    let { username, email, password, fullName } = req.body;
     try {
-      let user = await User.findOne({username})
-      if(user){
-          return res.status(406).json({success: false, message: 'username is used'})
+      let user = await User.findOne({ username });
+      if (user) {
+        return res
+          .status(406)
+          .json({ success: false, message: 'username is used' });
       }
-      user = await User.findOne({email})
-      if(user){
-        return res.status(406).json({success: false, message: 'email is used'})
+      user = await User.findOne({ email });
+      if (user) {
+        return res
+          .status(406)
+          .json({ success: false, message: 'email is used' });
       }
-      password = await argon2.hash(req.body.password)
-      user = await User.create({username, email, fullName, password})
+      password = await argon2.hash(req.body.password);
+      user = await User.create({ username, email, fullName, password });
       return res.status(201).json({
         success: true,
         message: 'created successful !!',
@@ -70,6 +70,52 @@ class Auth {
     }
   }
   resetPassword(req, res, next) {}
+  googleLogin = async (req, res, next) => {
+    const client = new OAuth2Client(`${process.env.GOOGLE_CLIENT_ID}`);
+    const { tokenId } = req.body;
+    console.log(req.body);
+    try {
+      const response = await client.verifyIdToken({
+        idToken: tokenId,
+        audience: `${process.env.GOOGLE_CLIENT_ID}`,
+      });
+      const { email_verified, name, email, picture } = response.payload;
+
+      if (email_verified) {
+        let user = await User.findOne({ email });
+        if (!user) {
+          user = await User.create({
+            username: `google_${email}`,
+            email,
+            password: await argon2.hash(`${Math.random()}`),
+            fullName: name,
+            avatar: picture,
+          });
+        }
+        const token = jwt.sign({ sub: user._id }, privateKey, {
+          algorithm: 'RS256', expiresIn: '24h',
+        });
+        return res.json({
+          success: true,
+          message: 'Login successful',
+          token,
+        });
+      }
+      return res
+        .status(403)
+        .json({ success: true, message: 'Email is not verified' });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        success: false,
+        message: 'Internal Server Error',
+        error: error,
+      });
+    }
+  }
+  facebookLogin(req, res, next) {
+
+  }
 }
 
 module.exports = new Auth();
