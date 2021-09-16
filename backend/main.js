@@ -10,9 +10,9 @@ const app = express();
 const passport = require('passport');
 const routes = require('./routes');
 const cors = require('cors');
+const cookieParser = require('cookie-parser')
 
-
-
+app.use(cookieParser())
 app.use(cors());
 
 app.use(express.urlencoded({ extended: true }));
@@ -40,7 +40,8 @@ passport.deserializeUser(function (user, done) {
 require('./services/passport')();
 
 app.get('/api', (req, res) => {
-  console.log(process.env);
+  req.cookies['auth_token'] = `${Math.random()}`
+  console.log('Cookies: ', req.cookies)
   return res.send(
     `<h1>server is running with bucket ${process.env.AWS_S3_BUCKET_NAME}</h1>`,
   );

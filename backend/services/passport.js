@@ -6,6 +6,8 @@ const path = require('path');
 const publicKey = fs.readFileSync(path.join(__dirname, '../public.pem'));
 const users = require('../models/users');
 
+
+
 module.exports = () => {
   var opts = {};
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
