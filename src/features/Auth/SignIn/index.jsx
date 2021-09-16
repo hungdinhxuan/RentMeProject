@@ -13,17 +13,17 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import AnhBackGround from "assets/acct_creation_bg.jpg";
 import Facebook from "assets/facebook.png";
 import Google from "assets/google.png";
+import axiosClient from "axiosClient";
 import React, { useState } from "react";
+import GoogleLogin from "react-google-login";
 import ReCAPTCHA from "react-google-recaptcha";
 // React-hook-form
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import * as yup from "yup";
 import { AsyncSignin } from "../AuthSlice";
 import "./SignIn.scss";
-import GoogleLogin from "react-google-login";
-import axiosClient from "axiosClient";
 
 function Copyright() {
   return (
@@ -117,6 +117,7 @@ export default function SignIn() {
   const initialValues = {
     username: "",
     password: "",
+    captcha: "",
   };
   const schema = yup.object().shape({
     username: yup
@@ -127,11 +128,13 @@ export default function SignIn() {
       .string()
       .min(8, "Mật khẩu ít nhất 8 ký tự")
       .required("Không được để trống"),
+    captcha: yup.string().required(),
   });
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -141,26 +144,30 @@ export default function SignIn() {
 
   // Capcha google
   const [capcha, setCapcha] = useState(true);
+  const recaptchaRef = React.useRef();
+
+  
+  const onSubmit = (data) => {
+    dispatch(AsyncSignin(data));
+    reset();
+  };
 
   const onCaptchaChange = (value) => {
-    console.log("Captcha value:", value);
+    setValue("captcha", value);
     setCapcha(false);
   };
+  
 
   // Xử lý redux
   const { user, loading, error } = useSelector((state) => state.auth);
   const history = useHistory();
   const dispatch = useDispatch();
 
-  const onSubmit = (data) => {
-    dispatch(AsyncSignin(data));
-    reset();
-  };
-  if(localStorage.getItem('token')){
-    history.push("/")
+
+  // Sau khi có tài khoản
+  if (localStorage.getItem("token")) {
+    history.push("/");
   }
-  
-  
 
   const googleButtonStyle = {
     backgroundImage: `url(${Google})`,
@@ -174,23 +181,23 @@ export default function SignIn() {
     borderRadius: "50%",
   };
 
+  // Login google
   const responseSuccessGoogle = async (response) => {
-    console.log(response);
     try {
-      const res = await axiosClient.post(`${process.env.REACT_APP_API}/auth/google`, {
-        tokenId: response.tokenId,
-      });
+      const res = await axiosClient.post(
+        `${process.env.REACT_APP_API}/auth/google`,
+        {
+          tokenId: response.tokenId,
+        }
+      );
 
-      localStorage.setItem('token', res.token);
-    } catch (error) {
-      
-    }
-    
-
+      localStorage.setItem("token", res.token);
+      if (localStorage.getItem("token")) {
+        history.push("/");
+      }
+    } catch (error) {}
   };
 
-  console.log(process.env.REACT_APP_GOOGLE_CLIENT_ID);
-  
   return (
     <Grid container component="main" maxwidth="xs" className={classes.root}>
       <CssBaseline />
@@ -286,7 +293,9 @@ export default function SignIn() {
                   <ReCAPTCHA
                     sitekey={`${process.env.REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY}`}
                     onChange={onCaptchaChange}
-                    onExpired={() => {setCapcha(true)}}
+                    onExpired={() => {
+                      setCapcha(true);
+                    }}
                   />
                 </div>
               </Grid>
@@ -301,7 +310,7 @@ export default function SignIn() {
                   )}
                   onSuccess={responseSuccessGoogle}
                   onFailure={responseSuccessGoogle}
-                  cookiePolicy={'single_host_origin'}
+                  cookiePolicy={"single_host_origin"}
                 />
                 <img src={Facebook} alt="Facebook" />
               </div>

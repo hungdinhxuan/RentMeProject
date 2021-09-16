@@ -7,7 +7,7 @@ const passport = require('passport');
 
 router.post(
   '/login',
-  // verifyRecaptcha,
+  verifyRecaptcha,
   validate.validateLogin(),
   validate.handleValidationErrors,
   authController.login,
