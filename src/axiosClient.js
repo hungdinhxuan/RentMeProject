@@ -34,15 +34,14 @@ axiosClient.interceptors.response.use(
       switch (err.response.status) {
         case 401:
           localStorage.removeItem("token");
-          window.location.href("/signin");
           break;
         case 403:
-          window.location.href("/404");
           break;
         default:
           return Promise.reject(err);
       }
     }
+    return Promise.reject(err);
   }
 );
 
