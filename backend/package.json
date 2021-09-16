@@ -6,10 +6,12 @@
   "dependencies": {
     "argon2": "^0.28.2",
     "aws-sdk": "^2.987.0",
+    "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "express-validator": "^6.12.1",
+    "google-auth-library": "^7.9.1",
     "isomorphic-fetch": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
     "mailgun-js": "^0.22.0",
