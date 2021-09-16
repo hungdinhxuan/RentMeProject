@@ -4,7 +4,8 @@ const path = require('path');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const privateKey = fs.readFileSync(path.join(__dirname, '../private.pem'));
-const {OAuth2Client} = require('google-auth-library');
+const { OAuth2Client } = require('google-auth-library');
+
 class Auth {
   async login(req, res, next) {
     const { username, password } = req.body;
@@ -70,7 +71,7 @@ class Auth {
     }
   }
   resetPassword(req, res, next) {}
-  googleLogin = async (req, res, next) => {
+  async googleLogin(req, res, next) {
     const client = new OAuth2Client(`${process.env.GOOGLE_CLIENT_ID}`);
     const { tokenId } = req.body;
     console.log(req.body);
@@ -79,13 +80,13 @@ class Auth {
         idToken: tokenId,
         audience: `${process.env.GOOGLE_CLIENT_ID}`,
       });
-      const { email_verified, name, email, picture } = response.payload;
-
+      const { sub, email_verified, name, email, picture } = response.payload;
+      console.log(response.payload);
       if (email_verified) {
         let user = await User.findOne({ email });
         if (!user) {
           user = await User.create({
-            username: `google_${email}`,
+            username: `google_${sub}`,
             email,
             password: await argon2.hash(`${Math.random()}`),
             fullName: name,
@@ -93,7 +94,8 @@ class Auth {
           });
         }
         const token = jwt.sign({ sub: user._id }, privateKey, {
-          algorithm: 'RS256', expiresIn: '24h',
+          algorithm: 'RS256',
+          expiresIn: '24h',
         });
         return res.json({
           success: true,
@@ -113,8 +115,43 @@ class Auth {
       });
     }
   }
-  facebookLogin(req, res, next) {
-
+  async facebookLogin(req, res, next) {
+    const { accessToken } = req.body;
+    let urlGraphFacebook = `https://graph.facebook.com/v12.0/me?fields=id%2Cname%2Cemail%2Cpicture&access_token=${accessToken}`;
+    try {
+      const response = await fetch(urlGraphFacebook, {
+        method: 'GET',
+      });
+      const data = await response.json();
+      console.log(data);
+      const { id, email, name, picture } = data;
+      let user = await User.findOne({ email });
+      if (!user) {
+        user = await User.create({
+          username: `facebook_${id}`,
+          email,
+          password: await argon2.hash(`${Math.random()}`),
+          fullName: name,
+          avatar: picture.data.url,
+        });
+      }
+      const token = jwt.sign({ sub: user._id }, privateKey, {
+        algorithm: 'RS256',
+        expiresIn: '24h',
+      });
+      return res.json({
+        success: true,
+        message: 'Login successful',
+        token,
+      });
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        success: false,
+        message: 'Internal Server Error',
+        error: error,
+      });
+    }
   }
 }
 

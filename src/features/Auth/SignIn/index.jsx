@@ -24,6 +24,7 @@ import "./SignIn.scss";
 import { AsyncSignin } from "../AuthSlice";
 import { useDispatch } from "react-redux";
 import GoogleLogin from "react-google-login";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import axiosClient from "axiosClient";
 
 function Copyright() {
@@ -160,23 +161,52 @@ export default function SignIn() {
     borderRadius: "50%",
   };
 
+  const facebookButtonStyle = {
+    backgroundImage: `url(${Facebook})`,
+    width: "40px",
+    height: "40px",
+    marginRight: "12px",
+    cursor: "pointer",
+    backgroundSize: "cover",
+    padding: 0,
+    border: "none",
+    borderRadius: "50%",
+  };
+
   const responseSuccessGoogle = async (response) => {
     console.log(response);
     try {
-      const res = await axiosClient.post(`${process.env.REACT_APP_API}/auth/google`, {
-        tokenId: response.tokenId,
-      });
+      const res = await axiosClient.post(
+        `${process.env.REACT_APP_API}/auth/google`,
+        {
+          tokenId: response.tokenId,
+        }
+      );
 
-      localStorage.setItem('token', res.token);
+      localStorage.setItem("token", res.token);
+    } catch (error) {}
+  };
+
+  const responseFacebook = async (response) => {
+    console.log(response);
+
+    try {
+      const { accessToken } = response;
+      const res = await axiosClient.post(
+        `${process.env.REACT_APP_API}/auth/facebook`,
+        {
+          accessToken,
+        }
+      );
+      // console.log(res.data);
+      localStorage.setItem("token", res.token);
     } catch (error) {
-      
+      console.log(error);
     }
-    
-
   };
 
   console.log(process.env.REACT_APP_GOOGLE_CLIENT_ID);
-  
+
   return (
     <Grid container component="main" maxwidth="xs" className={classes.root}>
       <CssBaseline />
@@ -285,9 +315,17 @@ export default function SignIn() {
                   )}
                   onSuccess={responseSuccessGoogle}
                   onFailure={responseSuccessGoogle}
-                  cookiePolicy={'single_host_origin'}
+                  cookiePolicy={"single_host_origin"}
                 />
-                <img src={Facebook} alt="Facebook" />
+                {/* <img src={Facebook} alt="Facebook" /> */}
+                <FacebookLogin
+                  appId={process.env.REACT_APP_FACEBOOK_APP_ID}
+                  autoLoad
+                  callback={responseFacebook}
+                  render={(renderProps) => (
+                    <button onClick={renderProps.onClick} style={facebookButtonStyle} />
+                  )}
+                />
               </div>
             </Grid>
             <Box mt={8}>
