@@ -22,7 +22,8 @@ import { Link } from "react-router-dom";
 import * as yup from "yup";
 import { AsyncSignin } from "../AuthSlice";
 import "./SignIn.scss";
-import {useHistory} from 'react-router-dom';
+import GoogleLogin from "react-google-login";
+import axiosClient from "axiosClient";
 
 function Copyright() {
   return (
@@ -161,6 +162,35 @@ export default function SignIn() {
   
   
 
+  const googleButtonStyle = {
+    backgroundImage: `url(${Google})`,
+    width: "40px",
+    height: "40px",
+    marginRight: "12px",
+    cursor: "pointer",
+    backgroundSize: "cover",
+    padding: 0,
+    border: "none",
+    borderRadius: "50%",
+  };
+
+  const responseSuccessGoogle = async (response) => {
+    console.log(response);
+    try {
+      const res = await axiosClient.post(`${process.env.REACT_APP_API}/auth/google`, {
+        tokenId: response.tokenId,
+      });
+
+      localStorage.setItem('token', res.token);
+    } catch (error) {
+      
+    }
+    
+
+  };
+
+  console.log(process.env.REACT_APP_GOOGLE_CLIENT_ID);
+  
   return (
     <Grid container component="main" maxwidth="xs" className={classes.root}>
       <CssBaseline />
@@ -261,7 +291,18 @@ export default function SignIn() {
                 </div>
               </Grid>
               <div className={`${classes.Anh} align-items-center`}>
-                <img src={Google} alt="google" />
+                <GoogleLogin
+                  clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+                  render={(renderProps) => (
+                    <button
+                      onClick={renderProps.onClick}
+                      style={googleButtonStyle}
+                    />
+                  )}
+                  onSuccess={responseSuccessGoogle}
+                  onFailure={responseSuccessGoogle}
+                  cookiePolicy={'single_host_origin'}
+                />
                 <img src={Facebook} alt="Facebook" />
               </div>
             </Grid>
