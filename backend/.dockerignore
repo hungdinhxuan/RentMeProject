@@ -5,3 +5,4 @@ README.md
 .eslintrc.js
 .prettierrc
 dist
+core
