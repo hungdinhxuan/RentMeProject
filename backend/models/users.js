@@ -5,7 +5,7 @@ const mongoose_delete = require('mongoose-delete');
 
 const UsersSchema = new Schema(
   {
-    username: { type: 'string', required: true, minlength: 5, maxLength: 32 },
+    username: { type: 'string', required: true, minlength: 5, maxLength: 64 },
     email: { type: 'string', required: true, maxLength: 255 },
     password: { type: 'string', required: true },
     fullName: { type: 'string', required: true },
