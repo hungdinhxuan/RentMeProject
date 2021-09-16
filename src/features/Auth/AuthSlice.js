@@ -4,14 +4,17 @@ import axiosClient from "axiosClient";
 const initialState = {
   user: null,
   loading: false,
-  error: "",
+  error: null,
 };
 
-console.log(process.env);
-export const AsyncSignin = createAsyncThunk("auth/signin", async (data) => {
-  const response = await axiosClient.post("/auth/login", data);
-  console.log(response.data);
-  return response.data;
+export const AsyncSignin = createAsyncThunk("auth/signin", async (values,{rejectWithValue}) => {
+  try {
+    const response = await axiosClient.post("/auth/login", values);
+    
+    return response;
+  } catch (err) {
+    return rejectWithValue(err.response.data);
+  }
 });
 
 const AuthSlice = createSlice({
@@ -24,12 +27,12 @@ const AuthSlice = createSlice({
     },
     [AsyncSignin.fulfilled]: (state, action) => {
       state.user = action.payload;
-      console.log(action.payload);
       state.loading = false;
+      state.error = null;
+      localStorage.setItem('token',state.user.token);
     },
     [AsyncSignin.rejected]: (state, action) => {
-      state.error = action.payload;
-      console.log(action.payload);
+      state.error = action.payload.message || "Đăng ký không thành công";
     },
   },
 });

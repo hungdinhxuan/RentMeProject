@@ -13,16 +13,16 @@ import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import AnhBackGround from "assets/acct_creation_bg.jpg";
 import Facebook from "assets/facebook.png";
 import Google from "assets/google.png";
-import React from "react";
+import React, { useState } from "react";
 import ReCAPTCHA from "react-google-recaptcha";
 // React-hook-form
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
+import { AsyncSignin } from "../AuthSlice";
 import "./SignIn.scss";
-import {AsyncSignin} from '../AuthSlice'
-import { useDispatch } from "react-redux";
+import {useHistory} from 'react-router-dom';
 
 function Copyright() {
   return (
@@ -118,8 +118,14 @@ export default function SignIn() {
     password: "",
   };
   const schema = yup.object().shape({
-    username: yup.string().required("Không được để trống"),
-    password: yup.string().required("Không được để trống"),
+    username: yup
+      .string()
+      .min(6, "Tài khoản ít nhất 6 ký tự")
+      .required("Không được để trống"),
+    password: yup
+      .string()
+      .min(8, "Mật khẩu ít nhất 8 ký tự")
+      .required("Không được để trống"),
   });
   const {
     register,
@@ -132,19 +138,28 @@ export default function SignIn() {
     mode: "onChange",
   });
 
+  // Capcha google
+  const [capcha, setCapcha] = useState(true);
+
+  const onCaptchaChange = (value) => {
+    console.log("Captcha value:", value);
+    setCapcha(false);
+  };
+
   // Xử lý redux
   const { user, loading, error } = useSelector((state) => state.auth);
+  const history = useHistory();
   const dispatch = useDispatch();
+
   const onSubmit = (data) => {
-    console.log(data);
     dispatch(AsyncSignin(data));
     reset();
   };
-
-  // Capcha google
-  const onCaptchaChange = (value) => {
-    console.log("Captcha value:", value);
-  };
+  if(localStorage.getItem('token')){
+    history.push("/")
+  }
+  
+  
 
   return (
     <Grid container component="main" maxwidth="xs" className={classes.root}>
@@ -203,6 +218,7 @@ export default function SignIn() {
               fullWidth
               variant="contained"
               className={classes.submit}
+              disabled={capcha}
             >
               Đăng nhập
             </Button>
@@ -240,6 +256,7 @@ export default function SignIn() {
                   <ReCAPTCHA
                     sitekey={`${process.env.REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY}`}
                     onChange={onCaptchaChange}
+                    onExpired={() => {setCapcha(true)}}
                   />
                 </div>
               </Grid>
