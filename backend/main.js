@@ -4,7 +4,7 @@ const app = express();
 const passport = require('passport');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
-const swaggerUi = require('swagger-ui-express');
+// const swaggerUi = require('swagger-ui-express');
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
