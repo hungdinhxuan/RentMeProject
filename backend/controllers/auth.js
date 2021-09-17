@@ -4,7 +4,9 @@ const path = require('path');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const privateKey = fs.readFileSync(path.join(__dirname, '../private.pem'));
+const publicKey = fs.readFileSync(path.join(__dirname, '../public.pem'));
 const { OAuth2Client } = require('google-auth-library');
+const mailgun = require('../utils/mailgun');
 
 class Auth {
   async login(req, res, next) {
@@ -18,7 +20,7 @@ class Auth {
           message: 'username or password is not correct',
         });
       }
-      const verify = await argon2.verify(user.password, password)
+      const verify = await argon2.verify(user.password, password);
       if (verify) {
         console.log(verify);
         const token = await jwt.sign({ sub: user._id }, privateKey, {
@@ -72,9 +74,45 @@ class Auth {
     }
   }
 
-  resetPassword(req, res, next) {
-    
+  async forgotPassword(req, res, next) {
+    const { email } = req.body;
+    // const user = await User.findOne({ email: email });
+    // if (!user) {
+    //   return res.status(406).json({
+    //     success: false,
+    //     message: "This email hasn't registered yet",
+    //   });
+    // }
+    const token = await jwt.sign({ sub: email }, privateKey, {
+      algorithm: 'RS256',
+      expiresIn: '2h',
+    });
+    const data = {
+      from: process.env.MAILGUN_SENDER_MAIL,
+      to: email,
+      subject: 'Reset password link',
+      // text: 'Test email text',
+      html: `
+      <div style="margin: auto; width: 20%; height: auto">
+      <img
+        src="https://rentme-project.s3.ap-east-1.amazonaws.com/1631865437047-player-dou-a.jpg"
+      />
+    </div>
+    <br />
+    <div style="text-align: center">
+      <b>To reset your password, please visit the following page </b>
+      <a
+        href="${process.env.SERVER_URL}/api/auth/reset-password/?token=${token}"
+        >${process.env.SERVER_URL}/api/auth/reset-password/?token=${token}</a
+      >
+    </div>
+            `,
+    };
+    req.data = data;
+    return mailgun(req, res);
   }
+
+  resetPassword(req, res, next) {}
 
   async googleLogin(req, res, next) {
     const client = new OAuth2Client(`${process.env.GOOGLE_CLIENT_ID}`);
