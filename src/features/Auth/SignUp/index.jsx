@@ -19,9 +19,11 @@ import { FormLabel } from "@material-ui/core";
 import AnhBackGround from "assets/acct_creation_bg.jpg";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-
+import { AsyncSignup } from "../AuthSlice";
+import {useSelector, useDispatch} from 'react-redux'
 // React-hook-form
 import { useForm } from "react-hook-form";
+import {useHistory} from 'react-router-dom'
 
 function Copyright() {
   return (
@@ -121,7 +123,7 @@ export default function SignUp() {
     email: "",
   };
   const schema = yup.object().shape({
-    username: yup.string().min(6,"Tài khoản phải trên 6 ký tự").required(),
+    username: yup.string().min(6, "Tài khoản phải trên 6 ký tự").required(),
     password: yup.string().min(8, "Mật khẩu phải ít nhất 8 ký tự").required(),
     confirmPassword: yup
       .string()
@@ -129,7 +131,10 @@ export default function SignUp() {
       .required("Không được để trống"),
     fullName: yup
       .string()
-      .matches(/^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W|_]/g, "Họ tên không hợp lệ")
+      .matches(
+        /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W]*$/,
+        "Họ tên không hợp lệ"
+      )
       .min(5, "Tên quá ngắn")
       .max(50, "Tên quá dài")
       .required(),
@@ -148,11 +153,19 @@ export default function SignUp() {
     defaultValues: initialValues,
     mode: "onChange",
   });
+
+  // Redux register
+  const {user, loading, error} =  useSelector(state => state.auth)
+  const dispatch = useDispatch();
+  const history = useHistory();
   const onSubmit = (data) => {
     console.log(data);
+    dispatch(AsyncSignup(data));
+    if(!error) {
+      return history.push("/signin");
+    }
     reset();
   };
- 
 
   return (
     <Grid container component="main" maxwidth="xs" className={classes.root}>

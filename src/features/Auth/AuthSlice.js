@@ -58,8 +58,21 @@ const AuthSlice = createSlice({
       localStorage.setItem("token", state.user.token);
     },
     [AsyncSignin.rejected]: (state, action) => {
-      state.error = action.payload.message || "Đăng ký không thành công";
+      state.error = action.payload.message || "Đăng nhập không thành công";
       handleNoti("error", "Đăng nhập thất bại", `${state.error}`);
+    },
+
+    [AsyncSignup.pending]: (state) => {
+      state.loading = true;
+    },
+    [AsyncSignup.fulfilled]: (state, action) => {
+      state.user = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+    [AsyncSignup.rejected]: (state, action) => {
+      state.error = action.payload.message || "Đăng ký không thành công";
+      handleNoti("error", `${state.error}`, "");
     },
   },
 });
