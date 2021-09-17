@@ -26,6 +26,8 @@ import { AsyncSignin } from "../AuthSlice";
 import "./SignIn.scss";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import { ToastContainer, toast } from "react-toastify";
+import {Redirect} from 'react-router-dom'
+
 
 function Copyright() {
   return (
@@ -166,6 +168,8 @@ export default function SignIn() {
 
   // Sau khi có tài khoản
   if (localStorage.getItem("token")) {
+    
+    // return <Redirect to="/" />
     history.push("/");
   }
 
