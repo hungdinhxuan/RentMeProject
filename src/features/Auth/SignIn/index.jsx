@@ -25,7 +25,7 @@ import * as yup from "yup";
 import { AsyncSignin } from "../AuthSlice";
 import "./SignIn.scss";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
-
+import { ToastContainer, toast } from "react-toastify";
 
 function Copyright() {
   return (
@@ -148,9 +148,9 @@ export default function SignIn() {
   const [capcha, setCapcha] = useState(true);
   const recaptchaRef = React.useRef();
 
-  
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     dispatch(AsyncSignin(data));
+    window.grecaptcha.reset();
     reset();
   };
 
@@ -158,13 +158,11 @@ export default function SignIn() {
     setValue("captcha", value);
     setCapcha(false);
   };
-  
 
   // Xử lý redux
   const { user, loading, error } = useSelector((state) => state.auth);
   const history = useHistory();
   const dispatch = useDispatch();
-
 
   // Sau khi có tài khoản
   if (localStorage.getItem("token")) {
@@ -210,7 +208,6 @@ export default function SignIn() {
       }
     } catch (error) {}
   };
-
 
   const responseFacebook = async (response) => {
     console.log(response);
@@ -325,6 +322,7 @@ export default function SignIn() {
                   }}
                 >
                   <ReCAPTCHA
+                    // ref={recaptchaRef}
                     sitekey={`${process.env.REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY}`}
                     onChange={onCaptchaChange}
                     onExpired={() => {
@@ -349,10 +347,13 @@ export default function SignIn() {
                 {/* <img src={Facebook} alt="Facebook" /> */}
                 <FacebookLogin
                   appId={process.env.REACT_APP_FACEBOOK_APP_ID}
-                  autoLoad
+                  autoLoad={false}
                   callback={responseFacebook}
                   render={(renderProps) => (
-                    <button onClick={renderProps.onClick} style={facebookButtonStyle} />
+                    <button
+                      onClick={renderProps.onClick}
+                      style={facebookButtonStyle}
+                    />
                   )}
                 />
               </div>
@@ -363,6 +364,7 @@ export default function SignIn() {
           </form>
         </div>
       </Grid>
+      <ToastContainer autoClose={2000} />
     </Grid>
   );
 }
