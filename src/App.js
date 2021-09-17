@@ -7,6 +7,7 @@ import SignIn from "features/Auth/SignIn";
 import "bootstrap/dist/css/bootstrap.min.css";
 import SignUp from "features/Auth/SignUp";
 import "aos/dist/aos.css";
+import 'react-toastify/dist/ReactToastify.css';
 const Home = lazy(() => import("features/Home/index.jsx"));
 
 function App() {

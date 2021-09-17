@@ -152,6 +152,7 @@ export default function SignUp() {
     console.log(data);
     reset();
   };
+ 
 
   return (
     <Grid container component="main" maxwidth="xs" className={classes.root}>
