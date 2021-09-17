@@ -1,13 +1,13 @@
 const { upload, bucket_name, s3 } = require('../services/s3');
-const singleUpload = upload.single('file');
-const multiUpload = upload.array('files', 10);
-const S3_URL = `https://${process.env.AWS_S3_BUCKET_NAME}.${process.env.AWS_S3_BUCKET_REGION}.amazonaws.com/`;
+const multer = require('multer');
+const S3_URL = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_BUCKET_REGION}.amazonaws.com/`;
 
 class S3 {
   listAllObjects(req, res) {
     const bucketParams = {
       Bucket: bucket_name,
     };
+    console.log(S3_URL);
     s3.listObjects(bucketParams, function (err, data) {
       if (err) {
         return res.json({ message: err.message });
@@ -22,34 +22,58 @@ class S3 {
       }
     });
   }
-  uploadOneObject(req, res, next) {
+  uploadOneImage(req, res, next) {
+    const singleUpload = upload.single('image');
     singleUpload(req, res, (err) => {
-      if (err) {
-        return res.json({
+      if (err instanceof multer.MulterError) {
+        // A Multer error occurred when uploading.
+        console.log(err);
+
+        return res.status(400).json({
           success: false,
-          errors: {
-            title: 'File Upload Error',
-            detail: err.message,
-            error: err,
-          },
+          err,
+          message: 'Kích thước file tối đa là 10MB ',
+          
+        });
+      } else if (err) {
+        // An unknown error occurred when uploading.
+        console.log(err);
+        return res.status(400).json({
+          success: false,
+          err,
+          message: 'Định dạng file không hợp lệ, Chỉ .png, .jpg và .jpeg được cho phép',
+
         });
       }
+      console.log(req.file);
       return res.json({
         success: true,
         message: 'uploaded',
+        url: req.file.location,
       });
     });
   }
-  uploadMultiObject(req, res, next) {
+  uploadMultiImages(req, res, next) {
+    const multiUpload = upload.array('images', 10);
     multiUpload(req, res, (err) => {
-      if (err) {
-        return res.json({
+      if (err instanceof multer.MulterError) {
+        // A Multer error occurred when uploading.
+        console.log(err);
+
+        return res.status(400).json({
           success: false,
-          errors: {
-            title: 'File Upload Error',
-            detail: err.message,
-            error: err,
-          },
+          err,
+          message: 'Tổng dung lượng file upload phải nhỏ hơn 10 MB',
+          
+        });
+      } else if (err) {
+        // An unknown error occurred when uploading.
+        console.log(err);
+        return res.status(400).json({
+          success: false,
+          err,
+          message: 'Định dạng file không hợp lệ, Chỉ .png, .jpg và .jpeg được cho phép',
+          
         });
       }
       return res.json({
@@ -58,7 +82,7 @@ class S3 {
       });
     });
   }
-  deleteOneObject(req, res, next) {
+  async deleteOneObject(req, res, next) {
     const pathName = req.body.file_name;
     const bucketParams = {
       Bucket: bucket_name,
