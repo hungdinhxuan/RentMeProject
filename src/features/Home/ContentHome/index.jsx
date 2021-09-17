@@ -1,12 +1,17 @@
 import React from "react";
 import { useHistory } from "react-router";
 import "./ContentHome.scss";
+import ReactTwitchEmbedVideo from "react-twitch-embed-video";
 // import AOS from "aos";
 
 function ContentHome() {
   const history = useHistory();
   return (
-    <div className="container__content" data-aos="fade-up" data-aos-duration="1000">
+    <div
+      className="container__content"
+      data-aos="fade-up"
+      data-aos-duration="1000"
+    >
       <div className="content__services">
         <div className="main__services">
           <div className="main__services--title">
@@ -93,7 +98,7 @@ function ContentHome() {
             </div>
             <div className="right__items col-6">
               <div className="video">
-                <iframe
+                {/* <iframe
                   width="640"
                   height="360"
                   src="https://www.youtube.com/embed/En-BbdqsNmQ"
@@ -102,7 +107,9 @@ function ContentHome() {
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                   className="youtube__video"
-                ></iframe>
+                ></iframe> */}
+                <ReactTwitchEmbedVideo channel="valorant" width="640" height="360" layout="video" />
+               
               </div>
             </div>
           </div>
