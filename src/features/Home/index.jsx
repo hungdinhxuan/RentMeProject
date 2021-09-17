@@ -1,6 +1,7 @@
 import Footer from "components/Footer";
 import Header from "components/Header";
 import React from "react";
+import { ToastContainer } from "react-toastify";
 import CarouselHeader from "./Carousel";
 import ContentHome from "./ContentHome";
 import "./Home.scss";
@@ -24,6 +25,8 @@ function Home() {
         <ListGame />
         <div className="bg__home"></div>
       </div>
+      <ToastContainer autoClose={2000} />
+
       <Footer />
     </div>
   );
