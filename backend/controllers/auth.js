@@ -76,17 +76,28 @@ class Auth {
 
   async forgotPassword(req, res, next) {
     const { email } = req.body;
-    // const user = await User.findOne({ email: email });
-    // if (!user) {
-    //   return res.status(406).json({
-    //     success: false,
-    //     message: "This email hasn't registered yet",
-    //   });
-    // }
-    const token = await jwt.sign({ sub: email }, privateKey, {
-      algorithm: 'RS256',
-      expiresIn: '2h',
-    });
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      return res.status(400).json({
+        success: false,
+        message: "This email hasn't registered yet",
+      });
+    }
+    let randPassword = Array(10)
+      .fill('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz')
+      .map(function (x) {
+        return x[Math.floor(Math.random() * x.length)];
+      })
+      .join('');
+    randPassword = randPassword + '3aA@';
+    const token = await jwt.sign(
+      { sub: email, newPassword: randPassword },
+      privateKey,
+      {
+        algorithm: 'RS256',
+        expiresIn: '2h',
+      },
+    );
     const data = {
       from: process.env.MAILGUN_SENDER_MAIL,
       to: email,
@@ -145,6 +156,7 @@ class Auth {
                                             password has been generated for you. To reset your password, click the
                                             following link and follow the instructions.
                                         </p>
+                                        <b>Your new password is ${randPassword}</b> <br/>
                                         <a href="${process.env.SERVER_URL}/api/auth/reset-password/?token=${token}"
                                             style="background:#20e277;text-decoration:none !important; font-weight:500; margin-top:35px; color:#fff;text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;">Reset
                                             Password</a>
