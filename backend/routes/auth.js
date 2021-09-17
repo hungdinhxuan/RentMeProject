@@ -3,7 +3,9 @@ const router = express.Router();
 const validate = require('../middleware/validate');
 const verifyRecaptcha = require('../middleware/verifyReptcha');
 const authController = require('../controllers/auth');
-const passport = require('passport');
+// const passport = require('passport');
+
+
 
 router.post(
   '/login',
