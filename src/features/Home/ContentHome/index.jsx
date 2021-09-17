@@ -2,10 +2,50 @@ import React from "react";
 import { useHistory } from "react-router";
 import "./ContentHome.scss";
 import ReactTwitchEmbedVideo from "react-twitch-embed-video";
+import axios from "axios";
+import { useEffect, useState } from "react";
 // import AOS from "aos";
 
 function ContentHome() {
   const history = useHistory();
+  const [channel, setChannel] = useState("");
+  useEffect(() => {
+    const calllApi = async () => {
+      try {
+        // Get access token
+        let options;
+        let res;
+        options = {
+          url: `https://id.twitch.tv/oauth2/token?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&client_secret=${process.env.REACT_APP_TWITCH_CLIENT_SECRET}&grant_type=client_credentials`,
+          method: "POST",
+        };
+        res = await axios(options);
+        const ACCESS_TOKEN = res.data.access_token;
+        console.log(ACCESS_TOKEN);
+        // Call api to get top 5 streaming video on twitch
+        console.log("callapi twitch");
+        options = {
+          url: "https://api.twitch.tv/helix/streams?first=5",
+          headers: {
+            Authorization: `Bearer ${ACCESS_TOKEN}`,
+            "Client-Id": process.env.REACT_APP_TWITCH_CLIENT_ID,
+          },
+          mehod: "GET",
+        };
+        // Pick 1 in 5 to setChannel
+        res = await axios(options);
+        const { data } = res.data;
+
+        const randomChanel = Math.floor(Math.random() * data.length);
+        // console.log(data[randomChanel]);
+        setChannel(data[randomChanel].user_login);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    calllApi();
+  }, []);
+  console.log(channel);
   return (
     <div
       className="container__content"
@@ -108,8 +148,12 @@ function ContentHome() {
                   allowFullScreen
                   className="youtube__video"
                 ></iframe> */}
-                <ReactTwitchEmbedVideo channel="valorant" width="640" height="360" layout="video" />
-               
+                <ReactTwitchEmbedVideo
+                  channel={channel || "valorant"}
+                  width="640"
+                  height="360"
+                  layout="video"
+                />
               </div>
             </div>
           </div>
