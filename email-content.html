@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div style="margin: auto; width: 20%; height: auto">
+      <img
+        src="https://rentme-project.s3.ap-east-1.amazonaws.com/1631865437047-player-dou-a.jpg"
+      />
+    </div>
+    <br />
+    <div style="text-align: center">
+      <b>To reset your password, please visit the following page </b>
+      <a
+        href="${process.env.SERVER_URL}/api/auth/reset-password/?token=${token}"
+        >${process.env.SERVER_URL}/api/auth/reset-password/?token=${token}</a
+      >
+    </div>
+  </body>
+</html>
