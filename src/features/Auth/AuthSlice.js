@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "axiosClient";
-import { ToastContainer, toast } from "react-toastify";
+import {  toast } from "react-toastify";
 const initialState = {
   user: null,
   loading: false,
@@ -12,7 +12,7 @@ export const AsyncSignin = createAsyncThunk(
   async (values, { rejectWithValue }) => {
     try {
       const response = await axiosClient.post("/auth/login", values);
-      toast.success("MY SUCCESS");
+      toast.success("Đăng nhập thành công");
       return response;
     } catch (err) {
       return rejectWithValue(err.response.data);

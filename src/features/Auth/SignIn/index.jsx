@@ -194,13 +194,12 @@ export default function SignIn() {
   };
 
   const responseSuccessGoogle = async (response) => {
+    // console.log(response);
+    // console.log(`${process.env.REACT_APP_API}/auth/google`);
     try {
-      const res = await axiosClient.post(
-        `${process.env.REACT_APP_API}/auth/google`,
-        {
-          tokenId: response.tokenId,
-        }
-      );
+      const res = await axiosClient.post('/auth/google', {
+        tokenId: response.tokenId,
+      });
 
       localStorage.setItem("token", res.token);
       if (localStorage.getItem("token")) {
@@ -214,12 +213,9 @@ export default function SignIn() {
 
     try {
       const { accessToken } = response;
-      const res = await axiosClient.post(
-        `${process.env.REACT_APP_API}/auth/facebook`,
-        {
-          accessToken,
-        }
-      );
+      const res = await axiosClient.post('/auth/facebook', {
+        accessToken,
+      });
       // console.log(res.data);
       localStorage.setItem("token", res.token);
     } catch (error) {

@@ -18,7 +18,9 @@ class Auth {
           message: 'username or password is not correct',
         });
       }
-      if (argon2.verify(user.password, password)) {
+      const verify = await argon2.verify(user.password, password)
+      if (verify) {
+        console.log(verify);
         const token = await jwt.sign({ sub: user._id }, privateKey, {
           algorithm: 'RS256',
           expiresIn: '24h',
@@ -28,7 +30,6 @@ class Auth {
       return res.status(401).json({
         success: false,
         message: 'username or password is not correct',
-        user,
       });
     } catch (error) {
       console.log(error);
@@ -70,7 +71,11 @@ class Auth {
       });
     }
   }
-  resetPassword(req, res, next) {}
+
+  resetPassword(req, res, next) {
+    
+  }
+
   async googleLogin(req, res, next) {
     const client = new OAuth2Client(`${process.env.GOOGLE_CLIENT_ID}`);
     const { tokenId } = req.body;
@@ -129,7 +134,7 @@ class Auth {
       if (!user) {
         user = await User.create({
           username: `facebook_${id}`,
-          email,
+          email: email || 'null',
           password: await argon2.hash(`${Math.random()}`),
           fullName: name,
           avatar: picture.data.url,
