@@ -1,6 +1,16 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "axiosClient";
-import {  toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
+import Swal from "sweetalert2";
+
+const handleNoti = (icon, title, text) => {
+  Swal.fire({
+    icon: `${icon}`,
+    title: `${title}`,
+    text: `${text}`,
+  });
+};
+
 const initialState = {
   user: null,
   loading: false,
@@ -12,7 +22,20 @@ export const AsyncSignin = createAsyncThunk(
   async (values, { rejectWithValue }) => {
     try {
       const response = await axiosClient.post("/auth/login", values);
-      toast.success("Đăng nhập thành công");
+      handleNoti("success", "Đăng nhập thành công", "");
+      return response;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const AsyncSignup = createAsyncThunk(
+  "auth/signup",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axiosClient.post("/auth/register", values);
+      handleNoti("success", "Đăng ký thành công", "");
       return response;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -36,7 +59,7 @@ const AuthSlice = createSlice({
     },
     [AsyncSignin.rejected]: (state, action) => {
       state.error = action.payload.message || "Đăng ký không thành công";
-      toast.error(state.error);
+      handleNoti("error", "Đăng nhập thất bại", `${state.error}`);
     },
   },
 });
