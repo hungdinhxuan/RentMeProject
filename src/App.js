@@ -8,7 +8,9 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import SignUp from "features/Auth/SignUp";
 import "aos/dist/aos.css";
 import 'react-toastify/dist/ReactToastify.css';
+import 'antd/dist/antd.css';
 const Home = lazy(() => import("features/Home/index.jsx"));
+const ForgotPassword = lazy(() => import("features/Auth/ForgotPassword/index.jsx"))
 
 function App() {
   return (
@@ -36,7 +38,7 @@ function App() {
             <Route exact path="/" component={Home} />
             <Route exact path="/signin" component={SignIn} />
             <Route exact path="/signup" component={SignUp} />
-            <Route exact path="/test" render={() => <h1>test</h1>} />
+            <Route exact path="/forgot-password" component={ForgotPassword} />
             <Route exact path="/404" component={PageNotFound} />
             <Route path="*" component={NotFound} />
           </Switch>

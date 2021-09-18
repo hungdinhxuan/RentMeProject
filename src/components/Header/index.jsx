@@ -3,9 +3,12 @@ import React, { useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { NavLink, useHistory, useLocation } from "react-router-dom";
 import "./Header.scss";
+import { Badge, Avatar } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 
 function Header() {
   const [header, setHeader] = useState(false);
+  const [user, setUser] = useState(false);
   const history = useHistory();
 
   const handleLogin = () => {
@@ -15,6 +18,11 @@ function Header() {
   const handleSignUp = () => {
     history.push("/signup");
   };
+
+  const userInfo = localStorage.getItem("token");
+  if (userInfo) {
+    setUser(false);
+  }
 
   return (
     <header>
@@ -71,7 +79,7 @@ function Header() {
               </Nav.Link>
             </Nav>
             <div className="justify-content-end">
-              <button className="button__login" onClick={handleLogin}>
+              {/* <button className="button__login" onClick={handleLogin}>
                 Log in
               </button>
               <button
@@ -80,7 +88,18 @@ function Header() {
                 onClick={handleSignUp}
               >
                 Sign up
-              </button>
+              </button> */}
+
+              <div className="message d-flex">
+                <Badge count={1}>
+                  <div className="message-icon">
+                    <i class="bi bi-envelope"></i>
+                  </div>
+                </Badge>
+                <div className="ml-2">
+                  <Avatar size={30} icon={<UserOutlined />} />
+                </div>
+              </div>
             </div>
           </Navbar.Collapse>
         </Container>
