@@ -6,3 +6,5 @@ README.md
 .prettierrc
 dist
 core
+.env
+prod.env

@@ -1,7 +1,7 @@
 const S3 = require("aws-sdk/clients/s3");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
-require("dotenv").config();
+// require("dotenv").config();
 
 const bucket_name = process.env.AWS_S3_BUCKET_NAME;
 const region = process.env.AWS_S3_BUCKET_REGION;

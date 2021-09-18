@@ -4,3 +4,6 @@ README.md
 .gitignore
 backend
 build
+.env
+.env.production
+text.txt

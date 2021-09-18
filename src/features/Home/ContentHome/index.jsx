@@ -153,6 +153,7 @@ function ContentHome() {
                   width="640"
                   height="360"
                   layout="video"
+                  targetClass="youtube__video"
                 />
               </div>
             </div>
