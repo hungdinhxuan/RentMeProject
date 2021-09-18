@@ -8,3 +8,4 @@ dist
 core
 .env
 prod.env
+yarn-error.log

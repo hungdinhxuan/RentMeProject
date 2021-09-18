@@ -4,7 +4,6 @@ const path = require('path');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const privateKey = fs.readFileSync(path.join(__dirname, '../private.pem'));
-const publicKey = fs.readFileSync(path.join(__dirname, '../public.pem'));
 const { OAuth2Client } = require('google-auth-library');
 const mailgun = require('../utils/mailgun');
 
