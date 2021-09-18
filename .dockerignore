@@ -5,6 +5,5 @@ README.md
 backend
 build
 .env
-.env.production
 text.txt
 yarn-error.log

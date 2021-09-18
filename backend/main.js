@@ -6,6 +6,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 // const swaggerUi = require('swagger-ui-express');
 
+
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
   // const swaggerJsdoc = require('swagger-jsdoc');
@@ -48,15 +49,16 @@ app.use(
 
 passport.serializeUser(function (user, done) {
   done(null, user);
+
 });
 
 passport.deserializeUser(function (user, done) {
   done(null, user);
 });
 
+
 require('./services/passport')();
 
 routes(app);
-
-app.listen(4000);
 socket(app);
+// app.listen(4000)
