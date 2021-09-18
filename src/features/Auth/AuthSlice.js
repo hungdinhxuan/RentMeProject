@@ -15,6 +15,7 @@ const initialState = {
   user: null,
   loading: false,
   error: null,
+  
 };
 
 export const AsyncSignin = createAsyncThunk(
@@ -36,6 +37,25 @@ export const AsyncSignup = createAsyncThunk(
     try {
       const response = await axiosClient.post("/auth/register", values);
       handleNoti("success", "Đăng ký thành công", "");
+      return response;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const AsyncForgotPassword = createAsyncThunk(
+  "auth/forgot-password",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axiosClient.post("/auth/forgot-password", values);
+      toast('Gửi email thành công', {
+        position: "bottom-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        pauseOnHover: false,
+        progress: undefined,
+        });
       return response;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -74,6 +94,23 @@ const AuthSlice = createSlice({
       state.error = action.payload.message || "Đăng ký không thành công";
       handleNoti("error", `${state.error}`, "");
     },
+    
+    [AsyncForgotPassword.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.error = null;
+    },
+    [AsyncForgotPassword.rejected]: (state, action) => {
+      state.error = action.payload.message || "Gửi email không thành công";
+      toast(`${state.error}`, {
+        position: "bottom-center",
+        autoClose: 2000,
+        hideProgressBar: false,
+        pauseOnHover: false,
+        progress: undefined,
+        });
+    },
+
+
   },
 });
 
