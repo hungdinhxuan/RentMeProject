@@ -12,6 +12,7 @@ module.exports = () => {
   var opts = {};
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
   opts.secretOrKey = publicKey;
+  opts.algorithm = ['RS256']
   passport.use(
     new JwtStrategy(opts, function (jwt_payload, done) {
       users.findOne({ _id: jwt_payload.sub }, function (err, user) {
