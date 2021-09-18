@@ -7,3 +7,4 @@ build
 .env
 .env.production
 text.txt
+yarn-error.log
