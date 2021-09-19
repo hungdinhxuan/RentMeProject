@@ -5,3 +5,6 @@ README.md
 .eslintrc.js
 .prettierrc
 dist
+core
+.env
+yarn-error.log

@@ -4,3 +4,6 @@ README.md
 .gitignore
 backend
 build
+.env
+text.txt
+yarn-error.log

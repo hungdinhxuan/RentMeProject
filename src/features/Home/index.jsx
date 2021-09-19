@@ -1,6 +1,7 @@
 import Footer from "components/Footer";
 import Header from "components/Header";
 import React from "react";
+import { ToastContainer } from "react-toastify";
 import CarouselHeader from "./Carousel";
 import ContentHome from "./ContentHome";
 import "./Home.scss";
@@ -9,6 +10,10 @@ import Stories from "./Stories";
 import TryRentme from "./TryRentme";
 
 function Home() {
+  window.onunload = () => {
+    window.scrollTo(0, 0);
+  };
+
   return (
     <div className="home__main">
       <Header />
@@ -16,11 +21,13 @@ function Home() {
         <CarouselHeader />
         <ContentHome />
         <Stories />
-        <TryRentme/>
-        <ListGame/>
+        <TryRentme />
+        <ListGame />
         <div className="bg__home"></div>
       </div>
-      <Footer/>
+      <ToastContainer autoClose={2000} />
+
+      <Footer />
     </div>
   );
 }

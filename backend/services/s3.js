@@ -1,7 +1,7 @@
 const S3 = require("aws-sdk/clients/s3");
 const multer = require("multer");
 const multerS3 = require("multer-s3");
-require("dotenv").config();
+// require("dotenv").config();
 
 const bucket_name = process.env.AWS_S3_BUCKET_NAME;
 const region = process.env.AWS_S3_BUCKET_REGION;
@@ -26,6 +26,20 @@ const upload = multer({
       cb(null, `${Date.now()}-${file.originalname}`);
     },
   }),
+  fileFilter: (req, file, cb) => {
+    if (
+      file.mimetype == 'image/png' ||
+      file.mimetype == 'image/jpg' ||
+      file.mimetype == 'image/jpeg'
+    ) {
+      cb(null, true)
+    } else {
+      cb(null, false)
+      return cb(new Error('Only .png, .jpg and .jpeg format allowed!'))
+    }
+  },
+  /// limit 10MB to upload
+  limits: {fileSize: 1024 * 1024 * 10}
 });
 
 

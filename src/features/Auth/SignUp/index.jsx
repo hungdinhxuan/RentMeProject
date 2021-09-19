@@ -17,9 +17,13 @@ import Google from "assets/google.png";
 import Facebook from "assets/facebook.png";
 import { FormLabel } from "@material-ui/core";
 import AnhBackGround from "assets/acct_creation_bg.jpg";
-
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { AsyncSignup } from "../AuthSlice";
+import {useSelector, useDispatch} from 'react-redux'
 // React-hook-form
 import { useForm } from "react-hook-form";
+import {useHistory} from 'react-router-dom'
 
 function Copyright() {
   return (
@@ -44,7 +48,8 @@ const useStyles = makeStyles((theme) => ({
     height: "100vh",
     justifyContent: "center",
     backgroundImage: `url(${AnhBackGround})`,
-    padding: "90px 0",
+    // padding: "90px 0",
+    padding: "40px 0",
   },
 
   paper: {
@@ -108,14 +113,57 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignUp() {
   const classes = useStyles();
+
+  // Form
+  const initialValues = {
+    username: "",
+    password: "",
+    confirmPassword: "",
+    fullName: "",
+    email: "",
+  };
+  const schema = yup.object().shape({
+    username: yup.string().min(6, "Tài khoản phải trên 6 ký tự").required(),
+    password: yup.string().min(8, "Mật khẩu phải ít nhất 8 ký tự").required(),
+    confirmPassword: yup
+      .string()
+      .oneOf([yup.ref("password"), null], "Mật khẩu không trùng khớp")
+      .required("Không được để trống"),
+    fullName: yup
+      .string()
+      .matches(
+        /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W]*$/,
+        "Họ tên không hợp lệ"
+      )
+      .min(5, "Tên quá ngắn")
+      .max(50, "Tên quá dài")
+      .required(),
+    email: yup
+      .string()
+      .email("Không đúng định dạng email")
+      .required("Không được để trống"),
+  });
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: initialValues,
+    mode: "onChange",
+  });
+
+  // Redux register
+  const {user, loading, error} =  useSelector(state => state.auth)
+  const dispatch = useDispatch();
+  const history = useHistory();
   const onSubmit = (data) => {
     console.log(data);
+    dispatch(AsyncSignup(data));
+    if(!error) {
+      return history.push("/signin");
+    }
     reset();
   };
 
@@ -154,6 +202,7 @@ export default function SignUp() {
               autoFocus
               {...register("username")}
             />
+            {errors.username && <p>{errors.username.message}</p>}
             <FormLabel className="mt-3">Họ Tên</FormLabel>
             <TextField
               fullWidth
@@ -163,6 +212,8 @@ export default function SignUp() {
               placeholder="Nhập họ tên"
               {...register("fullName")}
             />
+            {errors.fullName && <p>{errors.fullName.message}</p>}
+
             <FormLabel className="mt-3">Mật Khẩu</FormLabel>
             <TextField
               fullWidth
@@ -172,6 +223,7 @@ export default function SignUp() {
               placeholder="Nhập mật khẩu"
               {...register("password")}
             />
+            {errors.password && <p>{errors.password.message}</p>}
 
             <FormLabel className="mt-3">Xác Nhận Mật Khẩu</FormLabel>
             <TextField
@@ -182,6 +234,8 @@ export default function SignUp() {
               placeholder="Xác nhận mật khẩu"
               {...register("confirmPassword")}
             />
+            {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
+
             <FormLabel className="mt-3">Email</FormLabel>
             <TextField
               fullWidth
@@ -191,6 +245,7 @@ export default function SignUp() {
               placeholder="Nhập email"
               {...register("email")}
             />
+            {errors.email && <p>{errors.email.message}</p>}
 
             <Button
               type="submit"
@@ -202,17 +257,26 @@ export default function SignUp() {
             </Button>
             <Grid container>
               <Grid item xs>
-                <Link to="/" style={{ color: "#AF93EF" }} className={classes.Hover}>
+                <Link
+                  to="/"
+                  style={{ color: "#AF93EF" }}
+                  className={classes.Hover}
+                >
                   Trở về Trang Chủ
                 </Link>
               </Grid>
               <Grid item>
-                <Link to="/signin" variant="body2" style={{ color: "#AF93EF" }} className={classes.Hover}>
+                <Link
+                  to="/signin"
+                  variant="body2"
+                  style={{ color: "#AF93EF" }}
+                  className={classes.Hover}
+                >
                   {"Đã có tài khoản? Đăng nhập"}
                 </Link>
               </Grid>
             </Grid>
-            
+
             <Box mt={8}>
               <Copyright />
             </Box>

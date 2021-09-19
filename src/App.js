@@ -1,4 +1,3 @@
-import Header from "components/Header";
 import { lazy, React, Suspense } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import PageNotFound from "components/PageNotFound";
@@ -7,9 +6,15 @@ import SignIn from "features/Auth/SignIn";
 import "bootstrap/dist/css/bootstrap.min.css";
 import SignUp from "features/Auth/SignUp";
 import "aos/dist/aos.css";
+import "react-toastify/dist/ReactToastify.css";
+import socket from "socket";
+
 const Home = lazy(() => import("features/Home/index.jsx"));
 
 function App() {
+  socket.on("connect", () => {
+    console.log('ok');
+  });
   return (
     <div className="App">
       <Suspense
@@ -35,7 +40,6 @@ function App() {
             <Route exact path="/" component={Home} />
             <Route exact path="/signin" component={SignIn} />
             <Route exact path="/signup" component={SignUp} />
-            <Route exact path="/test" render={() => <h1>test</h1>} />
             <Route exact path="/404" component={PageNotFound} />
             <Route path="*" component={NotFound} />
           </Switch>
