@@ -6,9 +6,6 @@ services:
     ports:
       - 80:80
       - 443:443
-    volumes: 
-      # - ./nginx/rentme_ssl:/etc/ssl:ro
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
     restart: always
     env_file: ./.env.production
   backend:

@@ -21,7 +21,7 @@ class Auth {
       }
       const verify = await argon2.verify(user.password, password);
       if (verify) {
-        console.log(verify);
+        // console.log(verify);
         const token = await jwt.sign({ sub: user._id }, privateKey, {
           algorithm: 'RS256',
           expiresIn: '24h',
@@ -196,7 +196,7 @@ class Auth {
   async googleLogin(req, res, next) {
     const client = new OAuth2Client(`${process.env.GOOGLE_CLIENT_ID}`);
     const { tokenId } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
     try {
       const response = await client.verifyIdToken({
         idToken: tokenId,
@@ -245,7 +245,7 @@ class Auth {
         method: 'GET',
       });
       const data = await response.json();
-      console.log(data);
+      // console.log(data);
       const { id, email, name, picture } = data;
       let user = await User.findOne({ email });
       if (!user) {
