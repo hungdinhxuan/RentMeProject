@@ -6,11 +6,22 @@
   "dependencies": {
     "argon2": "^0.28.2",
     "aws-sdk": "^2.987.0",
+    "cookie-parser": "^1.4.5",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-session": "^1.17.2",
+    "express-validator": "^6.12.1",
+    "google-auth-library": "^7.9.1",
+    "isomorphic-fetch": "^3.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mailgun-js": "^0.22.0",
     "mongoose": "^6.0.5",
     "mongoose-delete": "^0.5.4",
     "multer": "^1.4.3",
     "multer-s3": "^2.9.0",
+    "nodemailer": "^6.6.3",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
     "socket.io": "^4.2.0"
   },
   "devDependencies": {

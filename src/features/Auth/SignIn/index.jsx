@@ -1,24 +1,33 @@
-import React from "react";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { FormLabel } from "@material-ui/core";
 import Avatar from "@material-ui/core/Avatar";
+import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import TextField from "@material-ui/core/TextField";
-import Paper from "@material-ui/core/Paper";
-import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
-import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
-import Typography from "@material-ui/core/Typography";
+import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
-import { Link } from "react-router-dom";
-import "./SignIn.scss";
-import Google from "assets/google.png";
-import Facebook from "assets/facebook.png";
-import { FormLabel } from "@material-ui/core";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import AnhBackGround from "assets/acct_creation_bg.jpg";
+import Facebook from "assets/facebook.png";
+import Google from "assets/google.png";
+import axiosClient from "axiosClient";
+import React, { useState } from "react";
+import GoogleLogin from "react-google-login";
 import ReCAPTCHA from "react-google-recaptcha";
-
 // React-hook-form
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useHistory } from "react-router-dom";
+import * as yup from "yup";
+import { AsyncSignin } from "../AuthSlice";
+import "./SignIn.scss";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
+import { ToastContainer, toast } from "react-toastify";
+import {Redirect} from 'react-router-dom'
+
 
 function Copyright() {
   return (
@@ -107,20 +116,119 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn() {
   const classes = useStyles();
+
+  // Form
+  const initialValues = {
+    username: "",
+    password: "",
+    captcha: "",
+  };
+  const schema = yup.object().shape({
+    username: yup
+      .string()
+      .min(6, "Tài khoản ít nhất 6 ký tự")
+      .required("Không được để trống"),
+    password: yup
+      .string()
+      .min(8, "Mật khẩu ít nhất 8 ký tự")
+      .required("Không được để trống"),
+    captcha: yup.string().required(),
+  });
   const {
     register,
     handleSubmit,
     reset,
+    setValue,
     formState: { errors },
-  } = useForm();
-  const onSubmit = (data) => {
-    console.log(data);
+  } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: initialValues,
+    mode: "onChange",
+  });
+
+  // Capcha google
+  const [capcha, setCapcha] = useState(true);
+  const recaptchaRef = React.useRef();
+
+  const onSubmit = async (data) => {
+    dispatch(AsyncSignin(data));
+    window.grecaptcha.reset();
     reset();
   };
-  
+
   const onCaptchaChange = (value) => {
-    console.log("Captcha value:", value);
+    setValue("captcha", value);
+    setCapcha(false);
+  };
+
+  // Xử lý redux
+  const { user, loading, error } = useSelector((state) => state.auth);
+  const history = useHistory();
+  const dispatch = useDispatch();
+
+  // Sau khi có tài khoản
+  if (localStorage.getItem("token")) {
+    
+    // return <Redirect to="/" />
+    history.push("/");
   }
+
+  const googleButtonStyle = {
+    backgroundImage: `url(${Google})`,
+    width: "40px",
+    height: "40px",
+    marginRight: "12px",
+    cursor: "pointer",
+    backgroundSize: "cover",
+    padding: 0,
+    border: "none",
+    borderRadius: "50%",
+  };
+
+  const facebookButtonStyle = {
+    backgroundImage: `url(${Facebook})`,
+    width: "40px",
+    height: "40px",
+    marginRight: "12px",
+    cursor: "pointer",
+    backgroundSize: "cover",
+    padding: 0,
+    border: "none",
+    borderRadius: "50%",
+  };
+
+  const responseSuccessGoogle = async (response) => {
+    // console.log(response);
+    // console.log(`${process.env.REACT_APP_API}/auth/google`);
+    try {
+      const res = await axiosClient.post('/auth/google', {
+        tokenId: response.tokenId,
+      });
+      console.log(res);
+      localStorage.setItem("token", res.token);
+      if (localStorage.getItem("token")) {
+        history.push("/");
+      }
+    } catch (error) {}
+  };
+
+  const responseFacebook = async (response) => {
+    console.log(response);
+
+    try {
+      const { accessToken } = response;
+      const res = await axiosClient.post('/auth/facebook', {
+        accessToken,
+      });
+      console.log(res.data);
+      localStorage.setItem("token", res.token);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  console.log(process.env.REACT_APP_GOOGLE_CLIENT_ID);
+
   return (
     <Grid container component="main" maxwidth="xs" className={classes.root}>
       <CssBaseline />
@@ -150,21 +258,24 @@ export default function SignIn() {
             <FormLabel>Tài Khoản</FormLabel>
             <TextField
               fullWidth
-              id="email"
+              id="username"
               name="username"
               placeholder="Nhập tài khoản"
               autoFocus
               {...register("username")}
             />
+
+            {errors.username && <p>{errors.username.message}</p>}
             <FormLabel className="mt-3">Mật Khẩu</FormLabel>
             <TextField
               fullWidth
+              id="password"
               name="password"
               type="password"
-              id="password"
               placeholder="Nhập mật khẩu"
               {...register("password")}
             />
+            {errors.password && <p>{errors.password.message}</p>}
             <Grid item xs style={{ marginTop: "5px" }}>
               <Link to="/forgot-password" style={{ color: "#AF93EF" }}>
                 Quên mật khẩu
@@ -175,6 +286,7 @@ export default function SignIn() {
               fullWidth
               variant="contained"
               className={classes.submit}
+              disabled={capcha}
             >
               Đăng nhập
             </Button>
@@ -210,15 +322,40 @@ export default function SignIn() {
                   }}
                 >
                   <ReCAPTCHA
+                    // ref={recaptchaRef}
                     sitekey={`${process.env.REACT_APP_GOOGLE_RECAPTCHA_SITE_KEY}`}
                     onChange={onCaptchaChange}
+                    onExpired={() => {
+                      setCapcha(true);
+                    }}
                   />
-                  
                 </div>
               </Grid>
               <div className={`${classes.Anh} align-items-center`}>
-                <img src={Google} alt="google" />
-                <img src={Facebook} alt="Facebook" />
+                <GoogleLogin
+                  clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+                  render={(renderProps) => (
+                    <button
+                      onClick={renderProps.onClick}
+                      style={googleButtonStyle}
+                    />
+                  )}
+                  onSuccess={responseSuccessGoogle}
+                  onFailure={responseSuccessGoogle}
+                  cookiePolicy={"single_host_origin"}
+                />
+                {/* <img src={Facebook} alt="Facebook" /> */}
+                <FacebookLogin
+                  appId={process.env.REACT_APP_FACEBOOK_APP_ID}
+                  autoLoad={false}
+                  callback={responseFacebook}
+                  render={(renderProps) => (
+                    <button
+                      onClick={renderProps.onClick}
+                      style={facebookButtonStyle}
+                    />
+                  )}
+                />
               </div>
             </Grid>
             <Box mt={8}>
@@ -227,6 +364,7 @@ export default function SignIn() {
           </form>
         </div>
       </Grid>
+      <ToastContainer autoClose={2000} />
     </Grid>
   );
 }

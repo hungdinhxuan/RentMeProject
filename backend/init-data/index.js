@@ -1,2 +1,2 @@
-require('dotenv').config();
+// require('dotenv').config();
 require('../services/mongo')();
