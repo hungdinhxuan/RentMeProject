@@ -1,6 +1,5 @@
 import React from "react";
-import { Swiper, SwiperSlide } from "swiper/react";
-import SwiperCore, { Autoplay } from "swiper";
+
 import Games from "constants/Games";
 import shadow from "assets/ListGames/shadow.png";
 import Slider from "react-slick";

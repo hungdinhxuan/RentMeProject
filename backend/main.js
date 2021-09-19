@@ -4,6 +4,9 @@ const app = express();
 const passport = require('passport');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+const helmet = require('helmet')
+app.use(helmet())
+
 // const swaggerUi = require('swagger-ui-express');
 
 

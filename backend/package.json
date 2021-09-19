@@ -12,6 +12,7 @@
     "express-session": "^1.17.2",
     "express-validator": "^6.12.1",
     "google-auth-library": "^7.9.1",
+    "helmet": "^4.6.0",
     "isomorphic-fetch": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
     "mailgun-js": "^0.22.0",
