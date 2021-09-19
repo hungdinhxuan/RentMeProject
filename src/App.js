@@ -9,10 +9,15 @@ import SignUp from "features/Auth/SignUp";
 import "aos/dist/aos.css";
 import 'react-toastify/dist/ReactToastify.css';
 import 'antd/dist/antd.css';
+import socket from "socket";
+
 const Home = lazy(() => import("features/Home/index.jsx"));
 const ForgotPassword = lazy(() => import("features/Auth/ForgotPassword/index.jsx"))
 
 function App() {
+  socket.on("connect", () => {
+    console.log('ok');
+  });
   return (
     <div className="App">
       <Suspense

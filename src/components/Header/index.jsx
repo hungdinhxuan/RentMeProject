@@ -41,7 +41,7 @@ function Header() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto">
-              <Nav.Link href="javascript:void(0)">
+              <Nav.Link href="#">
                 <NavLink
                   to="/streamhub"
                   className="nav__item"
@@ -50,7 +50,7 @@ function Header() {
                   StreamHub
                 </NavLink>
               </Nav.Link>
-              <Nav.Link href="javascript:void(0)">
+              <Nav.Link href="#">
                 <NavLink
                   to="/news"
                   className="nav__item"
@@ -59,7 +59,7 @@ function Header() {
                   News
                 </NavLink>
               </Nav.Link>
-              <Nav.Link href="javascript:void(0)">
+              <Nav.Link href="#">
                 <NavLink
                   to="/playerdou"
                   className="nav__item"
@@ -68,7 +68,7 @@ function Header() {
                   Thuê người chơi
                 </NavLink>
               </Nav.Link>
-              <Nav.Link href="javascript:void(0)">
+              <Nav.Link href="#">
                 <NavLink
                   to="/bxh"
                   className="nav__item"
@@ -76,6 +76,15 @@ function Header() {
                 >
                   BXH
                 </NavLink>
+              </Nav.Link>
+              <Nav.Link href="#">
+                <button
+                  className="nav__item user__mobile"
+                  activeclassname="nav__item--active"
+                >
+                  Thông tin cá nhân
+                </button>
+                <hr />
               </Nav.Link>
             </Nav>
             <div className="justify-content-end">
@@ -90,14 +99,16 @@ function Header() {
                 Sign up
               </button> */}
 
-              <div className="message d-flex">
-                <Badge count={1}>
-                  <div className="message-icon">
-                    <i class="bi bi-envelope"></i>
-                  </div>
-                </Badge>
-                <div className="ml-2">
-                  <Avatar size={30} icon={<UserOutlined />} />
+              <div className="message d-flex align-items-center">
+                <div className="message__badge">
+                  <Badge count={1}>
+                    <div className="message-icon">
+                      <i class="bi bi-envelope"></i>
+                    </div>
+                  </Badge>
+                </div>
+                <div className="user__icon">
+                  <Avatar size={28} icon={<UserOutlined />} />
                 </div>
               </div>
             </div>

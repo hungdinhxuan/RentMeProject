@@ -34,6 +34,7 @@
     "sass": "^1.38.2",
     "scss": "^0.2.4",
     "slick-carousel": "^1.8.1",
+    "socket.io-client": "^4.2.0",
     "sweetalert2": "^11.1.5",
     "swiper": "6.8.4",
     "yup": "^0.32.9"
