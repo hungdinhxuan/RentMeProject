@@ -92,20 +92,32 @@ header {
                         }
                     }
                 }
+                .user__mobile {
+                    background: transparent;
+                    border: none;
+                    font-weight: 500;
+                    display: none;
+                }
 
                 // UI khi đăng nhập thành công
                 .message {
-                    .message-icon {
-                        width: 28px;
-                        height: 28px;
-                        line-height: 29px;
-                        border-radius: 4px;
-                        text-align: center;
-                        cursor: pointer;
-                        color: #fff;
-                        i {
-                            font-size: 24px;
+                    .message__badge {
+                        .message-icon {
+                            width: 28px;
+                            height: 28px;
+                            line-height: 29px;
+                            border-radius: 4px;
+                            text-align: center;
+                            cursor: pointer;
+                            color: #fff;
+                            i {
+                                font-size: 24px;
+                            }
                         }
+                    }
+                    .user__icon {
+                        height: 34px;
+                        margin-left: 20px;
                     }
                 }
             }
@@ -144,6 +156,20 @@ header {
         }
         .navbar-light .navbar-toggler-icon {
             background-image: url("../../assets/Daco_3884885.png") !important;
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    header {
+        nav {
+            .container {
+                #basic-navbar-nav {
+                    .user__mobile {
+                        display: block;
+                    }
+                }
+            }
         }
     }
 }

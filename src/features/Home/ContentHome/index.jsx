@@ -21,9 +21,9 @@ function ContentHome() {
         };
         res = await axios(options);
         const ACCESS_TOKEN = res.data.access_token;
-        console.log(ACCESS_TOKEN);
+
         // Call api to get top 5 streaming video on twitch
-        console.log("callapi twitch");
+
         options = {
           url: "https://api.twitch.tv/helix/streams?first=5",
           headers: {
@@ -37,7 +37,7 @@ function ContentHome() {
         const { data } = res.data;
 
         const randomChanel = Math.floor(Math.random() * data.length);
-        // console.log(data[randomChanel]);
+
         setChannel(data[randomChanel].user_login);
       } catch (error) {
         console.log(error);
@@ -45,7 +45,7 @@ function ContentHome() {
     };
     calllApi();
   }, []);
-  console.log(channel);
+
   return (
     <div
       className="container__content"
@@ -138,21 +138,12 @@ function ContentHome() {
             </div>
             <div className="right__items col-6">
               <div className="video">
-                {/* <iframe
-                  width="640"
-                  height="360"
-                  src="https://www.youtube.com/embed/En-BbdqsNmQ"
-                  title="YouTube video player"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                  className="youtube__video"
-                ></iframe> */}
                 <ReactTwitchEmbedVideo
                   channel={channel || "valorant"}
-                  width="640"
-                  height="360"
+                  width="100%"
+                  height="413"
                   layout="video"
+                  autoplay="false"
                   targetClass="youtube__video"
                 />
               </div>
