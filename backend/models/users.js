@@ -17,11 +17,12 @@ const UsersSchema = new Schema(
     role_id: { type: Number, ref: 'roles', default: 4},
     avatar: { type: 'string', default: '' },
     balance: { type: mongoose.Schema.Types.Decimal128, default: 0 },
-    status: {
-      type: 'string',
-      enum: ['active', 'inactive', 'busy', 'not ready'],
-      default: 'inactive',
-    },
+    isOnline: { type: Boolean, default: false },
+    // status: {
+    //   type: 'string',
+    //   enum: ['busy', 'not ready'],
+    //   default: 'not ready',
+    // },
   },
   { timestamps: true },
 );
