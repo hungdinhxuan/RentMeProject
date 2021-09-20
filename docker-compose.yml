@@ -8,8 +8,6 @@ services:
       # - 443:443
     restart: always
     env_file: ./.env.production
-    volumes:
-      - ./nginx/nginx-dev.conf:/etc/nginx/nginx.conf
   backend:
     container_name: backend-rentme-expressjs
     build: ./backend
