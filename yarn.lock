@@ -11228,6 +11228,11 @@ snapdragon@^0.8.1:
     source-map-resolve "^0.5.0"
     use "^3.1.0"
 
+snyk@^1.717.0:
+  version "1.717.0"
+  resolved "https://registry.yarnpkg.com/snyk/-/snyk-1.717.0.tgz#4ea0b5388e6bff658b3f09a7aaf48c97eb5c25bd"
+  integrity sha512-OWVUEr1F24isElAGG7nxjEQnE6xaxpmgj3vDGLLz3ma2mvtgaUxjWT2fx5EopeEhe9tSk7uF6SUrgudCzrjUgQ==
+
 socket.io-client@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/socket.io-client/-/socket.io-client-4.2.0.tgz#195feed3de40283b1ae3f7d02cf91d3eb2c905c1"
