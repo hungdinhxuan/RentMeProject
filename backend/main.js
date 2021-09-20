@@ -5,7 +5,7 @@ const passport = require('passport');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet')
-app.use(helmet())
+app.use(helmet()) //protect your app from some well-known web vulnerabilities by setting HTTP headers appropriately.
 
 // const swaggerUi = require('swagger-ui-express');
 
