@@ -4,29 +4,27 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const fs = require('fs');
 const path = require('path');
 const publicKey = fs.readFileSync(path.join(__dirname, '../public.pem'));
-const users = require('../models/users');
-
-
+const User = require('../models/users');
 
 module.exports = () => {
   var opts = {};
   opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
   opts.secretOrKey = publicKey;
-  opts.algorithm = ['RS256']
+  opts.algorithm = ['RS256'];
   passport.use(
-    new JwtStrategy(opts, function (jwt_payload, done) {
-      users.findOne({ _id: jwt_payload.sub }, function (err, user) {
-        if (err) {
-          return done(err, false);
-        }
+    new JwtStrategy(opts, async (jwt_payload, done) => {
+      try {
+        const user = await User.findById(jwt_payload.sub).select('-password ');
         if (user) {
-        //   console.log(user);
+          //   console.log(user);
           return done(null, user);
         } else {
           return done(null, false);
           // or you could create a new account
         }
-      });
+      } catch (error) {
+        return done(error, false);
+      }
     }),
   );
 };
