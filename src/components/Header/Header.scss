@@ -118,6 +118,7 @@ header {
                     .user__icon {
                         height: 34px;
                         margin-left: 20px;
+                        cursor: pointer;
                     }
                 }
             }
@@ -167,6 +168,11 @@ header {
                 #basic-navbar-nav {
                     .user__mobile {
                         display: block;
+                    }
+                    .message {
+                        .user__icon {
+                            display: none;
+                        }
                     }
                 }
             }
