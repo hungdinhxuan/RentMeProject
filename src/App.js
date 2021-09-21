@@ -1,4 +1,3 @@
-import Header from "components/Header";
 import { lazy, React, Suspense } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import PageNotFound from "components/PageNotFound";
