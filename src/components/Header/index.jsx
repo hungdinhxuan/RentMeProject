@@ -5,10 +5,22 @@ import { NavLink, useHistory, useLocation } from "react-router-dom";
 import "./Header.scss";
 import { Badge, Avatar } from "antd";
 import { UserOutlined } from "@ant-design/icons";
+import Drawler from "./Drawler";
+import { Drawer, Button, Space, Radio } from "antd";
 
 function Header() {
   const [header, setHeader] = useState(false);
   const [user, setUser] = useState(false);
+  const [visible, setVisible] = useState(false);
+
+  const handleShowDrawler = () => {
+    setVisible(true);
+  };
+
+  const handleClose = () => {
+    setVisible(false);
+  };
+
   const history = useHistory();
 
   const handleLogin = () => {
@@ -81,6 +93,7 @@ function Header() {
                 <button
                   className="nav__item user__mobile"
                   activeclassname="nav__item--active"
+                  onClick={handleShowDrawler}
                 >
                   Thông tin cá nhân
                 </button>
@@ -107,7 +120,7 @@ function Header() {
                     </div>
                   </Badge>
                 </div>
-                <div className="user__icon">
+                <div className="user__icon" onClick={handleShowDrawler}>
                   <Avatar size={28} icon={<UserOutlined />} />
                 </div>
               </div>
@@ -115,6 +128,7 @@ function Header() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
+      <Drawler visible={visible} Close={handleClose} />
     </header>
   );
 }
