@@ -1,5 +1,5 @@
 import PageNotFound from "components/PageNotFound";
-import React, { useState,useRef,useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { NavLink, useHistory, useLocation } from "react-router-dom";
 import "./Header.scss";
@@ -13,26 +13,28 @@ function Header() {
   const [user, setUser] = useState(false);
   const [visible, setVisible] = useState(false);
   const [navScroll, setnavSroll] = useState("");
-  
+
   const navRef = useRef();
   navRef.current = navScroll;
 
   useEffect(() => {
     const handleScroll = () => {
-      const show = window.scrollY > 10
-      if(show ) {
-        setnavSroll("header__scroll")
+      const show = window.scrollY > 10;
+      if (show) {
+        setnavSroll("header__scroll");
+      } else {
+        setnavSroll("");
       }
-      else {
-        setnavSroll("")
-      }
-      
+    };
+    document.addEventListener("scroll", handleScroll);
+    if (userInfo) {
+      setUser(false);
     }
-    document.addEventListener("scroll", handleScroll)
+
     return () => {
-      document.removeEventListener("scroll",handleScroll);
-    }
-  }, [])
+      document.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   const handleShowDrawler = () => {
     setVisible(true);
@@ -53,9 +55,6 @@ function Header() {
   };
 
   const userInfo = localStorage.getItem("token");
-  if (userInfo) {
-    setUser(false);
-  }
 
   return (
     <header className={navScroll}>
