@@ -2,6 +2,7 @@ module.exports = (app) => {
   const { createServer } = require('http');
   const { Server } = require('socket.io');
   const User = require('../models/users');
+  const si = require('systeminformation');
   const {
     userSocketIdObj,
     addClientToObj,
@@ -111,6 +112,20 @@ module.exports = (app) => {
         .map((user) => user.peerId);
 
       io.to(room).emit('sendPeers', peers);
+    });
+
+    socket.on('systeminformation', async () => {
+      const valueObject = {
+        cpu: '*',
+        osInfo: 'platform, release, distro, kernel, hostname',
+        system: 'model, manufacturer',
+        mem: '*',
+        currentLoad: 'avgLoad',
+        dockerInfo:
+          'id, containers, containersRunning, containersPaused, containersStopped, images, memTotal',
+        fsSize: 'fs, type, size, used, available, use, mount'
+      };
+      socket.emit('systemInformation', await si.get(valueObject));
     });
   });
 

@@ -4,7 +4,7 @@ class UsersController {
   async getOne(req, res) {
     const id = req.params.id;
     if (req.user._id == id) {
-      return res.json({ success: true, message: 'User found', user: req.user });
+      return res.send(req.user);
     }
     try {
       const user = await User.findById({ _id: id });
@@ -13,7 +13,7 @@ class UsersController {
           .status(400)
           .json({ success: false, message: 'User not found' });
       }
-      return res.json({ success: true, message: 'User found', user });
+      return res.send( user );
     } catch (error) {
       return res.status(500).json({
         success: false,
@@ -29,7 +29,7 @@ class UsersController {
       let skip = (page - 1) * PAGE_SIZE;
       try {
         users = await User.find().skip(skip).limit(limit);
-        return res.json({ success: true, users });
+        return res.json(users);
       } catch (error) {
         return res
           .status(500)
@@ -37,12 +37,13 @@ class UsersController {
       }
     }
     try {
-      users = await User.find();
-      return res.json({ success: true, users });
+      users = await User.find().lean();
+      
+      return res.send( users );
     } catch (error) {
       return res.status(500).json({
         success: false,
-        message: 'Internal Server Error',
+        message: error.message || 'Some error occurred while retrieving data',
         error,
       });
     }
