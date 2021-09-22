@@ -226,7 +226,7 @@ export default function SignIn() {
     }
   };
 
-  console.log(process.env.REACT_APP_GOOGLE_CLIENT_ID);
+  
 
   return (
     <Grid container component="main" maxwidth="xs" className={classes.root}>
