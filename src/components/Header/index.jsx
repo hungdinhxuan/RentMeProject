@@ -1,5 +1,5 @@
 import PageNotFound from "components/PageNotFound";
-import React, { useState } from "react";
+import React, { useState,useRef,useEffect } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { NavLink, useHistory, useLocation } from "react-router-dom";
 import "./Header.scss";
@@ -12,6 +12,27 @@ function Header() {
   const [header, setHeader] = useState(false);
   const [user, setUser] = useState(false);
   const [visible, setVisible] = useState(false);
+  const [navScroll, setnavSroll] = useState("");
+  
+  const navRef = useRef();
+  navRef.current = navScroll;
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const show = window.scrollY > 10
+      if(show ) {
+        setnavSroll("header__scroll")
+      }
+      else {
+        setnavSroll("")
+      }
+      
+    }
+    document.addEventListener("scroll", handleScroll)
+    return () => {
+      document.removeEventListener("scroll",handleScroll);
+    }
+  }, [])
 
   const handleShowDrawler = () => {
     setVisible(true);
@@ -37,7 +58,7 @@ function Header() {
   }
 
   return (
-    <header>
+    <header className={navScroll}>
       <Navbar expand="lg">
         <Container>
           <NavLink exact to="/" className="header__nav">
@@ -101,7 +122,7 @@ function Header() {
               </Nav.Link>
             </Nav>
             <div className="justify-content-end">
-              {/* <button className="button__login" onClick={handleLogin}>
+              <button className="button__login" onClick={handleLogin}>
                 Log in
               </button>
               <button
@@ -110,9 +131,9 @@ function Header() {
                 onClick={handleSignUp}
               >
                 Sign up
-              </button> */}
+              </button>
 
-              <div className="message d-flex align-items-center">
+              {/* <div className="message d-flex align-items-center">
                 <div className="message__badge">
                   <Badge count={1}>
                     <div className="message-icon">
@@ -123,7 +144,7 @@ function Header() {
                 <div className="user__icon" onClick={handleShowDrawler}>
                   <Avatar size={28} icon={<UserOutlined />} />
                 </div>
-              </div>
+              </div> */}
             </div>
           </Navbar.Collapse>
         </Container>
