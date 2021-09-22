@@ -4,6 +4,8 @@ const validate = require('../middleware/validate');
 const verifyRecaptcha = require('../middleware/verifyReptcha');
 const authController = require('../controllers/auth');
 
+router.get('/', (req, res) => res.send(req.user))
+
 router.post(
   '/login',
   verifyRecaptcha,
