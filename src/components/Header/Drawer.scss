@@ -1,0 +1,186 @@
+.ant-drawer-body {
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+#sidebarList {
+    background: var(--color-button);
+    display: block;
+    min-width: 160px;
+    box-shadow: 0 0 8px 0 rgb(0 0 0 / 20%);
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--font-color-1);
+    line-height: 12px;
+    height: 100vh;
+    overflow: auto;
+    .userInfo__drawer {
+        padding: 24px 16px 16px;
+        cursor: pointer;
+        .avatar {
+            width: 48px;
+            height: 48px;
+            margin-right: 6px;
+        }
+
+        .box {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            .title {
+                display: flex;
+                align-items: center;
+                width: 100%;
+                .text {
+                    min-width: 0;
+                    margin-right: 4px;
+                    font-size: 18px;
+                    font-weight: 500;
+                    line-height: 25px;
+                    color: #fff;
+                }
+            }
+        }
+    }
+    .status__drawer {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 0 16px 20px;
+        background: var(--background-color);
+        border-radius: 20px;
+        padding: 14px 16px;
+        cursor: pointer;
+    }
+
+    .detailInfo__drawer {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        .detailInfo--card {
+            padding: 4px;
+            .card__items {
+                padding: 4px 0 8px;
+                cursor: pointer;
+                .num {
+                    font-size: 18px;
+                    font-weight: 500;
+                    color: var(--color-default);
+                    line-height: 27px;
+                    text-align: center;
+                }
+                .text {
+                    font-size: 12px;
+                    font-weight: 400;
+                    color: var(--text-footer);
+                    line-height: 18px;
+                    text-align: center;
+                    margin-top: 4px;
+                }
+            }
+        }
+    }
+
+    .options__drawer {
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+        margin: 12px 16px;
+        background: var(--background-color);
+        border-radius: 4px;
+        .options--card {
+            padding: 10px 0 0;
+            cursor: pointer;
+            .title {
+                position: relative;
+                width: 24px;
+                margin: 0 auto;
+
+                img {
+                    display: block;
+                    width: 24px;
+                    height: 24px;
+                    margin: 0 auto;
+                }
+            }
+            .text {
+                font-size: 14px;
+                font-weight: 400;
+                color: var(--color-default);
+                line-height: 21px;
+                text-align: center;
+                margin-top: 4px;
+            }
+        }
+    }
+    .operateList__drawer {
+        padding: 0 8px;
+        .line {
+            height: 1px;
+            background: var(--button-hover);
+            margin: 12px 0;
+        }
+        .operateList--plus {
+            background-image: url("../../assets/EpalPlus.png");
+            width: 304px;
+            height: 64px;
+            cursor: pointer;
+            background-size: cover;
+            position: relative;
+            .desc--plus {
+                position: absolute;
+                top: 30px;
+                left: 32px;
+                color: var(--color-default);
+                line-height: 14px;
+            }
+        }
+        .player {
+            margin-top: 12px;
+            margin-bottom: 22px;
+            background-image: url("../../assets/RentPlayer.png");
+            .desc--plus {
+                top: 12px;
+                font-weight: 500;
+                font-size: 14px;
+                line-height: 15px;
+            }
+            .text {
+                position: absolute;
+                top: 30px;
+                left: 32px;
+                color: var(--color-default);
+                line-height: 14px;
+            }
+        }
+        .option__items {
+            .ant-space {
+                width: 100%;
+                .ant-space-item {
+                    width: 100%;
+                    .left {
+                        color: var(--color-default);
+                        align-items: center;
+                        .icon {
+                            font-size: 16px;
+                            margin-right: 8px;
+                        }
+                        .text--item {
+                            font-size: 14px;
+                            font-weight: 400;
+                            line-height: 21px;
+                            cursor: pointer;
+                        }
+                    }
+                    .right {
+                        text-align: right;
+                    }
+                }
+            }
+            
+            &:hover {
+                background: #120e1b;
+                border-radius: 4px;
+            }
+        }
+    }
+}

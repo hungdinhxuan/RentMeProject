@@ -4,8 +4,8 @@ services:
     container_name: frontend-rentme-react  
     build: .
     ports:
-      - 80:80
-      - 443:443
+      - 3000:80
+      # - 443:443
     restart: always
     env_file: ./.env.production
   backend:

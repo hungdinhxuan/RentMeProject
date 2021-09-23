@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const jwt = require('jsonwebtoken');
 const privateKey = fs.readFileSync(path.join(__dirname, '../private.pem'));
+const publicKey = fs.readFileSync(path.join(__dirname, '../public.pem'));
 const { OAuth2Client } = require('google-auth-library');
 const mailgun = require('../utils/mailgun');
 
@@ -191,7 +192,28 @@ class Auth {
     return mailgun(req, res);
   }
 
-  resetPassword(req, res, next) {}
+  resetPassword(req, res, next) {
+    const token = req.params.token;
+    jwt.verify(token, publicKey, async function(err, decoded) {
+      if(err){
+        return res.status(500).json({
+          success: false,
+          message: error.message || 'Internal Server Error'
+        })
+      }
+      let {sub, newPassword} = decoded;
+      try {
+        newPassword = await argon2.hash(newPassword)
+        const user = await User.findByIdAndUpdate(sub, {password: newPassword})
+        return res.json({ success: true, message: 'Password reset successful'})
+      } catch (error) {
+        return res.status(500).json({
+          success: false,
+          message: error.message || 'Internal Server Error'
+        })
+      }
+    });
+  }
 
   async googleLogin(req, res, next) {
     const client = new OAuth2Client(`${process.env.GOOGLE_CLIENT_ID}`);
