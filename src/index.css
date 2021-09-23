@@ -5,6 +5,8 @@
   --button-hover: #4f4e60;
   --button-hover1: #8d65ea;
   --text-footer: #c4c3e6;
+  --background-color: #120e1b;
+  --color-default: #fff;
 }
 * {
   padding: 0;

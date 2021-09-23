@@ -25,7 +25,6 @@ import * as yup from "yup";
 import { AsyncSignin } from "../AuthSlice";
 import "./SignIn.scss";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
-import { ToastContainer, toast } from "react-toastify";
 import {Redirect} from 'react-router-dom'
 
 
@@ -49,7 +48,7 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: "100vh",
+    height: "1000px",
     justifyContent: "center",
     backgroundImage: `url(${AnhBackGround})`,
     padding: "130px 0",
@@ -227,7 +226,7 @@ export default function SignIn() {
     }
   };
 
-  console.log(process.env.REACT_APP_GOOGLE_CLIENT_ID);
+  
 
   return (
     <Grid container component="main" maxwidth="xs" className={classes.root}>
@@ -364,7 +363,7 @@ export default function SignIn() {
           </form>
         </div>
       </Grid>
-      <ToastContainer autoClose={2000} />
+      
     </Grid>
   );
 }

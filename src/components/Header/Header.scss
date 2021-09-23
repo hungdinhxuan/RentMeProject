@@ -1,8 +1,10 @@
 header {
-    background: #302f3d;
-    position: relative;
-    z-index: 20;
+    position: absolute;
+    left: 0;
+    top: 0;
     width: 100%;
+    background: none;
+    z-index: 20;
     nav {
         .container {
             padding: 0 16px;
@@ -37,17 +39,12 @@ header {
                     height: 32px;
                 }
                 .button__login {
-                    background: var(--color-button);
-                    &:hover {
-                        background: var(--button-hover);
-                        border: 1px solid rgb(255, 255, 255);
-                    }
+                    color: rgb(249, 249, 249);
+                    border: 1px solid rgb(255, 255, 255);
+                    background: transparent;
                 }
                 .button__signup {
-                    background: var(--text-hover);
-                    &:hover {
-                        background: #8d65ea;
-                    }
+                    background: rgb(141, 101, 234);
                 }
 
                 & a {
@@ -92,12 +89,64 @@ header {
                         }
                     }
                 }
+                .user__mobile {
+                    background: transparent;
+                    border: none;
+                    font-weight: 500;
+                    display: none;
+                }
+
+                // UI khi đăng nhập thành công
+                .message {
+                    .message__badge {
+                        .message-icon {
+                            width: 28px;
+                            height: 28px;
+                            line-height: 29px;
+                            border-radius: 4px;
+                            text-align: center;
+                            cursor: pointer;
+                            color: #fff;
+                            i {
+                                font-size: 24px;
+                            }
+                        }
+                    }
+                    .user__icon {
+                        height: 34px;
+                        margin-left: 20px;
+                        cursor: pointer;
+                    }
+                }
             }
         }
     }
 }
 
-
+.header__scroll {
+    background: #302f3d;
+    position: fixed;
+    width: 100%;
+    nav {
+        .container {
+            #basic-navbar-nav {
+                .button__login {
+                    background: var(--color-button);
+                    border: none;
+                    &:hover {
+                        background: var(--button-hover);
+                    }
+                }
+                .button__signup {
+                    background: var(--text-hover);
+                    &:hover {
+                        background: #8d65ea;
+                    }
+                }
+            }
+        }
+    }
+}
 
 @media (max-width: 991px) {
     header {
@@ -129,7 +178,28 @@ header {
             }
         }
         .navbar-light .navbar-toggler-icon {
-            background-image: url('../../assets/Daco_3884885.png') !important;
+            background-image: url("../../assets/Daco_3884885.png") !important;
+        }
+    }
+}
+
+@media only screen and (max-width: 768px) {
+    
+    header {
+        background: #302f3d;
+        nav {
+            .container {
+                #basic-navbar-nav {
+                    .user__mobile {
+                        display: block;
+                    }
+                    .message {
+                        .user__icon {
+                            display: none;
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -159,7 +229,7 @@ header {
             }
         }
         .navbar-light .navbar-toggler-icon {
-            background-image: url('../../assets/Daco_3884885.png') !important;
+            background-image: url("../../assets/Daco_3884885.png") !important;
         }
     }
 }

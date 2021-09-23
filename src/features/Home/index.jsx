@@ -9,6 +9,7 @@ import ListGame from "./ListGames";
 import Stories from "./Stories";
 import TryRentme from "./TryRentme";
 
+
 function Home() {
   window.onunload = () => {
     window.scrollTo(0, 0);
@@ -25,8 +26,6 @@ function Home() {
         <ListGame />
         <div className="bg__home"></div>
       </div>
-      <ToastContainer autoClose={2000} />
-
       <Footer />
     </div>
   );

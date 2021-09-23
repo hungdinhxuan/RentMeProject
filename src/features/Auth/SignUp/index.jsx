@@ -20,10 +20,10 @@ import AnhBackGround from "assets/acct_creation_bg.jpg";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AsyncSignup } from "../AuthSlice";
-import {useSelector, useDispatch} from 'react-redux'
+import { useSelector, useDispatch } from "react-redux";
 // React-hook-form
 import { useForm } from "react-hook-form";
-import {useHistory} from 'react-router-dom'
+import { useHistory } from "react-router-dom";
 
 function Copyright() {
   return (
@@ -45,7 +45,7 @@ function Copyright() {
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    height: "100vh",
+    height: "1000px",
     justifyContent: "center",
     backgroundImage: `url(${AnhBackGround})`,
     // padding: "90px 0",
@@ -155,13 +155,13 @@ export default function SignUp() {
   });
 
   // Redux register
-  const {user, loading, error} =  useSelector(state => state.auth)
+  const { user, loading, error } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const history = useHistory();
   const onSubmit = (data) => {
     console.log(data);
     dispatch(AsyncSignup(data));
-    if(!error) {
+    if (!error) {
       return history.push("/signin");
     }
     reset();
