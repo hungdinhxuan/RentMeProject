@@ -157,11 +157,11 @@ const upload = (mimetypes, error_msg, fileSize) => {
       }),
     cloudinary: () =>
       multer({
-        storage: multer.diskStorage({
-          filename: function (req, file, cb) {
-            cb(null, file.fieldname + '-' + Date.now());
-          },
-        }),
+        // storage: multer.diskStorage({
+        //   filename: function (req, file, cb) {
+        //     cb(null, file.fieldname + '-' + Date.now());
+        //   },
+        // }),
         fileFilter: (req, file, cb) => {
           if (mimetypes.indexOf(file.mimetype) !== -1) {
             cb(null, true);
