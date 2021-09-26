@@ -6,6 +6,7 @@
   "dependencies": {
     "argon2": "^0.28.2",
     "aws-sdk": "^2.987.0",
+    "cloudinary": "^1.27.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
