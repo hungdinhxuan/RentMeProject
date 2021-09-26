@@ -1,12 +1,10 @@
-import PageNotFound from "components/PageNotFound";
 import React, { useState, useRef, useEffect } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { NavLink, useHistory, useLocation } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import "./Header.scss";
-import { Badge, Avatar } from "antd";
-import { UserOutlined } from "@ant-design/icons";
 import Drawler from "./Drawler";
-import { Drawer, Button, Space, Radio } from "antd";
+import Logo from "assets/player-dou-a.jpg";
+
 
 function Header() {
   const [header, setHeader] = useState(false);
@@ -63,7 +61,7 @@ function Header() {
           <NavLink exact to="/" className="header__nav">
             <img
               alt="Logo Home"
-              src="/player-dou-a.jpg"
+              src={Logo}
               width="50"
               height="50"
               className="d-inline-block align-top"
