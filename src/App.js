@@ -6,16 +6,19 @@ import SignIn from "features/Auth/SignIn";
 import "bootstrap/dist/css/bootstrap.min.css";
 import SignUp from "features/Auth/SignUp";
 import "aos/dist/aos.css";
-import 'react-toastify/dist/ReactToastify.css';
-import 'antd/dist/antd.css';
+import "react-toastify/dist/ReactToastify.css";
+import "antd/dist/antd.css";
 import socket from "socket";
+import MessengerCustomerChat from "react-messenger-customer-chat";
 
 const Home = lazy(() => import("features/Home/index.jsx"));
-const ForgotPassword = lazy(() => import("features/Auth/ForgotPassword/index.jsx"))
+const ForgotPassword = lazy(() =>
+  import("features/Auth/ForgotPassword/index.jsx")
+);
 
 function App() {
   socket.on("connect", () => {
-    console.log('ok');
+    console.log("ok");
   });
   return (
     <div className="App">
@@ -54,6 +57,11 @@ function App() {
             </Switch>
           </Applayout>
           <Route path="*" component={PageNotFound} />  */}
+          <MessengerCustomerChat
+            pageId={process.env.REACT_APP_FACEBOOK_PAGE_ID}
+            appId={process.env.REACT_APP_FACEBOOK_APP_ID}
+            htmlRef={process.env.REACT_APP_FACEBOOK_HTML_REF}
+          />
         </BrowserRouter>
       </Suspense>
     </div>

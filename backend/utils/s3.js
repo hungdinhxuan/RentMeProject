@@ -1,4 +1,4 @@
-const { upload, bucket_name, s3 } = require('../services/s3');
+const { uploadS3, bucket_name, s3 } = require('../services/s3');
 const multer = require('multer');
 const S3_URL = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_BUCKET_REGION}.amazonaws.com/`;
 
@@ -23,7 +23,7 @@ class S3 {
     });
   }
   uploadOneImage(req, res, next) {
-    const singleUpload = upload.single('image');
+    const singleUpload = uploadS3.single('image');
     singleUpload(req, res, (err) => {
       if (err instanceof multer.MulterError) {
         // A Multer error occurred when uploading.
@@ -46,6 +46,7 @@ class S3 {
         });
       }
       console.log(req.file);
+      
       return res.json({
         success: true,
         message: 'uploaded',
