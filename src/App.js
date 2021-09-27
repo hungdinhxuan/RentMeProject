@@ -10,11 +10,14 @@ import "react-toastify/dist/ReactToastify.css";
 import "antd/dist/antd.css";
 import socket from "socket";
 import MessengerCustomerChat from "react-messenger-customer-chat";
+import Header from "components/Header";
 
 const Home = lazy(() => import("features/Home/index.jsx"));
 const ForgotPassword = lazy(() =>
   import("features/Auth/ForgotPassword/index.jsx")
 );
+
+const RentPlayer = lazy(() => import("features/RentPlayer/index.jsx"));
 
 function App() {
   socket.on("connect", () => {
@@ -30,22 +33,23 @@ function App() {
         }
       >
         <BrowserRouter>
-          {/* <Route
+          <Route
             render={({ location }) => {
               if (
                 location.pathname !== "/404" &&
                 location.pathname !== "/signin" &&
-                location.pathname !== "/signin"
+                location.pathname !== "/signup"
               )
                 return <Header />;
             }}
-          /> */}
+          />
 
           <Switch>
             <Route exact path="/" component={Home} />
             <Route exact path="/signin" component={SignIn} />
             <Route exact path="/signup" component={SignUp} />
             <Route exact path="/forgot-password" component={ForgotPassword} />
+            <Route path="/playerdou" component={RentPlayer} />
             <Route exact path="/404" component={PageNotFound} />
             <Route path="*" component={NotFound} />
           </Switch>
