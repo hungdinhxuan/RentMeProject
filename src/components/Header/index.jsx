@@ -1,10 +1,9 @@
-import React, { useState, useRef, useEffect } from "react";
-import { Container, Nav, Navbar } from "react-bootstrap";
-import { NavLink, useHistory } from "react-router-dom";
-import "./Header.scss";
-import Drawler from "./Drawler";
 import Logo from "assets/player-dou-a.jpg";
-
+import React, { useEffect, useRef, useState } from "react";
+import { Container, Nav, Navbar } from "react-bootstrap";
+import { NavLink, useHistory, useLocation } from "react-router-dom";
+import Drawler from "./Drawler";
+import "./Header.scss";
 
 function Header() {
   const [header, setHeader] = useState(false);
@@ -14,6 +13,8 @@ function Header() {
 
   const navRef = useRef();
   navRef.current = navScroll;
+  const location = useLocation();
+  
 
   useEffect(() => {
     const handleScroll = () => {
@@ -28,6 +29,7 @@ function Header() {
     if (userInfo) {
       setUser(false);
     }
+    
 
     return () => {
       document.removeEventListener("scroll", handleScroll);
@@ -37,8 +39,6 @@ function Header() {
   const handleShowDrawler = () => {
     setVisible(true);
   };
-
-  
 
   const handleClose = () => {
     setVisible(false);
@@ -72,7 +72,7 @@ function Header() {
           </NavLink>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
+            <Nav className="me-auto align-items-center">
               <Nav.Link href="#">
                 <NavLink
                   to="/streamhub"
