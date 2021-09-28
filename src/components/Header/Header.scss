@@ -151,6 +151,7 @@ header {
 @media (max-width: 991px) {
     header {
         font-size: 14px;
+        background: #302f3d;
         nav {
             .container {
                 #basic-navbar-nav {
@@ -175,6 +176,9 @@ header {
                         }
                     }
                 }
+                .me-auto {
+                    display: block;
+                }
             }
         }
         .navbar-light .navbar-toggler-icon {
@@ -186,7 +190,6 @@ header {
 @media only screen and (max-width: 768px) {
     
     header {
-        background: #302f3d;
         nav {
             .container {
                 #basic-navbar-nav {
