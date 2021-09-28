@@ -1,11 +1,12 @@
 import React from "react";
-import { useLocation } from "react-router";
+
 import { Select } from "antd";
 import "./RentPlayer.scss";
+import CardList from "./Card";
+
 
 function RentPlayer() {
-  const location = useLocation();
-  console.log(location);
+  
 
   //   Select
   const { Option } = Select;
@@ -24,9 +25,10 @@ function RentPlayer() {
                 <div className="filter__search--name filters">Filter</div>
                 <div className="filter__search--items filters">
                   <Select
-                    defaultValue="Gender"
-                    style={{ width: 100 }}
+                    placeholder="Gender"
+                    style={{ width: 90 }}
                     onChange={handleChange}
+                    className="select"
                   >
                     <Option value="Male">Male</Option>
                     <Option value="Female">Female</Option>
@@ -36,7 +38,7 @@ function RentPlayer() {
 
                 <div className="filter__search--items filters">
                   <Select
-                    defaultValue="All status"
+                    placeholder="All status"
                     style={{ width: 100 }}
                     onChange={handleChange}
                   >
@@ -47,8 +49,8 @@ function RentPlayer() {
 
                 <div className="filter__search--items filters">
                   <Select
-                    defaultValue="Price"
-                    style={{ width: 110 }}
+                    placeholder="Price"
+                    style={{ width: 100 }}
                     onChange={handleChange}
                   >
                     <Option value="1">1-5</Option>
@@ -60,8 +62,8 @@ function RentPlayer() {
 
                 <div className="filter__search--items filters">
                   <Select
-                    defaultValue="Age"
-                    style={{ width: 110 }}
+                    placeholder="Age"
+                    style={{ width: 80 }}
                     onChange={handleChange}
                   >
                     <Option value="25">18-25</Option>
@@ -71,6 +73,13 @@ function RentPlayer() {
                 </div>
               </div>
             </div>
+          </div>
+        </div>
+        <div className="card__rent">
+          <div className="card__container">
+              <div className="cardList">
+                <CardList />
+              </div>
           </div>
         </div>
       </div>

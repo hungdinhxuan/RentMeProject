@@ -11,12 +11,13 @@ import "antd/dist/antd.css";
 import socket from "socket";
 import MessengerCustomerChat from "react-messenger-customer-chat";
 import Header from "components/Header";
+import AOS from "aos";
 
 const Home = lazy(() => import("features/Home/index.jsx"));
 const ForgotPassword = lazy(() =>
   import("features/Auth/ForgotPassword/index.jsx")
 );
-
+AOS.init();
 const RentPlayer = lazy(() => import("features/RentPlayer/index.jsx"));
 
 function App() {

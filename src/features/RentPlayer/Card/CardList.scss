@@ -1,0 +1,165 @@
+.card__details {
+    position: relative;
+    width: 313px;
+    .card__items {
+        padding-top: 24px;
+        position: relative;
+        // color: var(--color-default);
+
+        .profile {
+            position: absolute;
+            left: 16px;
+            top: 0;
+            z-index: 1;
+            .status {
+                position: absolute;
+                bottom: 4px;
+                right: -6px;
+            }
+        }
+
+        .box {
+            background: var(--background-card);
+            box-shadow: 0 0 8px 0 rgb(0 0 0 / 20%);
+            border-radius: 8px;
+            overflow: hidden;
+            .box__container {
+                background: var(--background-card);
+                overflow: hidden;
+                padding: 93px 16px 16px;
+                position: relative;
+                border-radius: 8px 8px 0 0;
+                .title {
+                    font-size: 18px;
+                    font-weight: 500;
+                    color: var(--color-default);
+                }
+                .intro {
+                    margin-top: 13px;
+                    .games {
+                        .categories {
+                            background: var(--color-button);
+                            border-radius: 2px;
+                            padding: 1px 8px;
+                            font-size: 12px;
+                            font-weight: 400;
+                            color: var(--text-footer);
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                            min-width: 0;
+                            white-space: nowrap;
+                        }
+                    }
+                    .desc {
+                        margin-top: 13px;
+                        height: 18px;
+                        color: var(--text-footer);
+                        .text {
+                            text-overflow: ellipsis;
+                            overflow: hidden;
+                            white-space: nowrap;
+                            font-size: 12px;
+                        }
+                    }
+                }
+                .corner {
+                    position: absolute;
+                    right: 0;
+                    top: 0;
+                    .shape {
+                        width: 67px;
+                        opacity: 0.8;
+                        display: flex;
+                        justify-content: space-between !important;
+                        align-items: center;
+                        cursor: pointer;
+                        position: relative;
+                        height: 32px;
+                        background: linear-gradient(90deg, #625cff, #7041e6);
+                        border-radius: 0 8px 0 8px;
+                        color: #fff;
+                        padding: 9px 12px;
+                        user-select: none;
+                        &:hover {
+                            background: #8d65ea;
+                        }
+                        .shape--left {
+                            display: flex;
+                            width: 14px;
+                            height: 14px;
+                            justify-content: space-around !important;
+                            div:nth-child(1) {
+                                width: 2px;
+                                height: 14px;
+                                background: #fff;
+                                border-radius: 2px;
+                                transform: scaleY(0.6);
+                            }
+                            div:nth-child(2) {
+                                transform: scaleY(1);
+                                width: 2px;
+                                height: 14px;
+                                background: #fff;
+                                border-radius: 2px;
+                            }
+                            div:nth-child(3) {
+                                width: 2px;
+                                height: 14px;
+                                background: #fff;
+                                border-radius: 2px;
+                                transform: scaleY(0.6);
+                            }
+                        }
+
+                        .shape--right {
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            i {
+                                font-size: 20px;
+                            }
+                        }
+                    }
+                }
+            }
+            .box__footer {
+                height: 76px;
+                background: var(--color-button);
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 16px;
+                border-radius: 8px;
+                .prices {
+                    // .footer--text {
+                    //     font-size: 12px;
+                    //     font-weight: 400;
+                    //     line-height: 12px;
+                    //     color: var(--text-field);
+                    // }
+                    .prices--details {
+                        color: var(--color-default);
+                        span:first-child {
+                            font-size: 24px;
+                        }
+                        span:nth-child(2) {
+                            font-size: 12px;
+                        }
+                        span:nth-child(3) {
+                            font-size: 12px;
+                        }
+                    }
+                }
+
+                .rate {
+                    font-size: 14px;
+
+                    .score {
+                        color: var(--color-default);
+                        font-size: 16px;
+                    }
+                }
+            }
+        }
+    }
+}
