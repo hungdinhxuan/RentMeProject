@@ -16,7 +16,7 @@ function Home() {
 
   return (
     <div className="home__main">
-      <Header />
+      
       <div className="home__body">
         <CarouselHeader />
         <ContentHome />
