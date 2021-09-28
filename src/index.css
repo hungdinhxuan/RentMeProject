@@ -7,6 +7,8 @@
   --text-footer: #c4c3e6;
   --background-color: #120e1b;
   --color-default: #fff;
+  --text-card: #bdbcde;
+  --background-card: #302f3d;
 }
 * {
   padding: 0;

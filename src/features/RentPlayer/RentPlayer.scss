@@ -32,6 +32,7 @@
                         display: flex;
                         width: 100%;
                         flex-wrap: wrap;
+                        align-items: center;
                         gap: 8px;
                         .filters {
                             margin-bottom: 8px;
@@ -41,9 +42,35 @@
                             margin-right: 8px;
                         }
                         .filter__search--items {
-                            color: red;
+                            .ant-select-focused {
+                                border: none;
+                            }
+                            .ant-select-selector {
+                                border: none;
+                                background: var(--background-card);
+                                color: var(--text-card);
+                            }
+                            .ant-select-arrow {
+                                color: var(--text-card);
+                            }
                         }
                     }
+                }
+            }
+        }
+
+        .card__rent {
+            position: relative;
+            min-height: calc(100vh - 519px);
+            z-index: 1;
+            .card__container {
+                width: 80%;
+                margin: 0 auto;
+                .cardList {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: space-between;
+                    color: var(--color-default);
                 }
             }
         }
