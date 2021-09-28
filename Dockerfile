@@ -9,6 +9,6 @@ RUN yarn build
 FROM nginx:1.20.1-alpine
 COPY --from=builder /usr/src/app/build /usr/share/nginx/html
 # COPY --from=builder /usr/src/app/nginx/rentme_ssl /etc/ssl
-# COPY --from=builder /usr/src/app/nginx/nginx.conf /etc/nginx/nginx.conf
+COPY --from=builder /usr/src/app/nginx/nginx-dev.conf /etc/nginx/nginx.conf
 EXPOSE 80
 

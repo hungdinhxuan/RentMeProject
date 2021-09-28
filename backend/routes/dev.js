@@ -53,7 +53,6 @@ router.post('/upload-images', (req, res) => {
     let uploadFromBuffer = (file, id) => {
 
       return new Promise((resolve, reject) => {
-   
         let cld_upload_stream = cloudinary.uploader.upload_stream(
          {
           upload_preset: "rentme",
@@ -68,15 +67,11 @@ router.post('/upload-images', (req, res) => {
             }
           }
         );
-   
         streamifier.createReadStream(file.buffer).pipe(cld_upload_stream);
       });
    
    };
-
-
-    try {
-      
+    try {      
       let multiplePicturePromise = req.files.map((file) => uploadFromBuffer(file, req.body.id));
       let imageResponses = await Promise.all(multiplePicturePromise);
       console.log(`Uploaded ${imageResponses.length}`);
