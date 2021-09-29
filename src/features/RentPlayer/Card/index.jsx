@@ -17,7 +17,7 @@ function CardList() {
   };
 
   return (
-    <div className="card__details">
+    <div className="card__details col-xl-3 col-md-6 col-12">
       <Link to="/signin">
         <div className="card__items">
           <div className="profile">

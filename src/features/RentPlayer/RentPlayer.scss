@@ -17,7 +17,7 @@
         .header__rent {
             padding-bottom: 24px;
             .header__container {
-                width: 80%;
+                width: 70%;
                 margin: 0 auto;
                 .header--title {
                     font-size: 48px;
@@ -64,12 +64,10 @@
             min-height: calc(100vh - 519px);
             z-index: 1;
             .card__container {
-                width: 80%;
+                width: 70%;
                 margin: 0 auto;
                 .cardList {
-                    display: flex;
                     flex-wrap: wrap;
-                    justify-content: space-between;
                     color: var(--color-default);
                 }
             }
