@@ -77,7 +77,10 @@ function RentPlayer() {
         </div>
         <div className="card__rent">
           <div className="card__container">
-              <div className="cardList">
+              <div className="cardList row">
+                <CardList />
+                <CardList />
+                <CardList />
                 <CardList />
               </div>
           </div>
