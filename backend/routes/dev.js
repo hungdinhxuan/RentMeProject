@@ -9,11 +9,10 @@ const {
   cloudinary,
   upload,
 } = require('../services/multer');
-const { v4: uuidv4 } = require('uuid');
 const { multer } = require('../utils/config');
 const multerLib = require('multer');
-const fs = require('fs');
 const streamifier = require('streamifier');
+const validate = require('../middleware/validate');
 
 router.post('/upload-images', (req, res) => {
   upload(
@@ -51,28 +50,27 @@ router.post('/upload-images', (req, res) => {
     //map through images and create a promise array using cloudinary upload function
 
     let uploadFromBuffer = (file, id) => {
-
       return new Promise((resolve, reject) => {
         let cld_upload_stream = cloudinary.uploader.upload_stream(
-         {
-          upload_preset: "rentme",
-           filename_override: `${id}_albums`
-         },
-         (error, result) => {
-   
-           if (result) {
-             resolve(result);
-           } else {
-             reject(error);
+          {
+            upload_preset: 'rentme',
+            filename_override: `${id}_albums`,
+          },
+          (error, result) => {
+            if (result) {
+              resolve(result);
+            } else {
+              reject(error);
             }
-          }
+          },
         );
         streamifier.createReadStream(file.buffer).pipe(cld_upload_stream);
       });
-   
-   };
-    try {      
-      let multiplePicturePromise = req.files.map((file) => uploadFromBuffer(file, req.body.id));
+    };
+    try {
+      let multiplePicturePromise = req.files.map((file) =>
+        uploadFromBuffer(file, req.body.id),
+      );
       let imageResponses = await Promise.all(multiplePicturePromise);
       console.log(`Uploaded ${imageResponses.length}`);
       res.json({ images: imageResponses });
@@ -122,12 +120,10 @@ router.post('/upload-image', (req, res) => {
     function cloudinaryDone(error, result) {
       if (error) {
         console.log('Error in cloudinary.uploader.upload_stream\n', error);
-        return res
-          .status(500)
-          .json({
-            success: false,
-            message: 'Error in cloudinary.uploader.upload_stream',
-          });
+        return res.status(500).json({
+          success: false,
+          message: 'Error in cloudinary.uploader.upload_stream',
+        });
       }
       console.log(result);
       return res.json({ success: true, file: result });
@@ -150,4 +146,12 @@ router.post('/upload-video', (req, res) => {});
 
 router.post('/upload-audio', (req, res) => {});
 
+router.post(
+  '/users',
+  validate.validateRegisterUser(),
+  validate.handleValidationErrors,
+  async (req, res) => {
+    const {username, password, email, fullName, role} = req.body;
+  },
+);
 module.exports = router;
