@@ -118,18 +118,6 @@ router.post('/upload-image', (req, res) => {
         .status(400)
         .json({ success: false, message: 'No picture attached!' });
     //map through images and create a promise array using cloudinary upload function
-    // try {
-    //   const { id } = req.body;
-    //   let uploadResponse = await cloudinary.uploader.upload(req.file.path, {
-    //       unique_filename: false,
-    //       upload_preset: 'rentme',
-    //       filename_override: `${id}_avatar`,
-    //     });
-
-    //   res.json({success: true, message: 'Upload successful', image: uploadResponse });
-    // } catch (error) {
-    //   return res.status(500).send(error);
-    // }
     const { id } = req.body;
     function cloudinaryDone(error, result) {
       if (error) {

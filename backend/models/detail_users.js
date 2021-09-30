@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const DetailUsersSchema = new Schema(
   {
-    nickName: { type: 'string', default: '' },
+    nickname: { type: 'string', default: '' },
     desc: { type: 'string', default: '' },
     user_id: { type: mongoose.Types.ObjectId, refs: 'users' },
     birthDate: { type: Date },
