@@ -51,8 +51,31 @@ const handleValidationErrors = (req, res, next) => {
   next();
 };
 
+const validateNewPassword = () => {
+  return [
+    check(
+      'newPassword',
+      'newPassword is not strong, it should have minLength: 8, minLowercase: 1, minUppercase: 1, minNumbers: 1, minSymbols: 1',
+    ).isStrongPassword({
+      minLength: 8,
+      minLowercase: 1,
+      minUppercase: 1,
+      minNumbers: 1,
+      minSymbols: 1,
+      returnScore: false,
+      pointsPerUnique: 1,
+      pointsPerRepeat: 0.5,
+      pointsForContainingLower: 10,
+      pointsForContainingUpper: 10,
+      pointsForContainingNumber: 10,
+      pointsForContainingSymbol: 10,
+    }),
+  ]
+}
+
 module.exports = {
   validateRegisterUser: validateRegisterUser,
   validateLogin: validateLogin,
   handleValidationErrors,
+  validateNewPassword
 };
