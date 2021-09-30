@@ -11,7 +11,7 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) =>
 
 router.post(
   '/login',
-  verifyRecaptcha,
+  // verifyRecaptcha,
   validate.validateLogin(),
   validate.handleValidationErrors,
   authController.login,
