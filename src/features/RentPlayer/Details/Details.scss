@@ -12,6 +12,8 @@
                     text-align: center;
                     background: var(--background-card);
                     border-radius: 15px;
+                    margin-bottom: 15px;
+                    height: 100%;
                     .rent-time {
                         margin-top: 20px;
                         p {
@@ -50,6 +52,7 @@
                     padding-top: 30px;
                     border-radius: 15px;
                     text-align: center;
+                    height: 100%;
                     .price-profile {
                         font-size: 24px;
                         font-weight: 700;
@@ -81,7 +84,7 @@
                         .btn-style.purple {
                             background: var(--text-hover);
                             color: var(--color-default);
-                            transition: all 0.5s; 
+                            transition: all 0.5s;
                             &:hover {
                                 background: var(--text-field);
                             }
@@ -90,12 +93,134 @@
                             border: 1px solid var(--text-field);
                             color: var(--text-field);
                             background: transparent;
-                            transition: all 0.5s; 
+                            transition: all 0.3s;
                             &:hover {
                                 border: 1px solid #8d65ea;
                             }
                         }
                     }
+                }
+
+                .player__profile--main {
+                    padding-top: 30px;
+                    .name-profile {
+                        .center-item {
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            .name__player {
+                                font-size: 28px;
+                                font-weight: 700;
+                                font-style: normal;
+                                font-stretch: normal;
+                                line-height: normal;
+                                letter-spacing: normal;
+                                color: var(--color-default);
+                            }
+                            .btn-follow-player {
+                                padding: 0 15px;
+                                background-color: var(--text-hover);
+                                border-radius: 20px;
+                                color: #fff;
+                                font-weight: 500;
+                                font-size: 18px;
+                                border: none;
+                            }
+                        }
+                    }
+                    .nav-player-profile {
+                        margin-top: 30px;
+                        .nav__item-name {
+                            width: 66px;
+                            height: 15px;
+                            opacity: 0.7;
+                            font-size: 12px;
+                            font-weight: 700;
+
+                            color: var(--text-field);
+                            text-transform: uppercase;
+                            display: inline;
+                        }
+                        .nav__item-value {
+                            font-size: 16px;
+                            color: var(--button-hover1);
+                        }
+                    }
+                    .title-player-profile {
+                        margin-top: 30px;
+                        font-size: 24px;
+                        font-weight: 700;
+                        font-style: normal;
+                        font-stretch: normal;
+                        line-height: normal;
+                        letter-spacing: normal;
+                        color: var(--color-default);
+                    }
+                    .content-player-profile {
+                        white-space: normal;
+                        word-break: break-word;
+                        margin-top: 15px;
+                        p {
+                            font-weight: 400;
+                            font-style: normal;
+                            font-stretch: normal;
+                            line-height: 16px;
+                            letter-spacing: normal;
+                            color: var(--text-footer);
+                            font-size: 14px;
+                        }
+                    }
+                    .video-player-profile {
+                    }
+                    .comment-player-profile {
+                        margin-top: 14px;
+                        .fullsize {
+                            margin-top: 23px;
+                            width: 100%;
+                            display: flex;
+                            .comment-image {
+                            }
+                            .comment-content {
+                                display: flex;
+                                padding-left: 15px;
+                                justify-content: space-between;
+                                width: 90%;
+                                .review-content {
+                                    width: 70%;
+                                    p {
+                                        font-size: 15px;
+                                        font-weight: 600;
+                                        color: var(--button-hover1);
+                                        margin: 0;
+                                        text-align: left;
+                                    }
+                                    p.review-time {
+                                        font-size: 12px;
+                                        font-weight: 400;
+                                        font-style: normal;
+                                        font-stretch: normal;
+                                        color: var(--text-field);
+                                    }
+                                    p.content-player-comment {
+                                        word-break: break-word;
+                                        text-align: justify;
+                                        display: inline-block;
+                                        width: 100%;
+                                        color: var(--color-default);
+                                        font-weight: 400;
+                                    }
+                                }
+                                .review-rating {
+                                    width: 50%;
+                                }
+                                
+                            }
+                        }
+                    }
+                }
+                hr {
+                    border: 0;
+                    border-top: 2px solid var(--button-hover);
                 }
             }
         }
