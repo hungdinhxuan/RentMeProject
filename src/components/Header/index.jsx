@@ -1,12 +1,9 @@
-import PageNotFound from "components/PageNotFound";
-import React, { useState, useRef, useEffect } from "react";
+import Logo from "assets/player-dou-a.jpg";
+import React, { useEffect, useRef, useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { NavLink, useHistory, useLocation } from "react-router-dom";
-import "./Header.scss";
-import { Badge, Avatar } from "antd";
-import { UserOutlined } from "@ant-design/icons";
 import Drawler from "./Drawler";
-import { Drawer, Button, Space, Radio } from "antd";
+import "./Header.scss";
 
 function Header() {
   const [header, setHeader] = useState(false);
@@ -16,6 +13,8 @@ function Header() {
 
   const navRef = useRef();
   navRef.current = navScroll;
+  const location = useLocation();
+  
 
   useEffect(() => {
     const handleScroll = () => {
@@ -30,6 +29,7 @@ function Header() {
     if (userInfo) {
       setUser(false);
     }
+    
 
     return () => {
       document.removeEventListener("scroll", handleScroll);
@@ -63,7 +63,7 @@ function Header() {
           <NavLink exact to="/" className="header__nav">
             <img
               alt="Logo Home"
-              src="/player-dou-a.jpg"
+              src={Logo}
               width="50"
               height="50"
               className="d-inline-block align-top"
@@ -72,7 +72,7 @@ function Header() {
           </NavLink>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="me-auto">
+            <Nav className="me-auto align-items-center">
               <Nav.Link href="#">
                 <NavLink
                   to="/streamhub"

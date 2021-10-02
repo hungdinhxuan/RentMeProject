@@ -7,18 +7,18 @@ const mongoose_delete = require('mongoose-delete');
 
 const UsersSchema = new Schema(
   {
-    username: { type: 'string', required: true, minlength: 5, maxLength: 64 },
+    username: { type: 'string', required: true, minlength: 6, maxLength: 64 },
     email: { type: 'string', required: true, maxLength: 255 },
     password: { type: 'string', required: true },
-    fullName: { type: 'string', required: true },
+    fullName: { type: 'string', required: true, maxLength: 255},
     gender: {
       type: 'string',
       enum: ['male', 'female', 'other'],
       default: 'male',
     },
-    role_id: { type: Number, ref: 'roles', default: 4},
+    role: { type: Number, default: 3},
     avatar: { type: 'string', default: '' },
-    balance: { type: mongoose.Schema.Types.Decimal128, default: 0 },
+    balance: { type: Number, default: 0 },
     isOnline: { type: Boolean, default: false },
     // status: {
     //   type: 'string',
@@ -32,6 +32,8 @@ const UsersSchema = new Schema(
 UsersSchema.plugin(mongoose_delete, {
   overrideMethods: 'all',
   deletedAt: true,
+  deletedBy: true, 
+  deletedByType: String
 });
 
 
