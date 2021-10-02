@@ -4,6 +4,7 @@ const validate = require('../middleware/validate');
 const verifyRecaptcha = require('../middleware/verifyReptcha');
 const authController = require('../controllers/auth');
 const passport = require('passport');
+const {loginLimiter, registerLimiter} = require('../utils/limitRequests')
 
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res) =>
   res.send(req.user),
@@ -11,9 +12,10 @@ router.get('/', passport.authenticate('jwt', { session: false }), (req, res) =>
 
 router.post(
   '/login',
-  // verifyRecaptcha,
+  verifyRecaptcha,
   validate.validateLogin(),
   validate.handleValidationErrors,
+  loginLimiter,
   authController.login,
 );
 
@@ -24,6 +26,7 @@ router.post(
   '/register',
   validate.validateRegisterUser(),
   validate.handleValidationErrors,
+  registerLimiter,
   authController.register,
 );
 
