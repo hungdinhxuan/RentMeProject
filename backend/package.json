@@ -16,6 +16,7 @@
     "express-validator": "^6.12.1",
     "google-auth-library": "^7.9.1",
     "helmet": "^4.6.0",
+    "hpp": "^0.2.3",
     "isomorphic-fetch": "^3.0.0",
     "jsonwebtoken": "^8.5.1",
     "mailgun-js": "^0.22.0",
@@ -27,9 +28,7 @@
     "passport": "^0.4.1",
     "passport-jwt": "^4.0.0",
     "socket.io": "^4.2.0",
-    "streamifier": "^0.1.1",
-    "systeminformation": "^5.9.3",
-    "uuid": "^8.3.2"
+    "streamifier": "^0.1.1"
   },
   "devDependencies": {
     "dotenv": "^10.0.0",
