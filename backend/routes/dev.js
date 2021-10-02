@@ -14,6 +14,12 @@ const multerLib = require('multer');
 const streamifier = require('streamifier');
 const validate = require('../middleware/validate');
 
+
+router.get('/', (req, res) => {
+  console.log(req.body);
+  return res.send('ok')
+})
+
 router.post('/upload-images', (req, res) => {
   upload(
     multer.mimeTypes.image,
@@ -154,4 +160,6 @@ router.post(
     const {username, password, email, fullName, role} = req.body;
   },
 );
+
+
 module.exports = router;
