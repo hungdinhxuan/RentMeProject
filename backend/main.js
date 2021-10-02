@@ -6,6 +6,7 @@ const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
+const hpp = require('hpp');
 
 
 if (process.env.NODE_ENV !== 'production') {
@@ -25,16 +26,20 @@ if (process.env.NODE_ENV !== 'production') {
   // const openapiSpecification = swaggerJsdoc(options);
   // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
 }
+require('./services/mongo')();
 
 app.use(mongoSanitize());
 
-// limit request (limit 1000 request in 1h)
+//Prevent HTTP Parameter Pollution example: http://localhost:4000/api/dev?username=long&username=laduv => 
+// req.query = {username:  [ 'long', 'laduv' ]}
+app.use(hpp());
+
 
 app.use(helmet()); //protect your app from some well-known web vulnerabilities by setting HTTP headers appropriately.
 
 // const swaggerUi = require('swagger-ui-express');
 
-require('./services/mongo')();
+
 
 const routes = require('./routes');
 const socket = require('./utils/socket');
