@@ -25,7 +25,6 @@ import * as yup from "yup";
 import { AsyncSignin } from "../AuthSlice";
 import "./SignIn.scss";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
-import {Redirect} from 'react-router-dom'
 
 
 function Copyright() {
@@ -205,9 +204,8 @@ export default function SignIn() {
       });
       console.log(res);
       localStorage.setItem("token", res.token);
-      if (localStorage.getItem("token")) {
-        history.push("/");
-      }
+      history.push("/");
+      
     } catch (error) {}
   };
 
@@ -221,6 +219,7 @@ export default function SignIn() {
       });
       console.log(res.data);
       localStorage.setItem("token", res.token);
+      history.push("/");
     } catch (error) {
       console.log(error);
     }

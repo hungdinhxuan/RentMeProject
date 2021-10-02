@@ -1,14 +1,49 @@
-const express = require('express')
-const router = express.Router()
-const UserController = require('../controllers/users')
-const passport = require('passport')
-const checkRoles = require('../middleware/checkRoles')
-const s3 = require('../utils/s3')
+const express = require('express');
+const router = express.Router();
+const UserController = require('../controllers/users');
+const passport = require('passport');
+const { AdminRole } = require('../middleware/checkRoles');
+const {
+  validateRegisterUser,
+  validateNewPassword,
+  handleValidationErrors,
+} = require('../middleware/validate');
 
-router.get('/', UserController.getAll)
-router.post('/upload', s3.uploadOneImage)
-router.get('/files', s3.listAllObjects)
-router.get('/:id', passport.authenticate('jwt', { session: false }), checkRoles.CustomerRole, UserController.getOne)
+router.get(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  AdminRole,
+  UserController.getAll,
+);
 
+router.post(
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  AdminRole,
+  validateRegisterUser(),
+  handleValidationErrors,
+  UserController.createUser,
+);
 
-module.exports = router
+router.get(
+  '/:id',
+  passport.authenticate('jwt', { session: false }),
+
+  UserController.getOne,
+);
+
+router.patch(
+  '/:id/change-password',
+  passport.authenticate('jwt', { session: false }),
+  validateNewPassword(),
+  handleValidationErrors,
+  UserController.changePassword,
+);
+
+router.delete(
+  '/:id/soft',
+  passport.authenticate('jwt', { session: false }),
+  AdminRole,
+  UserController.softDelete,
+);
+module.exports = router;

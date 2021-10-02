@@ -1,7 +1,6 @@
 import Footer from "components/Footer";
 import Header from "components/Header";
 import React from "react";
-import { ToastContainer } from "react-toastify";
 import CarouselHeader from "./Carousel";
 import ContentHome from "./ContentHome";
 import "./Home.scss";
@@ -17,7 +16,7 @@ function Home() {
 
   return (
     <div className="home__main">
-      <Header />
+      
       <div className="home__body">
         <CarouselHeader />
         <ContentHome />
