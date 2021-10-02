@@ -8,9 +8,6 @@ import PriceCard from "assets/priceCard.png";
 import "./CardList.scss";
 
 function CardList() {
-  const location = useLocation();
-  console.log(location);
-
   const handleAudio = (e) => {
     e.preventDefault();
     console.log("open audio");
@@ -18,7 +15,7 @@ function CardList() {
 
   return (
     <div className="card__details col-xl-3 col-md-6 col-12">
-      <Link to="/signin">
+      <Link to="/playerdou/details">
         <div className="card__items">
           <div className="profile">
             <Avatar shape="square" size={100} src={Ha} />
