@@ -17,6 +17,7 @@ const validate = require('../middleware/validate');
 
 router.get('/', (req, res) => {
   console.log(req.body);
+  console.log(req.query)
   return res.send('ok')
 })
 
