@@ -1,6 +1,6 @@
 const User = require('../models/users');
 const argon2 = require('argon2');
-const DetailUser = require('../models/detail_users');
+
 
 class UsersController {
   async getOne(req, res) {
@@ -93,20 +93,6 @@ class UsersController {
 
   async uploadAvatar(req, res) {}
 
-  async createDetailUser(req, res) {
-    try {
-      let { nickname, birthDate, province, desc } = req.body;
-      desc = desc || '';
-      await DetailUser.create({ nickname, birthDate, province, desc });
-      return res.status(200).json({ success: true, message: 'Created' });
-    } catch (error) {
-      return res.status(500).json({
-        success: false,
-        message: error.message || 'Internal Server Error',
-        error,
-      });
-    }
-  }
 
   async createUser(req, res) {
     const { username, password, email, fullName, role } = req.body;
