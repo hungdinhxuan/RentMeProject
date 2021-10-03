@@ -12,10 +12,9 @@ const connectAndRetry  = async () => {
   }
   try {
     await mongoose.connect(MONGO_URL);
-    console.log(MONGO_URL);
     console.log('Connect to database successfully');
   } catch (error) {
-    console.log(MONGO_URL);
+    
     console.log('Cannot connect to database - retrying in 5 sec ...');
     setTimeout(connectAndRetry, 5000);
   }
