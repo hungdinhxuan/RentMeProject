@@ -4,6 +4,9 @@ README.md
 .gitignore
 .eslintrc.js
 .prettierrc
+Makefile
+init-data
+test.js
 dist
 core
 .env

@@ -1,7 +1,9 @@
 FROM node:16-alpine
+RUN apk add dumb-init
 WORKDIR /app
-COPY package.json yarn.lock ./
+COPY --chown=node:node package.json yarn.lock ./
 RUN yarn install --production=true
-COPY . .
+COPY --chown=node:node . .
 EXPOSE 4000
-CMD [ "yarn", "start" ]
+USER node
+CMD ["dumb-init", "node", "main.js" ]
