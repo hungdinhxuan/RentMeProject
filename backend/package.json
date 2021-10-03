@@ -31,7 +31,11 @@
     "streamifier": "^0.1.1"
   },
   "devDependencies": {
+    "chai": "^4.3.4",
+    "chai-http": "^4.3.0",
     "dotenv": "^10.0.0",
+    "mocha": "^9.1.2",
+    "morgan": "^1.10.0",
     "nodemon": "^2.0.12",
     "snyk": "^1.717.0",
     "swagger-jsdoc": "^6.1.0",
@@ -40,6 +44,6 @@
   "scripts": {
     "start": "node main",
     "dev": "nodemon main",
-    "test": "snyk test"
+    "test": "mocha --timeout 10000"
   }
 }

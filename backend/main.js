@@ -8,38 +8,22 @@ const helmet = require('helmet');
 const mongoSanitize = require('express-mongo-sanitize');
 const hpp = require('hpp');
 
-
-if (process.env.NODE_ENV !== 'production') {
+if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
   require('dotenv').config();
-  // const swaggerJsdoc = require('swagger-jsdoc');
-
-  // const options = {
-  //   definition: {
-  //     openapi: '3.0.0',
-  //     info: {
-  //       title: 'BACKEND API',
-  //       version: '1.0.0',
-  //     },
-  //   },
-  //   apis: ['./routes/*.js'], // files containing annotations as above
-  // };
-  // const openapiSpecification = swaggerJsdoc(options);
-  // app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openapiSpecification));
+  app.use(require('morgan')('combined'));
 }
+
 require('./services/mongo')();
 
 app.use(mongoSanitize());
 
-//Prevent HTTP Parameter Pollution example: http://localhost:4000/api/dev?username=long&username=laduv => 
+//Prevent HTTP Parameter Pollution example: http://localhost:4000/api/dev?username=long&username=laduv =>
 // req.query = {username:  [ 'long', 'laduv' ]}
 app.use(hpp());
-
 
 app.use(helmet()); //protect your app from some well-known web vulnerabilities by setting HTTP headers appropriately.
 
 // const swaggerUi = require('swagger-ui-express');
-
-
 
 const routes = require('./routes');
 const socket = require('./utils/socket');
@@ -89,4 +73,5 @@ require('./services/passport')();
 
 routes(app);
 socket(app);
-// app.listen(4000)
+
+module.exports = app;
