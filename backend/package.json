@@ -44,6 +44,6 @@
   "scripts": {
     "start": "node main",
     "dev": "nodemon main",
-    "test": "mocha --timeout 10000"
+    "test": "mocha --exit"
   }
 }
