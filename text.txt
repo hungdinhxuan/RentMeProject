@@ -6,3 +6,5 @@
 + extra: 1200px hoặc 1400px
 
 max-width của boostrap: 1920px
+
+--trigger build 2

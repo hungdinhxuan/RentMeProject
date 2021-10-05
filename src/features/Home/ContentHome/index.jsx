@@ -44,8 +44,10 @@ function ContentHome() {
       }
     };
     calllApi();
+    
   }, []);
-
+  
+  
   return (
     <div
       className="container__content"

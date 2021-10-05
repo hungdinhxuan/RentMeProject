@@ -1,13 +1,15 @@
-import Footer from "components/Footer";
-import Header from "components/Header";
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { AsyncLoadUser } from "features/Auth/AuthSlice";
 
 export default function Applayout({ children, ...rest }) {
-  return (
-    <Fragment>
-      <Header />
-      {children}
-      <Footer />
-    </Fragment>
-  );
+  // const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   if (localStorage.getItem("token")) {
+  //     dispatch(AsyncLoadUser());
+  //   }
+  // }, []);
+
+  return <Fragment>{children}</Fragment>;
 }
