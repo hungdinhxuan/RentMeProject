@@ -11,18 +11,21 @@ import { useDispatch, useSelector } from "react-redux";
 import { AsyncLoadUser } from "features/Auth/AuthSlice";
 
 function Home() {
+
   window.onunload = () => {
     window.scrollTo(0, 0);
   };
   const dispatch = useDispatch();
-
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      dispatch(AsyncLoadUser());
+    }
+  }, []);
   // useEffect(() => {
-  //   if (localStorage.getItem("token")) {
-  //     dispatch(AsyncLoadUser());
-  //   }
-  // }, []);
-
-
+  //   dispatch(AsyncLoadUser());
+  // }, [dispatch]);
+  
+  
   return (
     <div className="home__main">
       <div className="home__body">

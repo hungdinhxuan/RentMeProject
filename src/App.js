@@ -1,4 +1,4 @@
-import { lazy, React, Suspense } from "react";
+import { lazy, React, Suspense,useEffect } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import PageNotFound from "components/PageNotFound";
 import NotFound from "components/NotFound";
@@ -15,7 +15,8 @@ import AOS from "aos";
 import ProtectedRoute from "components/ProtectedRoute";
 import Settings from "features/Settings";
 import Applayout from "components/Applayout/index";
-
+import { useSelector, useDispatch } from "react-redux";
+import { AsyncLoadUser } from "features/Auth/AuthSlice";
 const Home = lazy(() => import("features/Home/index.jsx"));
 const ForgotPassword = lazy(() =>
   import("features/Auth/ForgotPassword/index.jsx")
@@ -23,9 +24,23 @@ const ForgotPassword = lazy(() =>
 const RentPlayer = lazy(() => import("features/RentPlayer/index.jsx"));
 AOS.init();
 function App() {
+  const { loading, isAuthenticated } = useSelector((state) => state.auth);
   socket.on("connect", () => {
     console.log("ok");
   });
+
+
+  const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   if (localStorage.getItem("token")) {
+  //     dispatch(AsyncLoadUser());
+  //   }
+  // }, []);
+  // if(loading){
+  //   return <h1 style={{ color: "#fff" }}>Loading</h1>;
+  // }
+  
   return (
     <div className="App">
       <Suspense

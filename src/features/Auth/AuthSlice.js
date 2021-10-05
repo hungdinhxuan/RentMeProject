@@ -95,7 +95,9 @@ const AuthSlice = createSlice({
       state.error = null;
     },
     [AsyncLoadUser.rejected]: (state, action) => {
-      state = initialState;
+      state.user = null;
+      state.loading = false;
+      state.isAuthenticated = false;
     },
 
     [AsyncSignin.pending]: (state) => {
