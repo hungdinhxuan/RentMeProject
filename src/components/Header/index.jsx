@@ -1,20 +1,25 @@
+import { Avatar, Badge } from "antd";
+import { UserOutlined } from "@ant-design/icons";
 import Logo from "assets/player-dou-a.jpg";
 import React, { useEffect, useRef, useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
+import { useSelector } from "react-redux";
 import { NavLink, useHistory, useLocation } from "react-router-dom";
 import Drawler from "./Drawler";
 import "./Header.scss";
+import Ha from 'assets/Ha.jpg'
 
 function Header() {
+  const { user, loading, error } = useSelector((state) => state.auth);
+
   const [header, setHeader] = useState(false);
-  const [user, setUser] = useState(false);
+  const [userHeader, setUserHeader] = useState(true);
   const [visible, setVisible] = useState(false);
   const [navScroll, setnavSroll] = useState("");
 
   const navRef = useRef();
   navRef.current = navScroll;
   const location = useLocation();
-  
 
   useEffect(() => {
     const handleScroll = () => {
@@ -26,15 +31,19 @@ function Header() {
       }
     };
     document.addEventListener("scroll", handleScroll);
-    if (userInfo) {
-      setUser(false);
-    }
-    
 
     return () => {
       document.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  
+  
+  useEffect(() => {
+    if (user) {
+      setUserHeader(false);
+    }
+  }, [user]);
 
   const handleShowDrawler = () => {
     setVisible(true);
@@ -53,8 +62,6 @@ function Header() {
   const handleSignUp = () => {
     history.push("/signup");
   };
-
-  const userInfo = localStorage.getItem("token");
 
   return (
     <header className={navScroll}>
@@ -121,29 +128,33 @@ function Header() {
               </Nav.Link>
             </Nav>
             <div className="justify-content-end">
-              <button className="button__login" onClick={handleLogin}>
-                Log in
-              </button>
-              <button
-                style={{ marginLeft: "12px" }}
-                className="button__signup"
-                onClick={handleSignUp}
-              >
-                Sign up
-              </button>
-
-              {/* <div className="message d-flex align-items-center">
-                <div className="message__badge">
-                  <Badge count={1}>
-                    <div className="message-icon">
-                      <i class="bi bi-envelope"></i>
-                    </div>
-                  </Badge>
+              {userHeader ? (
+                <>
+                  <button className="button__login" onClick={handleLogin}>
+                    Log in
+                  </button>
+                  <button
+                    style={{ marginLeft: "12px" }}
+                    className="button__signup"
+                    onClick={handleSignUp}
+                  >
+                    Sign up
+                  </button>
+                </>
+              ) : (
+                <div className="message d-flex align-items-center">
+                  <div className="message__badge">
+                    <Badge count={1}>
+                      <div className="message-icon">
+                        <i class="bi bi-envelope"></i>
+                      </div>
+                    </Badge>
+                  </div>
+                  <div className="user__icon" onClick={handleShowDrawler}>
+                    <Avatar size={28} src={Ha} />
+                  </div>
                 </div>
-                <div className="user__icon" onClick={handleShowDrawler}>
-                  <Avatar size={28} icon={<UserOutlined />} />
-                </div>
-              </div> */}
+              )}
             </div>
           </Navbar.Collapse>
         </Container>

@@ -6,7 +6,7 @@ import Ha from "assets/Ha.jpg";
 
 export default function PlayerDetails() {
   const location = useLocation();
-  console.log(location);
+  // console.log(location);
 
   const [visible, setVisible] = useState(false);
 
@@ -164,7 +164,7 @@ export default function PlayerDetails() {
                           value={5}
                           count={5}
                           disabled
-                          style={{ fontSize: "16px" }}
+                          style={{ fontSize: "14px" }}
                         />
                       </div>
                     </div>
