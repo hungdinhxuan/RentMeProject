@@ -7,3 +7,4 @@ build
 .env
 text.txt
 yarn-error.log
+email-content.html

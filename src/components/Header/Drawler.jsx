@@ -7,6 +7,7 @@ import "./Drawer.scss";
 import Wallet from "assets/wallet.png";
 import Coupon from "assets/coupon.png";
 import EpalPlus from "assets/EpalPlus.png";
+import { Link } from "react-router-dom";
 function Drawler(props) {
   const { visible, Close } = props;
 
@@ -142,7 +143,9 @@ function Drawler(props) {
                   <div className="icon">
                     <i class="bi bi-gear"></i>
                   </div>
-                  <div className="text--item">Settings</div>
+                  <div className="text--item" >
+                    <Link to="/setting">Settings</Link>
+                  </div>
                 </div>
               </Space>
             </div>

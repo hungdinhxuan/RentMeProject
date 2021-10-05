@@ -184,9 +184,9 @@
                                 display: flex;
                                 padding-left: 15px;
                                 justify-content: space-between;
-                                width: 90%;
+                                width: 100%;
                                 .review-content {
-                                    width: 70%;
+                                    width: 50%;
                                     p {
                                         font-size: 15px;
                                         font-weight: 600;
@@ -212,6 +212,7 @@
                                 }
                                 .review-rating {
                                     width: 50%;
+                                    text-align: right;
                                 }
                                 
                             }

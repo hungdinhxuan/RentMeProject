@@ -4,16 +4,20 @@ const mongoose_delete = require('mongoose-delete');
 
 const PlayerProfilesSchema = new Schema(
   {
-    nickname: { type: 'string',require: true },
-    shortDesc: { type: 'string', default: '' , maxLength: 255},
-    longDesc: { type: 'string', default: '' , maxLength: 2000},
+    nickname: { type: String, require: true },
+    shortDesc: { type: String, default: '', maxLength: 255, required: true},
+    longDesc: { type: String, default: '', maxLength: 2000 },
     userId: { type: mongoose.Types.ObjectId, refs: 'users' },
-    pricePerHour: { type: Number},
-    recordVoiceUrl: { type: 'string', default: '' },
+    coverBackground: { type: String, required: true},
+    pricePerHour: { type: Number },
+    recordVoiceUrl: { type: String, default: '' },
     albums: [String],
-    avatar: { type: 'string', default: ''},
     timeCanReceive: [Number],
-
+    status: { 
+      type: String,
+      default: 'Under Review',
+      enum: ['Accepted', 'Rejected', 'Under Review'],
+    },
   },
   { timestamps: true },
 );
