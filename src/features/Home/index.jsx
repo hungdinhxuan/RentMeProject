@@ -7,24 +7,21 @@ import "./Home.scss";
 import ListGame from "./ListGames";
 import Stories from "./Stories";
 import TryRentme from "./TryRentme";
-import { AsyncLoadUser } from "features/Auth/AuthSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { AsyncLoadUser } from "features/Auth/AuthSlice";
 
 function Home() {
   window.onunload = () => {
     window.scrollTo(0, 0);
   };
-
-  const { user, loading, error } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      dispatch(AsyncLoadUser());
-    }
-  }, []);
-  
-  
+  // useEffect(() => {
+  //   if (localStorage.getItem("token")) {
+  //     dispatch(AsyncLoadUser());
+  //   }
+  // }, []);
+
 
   return (
     <div className="home__main">

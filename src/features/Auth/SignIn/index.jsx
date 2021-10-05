@@ -20,7 +20,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 // React-hook-form
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useHistory,Redirect,useLocation } from "react-router-dom";
 import * as yup from "yup";
 import { AsyncSignin } from "../AuthSlice";
 import "./SignIn.scss";
@@ -112,9 +112,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+export default function SignIn(props) {
   const classes = useStyles();
-
+  
   // Form
   const initialValues = {
     username: "",
@@ -160,16 +160,18 @@ export default function SignIn() {
   };
 
   // Xử lý redux
-  const { user, loading, error } = useSelector((state) => state.auth);
+  const { user, loading, error, isAuthenticated } = useSelector((state) => state.auth);
   const history = useHistory();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   // Sau khi có tài khoản
+  const {referrer} = props.location.state;
+  console.log(referrer);
   if (localStorage.getItem("token")) {
-    
-    // return <Redirect to="/" />
-    history.push("/");
-  }
+    history.push("/")
+ }
+  
 
   const googleButtonStyle = {
     backgroundImage: `url(${Google})`,
