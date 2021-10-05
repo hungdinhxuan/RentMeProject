@@ -38,12 +38,12 @@ function Header() {
   }, []);
 
   
-  const data = user;
-  // useEffect(() => {
-  //   if (user) {
-  //     setUserHeader(false);
-  //   }
-  // }, [data]);
+  
+  useEffect(() => {
+    if (user) {
+      setUserHeader(false);
+    }
+  }, [user]);
 
   const handleShowDrawler = () => {
     setVisible(true);

@@ -14,7 +14,7 @@ import AnhBackGround from "assets/acct_creation_bg.jpg";
 import Facebook from "assets/facebook.png";
 import Google from "assets/google.png";
 import axiosClient from "axiosClient";
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import GoogleLogin from "react-google-login";
 import ReCAPTCHA from "react-google-recaptcha";
 // React-hook-form
@@ -166,11 +166,13 @@ export default function SignIn(props) {
   const location = useLocation();
 
   // Sau khi có tài khoản
-  const {referrer} = props.location.state;
-  console.log(referrer);
+  const {referrer} = props.location.state || {referrer: {pathname: "/"}};
+
+  
   if (localStorage.getItem("token")) {
-    history.push("/")
+    history.push(referrer)
  }
+
   
 
   const googleButtonStyle = {
