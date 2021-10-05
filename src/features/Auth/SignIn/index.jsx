@@ -202,7 +202,7 @@ export default function SignIn() {
       const res = await axiosClient.post('/auth/google', {
         tokenId: response.tokenId,
       });
-      console.log(res);
+      // console.log(res);
       localStorage.setItem("token", res.token);
       history.push("/");
       
@@ -210,14 +210,14 @@ export default function SignIn() {
   };
 
   const responseFacebook = async (response) => {
-    console.log(response);
+
 
     try {
       const { accessToken } = response;
       const res = await axiosClient.post('/auth/facebook', {
         accessToken,
       });
-      console.log(res.data);
+      // console.log(res.data);
       localStorage.setItem("token", res.token);
       history.push("/");
     } catch (error) {

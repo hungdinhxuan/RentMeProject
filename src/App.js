@@ -12,6 +12,7 @@ import socket from "socket";
 import MessengerCustomerChat from "react-messenger-customer-chat";
 import Header from "components/Header";
 import AOS from "aos";
+import ProtectedRoute from "components/ProtectedRoute";
 
 const Home = lazy(() => import("features/Home/index.jsx"));
 const ForgotPassword = lazy(() =>
@@ -50,7 +51,7 @@ function App() {
             <Route exact path="/signin" component={SignIn} />
             <Route exact path="/signup" component={SignUp} />
             <Route exact path="/forgot-password" component={ForgotPassword} />
-            <Route path="/playerdou" component={RentPlayer} />
+            <ProtectedRoute path="/playerdou" component={RentPlayer} />
             <Route exact path="/404" component={PageNotFound} />
             <Route path="*" component={NotFound} />
           </Switch>

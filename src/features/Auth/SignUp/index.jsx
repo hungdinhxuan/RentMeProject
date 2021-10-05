@@ -157,7 +157,7 @@ export default function SignUp() {
   const dispatch = useDispatch();
   const history = useHistory();
   const onSubmit = (data) => {
-    console.log(data);
+  
     dispatch(AsyncSignup(data));
     if (!error) {
       return history.push("/signin");
