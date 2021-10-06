@@ -1,4 +1,4 @@
-import { lazy, React, Suspense,useEffect } from "react";
+import { lazy, React, Suspense, useEffect } from "react";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import PageNotFound from "components/PageNotFound";
 import NotFound from "components/NotFound";
@@ -17,6 +17,7 @@ import Settings from "features/Settings";
 import Applayout from "components/Applayout/index";
 import { useSelector, useDispatch } from "react-redux";
 import { AsyncLoadUser } from "features/Auth/AuthSlice";
+import Loading from "components/Loading";
 const Home = lazy(() => import("features/Home/index.jsx"));
 const ForgotPassword = lazy(() =>
   import("features/Auth/ForgotPassword/index.jsx")
@@ -29,7 +30,6 @@ function App() {
     console.log("ok");
   });
 
-
   const dispatch = useDispatch();
 
   // useEffect(() => {
@@ -40,16 +40,10 @@ function App() {
   // if(loading){
   //   return <h1 style={{ color: "#fff" }}>Loading</h1>;
   // }
-  
+
   return (
     <div className="App">
-      <Suspense
-        fallback={
-          <div style={{ color: "white" }} className="text-center">
-            Loading...
-          </div>
-        }
-      >
+      <Suspense fallback={<Loading />}>
         <BrowserRouter>
           <Route
             render={({ location }) => {
@@ -62,18 +56,16 @@ function App() {
             }}
           />
 
-          
-            <Switch>
-              <Route exact path="/" component={Home} />
-              <Route exact path="/signin" component={SignIn} />
-              <Route exact path="/signup" component={SignUp} />
-              <Route exact path="/forgot-password" component={ForgotPassword} />
-              <ProtectedRoute path="/playerdou" component={RentPlayer} />
-              <ProtectedRoute path="/setting" component={Settings} />
-              <Route exact path="/404" component={PageNotFound} />
-              <Route path="*" component={NotFound} />
-            </Switch>
-          
+          <Switch>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/signin" component={SignIn} />
+            <Route exact path="/signup" component={SignUp} />
+            <Route exact path="/forgot-password" component={ForgotPassword} />
+            <ProtectedRoute path="/playerdou" component={RentPlayer} />
+            <ProtectedRoute path="/setting" component={Settings} />
+            <Route exact path="/404" component={PageNotFound} />
+            <Route path="*" component={NotFound} />
+          </Switch>
 
           {/* <Applayout>
             <Switch>
@@ -87,6 +79,7 @@ function App() {
             appId={process.env.REACT_APP_FACEBOOK_APP_ID}
             htmlRef={process.env.REACT_APP_FACEBOOK_HTML_REF}
           />
+          
         </BrowserRouter>
       </Suspense>
     </div>
