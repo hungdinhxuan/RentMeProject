@@ -1,6 +1,6 @@
 const User = require('../models/users');
 const argon2 = require('argon2');
-
+const PlayerProfiles = require('../models/player_profiles');
 
 class UsersController {
   async getOne(req, res) {
@@ -27,7 +27,7 @@ class UsersController {
   async getAll(req, res) {
     const { page, limit } = req.query;
     let { deleted } = req.body;
-    deleted = (deleted === 'true');
+    deleted = deleted === 'true';
     let users;
     if (page) {
       /// Find all users including deleted
@@ -93,7 +93,6 @@ class UsersController {
 
   async uploadAvatar(req, res) {}
 
-
   async createUser(req, res) {
     const { username, password, email, fullName, role } = req.body;
     try {
@@ -141,18 +140,27 @@ class UsersController {
   async getAllPlayers(req, res) {
     const { page, limit } = req.query;
     let { deleted } = req.body;
-    deleted = (deleted === 'true');
-    let users;
+    deleted = deleted === 'true';
+    let player_profiles;
     if (page) {
       /// Find all users including deleted
 
       let skip = (page - 1) * PAGE_SIZE;
 
       try {
-        users = deleted
-          ? await User.findWithDeleted().skip(skip).limit(limit)
-          : await User.find().skip(skip).limit(limit);
-        return res.json(users);
+        player_profiles = deleted
+          ? await PlayerProfiles.findWithDeleted()
+              .skip(skip)
+              .limit(limit)
+              .populate('userId')
+              .select('-password')
+          : await PlayerProfiles.find()
+              .skip(skip)
+              .limit(limit)
+              .populate('userId')
+              .select('-password')
+              .sort({ isOnline: 'asc' });
+        return res.json(player_profiles);
       } catch (error) {
         return res
           .status(500)
@@ -160,7 +168,9 @@ class UsersController {
       }
     }
     try {
-      users = deleted ? await User.findWithDeleted().limit(limit) : await User.find().limit(limit);
+      users = deleted
+        ? await User.findWithDeleted().limit(limit)
+        : await User.find().limit(limit).sort({});
       return res.send(users);
     } catch (error) {
       return res.status(500).json({
@@ -170,9 +180,11 @@ class UsersController {
       });
     }
   }
-  async createPlayer(req, res) {
-    
+
+  async filterPlayers(req, res) {
+    const { page, limit, status } = req.query;
   }
+  async createPlayer(req, res) {}
 }
 
 module.exports = new UsersController();
