@@ -14,6 +14,9 @@ const multerLib = require('multer');
 const streamifier = require('streamifier');
 const validate = require('../middleware/validate');
 const User = require('../models/users');
+const PlayerProfiles = require('../models/player_profiles')
+const argon2 = require('argon2');
+const {girlName} = require('../init-data');
 
 router.get('/', (req, res) => {
   console.log(req.body);
@@ -171,26 +174,62 @@ router.post('/generate-sample-profile-player', async (req, res) => {
   const max_results = 50 * 4;
 
   try {
-    const res = await cloudinary.search
+    let users = []
+    const lengthName = girlName.length
+    function randomDate(start, end) {
+      return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
+    }
+    for (let index = 0; index < max_results; index+=4) {
+      users.push({
+        username: `rentme${parseInt((index + 1) /4 )}`,
+        password: await argon2.hash(`Str0ng!Passw0rd`),
+        email: `rentme${parseInt((index + 1) /4 )}@rentme.games`,
+        fullName: `${girlName[ Math.floor(Math.random() * lengthName) ]}`,
+        birthDate: randomDate(new Date(1992, 0, 1), new Date(2002, 0, 1)),
+        gender: 'female',
+      })
+    }
+
+    users = await User.insertMany(users)
+
+    console.log('here');
+    const imgResult = await cloudinary.search
       .expression(
-        'rentme-sample-data/girlxinhpro/*', // add your folder
+        'rentme-sample-data/*', // add your folder
       )
       .sort_by('public_id', 'desc')
       .max_results(max_results)
       .execute();
-    const { resources } = result;
+
+    const { resources } = imgResult;
     // const player_profiles
+    console.log(imgResult);
+    let player_profiles = []
     for (let index = 0; index < resources.length; index += 4) {
-      let coverBackground = resources[index].secure_url;
-      let albums = [
+      
+       player_profiles.push({
+        nickname: users[ parseInt((index + 1) /4 )].fullName,
+        coverBackground: resources[index].secure_url,
+       albums: [
         resources[index + 1].secure_url,
         resources[index + 2].secure_url,
         resources[index + 3].secure_url,
-      ];
+      ],
+       shortDesc: 'Người Chơi Hệ Đáng Yêu',
+       pricePerHour: Math.floor(Math.random() * 100 + 2),
+       timeCanReceive: [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22],
+       status: "Accepted",
+       userId: users[parseInt((index + 1) /4 )]._id
+       })
     }
-    res.send(result);
+    player_profiles = await PlayerProfiles.insertMany(player_profiles)
+    res.send({
+      msg: `created ${max_results}`,
+      player_profiles
+    });
   } catch (error) {
-    res.send(err);
+    console.log(error);
+    res.status(500).send(error);
   }
 });
 

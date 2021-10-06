@@ -138,6 +138,38 @@ class UsersController {
     }
   }
 
+  async getAllPlayers(req, res) {
+    const { page, limit } = req.query;
+    let { deleted } = req.body;
+    deleted = (deleted === 'true');
+    let users;
+    if (page) {
+      /// Find all users including deleted
+
+      let skip = (page - 1) * PAGE_SIZE;
+
+      try {
+        users = deleted
+          ? await User.findWithDeleted().skip(skip).limit(limit)
+          : await User.find().skip(skip).limit(limit);
+        return res.json(users);
+      } catch (error) {
+        return res
+          .status(500)
+          .json({ success: false, message: 'Internal Server Error' });
+      }
+    }
+    try {
+      users = deleted ? await User.findWithDeleted().limit(limit) : await User.find().limit(limit);
+      return res.send(users);
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message || 'Some error occurred while retrieving data',
+        error,
+      });
+    }
+  }
   async createPlayer(req, res) {
     
   }
