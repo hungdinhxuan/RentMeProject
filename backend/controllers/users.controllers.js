@@ -137,6 +137,10 @@ class UsersController {
       });
     }
   }
+
+  async createPlayer(req, res) {
+    
+  }
 }
 
 module.exports = new UsersController();
