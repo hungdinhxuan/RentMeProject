@@ -13,13 +13,13 @@ const { multer } = require('../utils/config');
 const multerLib = require('multer');
 const streamifier = require('streamifier');
 const validate = require('../middleware/validate');
-
+const User = require('../models/users');
 
 router.get('/', (req, res) => {
   console.log(req.body);
-  console.log(req.query)
-  return res.send('ok')
-})
+  console.log(req.query);
+  return res.send('ok');
+});
 
 router.post('/upload-images', (req, res) => {
   upload(
@@ -153,14 +153,45 @@ router.post('/upload-video', (req, res) => {});
 
 router.post('/upload-audio', (req, res) => {});
 
-router.post(
-  '/users',
-  validate.validateRegisterUser(),
-  validate.handleValidationErrors,
-  async (req, res) => {
-    const {username, password, email, fullName, role} = req.body;
-  },
-);
+// nickname: { type: String, require: true },
+//     shortDesc: { type: String, default: '', maxLength: 255, required: true},
+//     longDesc: { type: String, default: '', maxLength: 2000 },
+//     userId: { type: mongoose.Types.ObjectId, refs: 'users' },
+//     coverBackground: { type: String, required: true},
+//     pricePerHour: { type: Number },
+//     recordVoiceUrl: { type: String, default: '' },
+//     albums: [String],
+//     timeCanReceive: [Number],
+//     status: {
+//       type: String,
+//       default: 'Under Review',
+//       enum: ['Accepted', 'Rejected', 'Under Review'],
+//     },
+router.post('/generate-sample-profile-player', async (req, res) => {
+  const max_results = 50 * 4;
 
+  try {
+    const res = await cloudinary.search
+      .expression(
+        'rentme-sample-data/girlxinhpro/*', // add your folder
+      )
+      .sort_by('public_id', 'desc')
+      .max_results(max_results)
+      .execute();
+    const { resources } = result;
+    // const player_profiles
+    for (let index = 0; index < resources.length; index += 4) {
+      let coverBackground = resources[index].secure_url;
+      let albums = [
+        resources[index + 1].secure_url,
+        resources[index + 2].secure_url,
+        resources[index + 3].secure_url,
+      ];
+    }
+    res.send(result);
+  } catch (error) {
+    res.send(err);
+  }
+});
 
 module.exports = router;
