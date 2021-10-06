@@ -21,9 +21,7 @@ function Home() {
       dispatch(AsyncLoadUser());
     }
   }, []);
-  // useEffect(() => {
-  //   dispatch(AsyncLoadUser());
-  // }, [dispatch]);
+  
   
   
   return (
