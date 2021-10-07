@@ -7,7 +7,8 @@ import { useSelector } from "react-redux";
 import { NavLink, useHistory, useLocation } from "react-router-dom";
 import Drawler from "./Drawler";
 import "./Header.scss";
-import Ha from 'assets/Ha.jpg'
+import Ha from "assets/Ha.jpg";
+import Loading from "components/Loading";
 
 function Header() {
   const { user, loading, error } = useSelector((state) => state.auth);
@@ -37,14 +38,6 @@ function Header() {
     };
   }, []);
 
-  
-  
-  useEffect(() => {
-    if (user) {
-      setUserHeader(false);
-    }
-  }, [user]);
-
   const handleShowDrawler = () => {
     setVisible(true);
   };
@@ -62,6 +55,10 @@ function Header() {
   const handleSignUp = () => {
     history.push("/signup");
   };
+
+  useEffect(() => {
+    user ? setUserHeader(false) : setUserHeader(true);
+  }, [user]);
 
   return (
     <header className={navScroll}>

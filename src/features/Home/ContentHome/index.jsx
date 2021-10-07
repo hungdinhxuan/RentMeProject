@@ -9,40 +9,41 @@ import { useEffect, useState } from "react";
 function ContentHome() {
   const history = useHistory();
   const [channel, setChannel] = useState("");
+  const calllApi = async () => {
+    try {
+      // Get access token
+      let options;
+      let res;
+      options = {
+        url: `https://id.twitch.tv/oauth2/token?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&client_secret=${process.env.REACT_APP_TWITCH_CLIENT_SECRET}&grant_type=client_credentials`,
+        method: "POST",
+      };
+      res = await axios(options);
+      const ACCESS_TOKEN = res.data.access_token;
+
+      // Call api to get top 5 streaming video on twitch
+
+      options = {
+        url: "https://api.twitch.tv/helix/streams?first=5",
+        headers: {
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
+          "Client-Id": process.env.REACT_APP_TWITCH_CLIENT_ID,
+        },
+        mehod: "GET",
+      };
+      // Pick 1 in 5 to setChannel
+      res = await axios(options);
+      const { data } = res.data;
+
+      const randomChanel = Math.floor(Math.random() * data.length);
+
+      setChannel(data[randomChanel].user_login);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  
   useEffect(() => {
-    const calllApi = async () => {
-      try {
-        // Get access token
-        let options;
-        let res;
-        options = {
-          url: `https://id.twitch.tv/oauth2/token?client_id=${process.env.REACT_APP_TWITCH_CLIENT_ID}&client_secret=${process.env.REACT_APP_TWITCH_CLIENT_SECRET}&grant_type=client_credentials`,
-          method: "POST",
-        };
-        res = await axios(options);
-        const ACCESS_TOKEN = res.data.access_token;
-
-        // Call api to get top 5 streaming video on twitch
-
-        options = {
-          url: "https://api.twitch.tv/helix/streams?first=5",
-          headers: {
-            Authorization: `Bearer ${ACCESS_TOKEN}`,
-            "Client-Id": process.env.REACT_APP_TWITCH_CLIENT_ID,
-          },
-          mehod: "GET",
-        };
-        // Pick 1 in 5 to setChannel
-        res = await axios(options);
-        const { data } = res.data;
-
-        const randomChanel = Math.floor(Math.random() * data.length);
-
-        setChannel(data[randomChanel].user_login);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     calllApi();
     
   }, []);

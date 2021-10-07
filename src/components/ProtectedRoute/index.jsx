@@ -14,11 +14,13 @@ export default function ProtectedRoute({ component: Component, ...rest }) {
     if (localStorage.getItem("token")) {
       dispatch(AsyncLoadUser());
     }
+    console.log(isAuthenticated)
   }, []);
   
   if (loading) {
     return <Loading/>
   }
+
   
 
 
