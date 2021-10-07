@@ -11,8 +11,8 @@ const {
 
 router.get(
   '/',
-  passport.authenticate('jwt', { session: false }),
-  AdminRole,
+  // passport.authenticate('jwt', { session: false }),
+  // AdminRole,
   UserController.getAll,
 );
 
