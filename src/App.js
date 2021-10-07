@@ -62,18 +62,12 @@ function App() {
             <Route exact path="/signup" component={SignUp} />
             <Route exact path="/forgot-password" component={ForgotPassword} />
             <ProtectedRoute path="/playerdou" component={RentPlayer} />
-            <ProtectedRoute path="/setting" component={Settings} />
+            <ProtectedRoute path="/setting/profile" component={Settings} />
             <Route exact path="/404" component={PageNotFound} />
             <Route path="*" component={NotFound} />
           </Switch>
 
-          {/* <Applayout>
-            <Switch>
-              <Route exact path="/" component={CarouselHeader} />
-              <Route exact path="/SignIn" component={SignIn} /> 
-            </Switch>
-          </Applayout>
-          <Route path="*" component={PageNotFound} />  */}
+          
           <MessengerCustomerChat
             pageId={process.env.REACT_APP_FACEBOOK_PAGE_ID}
             appId={process.env.REACT_APP_FACEBOOK_APP_ID}

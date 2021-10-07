@@ -83,7 +83,13 @@ export const AsyncForgotPassword = createAsyncThunk(
 const AuthSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      state.user = null;
+      state.loading = false;
+      state.isAuthenticated = false;
+    }
+  },
   extraReducers: {
     [AsyncLoadUser.pending]: (state) => {
       state.loading = true;
@@ -143,5 +149,6 @@ const AuthSlice = createSlice({
 });
 
 const { reducer } = AuthSlice;
+export const {logout} = AuthSlice.actions;
 
 export default reducer;

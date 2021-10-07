@@ -144,7 +144,7 @@ function Drawler(props) {
                     <i class="bi bi-gear"></i>
                   </div>
                   <div className="text--item" >
-                    <Link to="/setting">Settings</Link>
+                    <Link to="/setting/profile">Settings</Link>
                   </div>
                 </div>
               </Space>
