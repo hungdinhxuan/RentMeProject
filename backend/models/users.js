@@ -28,9 +28,9 @@ const UsersSchema = new Schema(
     desc: { type: 'string', default: '', maxLength: 1000 },
     isOnline: { type: Boolean, default: false, required: true },
     birthDate: { type: Date, default: '2000-01-01', required: true },
-    following: [mongoose.Types.ObjectId],
-    follower: [mongoose.Types.ObjectId],
-    blockList: [mongoose.Types.ObjectId],
+    following: [{type: mongoose.Types.ObjectId, ref: "users"}]  ,
+    follower: [{type: mongoose.Types.ObjectId, ref: "users"}]  ,
+    blockList: [{type: mongoose.Types.ObjectId, ref: "users"}] ,
     province: {
       type: 'string',
       default: 'Hồ Chí Minh',
