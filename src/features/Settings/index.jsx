@@ -1,7 +1,7 @@
-import SignUp from "features/Auth/SignUp";
 import React from "react";
-import { Redirect, Route, Switch, useHistory, useLocation } from "react-router";
+import { Route, Switch, useLocation } from "react-router";
 import SidebarSetting from "./MainSetting";
+import ProfileSetting from "./ProfileSetting";
 import "./Settings.scss";
 
 export default function Settings() {
@@ -14,7 +14,7 @@ export default function Settings() {
       </div>
       <div className="col-xl-10 col-lg-10 col-md-12">
         <Switch>
-          <Route  path="/setting/profile" component={SignUp} />
+          <Route  path="/setting/profile" component={ProfileSetting} />
         </Switch>
       </div>
     </div>

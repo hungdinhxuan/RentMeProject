@@ -1,0 +1,40 @@
+.profile__setting {
+    padding: 30px;
+    .row {
+        margin: 0;
+        div {
+            h3 {
+                color: var(--color-default);
+                margin-bottom: 30px;
+                font-size: 24px;
+            }
+            .profile__setting--avatar {
+                margin: 30px 0;
+                .right-avatar {
+                    display: flex;
+                    align-items: center;
+                    margin-left: 15px;
+                    cursor: pointer;
+                    .ant-upload {
+                        background: #ccc;
+                        color: #000;
+                    }
+                }
+            }
+            .line {
+                width: 800px;
+                height: 1px;
+                background: var(--button-hover);
+                margin: 24px 0;
+            }
+            
+        }
+        .title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-default);
+            margin-bottom: 24px;
+        }
+    }
+
+}

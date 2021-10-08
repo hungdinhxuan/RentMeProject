@@ -15,14 +15,6 @@ function Home() {
   window.onunload = () => {
     window.scrollTo(0, 0);
   };
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      dispatch(AsyncLoadUser());
-    }
-  }, []);
-  
-  
   
   return (
     <div className="home__main">
