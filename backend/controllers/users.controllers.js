@@ -32,7 +32,7 @@ class UsersController {
     if (page) {
       /// Find all users including deleted
 
-      let skip = (page - 1) * PAGE_SIZE;
+      let skip = (page - 1) * limit;
 
       try {
         users = deleted
@@ -145,7 +145,7 @@ class UsersController {
     if (page) {
       /// Find all users including deleted
 
-      let skip = (page - 1) * PAGE_SIZE;
+      let skip = (page - 1) * limit;
 
       try {
         player_profiles = deleted
@@ -182,7 +182,97 @@ class UsersController {
   }
 
   async filterPlayers(req, res) {
-    const { page, limit, status } = req.query;
+    let { page, limit, status } = req.query;
+    let player_profiles;
+
+    page = parseInt(page);
+    limit = parseInt(limit);
+    try {
+      if (page) {
+        let skip = (page - 1) * limit;
+
+        if (status == 'true') {
+          console.log('get online players');
+          player_profiles = await PlayerProfiles.aggregate([
+            {
+              $lookup: {
+                from: 'users',
+                localField: 'userId',
+                foreignField: '_id',
+                as: 'user',
+              },
+            },
+            // { $unwind: '$user' },
+            {
+              $project: {
+                'user.password': 0,
+                'user.username': 0,
+                'user.email': 0,
+                'user.role': 0,
+              },
+            },
+            { $sort: { 'user.isOnline': -1 } },
+            { $skip: skip },
+            { $limit: limit },
+          ]);
+        } else {
+          console.log('get offline players');
+          player_profiles = await PlayerProfiles.aggregate([
+            {
+              $lookup: {
+                from: 'users',
+                localField: 'userId',
+                foreignField: '_id',
+                as: 'user',
+              },
+            },
+            // { $unwind: '$user' },
+            {
+              $project: {
+                'user.password': 0,
+                'user.username': 0,
+                'user.email': 0,
+                'user.role': 0,
+              },
+            },
+            { $sort: { 'user.isOnline': 1 } },
+            { $skip: skip },
+            { $limit: limit },
+          ]);
+        }
+
+        return res.send(player_profiles);
+      } else {
+        player_profiles = await PlayerProfiles.aggregate([
+          {
+            $lookup: {
+              from: 'users',
+              localField: 'userId',
+              foreignField: '_id',
+              as: 'user',
+            },
+          },
+          // { $unwind: '$user' },
+          {
+            $project: {
+              'user.password': 0,
+              'user.username': 0,
+              'user.email': 0,
+              'user.role': 0,
+            },
+          },
+          { $sort: { 'user.isOnline': -1 } },
+          { $limit: limit },
+        ]);
+
+        return res.send(player_profiles);
+      }
+    } catch (error) {
+      console.log(error);
+      return res
+        .status(500)
+        .json({ success: false, message: 'Internal Server Error' });
+    }
   }
   async createPlayer(req, res) {}
 }

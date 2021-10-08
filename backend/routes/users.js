@@ -28,7 +28,6 @@ router.post(
 router.get(
   '/:id',
   passport.authenticate('jwt', { session: false }),
-
   UserController.getOne,
 );
 

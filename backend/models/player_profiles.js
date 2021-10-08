@@ -11,7 +11,7 @@ const PlayerProfilesSchema = new Schema(
     nickname: { type: String, require: true },
     shortDesc: { type: String, default: '', maxLength: 255, required: true },
     longDesc: { type: String, default: '', maxLength: 2000 },
-    userId: { type: mongoose.Types.ObjectId, refs: 'users', required: true },
+    userId: { type: mongoose.Types.ObjectId, ref: 'users', required: true },
     coverBackground: { type: String, required: true },
     pricePerHour: { type: Number, required: true },
     recordVoiceUrl: { type: String, default: '' },
@@ -29,7 +29,7 @@ const PlayerProfilesSchema = new Schema(
       enum: ['Accepted', 'Rejected', 'Under Review'],
     },
   },
-  { timestamps: true },
+  { timestamps: true , versionKey: false },
 );
 
 PlayerProfilesSchema.plugin(mongoose_delete, {
