@@ -7,7 +7,6 @@ import CardList from "../Card/index";
 
 function MainRentPlayer() {
   
-
   //   Select
   const { Option } = Select;
   const handleChange = (value) => {
