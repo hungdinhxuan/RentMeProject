@@ -14,18 +14,18 @@ import AnhBackGround from "assets/acct_creation_bg.jpg";
 import Facebook from "assets/facebook.png";
 import Google from "assets/google.png";
 import axiosClient from "axiosClient";
-import React, { useState,useEffect } from "react";
+import React, { useState } from "react";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import GoogleLogin from "react-google-login";
 import ReCAPTCHA from "react-google-recaptcha";
 // React-hook-form
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { Link, useHistory,Redirect,useLocation } from "react-router-dom";
+import { Link, useHistory, useLocation } from "react-router-dom";
 import * as yup from "yup";
 import { AsyncSignin } from "../AuthSlice";
 import "./SignIn.scss";
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
-
+import Loading from "components/Loading";
 
 function Copyright() {
   return (
@@ -114,7 +114,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function SignIn(props) {
   const classes = useStyles();
-  
+
   // Form
   const initialValues = {
     username: "",
@@ -160,20 +160,24 @@ export default function SignIn(props) {
   };
 
   // Xử lý redux
-  const { user, loading, error, isAuthenticated } = useSelector((state) => state.auth);
+  const { user, loading, isAuthenticated } = useSelector(
+    (state) => state.auth
+  );
   const history = useHistory();
   const dispatch = useDispatch();
-  const location = useLocation();
 
   // Sau khi có tài khoản
-  const {referrer} = props.location.state || {referrer: {pathname: "/"}};
+  const { referrer } = props.location.state || { referrer: { pathname: "/" } };
+    
+  if (user || isAuthenticated) {
+    history.push(referrer);
+  }
 
   
-  if (localStorage.getItem("token")) {
-    history.push(referrer)
- }
 
-  
+  if(loading){
+    return <Loading/>
+  }
 
   const googleButtonStyle = {
     backgroundImage: `url(${Google})`,
@@ -203,33 +207,28 @@ export default function SignIn(props) {
     // console.log(response);
     // console.log(`${process.env.REACT_APP_API}/auth/google`);
     try {
-      const res = await axiosClient.post('/auth/google', {
+      const res = await axiosClient.post("/auth/google", {
         tokenId: response.tokenId,
       });
       // console.log(res);
       localStorage.setItem("token", res.token);
-      history.push("/");
-      
+      history.push(referrer);
     } catch (error) {}
   };
 
   const responseFacebook = async (response) => {
-
-
     try {
       const { accessToken } = response;
-      const res = await axiosClient.post('/auth/facebook', {
+      const res = await axiosClient.post("/auth/facebook", {
         accessToken,
       });
       // console.log(res.data);
       localStorage.setItem("token", res.token);
-      history.push("/");
+      history.push(referrer);
     } catch (error) {
       console.log(error);
     }
   };
-
-  
 
   return (
     <Grid container component="main" maxwidth="xs" className={classes.root}>
@@ -366,7 +365,6 @@ export default function SignIn(props) {
           </form>
         </div>
       </Grid>
-      
     </Grid>
   );
 }
