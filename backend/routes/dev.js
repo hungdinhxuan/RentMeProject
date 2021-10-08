@@ -179,6 +179,12 @@ router.post('/generate-sample-profile-player', async (req, res) => {
     function randomDate(start, end) {
       return new Date(start.getTime() + Math.random() * (end.getTime() - start.getTime()));
     }
+    
+    const avatarResult = await cloudinary.search
+    .expression(
+      'rentme-sample-avatar/*', // add your folder
+    ).execute()
+     
     for (let index = 0; index < max_results; index+=4) {
       users.push({
         username: `rentme${parseInt((index + 1) /4 )}`,
@@ -187,6 +193,7 @@ router.post('/generate-sample-profile-player', async (req, res) => {
         fullName: `${girlName[ Math.floor(Math.random() * lengthName) ]}`,
         birthDate: randomDate(new Date(1992, 0, 1), new Date(2002, 0, 1)),
         gender: 'female',
+        avatar: avatarResult.resources[index / 4].secure_url
       })
     }
 
@@ -203,7 +210,7 @@ router.post('/generate-sample-profile-player', async (req, res) => {
 
     const { resources } = imgResult;
     // const player_profiles
-    console.log(imgResult);
+    
     let player_profiles = []
     for (let index = 0; index < resources.length; index += 4) {
       
