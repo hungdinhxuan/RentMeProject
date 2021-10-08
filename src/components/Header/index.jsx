@@ -148,7 +148,7 @@ function Header() {
                     </Badge>
                   </div>
                   <div className="user__icon" onClick={handleShowDrawler}>
-                    <Avatar size={28} src={Ha} />
+                    <Avatar size={28} src={user.avatar} />
                   </div>
                 </div>
               )}
@@ -156,7 +156,7 @@ function Header() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <Drawler visible={visible} Close={handleClose} />
+      <Drawler visible={visible} Close={handleClose} avatar={user?.avatar} />
     </header>
   );
 }

@@ -112,9 +112,11 @@ const AuthSlice = createSlice({
     [AsyncSignin.fulfilled]: (state) => {
       state.loading = false;
       state.error = null;
+      state.isAuthenticated = true;
     },
     [AsyncSignin.rejected]: (state, action) => {
       state.error = action.payload.message || "Đăng nhập không thành công";
+      state.loading = false;
       handleNoti("error", "Đăng nhập thất bại", `${state.error}`);
     },
 

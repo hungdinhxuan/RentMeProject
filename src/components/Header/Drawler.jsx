@@ -8,9 +8,10 @@ import Wallet from "assets/wallet.png";
 import Coupon from "assets/coupon.png";
 import EpalPlus from "assets/EpalPlus.png";
 import { Link } from "react-router-dom";
-function Drawler(props) {
-  const { visible, Close } = props;
 
+function Drawler(props) {
+  const { visible, Close, avatar } = props;
+  
   return (
     <>
       <Drawer
@@ -24,7 +25,7 @@ function Drawler(props) {
           <div className="userInfo__drawer">
             <div className="cardInfo d-flex">
               <div className="avatar">
-                <Avatar size={40} src={AvatarProfile} />
+                <Avatar size={40} src={avatar} />
               </div>
               <div className="box">
                 <div className="title">
