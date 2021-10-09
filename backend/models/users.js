@@ -7,38 +7,50 @@ const { ListCities } = require('../utils/config');
 const UsersSchema = new Schema(
   {
     username: {
-      type: 'string',
+      type: String,
       required: true,
       minlength: 6,
       maxLength: 64,
       unique: true,
     },
-    email: { type: 'string', required: true, maxLength: 255, unique: true },
-    password: { type: 'string', required: true },
-    fullName: { type: 'string', required: true, maxLength: 255 },
+    email: { type: String, required: true, maxLength: 255, unique: true },
+    password: { type: String, required: true },
+    fullName: { type: String, required: true, maxLength: 255 },
     gender: {
-      type: 'string',
+      type: String,
       enum: ['male', 'female', 'other'],
       default: 'male',
     },
     role: { type: Number, default: 3, required: true },
-    avatar: { type: 'string', default: '', maxLength: 500 },
+    avatar: {
+      type: String,
+      default:
+        'https://res.cloudinary.com/rentme-store/image/upload/v1633703754/rentme/default-avatar_gfslso.png',
+      maxLength: 500,
+      required: true,
+    },
     balance: { type: Number, default: 0 },
-    nickname: { type: 'string', default: '' },
-    desc: { type: 'string', default: '', maxLength: 1000 },
+    nickname: { type: String, default: '' },
+    desc: { type: String, default: '', maxLength: 1000 },
     isOnline: { type: Boolean, default: false, required: true },
     birthDate: { type: Date, default: '2000-01-01', required: true },
-    following: [{type: mongoose.Types.ObjectId, ref: "users"}]  ,
-    follower: [{type: mongoose.Types.ObjectId, ref: "users"}]  ,
-    blockList: [{type: mongoose.Types.ObjectId, ref: "users"}] ,
+    following: [{ type: mongoose.Types.ObjectId, ref: 'users' }],
+    follower: [{ type: mongoose.Types.ObjectId, ref: 'users' }],
+    blockList: [{ type: mongoose.Types.ObjectId, ref: 'users' }],
+    typeAccount: {
+      type: String,
+      default: 'local',
+      required: true,
+      enum: ['local', 'facebook', 'google'],
+    },
     province: {
-      type: 'string',
+      type: String,
       default: 'Hồ Chí Minh',
       enum: ListCities,
       required: true,
     },
   },
-  { timestamps: true },
+  { timestamps: true, versionKey: false },
 );
 
 UsersSchema.plugin(mongoose_delete, {
