@@ -238,6 +238,7 @@ class Auth {
             password: await argon2.hash(`${Math.random()}`),
             fullName: name,
             avatar: picture,
+            typeAccount: 'google'
           });
         }
         const token = jwt.sign({ sub: user._id }, privateKey, {
@@ -280,6 +281,7 @@ class Auth {
           password: await argon2.hash(`${Math.random()}`),
           fullName: name,
           avatar: picture.data.url,
+          typeAccount: 'facebook'
         });
       }
       const token = jwt.sign({ sub: user._id }, privateKey, {
