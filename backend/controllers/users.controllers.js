@@ -1,6 +1,13 @@
 const User = require('../models/users');
 const argon2 = require('argon2');
 const PlayerProfiles = require('../models/player_profiles');
+const { multer } = require('../utils/config');
+const multerLib = require('multer');
+const streamifier = require('streamifier');
+const {
+  cloudinary,
+  upload,
+} = require('../services/multer');
 
 class UsersController {
   async getOne(req, res) {
@@ -91,7 +98,77 @@ class UsersController {
     }
   }
 
-  async uploadAvatar(req, res) {}
+  async changeAvatar(req, res) {
+    upload(
+      multer.mimeTypes.image,
+      multer.multerError.image,
+      multer.multerFileSizeLimit,
+    )
+      .cloudinary()
+      .single('image')(req, res, async (err) => {
+      if (err instanceof multerLib.MulterError) {
+        // A Multer error occurred when uploading.
+        console.log(err);
+  
+        return res.status(400).json({
+          success: false,
+          err,
+          //   message: "Tổng dung lượng file upload phải nhỏ hơn 10 MB",
+          message: `File size limit exceeded please try again, file size must be <= ${multer.multerFileSizeLimit}`,
+        });
+      } else if (err) {
+        // An unknown error occurred when uploading.
+  
+        console.log(err);
+        return res.status(400).json({
+          success: false,
+          err,
+          message: multer.multerError.image,
+          // "Định dạng file không hợp lệ, Chỉ .png, .jpg và .jpeg được cho phép",
+        });
+      }
+  
+      //Check if files exist
+      if (!req.file)
+        return res
+          .status(400)
+          .json({ success: false, message: 'No picture attached!' });
+      //map through images and create a promise array using cloudinary upload function
+
+      const {id} = req.params
+      
+       function cloudinaryDone(error, result) {
+        if (error) {
+          console.log('Error in cloudinary.uploader.upload_stream\n', error);
+          return res.status(500).json({
+            success: false,
+            message: 'Error in cloudinary.uploader.upload_stream',
+          });
+        }
+        User.findByIdAndUpdate(req.user._id, {avatar: result.secure_url}, (err, data) => {
+          if(err){
+            return res.status(500).json({
+              success: false,
+              message: err.message || 'Internal Server Error',
+            });
+          }
+          return res.json({ success: true, newAvatar: data.avatar });
+        })
+        console.log(result);
+      }
+      // console.log(req.file);
+      cloudinary.uploader
+        .upload_stream(
+          {
+            upload_preset: 'rentme',
+            filename_override: `${req.user._id}_avatar`,
+            unique_filename: false,
+          },
+          cloudinaryDone,
+        )
+        .end(req.file.buffer);
+    });
+  }
 
   async createUser(req, res) {
     const { username, password, email, fullName, role } = req.body;
@@ -271,10 +348,85 @@ class UsersController {
       console.log(error);
       return res
         .status(500)
-        .json({ success: false, message: 'Internal Server Error' });
+        .json({ success: false, message: error.message || 'Internal Server Error' });
     }
   }
-  async createPlayer(req, res) {}
+  async createPlayer(req, res) {
+    
+    try {
+      
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ success: false, message: error.message || 'Internal Server Error' });
+    }
+  }
+
+  async uploadAlbumsPlayer(req, res) {
+    upload(
+      multer.mimeTypes.image,
+      multer.multerError.image,
+      multer.multerFileSizeLimit,
+    )
+      .cloudinary()
+      .array('images', multer.maxCount.images)(req, res, async (err) => {
+      if (err instanceof multerLib.MulterError) {
+        // A Multer error occurred when uploading.
+        console.log(err);
+  
+        return res.status(400).json({
+          success: false,
+          err,
+          //   message: "Tổng dung lượng file upload phải nhỏ hơn 10 MB",
+          message: `File size limit exceeded please try again, file size must be <= ${multer.multerFileSizeLimit}`,
+        });
+      } else if (err) {
+        // An unknown error occurred when uploading.
+  
+        console.log(err);
+        return res.status(400).json({
+          success: false,
+          err,
+          message: multer.multerError.image,
+          // "Định dạng file không hợp lệ, Chỉ .png, .jpg và .jpeg được cho phép",
+        });
+      }
+  
+      //Check if files exist
+      if (!req.files)
+        return res.status(400).json({ message: 'No picture attached!' });
+      //map through images and create a promise array using cloudinary upload function
+  
+      let uploadFromBuffer = (file, id) => {
+        return new Promise((resolve, reject) => {
+          let cld_upload_stream = cloudinary.uploader.upload_stream(
+            {
+              upload_preset: 'rentme',
+              filename_override: `${req.user._id}_players_albums`,
+            },
+            (error, result) => {
+              if (result) {
+                resolve(result);
+              } else {
+                reject(error);
+              }
+            },
+          );
+          streamifier.createReadStream(file.buffer).pipe(cld_upload_stream);
+        });
+      };
+      try {
+        let multiplePicturePromise = req.files.map((file) =>
+          uploadFromBuffer(file, req.body.id),
+        );
+        let imageResponses = await Promise.all(multiplePicturePromise);
+        console.log(`Uploaded ${imageResponses.length}`);
+        res.json({ images: imageResponses });
+      } catch (error) {
+        return res.status(500).send(error);
+      }
+    });
+  }
 }
 
 module.exports = new UsersController();

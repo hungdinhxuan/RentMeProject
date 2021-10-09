@@ -31,6 +31,12 @@ router.get(
   UserController.getOne,
 );
 
+router.post(
+  '/:id/change-avatar',
+  passport.authenticate('jwt', { session: false }),
+  UserController.changeAvatar,
+);
+
 router.patch(
   '/:id/change-password',
   passport.authenticate('jwt', { session: false }),
