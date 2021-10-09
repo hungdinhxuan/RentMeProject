@@ -19,14 +19,16 @@ export default function ForgotPassword() {
     history.push("/signin");
   };
 
-  const { loading, error } = useSelector((state) => state.auth);
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const handleSubmit = () => {
     dispatch(AsyncForgotPassword(values));
     setValues({ email: "" });
   };
+  if (isAuthenticated) {
+    history.push("/");
+  }
 
- 
   return (
     <div
       style={{
@@ -64,7 +66,7 @@ export default function ForgotPassword() {
           </DialogActions>
         </Dialog>
       </div>
-      <ToastContainer pauseOnFocusLoss={false}/>
+      <ToastContainer pauseOnFocusLoss={false} />
     </div>
   );
 }

@@ -13,7 +13,6 @@ import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import socket from "socket";
 
-
 AOS.init();
 function App() {
   socket.on("connect", () => {
@@ -26,6 +25,7 @@ function App() {
         if (
           route.path === "/signin" ||
           route.path === "/signup" ||
+          route.path === "/forgot-password" ||
           route.path === "/"
         ) {
           return (

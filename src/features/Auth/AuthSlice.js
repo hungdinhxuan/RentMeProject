@@ -16,6 +16,7 @@ const initialState = {
   loading: false,
   error: null,
   isAuthenticated: false,
+  userSignup: null
 };
 
 export const AsyncLoadUser = createAsyncThunk(
@@ -124,7 +125,7 @@ const AuthSlice = createSlice({
       state.loading = true;
     },
     [AsyncSignup.fulfilled]: (state, action) => {
-      state.user = action.payload;
+      state.userSignup = action.payload;
       state.loading = false;
       state.error = null;
     },
