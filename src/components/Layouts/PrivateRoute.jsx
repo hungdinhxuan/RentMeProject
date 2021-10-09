@@ -1,4 +1,3 @@
-import Loading from "components/Loading";
 import React from "react";
 import { useSelector } from "react-redux";
 import { Redirect, Route, useLocation } from "react-router";
@@ -8,9 +7,10 @@ export function PrivateRoute({
   layout: Layout,
   ...rest
 }) {
-  const {isAuthenticated} = useSelector((state) => state.auth);
-  const location = useLocation();
 
+  const { isAuthenticated } = useSelector((state) => state.auth);
+  const location = useLocation();
+  
   return (
     <Route
       {...rest}
