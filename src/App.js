@@ -2,27 +2,18 @@ import "antd/dist/antd.css";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Applayout from "components/Applayout/index";
 import { PrivateRoute } from "components/Layouts/PrivateRoute";
 import { PublicRoute } from "components/Layouts/PublicRoute";
 import Loading from "components/Loading";
 import PageNotFound from "components/PageNotFound";
-import ProtectedRoute from "components/ProtectedRoute";
 import routes from "constants/routes";
-import SignIn from "features/Auth/SignIn";
-import SignUp from "features/Auth/SignUp";
-import Settings from "features/Settings";
-import { lazy, React, Suspense } from "react";
+import { React, Suspense } from "react";
 import MessengerCustomerChat from "react-messenger-customer-chat";
-import { useSelector } from "react-redux";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import socket from "socket";
-const Home = lazy(() => import("features/Home/index.jsx"));
-const ForgotPassword = lazy(() =>
-  import("features/Auth/ForgotPassword/index.jsx")
-);
-const RentPlayer = lazy(() => import("features/RentPlayer/index.jsx"));
+
+
 AOS.init();
 function App() {
   socket.on("connect", () => {
