@@ -4,10 +4,7 @@ const PlayerProfiles = require('../models/player_profiles');
 const { multer } = require('../utils/config');
 const multerLib = require('multer');
 const streamifier = require('streamifier');
-const {
-  cloudinary,
-  upload,
-} = require('../services/multer');
+const { cloudinary, upload } = require('../services/multer');
 
 class UsersController {
   async getOne(req, res) {
@@ -109,7 +106,7 @@ class UsersController {
       if (err instanceof multerLib.MulterError) {
         // A Multer error occurred when uploading.
         console.log(err);
-  
+
         return res.status(400).json({
           success: false,
           err,
@@ -118,7 +115,7 @@ class UsersController {
         });
       } else if (err) {
         // An unknown error occurred when uploading.
-  
+
         console.log(err);
         return res.status(400).json({
           success: false,
@@ -127,7 +124,7 @@ class UsersController {
           // "Định dạng file không hợp lệ, Chỉ .png, .jpg và .jpeg được cho phép",
         });
       }
-  
+
       //Check if files exist
       if (!req.file)
         return res
@@ -135,9 +132,9 @@ class UsersController {
           .json({ success: false, message: 'No picture attached!' });
       //map through images and create a promise array using cloudinary upload function
 
-      const {id} = req.params
-      
-       function cloudinaryDone(error, result) {
+      const { id } = req.params;
+
+      function cloudinaryDone(error, result) {
         if (error) {
           console.log('Error in cloudinary.uploader.upload_stream\n', error);
           return res.status(500).json({
@@ -145,15 +142,19 @@ class UsersController {
             message: 'Error in cloudinary.uploader.upload_stream',
           });
         }
-        User.findByIdAndUpdate(req.user._id, {avatar: result.secure_url}, (err, data) => {
-          if(err){
-            return res.status(500).json({
-              success: false,
-              message: err.message || 'Internal Server Error',
-            });
-          }
-          return res.json({ success: true, newAvatar: data.avatar });
-        })
+        User.findByIdAndUpdate(
+          req.user._id,
+          { avatar: result.secure_url },
+          (err, data) => {
+            if (err) {
+              return res.status(500).json({
+                success: false,
+                message: err.message || 'Internal Server Error',
+              });
+            }
+            return res.json({ success: true, newAvatar: data.avatar });
+          },
+        );
         console.log(result);
       }
       // console.log(req.file);
@@ -168,6 +169,27 @@ class UsersController {
         )
         .end(req.file.buffer);
     });
+  }
+
+  async changeUserInfo(req, res) {
+    const { fullName, nickname, birthDate, gender, province } = req.body;
+    console.log(req.body);
+    try {
+      const user = await User.findByIdAndUpdate(req.user._id, {
+        fullName,
+        nickname,
+        birthDate,
+        gender,
+        province,
+      });
+      return res.json({success: true, message: 'Update successful', user})
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message || 'Internal Server Error',
+        error,
+      });
+    }
   }
 
   async createUser(req, res) {
@@ -213,6 +235,8 @@ class UsersController {
       });
     }
   }
+
+  // player
 
   async getAllPlayers(req, res) {
     const { page, limit } = req.query;
@@ -348,17 +372,21 @@ class UsersController {
       console.log(error);
       return res
         .status(500)
-        .json({ success: false, message: error.message || 'Internal Server Error' });
+        .json({
+          success: false,
+          message: error.message || 'Internal Server Error',
+        });
     }
   }
   async createPlayer(req, res) {
-    
     try {
-      
     } catch (error) {
       return res
         .status(500)
-        .json({ success: false, message: error.message || 'Internal Server Error' });
+        .json({
+          success: false,
+          message: error.message || 'Internal Server Error',
+        });
     }
   }
 
@@ -373,7 +401,7 @@ class UsersController {
       if (err instanceof multerLib.MulterError) {
         // A Multer error occurred when uploading.
         console.log(err);
-  
+
         return res.status(400).json({
           success: false,
           err,
@@ -382,7 +410,7 @@ class UsersController {
         });
       } else if (err) {
         // An unknown error occurred when uploading.
-  
+
         console.log(err);
         return res.status(400).json({
           success: false,
@@ -391,12 +419,12 @@ class UsersController {
           // "Định dạng file không hợp lệ, Chỉ .png, .jpg và .jpeg được cho phép",
         });
       }
-  
+
       //Check if files exist
       if (!req.files)
         return res.status(400).json({ message: 'No picture attached!' });
       //map through images and create a promise array using cloudinary upload function
-  
+
       let uploadFromBuffer = (file, id) => {
         return new Promise((resolve, reject) => {
           let cld_upload_stream = cloudinary.uploader.upload_stream(
