@@ -7,6 +7,7 @@ const {
   validateRegisterUser,
   validateNewPassword,
   handleValidationErrors,
+  validateNewUserInfo
 } = require('../middleware/validate');
 
 router.get(
@@ -29,6 +30,14 @@ router.get(
   '/:id',
   passport.authenticate('jwt', { session: false }),
   UserController.getOne,
+);
+
+router.put(
+  '/:id',
+  passport.authenticate('jwt', { session: false }),
+  validateNewUserInfo(),
+  handleValidationErrors,
+  UserController.changeUserInfo,
 );
 
 router.patch(

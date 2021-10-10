@@ -29,8 +29,8 @@ export const AsyncUpdateAvatar = createAsyncThunk(
         },
       };
 
-      const response = await axiosClient.post(
-        `/users/${values.id}/change-avatar`,
+      const response = await axiosClient.patch(
+        `/users/${values.id}/avatar`,
         formData,
         config
       );
