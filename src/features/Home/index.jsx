@@ -8,7 +8,7 @@ import ListGame from "./ListGames";
 import Stories from "./Stories";
 import TryRentme from "./TryRentme";
 import { useDispatch, useSelector } from "react-redux";
-import { AsyncLoadUser } from "features/Auth/AuthSlice";
+
 
 function Home() {
 

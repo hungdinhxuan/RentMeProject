@@ -1,6 +1,6 @@
 import { Avatar } from "antd";
-import React, { useState } from "react";
-import { useSelector } from "react-redux";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import "./ProfileSetting.scss";
 import ImgCrop from "antd-img-crop";
 import { Upload } from "antd";
@@ -8,31 +8,19 @@ import { Form } from "react-bootstrap";
 import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import { Radio } from "antd";
+import { AsyncLoadUser } from "features/Auth/AuthSlice";
+import { AsyncUpdateAvatar } from "features/Settings/SettingSlice";
+import { toast, ToastContainer } from "react-toastify";
+import { toastSuccess } from "components/Toastify/toastHelper";
+import Loading from "components/Loading";
 
 function ProfileSetting() {
   const { user } = useSelector((state) => state.auth);
-  const [fileList, setFileList] = useState([]);
+  const { fileAvatar, loading } = useSelector((state) => state.setting);
   const [valueForm, setValueForm] = useState({});
   const [startDate, setStartDate] = useState(new Date());
-
-  const handleChangeImg = ({ fileList: newFileList }) => {
-    console.log(newFileList);
-    setFileList(newFileList);
-  };
-  const onPreview = async (file) => {
-    let src = file.url;
-    if (!src) {
-      src = await new Promise((resolve) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file.originFileObj);
-        reader.onload = () => resolve(reader.result);
-      });
-    }
-    const image = new Image();
-    image.src = src;
-    const imgWindow = window.open(src);
-    imgWindow.document.write(image.outerHTML);
-  };
+  const fileList = [];
+  const dispatch = useDispatch();
 
   const handleChange = (e) => {
     setValueForm({ ...valueForm, [e.target.name]: e.target.value });
@@ -41,13 +29,22 @@ function ProfileSetting() {
   };
   const handleDateChange = (value) => {
     setStartDate(value);
-    setValueForm({birthdate: startDate})
+    setValueForm({ birthdate: startDate });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(valueForm);
-  }
+  };
+
+  const uploadAvatar = (options) => {
+    const { file } = options;
+    dispatch(AsyncUpdateAvatar({ id: user._id, file: file }));
+  };
+
+  useEffect(() => {
+    dispatch(AsyncLoadUser());
+  }, [fileAvatar,dispatch]);
 
   return (
     <div className="profile__setting">
@@ -60,13 +57,7 @@ function ProfileSetting() {
             <div className="right-avatar">
               {/* Grid là cho không cho phép xoay ảnh != rotate */}
               <ImgCrop grid>
-                <Upload
-                  action="https://www.mocky.io/v2/5cc8019d300000980a055e76"
-                  listType="picture-card"
-                  fileList={fileList}
-                  onChange={handleChangeImg}
-                  onPreview={onPreview}
-                >
+                <Upload listType="picture-card" customRequest={uploadAvatar} fileList={fileList}>
                   + Upload File
                 </Upload>
               </ImgCrop>
@@ -135,11 +126,14 @@ function ProfileSetting() {
                 </div>
               </Form.Group>
               <div className="line"></div>
-              <button className="submit-form" type="submit">Save</button>
+              <button className="submit-form" type="submit">
+                Save
+              </button>
             </Form>
           </div>
         </div>
       </div>
+      <ToastContainer />
     </div>
   );
 }

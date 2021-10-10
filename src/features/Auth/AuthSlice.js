@@ -1,7 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "axiosClient";
-import { ToastContainer, toast } from "react-toastify";
+import { toastSuccess } from "components/Toastify/toastHelper";
+import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+
 
 const handleNoti = (icon, title, text) => {
   Swal.fire({
@@ -80,6 +82,36 @@ export const AsyncForgotPassword = createAsyncThunk(
     }
   }
 );
+
+// file IMG
+export const AsyncUpdateAvatar = createAsyncThunk(
+  "setting/updateAvatar",
+  async (values, { rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      formData.append("image", values.file);
+      console.log(values);
+      const config = {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      };
+
+      const response = await axiosClient.post(
+        `/users/${values.id}/change-avatar`,
+        formData,
+        config
+      );
+      
+      return response;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+
+
 
 const AuthSlice = createSlice({
   name: "auth",

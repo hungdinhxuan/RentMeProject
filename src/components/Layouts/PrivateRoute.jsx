@@ -1,5 +1,6 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import { AsyncLoadUser } from "features/Auth/AuthSlice";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Redirect, Route, useLocation } from "react-router";
 
 export function PrivateRoute({
