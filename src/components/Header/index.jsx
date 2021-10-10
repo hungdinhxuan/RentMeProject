@@ -3,12 +3,13 @@ import { UserOutlined } from "@ant-design/icons";
 import Logo from "assets/player-dou-a.jpg";
 import React, { useEffect, useRef, useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useHistory, useLocation } from "react-router-dom";
 import Drawler from "./Drawler";
 import "./Header.scss";
 import Ha from "assets/Ha.jpg";
 import Loading from "components/Loading";
+import { AsyncLoadUser } from "features/Auth/AuthSlice";
 
 function Header() {
   const { user, loading, error } = useSelector((state) => state.auth);
@@ -21,22 +22,8 @@ function Header() {
   const navRef = useRef();
   navRef.current = navScroll;
   const location = useLocation();
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const show = window.scrollY > 10;
-      if (show) {
-        setnavSroll("header__scroll");
-      } else {
-        setnavSroll("");
-      }
-    };
-    document.addEventListener("scroll", handleScroll);
-
-    return () => {
-      document.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
+const dispatch = useDispatch();
+  
 
   const handleShowDrawler = () => {
     setVisible(true);
@@ -55,6 +42,24 @@ function Header() {
   const handleSignUp = () => {
     history.push("/signup");
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const show = window.scrollY > 10;
+      if (show) {
+        setnavSroll("header__scroll");
+      } else {
+        setnavSroll("");
+      }
+    };
+    document.addEventListener("scroll", handleScroll);
+    if (localStorage.getItem("token")) {
+      dispatch(AsyncLoadUser());
+    }
+    return () => {
+      document.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   useEffect(() => {
     user ? setUserHeader(false) : setUserHeader(true);

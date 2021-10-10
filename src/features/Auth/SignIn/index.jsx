@@ -27,6 +27,7 @@ import { AsyncSignin } from "../AuthSlice";
 import "./SignIn.scss";
 import Loading from "components/Loading";
 
+
 function Copyright() {
   return (
     <Typography
@@ -169,11 +170,9 @@ export default function SignIn(props) {
   // Sau khi có tài khoản
   const { referrer } = props.location.state || { referrer: { pathname: "/" } };
     
-  if (user || isAuthenticated) {
+  if (user || isAuthenticated ) {
     history.push(referrer);
   }
-
-  
 
   if(loading){
     return <Loading/>

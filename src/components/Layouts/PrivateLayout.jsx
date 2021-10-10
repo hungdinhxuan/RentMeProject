@@ -5,20 +5,19 @@ import React, { Fragment, useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 
-export function PrivateLayout({ children}) {
+export function PrivateLayout({ children }) {
   const dispatch = useDispatch();
-  const {loading} = useSelector(state=> state.auth)
+  const { user, loading } = useSelector((state) => state.auth);
 
-  useEffect(() => {
-    if (localStorage.getItem("token")) {
-      dispatch(AsyncLoadUser());
-    }
-  }, [dispatch]);
+  // useEffect(() => {
+  //   if (localStorage.getItem("token")) {
+  //     dispatch(AsyncLoadUser());
+  //   }
+  // }, []);
 
-  if(loading){
-    return <Loading/>
-  }
-  
+  // if (loading) {
+  //   return <Loading />;
+  // }
 
   return (
     <Fragment>
