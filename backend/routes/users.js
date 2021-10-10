@@ -31,14 +31,14 @@ router.get(
   UserController.getOne,
 );
 
-router.post(
-  '/:id/change-avatar',
+router.patch(
+  '/:id/avatar',
   passport.authenticate('jwt', { session: false }),
   UserController.changeAvatar,
 );
 
 router.patch(
-  '/:id/change-password',
+  '/:id/password',
   passport.authenticate('jwt', { session: false }),
   validateNewPassword(),
   handleValidationErrors,
