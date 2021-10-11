@@ -23,7 +23,7 @@ export const AsyncLoadPlayer = createAsyncThunk(
   async (values, { rejectWithValue }) => {
     try {
       const response = await axiosClient.get(
-        "/players?page=1&limit=50&status=false"
+        "/players?page=1&limit=50&status=true"
       );
       return response;
     } catch (err) {

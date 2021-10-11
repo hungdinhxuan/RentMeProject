@@ -28,6 +28,10 @@ const PlayerProfilesSchema = new Schema(
       default: 'Under Review',
       enum: ['Accepted', 'Rejected', 'Under Review'],
     },
+    services: {
+      type: [{type: mongoose.Types.ObjectId, ref: 'services'}],
+      validate: [minimumLimit, 'Khong the nho hon hoac bang 0'],
+    },
   },
   { timestamps: true , versionKey: false },
 );
