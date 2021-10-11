@@ -13,7 +13,8 @@ export function PublicRoute({ component: Component, layout: Layout, ...rest }) {
     if (localStorage.getItem("token")) {
       dispatch(AsyncLoadUser());
     }
-  }, [dispatch]);
+  }, []);
+
   return (
     <Route
       {...rest}

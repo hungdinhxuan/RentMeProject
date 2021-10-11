@@ -5,10 +5,17 @@ import MainRentPlayer from "./Main";
 
 function RentPlayer() {
   const match = useRouteMatch();
-  return <Switch>
-      <Route exact path={match.url} component={MainRentPlayer}  />
-      <Route path={`${match.url}/:cardId`} component={PlayerDetails}  />
-  </Switch>;
+  
+  return (
+    <Switch>
+      <Route
+        exact
+        path={match.url}
+        component={MainRentPlayer}
+      />
+      <Route path={`${match.url}/:cardId`} component={PlayerDetails} />
+    </Switch>
+  );
 }
 
 export default RentPlayer;

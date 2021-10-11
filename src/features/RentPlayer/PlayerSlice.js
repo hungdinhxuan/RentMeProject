@@ -12,18 +12,19 @@ const handleNoti = (icon, title, text) => {
 };
 
 const initialState = {
-  user: null,
+  listPlayers: null,
   loading: false,
   error: null,
-  isAuthenticated: false,
-  userSignup: null
+  player: null,
 };
 
-export const AsyncLoadUser = createAsyncThunk(
-  "auth/loaduser",
+export const AsyncLoadPlayer = createAsyncThunk(
+  "player/loadplayer",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axiosClient.get("/auth");
+      const response = await axiosClient.get(
+        "/players?page=1&limit=50&status=false"
+      );
       return response;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -31,24 +32,32 @@ export const AsyncLoadUser = createAsyncThunk(
   }
 );
 
-
-
-const AuthSlice = createSlice({
-  name: "auth",
+const PlayerSlice = createSlice({
+  name: "player",
   initialState,
   reducers: {
-    logout: (state) => {
-      state.user = null;
-      state.loading = false;
-      state.isAuthenticated = false;
+    playerDetails: (state,action) => {
+      state.player = action.payload;
     }
   },
   extraReducers: {
-    
+    [AsyncLoadPlayer.pending]: (state) => {
+      state.loading = true;
+    },
+    [AsyncLoadPlayer.fulfilled]: (state, action) => {
+      state.listPlayers = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+    [AsyncLoadPlayer.rejected]: (state, action) => {
+      state.listPlayers = null;
+      state.loading = false;
+      state.error = action.payload.message;
+    },
   },
 });
 
-const { reducer } = AuthSlice;
-export const {logout} = AuthSlice.actions;
+const { reducer } = PlayerSlice;
+export const { logout } = PlayerSlice.actions;
 
 export default reducer;

@@ -2,11 +2,12 @@ import React from "react";
 import "./SidebarSetting.scss";
 import { NavLink, useHistory, useLocation } from "react-router-dom";
 import { Redirect } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "features/Auth/AuthSlice";
 
 export default function SidebarSetting() {
   const history = useHistory();
+  const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const handleLogout = (e) => {
     e.preventDefault();
@@ -32,13 +33,17 @@ export default function SidebarSetting() {
         >
           <div className="setting__list">Wallet</div>
         </NavLink>
-        <NavLink
-          to="/setting/privacy"
-          className="setting__item"
-          activeClassName="setting__item--active"
-        >
-          <div className="setting__list">Privacy</div>
-        </NavLink>
+        {user?.typeAccount === "local" ? (
+          <NavLink
+            to="/setting/privacy"
+            className="setting__item"
+            activeClassName="setting__item--active"
+          >
+            <div className="setting__list">Privacy</div>
+          </NavLink>
+        ) : (
+          <></>
+        )}
         <hr />
         <div className="setting__list" onClick={handleLogout}>
           Logout
