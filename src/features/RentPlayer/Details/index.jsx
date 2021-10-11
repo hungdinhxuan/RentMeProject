@@ -126,20 +126,10 @@ export default function PlayerDetails(props) {
                 <p>
                   Thuê đi, nhìn cái gì. Ơ kìa 🌸.Hát hò, LOL, ĐTCL, Aram,
                   Business Tour, Call mess.
+                  {player?.shortDesc}
                 </p>
                 <p>
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsa
-                  dolorem sunt fugit molestiae nostrum beatae numquam quis,
-                  repellendus accusamus reprehenderit natus, ad debitis mollitia
-                  facere laborum ex suscipit saepe doloribus rerum! Dignissimos
-                  obcaecati, incidunt aliquid odio sunt iusto fugiat nostrum
-                  dicta quas vitae minima accusamus nesciunt enim cumque nulla
-                  inventore ex dolor sequi at ipsa quia nam vero! Distinctio
-                  ullam cupiditate quam. Ducimus eius, porro ab alias non
-                  similique quam natus, labore molestiae iusto dolores
-                  laboriosam architecto est aspernatur aliquam quisquam? Odio
-                  vitae doloribus accusamus at vel autem quasi, dolore eaque
-                  commodi dolor, doloremque neque est rerum corrupti eos ex.
+                 {player?.longDesc}
                 </p>
               </div>
               <div className="video-player-profile title-player-profile row">

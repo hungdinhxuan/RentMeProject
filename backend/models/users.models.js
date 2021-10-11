@@ -25,7 +25,7 @@ const UsersSchema = new Schema(
     avatar: {
       type: String,
       default:
-        'https://res.cloudinary.com/rentme-store/image/upload/v1633703754/rentme/default-avatar_gfslso.png',
+        'https://res.cloudinary.com/rentme-store/image/upload/v1633957597/rentme/default_avatar.png',
       maxLength: 500,
       required: true,
     },

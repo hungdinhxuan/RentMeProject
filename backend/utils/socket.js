@@ -1,7 +1,7 @@
 module.exports = (app) => {
   const { createServer } = require('http');
   const { Server } = require('socket.io');
-  const User = require('../models/users');
+  const User = require('../models/users.models');
   const {
     userSocketIdObj,
     addClientToObj,

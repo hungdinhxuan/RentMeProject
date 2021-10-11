@@ -36,8 +36,9 @@ function CardList({ item }) {
               <div className="intro">
                 <div className="games">
                   <Space size={4} style={{ flexWrap: "wrap" }}>
-                    <div className="categories">League of Legends</div>
-                    <div className="categories">Wild rift</div>
+                    {/* <div className="categories">League of Legends</div>
+                    <div className="categories">Wild rift</div> */}
+                    {item?.services.map((val, index) => <div className="categories" key={index}>{val.name}</div>)}
                   </Space>
                 </div>
                 <div className="desc">

@@ -1,6 +1,6 @@
-const User = require('../models/users');
+const User = require('../models/users.models');
 const argon2 = require('argon2');
-const PlayerProfiles = require('../models/player_profiles');
+const PlayerProfiles = require('../models/player_profiles.models');
 const { multer } = require('../utils/config');
 const multerLib = require('multer');
 const streamifier = require('streamifier');
@@ -174,17 +174,18 @@ class UsersController {
   }
 
   async changeUserInfo(req, res) {
-    let { fullName, nickname, birthDate, gender, province } = req.body;
-    birthDate = new Date(birthDate);
+    const  { fullName, nickname, birthDate, gender, province } = req.body;
+    
     console.log(req.body);
     try {
       const user = await User.findByIdAndUpdate(req.user._id, {
         fullName,
         nickname,
-        birthDate,
+        birthDate: new Date(birthDate),
         gender,
         province,
-      });
+      }, {new: true});
+      console.log(user);
       return res.json({ success: true, message: 'Update successful', user });
     } catch (error) {
       return res.status(500).json({
@@ -327,10 +328,11 @@ class UsersController {
     let { page, limit, status } = req.query;
     let player_profiles;
 
-    page = parseInt(page);
-    limit = parseInt(limit);
+ 
     try {
       if (page) {
+        page = parseInt(page);
+        limit = parseInt(limit);
         let skip = (page - 1) * limit;
 
         if (status == 'true') {
@@ -343,6 +345,15 @@ class UsersController {
                 foreignField: '_id',
                 as: 'user',
               },
+             
+            },
+            {
+              $lookup: {
+                from: 'services',
+                localField: 'services',
+                foreignField: '_id',
+                as: 'services'
+              }
             },
             // { $unwind: '$user' },
             {
@@ -351,6 +362,10 @@ class UsersController {
                 'user.username': 0,
                 'user.email': 0,
                 'user.role': 0,
+                'services.desc': 0,
+                'services.deleted': 0,
+                'services.createdAt': 0,
+                'services.updatedAt': 0                
               },
             },
             { $sort: { 'user.isOnline': -1 } },
@@ -375,6 +390,10 @@ class UsersController {
                 'user.username': 0,
                 'user.email': 0,
                 'user.role': 0,
+                'services.desc': 0,
+                'services.deleted': 0,
+                'services.createdAt': 0,
+                'services.updatedAt': 0                
               },
             },
             { $sort: { 'user.isOnline': 1 } },
@@ -401,6 +420,10 @@ class UsersController {
               'user.username': 0,
               'user.email': 0,
               'user.role': 0,
+              'services.desc': 0,
+              'services.deleted': 0,
+              'services.createdAt': 0,
+              'services.updatedAt': 0                
             },
           },
           { $sort: { 'user.isOnline': -1 } },
