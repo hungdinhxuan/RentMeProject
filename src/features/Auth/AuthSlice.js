@@ -68,7 +68,7 @@ export const AsyncForgotPassword = createAsyncThunk(
   "auth/forgot-password",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axiosClient.post("/auth/forgot-password", values);
+      const response = await axiosClient.patch("/auth/forgot-password", values);
       toast("Gửi email thành công", {
         position: "bottom-center",
         autoClose: 2000,
@@ -97,8 +97,8 @@ export const AsyncUpdateAvatar = createAsyncThunk(
         },
       };
 
-      const response = await axiosClient.post(
-        `/users/${values.id}/change-avatar`,
+      const response = await axiosClient.patch(
+        `/users/${values.id}/avatar`,
         formData,
         config
       );
