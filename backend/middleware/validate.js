@@ -73,9 +73,26 @@ const validateNewPassword = () => {
   ]
 }
 
+const validateNewUserInfo = () => {
+  return [
+    check(
+      'fullName',
+      'Full must be and min Length is 5 characters',
+    ).matches(/^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W]*$/)
+    .isLength({ min: 5}),
+    check('birthDate').not().isEmpty(),
+    check('birthDate').isDate(),
+    check('gender').not().isEmpty(),
+    check('gender').isAlpha(),
+    check('province').not().isEmpty(),
+    
+  ]
+}
+
 module.exports = {
   validateRegisterUser: validateRegisterUser,
   validateLogin: validateLogin,
   handleValidationErrors,
-  validateNewPassword
+  validateNewPassword,
+  validateNewUserInfo
 };

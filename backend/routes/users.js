@@ -7,6 +7,7 @@ const {
   validateRegisterUser,
   validateNewPassword,
   handleValidationErrors,
+  validateNewUserInfo
 } = require('../middleware/validate');
 
 router.get(
@@ -31,14 +32,22 @@ router.get(
   UserController.getOne,
 );
 
-router.post(
-  '/:id/change-avatar',
+router.put(
+  '/:id',
+  passport.authenticate('jwt', { session: false }),
+  validateNewUserInfo(),
+  handleValidationErrors,
+  UserController.changeUserInfo,
+);
+
+router.patch(
+  '/:id/avatar',
   passport.authenticate('jwt', { session: false }),
   UserController.changeAvatar,
 );
 
 router.patch(
-  '/:id/change-password',
+  '/:id/password',
   passport.authenticate('jwt', { session: false }),
   validateNewPassword(),
   handleValidationErrors,
