@@ -9,32 +9,46 @@ import "react-datepicker/dist/react-datepicker.css";
 import DatePicker from "react-datepicker";
 import { Radio } from "antd";
 import { AsyncLoadUser } from "features/Auth/AuthSlice";
-import { AsyncUpdateAvatar } from "features/Settings/SettingSlice";
+import {
+  AsyncUpdateAvatar,
+  AsyncUpdateProfile,
+} from "features/Settings/SettingSlice";
 import { toast, ToastContainer } from "react-toastify";
 import { toastSuccess } from "components/Toastify/toastHelper";
 import Loading from "components/Loading";
+import Cities from "constants/Cities";
 
 function ProfileSetting() {
   const { user } = useSelector((state) => state.auth);
   const { fileAvatar, loading } = useSelector((state) => state.setting);
-  const [valueForm, setValueForm] = useState({});
-  const [startDate, setStartDate] = useState(new Date());
+  const [valueForm, setValueForm] = useState({
+    fullName: user?.fullName,
+    nickname: user?.nickname,
+    birthDate: new Date(user?.birthDate),
+    province: user?.province,
+    gender: user?.gender,
+  });
+  const [startDate, setStartDate] = useState(new Date(user?.birthDate));
+  const [genderState, setGenderState] = useState(user.gender);
   const fileList = [];
   const dispatch = useDispatch();
 
   const handleChange = (e) => {
+    if (e.target.name === "gender") {
+      setGenderState(e.target.value);
+    }
     setValueForm({ ...valueForm, [e.target.name]: e.target.value });
 
     // console.log({ ...valueForm, [e.target.name]: e.target.value });
   };
   const handleDateChange = (value) => {
     setStartDate(value);
-    setValueForm({ birthdate: startDate });
+    setValueForm({ ...valueForm, birthDate: startDate });
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log(valueForm);
+    dispatch(AsyncUpdateProfile({ ...valueForm, id: user._id }));
   };
 
   const uploadAvatar = (options) => {
@@ -44,7 +58,8 @@ function ProfileSetting() {
 
   useEffect(() => {
     dispatch(AsyncLoadUser());
-  }, [fileAvatar,dispatch]);
+  }, [fileAvatar, dispatch]);
+  console.log(valueForm);
 
   return (
     <div className="profile__setting">
@@ -57,7 +72,11 @@ function ProfileSetting() {
             <div className="right-avatar">
               {/* Grid là cho không cho phép xoay ảnh != rotate */}
               <ImgCrop grid>
-                <Upload listType="picture-card" customRequest={uploadAvatar} fileList={fileList}>
+                <Upload
+                  listType="picture-card"
+                  customRequest={uploadAvatar}
+                  fileList={fileList}
+                >
                   + Upload File
                 </Upload>
               </ImgCrop>
@@ -74,6 +93,7 @@ function ProfileSetting() {
                   placeholder="Please enter your Name"
                   name="fullName"
                   onChange={handleChange}
+                  defaultValue={user?.fullName}
                 />
               </Form.Group>
 
@@ -83,6 +103,7 @@ function ProfileSetting() {
                   type="text"
                   placeholder="Please enter your nick name"
                   name="nickname"
+                  defaultValue={user?.nickname}
                   onChange={handleChange}
                 />
               </Form.Group>
@@ -108,20 +129,28 @@ function ProfileSetting() {
                   as="select"
                   onChange={handleChange}
                   name="province"
+                  defaultValue={user?.province}
                 >
-                  <option>Open this select city</option>
-                  <option value="TPHCM">TPHCM</option>
-                  <option value="Hà Nội">Hà Nội</option>
-                  <option value="Hải Phòng">Hải Phòng</option>
+                  {Cities.map((item, index) => {
+                    return (
+                      <option value={`${item}`} key={index}>
+                        {item}
+                      </option>
+                    );
+                  })}
                 </Form.Control>
               </Form.Group>
 
               <Form.Group className="mb-3">
                 <Form.Label>Gender</Form.Label>
                 <div>
-                  <Radio.Group name="gender" onChange={handleChange}>
-                    <Radio value="Male">Male</Radio>
-                    <Radio value="Female">Female</Radio>
+                  <Radio.Group
+                    name="gender"
+                    onChange={handleChange}
+                    value={genderState}
+                  >
+                    <Radio value="male">Male</Radio>
+                    <Radio value="female">Female</Radio>
                   </Radio.Group>
                 </div>
               </Form.Group>

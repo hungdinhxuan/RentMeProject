@@ -34,7 +34,19 @@ export const AsyncUpdateAvatar = createAsyncThunk(
         formData,
         config
       );
-      
+
+      return response;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const AsyncUpdateProfile = createAsyncThunk(
+  "setting/updateProfile",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axiosClient.put(`users/${values.id}`, values);
       return response;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -60,7 +72,20 @@ const SettingSlice = createSlice({
       state.fileAvatar = null;
       state.loading = false;
       state.error = action.payload.message;
-      ;
+    },
+    [AsyncUpdateProfile.pending]: (state) => {
+      state.loading = true;
+    },
+    [AsyncUpdateProfile.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.error = null;
+      toastSuccess();
+    },
+    [AsyncUpdateProfile.rejected]: (state, action) => {
+      state.fileAvatar = null;
+      state.loading = false;
+      state.error = action.payload;
+      console.log(action.payload);
     },
   },
 });

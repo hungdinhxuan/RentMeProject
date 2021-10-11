@@ -32,6 +32,20 @@ export const AsyncLoadPlayer = createAsyncThunk(
   }
 );
 
+export const AsyncLoadPlayerDetails = createAsyncThunk(
+  "player/loadplayerdetails",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axiosClient.get(
+        `/players/${values}`
+      );
+      return response;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 const PlayerSlice = createSlice({
   name: "player",
   initialState,
@@ -51,6 +65,17 @@ const PlayerSlice = createSlice({
     },
     [AsyncLoadPlayer.rejected]: (state, action) => {
       state.listPlayers = null;
+      state.loading = false;
+      state.error = action.payload.message;
+    },
+    
+    [AsyncLoadPlayerDetails.fulfilled]: (state, action) => {
+      state.player = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+    [AsyncLoadPlayerDetails.rejected]: (state, action) => {
+      state.player = null;
       state.loading = false;
       state.error = action.payload.message;
     },
