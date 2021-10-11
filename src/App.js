@@ -12,8 +12,8 @@ import MessengerCustomerChat from "react-messenger-customer-chat";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
 import socket from "socket";
-
 AOS.init();
+
 function App() {
   socket.on("connect", () => {
     console.log("ok");

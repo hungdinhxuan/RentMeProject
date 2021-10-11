@@ -53,9 +53,7 @@ const dispatch = useDispatch();
       }
     };
     document.addEventListener("scroll", handleScroll);
-    if (localStorage.getItem("token")) {
-      dispatch(AsyncLoadUser());
-    }
+    
     return () => {
       document.removeEventListener("scroll", handleScroll);
     };
