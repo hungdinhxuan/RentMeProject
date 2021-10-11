@@ -1,14 +1,27 @@
-import React, { useState } from "react";
-import { useLocation, useRouteMatch } from "react-router";
+import React, { useEffect, useState } from "react";
+import { useHistory, useLocation, useRouteMatch } from "react-router";
 import { Image, Rate, Avatar } from "antd";
 import "./Details.scss";
 import Ha from "assets/Ha.jpg";
+import { AsyncLoadPlayerDetails } from "../PlayerSlice";
+import { useDispatch, useSelector } from "react-redux";
 
-export default function PlayerDetails() {
-  const location = useLocation();
+export default function PlayerDetails(props) {
+  const match = useRouteMatch();
+  console.log(props);
   // console.log(location);
+  const { player, loading, error } = useSelector((state) => state.players);
+
+  if (error) {
+    console.log(error);
+  }
 
   const [visible, setVisible] = useState(false);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(AsyncLoadPlayerDetails(match.params.cardId));
+  }, []);
 
   return (
     <div className="details">
@@ -22,7 +35,7 @@ export default function PlayerDetails() {
                   width={260}
                   height={260}
                   style={{ objectFit: "cover", borderRadius: "10px" }}
-                  src="https://gw.alipayobjects.com/zos/antfincdn/LlvErxo8H9/photo-1503185912284-5271ff81b9a8.webp"
+                  src={player?.coverBackground}
                   onClick={() => setVisible(true)}
                 />
                 <div style={{ display: "none" }}>
@@ -32,9 +45,9 @@ export default function PlayerDetails() {
                       onVisibleChange: (vis) => setVisible(vis),
                     }}
                   >
-                    <Image src="https://gw.alipayobjects.com/zos/antfincdn/LlvErxo8H9/photo-1503185912284-5271ff81b9a8.webp" />
-                    <Image src="https://gw.alipayobjects.com/zos/antfincdn/cV16ZqzMjW/photo-1473091540282-9b846e7965e3.webp" />
-                    <Image src="https://gw.alipayobjects.com/zos/antfincdn/x43I27A55%26/photo-1438109491414-7198515b166b.webp" />
+                    {player?.albums.map((item, index) => (
+                      <Image key={index} src={item} />
+                    ))}
                   </Image.PreviewGroup>
                 </div>
               </div>
@@ -57,7 +70,7 @@ export default function PlayerDetails() {
             </div>
 
             <div className="player__profile--right col-lg-3 order-lg-2">
-              <p className="price-profile">5.00 USD/G</p>
+              <p className="price-profile">{player?.pricePerHour}.00 USD/G</p>
               <div className="rate-profile">
                 <Rate
                   value={5}
@@ -75,7 +88,7 @@ export default function PlayerDetails() {
             <div className="player__profile--main col-lg-6 order-lg-1">
               <div className="name-profile">
                 <div className="center-item col-lg-12">
-                  <span className="name__player">SuYii 🐶</span>
+                  <span className="name__player">{player?.nickname} </span>
                   <button className="btn-follow-player">Follow Me</button>
                 </div>
               </div>
@@ -136,9 +149,9 @@ export default function PlayerDetails() {
                     height="350"
                     src="https://www.youtube.com/embed/1WLSitEnnCg"
                     title="YouTube video player"
-                    frameborder="0"
+                    frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
+                    allowFullScreen
                   ></iframe>
                 </div>
               </div>

@@ -174,7 +174,8 @@ class UsersController {
   }
 
   async changeUserInfo(req, res) {
-    const { fullName, nickname, birthDate, gender, province } = req.body;
+    let { fullName, nickname, birthDate, gender, province } = req.body;
+    birthDate = new Date(birthDate);
     console.log(req.body);
     try {
       const user = await User.findByIdAndUpdate(req.user._id, {
@@ -311,7 +312,7 @@ class UsersController {
           },
         },
       ]);
-      return res.send(player_profiles);
+      return res.send(player_profiles[0]);
     } catch (error) {
       console.log(error);
       return res.status(500).json({

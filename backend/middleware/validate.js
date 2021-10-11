@@ -81,7 +81,7 @@ const validateNewUserInfo = () => {
     ).matches(/^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W]*$/)
     .isLength({ min: 5}),
     check('birthDate').not().isEmpty(),
-    check('birthDate').isDate(),
+    // check('birthDate').isDate(),
     check('gender').not().isEmpty(),
     check('gender').isAlpha(),
     check('province').not().isEmpty(),
