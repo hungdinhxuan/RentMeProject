@@ -5,6 +5,7 @@ import SignUp from "features/Auth/SignUp";
 import Settings from "features/Settings";
 import PageNotFound from "components/PageNotFound";
 import { lazy} from "react";
+import PrivacySetting from "features/Settings/PrivacySetting";
 
 const Home = lazy(() => import("features/Home/index.jsx"));
 const ForgotPassword = lazy(() =>
@@ -33,6 +34,12 @@ const routes = [
   },
   {
     path: "/setting/profile",
+    exact: false,
+    layout: PrivateLayout,
+    main: Settings
+  },
+  {
+    path: "/setting/privacy",
     exact: false,
     layout: PrivateLayout,
     main: Settings
