@@ -43,7 +43,7 @@ function ProfileSetting() {
   };
   const handleDateChange = (value) => {
     setStartDate(value);
-    setValueForm({ ...valueForm, birthDate: startDate });
+    setValueForm({ ...valueForm, birthDate: value });
   };
 
   const handleSubmit = (e) => {
