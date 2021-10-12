@@ -29,25 +29,53 @@
         color: var(--color-default);
     }
     // form {
-    //     label {
-    //         color: var(--text-footer);
-    //         padding: 0;
-    //         line-height: 1.2;
-    //         font-size: 12px;
-    //         font-weight: 400;
-    //         margin-bottom: 8px;
-    //     }
-    //     input {
-    //         font-size: 14px;
-    //         color: var(--color-default);
-    //         background: var(--color-button) !important;
-    //         border: 1px solid var(--button-hover);
-    //         &:hover {
-    //             border-color: var(--text-field);
-    //         }
-            
-    //     }
-        
-       
-    // }
+    .ant-form-item {
+        .ant-form-item-label {
+            label {
+                color: var(--text-footer);
+            }
+        }
+    }
+
+    // Input antd
+    .ant-form-item-control {
+        button {
+            width: 100%;
+            background-color: var(--button-hover1);
+            color: var(--color-default);
+            outline: none;
+            box-shadow: none;
+            border-color: var(--text-hover);
+            &:hover {
+                background-color: var(--text-hover);
+                border-color: var(--text-hover);
+            }
+        }
+        .ant-input-affix-wrapper {
+            border: 1px solid var(--button-hover);
+            color: var(--color-default);
+            background: var(--color-button);
+            &:hover {
+                border-color: var(--text-field);
+                background: none;
+            }
+            &:focus {
+                border-color: var(--text-field);
+                box-shadow: none;
+                outline: none;
+            }
+            input {
+                background: var(--color-button);
+                color: var(--color-default);
+                &:hover {
+                    background: none;
+                }
+            }
+            .ant-input-suffix {
+                .anticon {
+                    color: var(--text-footer);
+                }
+            }
+        }
+    }
 }
