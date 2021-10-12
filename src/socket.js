@@ -1,3 +1,4 @@
+import { createContext } from "react";
 import { io } from "socket.io-client";
 
 const socket = io(process.env.REACT_APP_SOCKET_SERVER_URL, {
@@ -5,5 +6,6 @@ const socket = io(process.env.REACT_APP_SOCKET_SERVER_URL, {
   path: '/mysocket'
 });
 
+export const socketContext = createContext();
 // console.log('http://localhost:4000');
 export default socket;

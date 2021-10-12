@@ -7,18 +7,15 @@ import { PublicRoute } from "components/Layouts/PublicRoute";
 import Loading from "components/Loading";
 import PageNotFound from "components/PageNotFound";
 import routes from "constants/routes";
-import { React, Suspense } from "react";
+import { createContext, React, Suspense } from "react";
 import MessengerCustomerChat from "react-messenger-customer-chat";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-import socket from "socket";
+import socket, { socketContext } from "socket";
 AOS.init();
 
 function App() {
-  socket.on("connect", () => {
-    console.log("ok");
-  });
-
+  
   const showLayout = (routes) => {
     if (routes && routes.length > 0) {
       return routes.map((route, index) => {
@@ -53,7 +50,7 @@ function App() {
     }
   };
   return (
-    <div className="App">
+    <socketContext.Provider value={socket} className="App">
       <Suspense fallback={<Loading />}>
         <BrowserRouter>
           <Switch>
@@ -68,7 +65,7 @@ function App() {
           />
         </BrowserRouter>
       </Suspense>
-    </div>
+    </socketContext.Provider>
   );
 }
 export default App;

@@ -8,20 +8,21 @@ import { useDispatch, useSelector } from "react-redux";
 
 export default function PlayerDetails(props) {
   const match = useRouteMatch();
-  console.log(props);
+  const history = useHistory();
+  const [visible, setVisible] = useState(false);
+
   // console.log(location);
   const { player, loading, error } = useSelector((state) => state.players);
 
   if (error) {
-    console.log(error);
+    history.push("/error");
   }
-
-  const [visible, setVisible] = useState(false);
   const dispatch = useDispatch();
-
   useEffect(() => {
     dispatch(AsyncLoadPlayerDetails(match.params.cardId));
+    
   }, []);
+
 
   return (
     <div className="details">

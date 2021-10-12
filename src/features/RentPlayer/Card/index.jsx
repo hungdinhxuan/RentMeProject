@@ -23,7 +23,7 @@ function CardList({ item }) {
           <div className="profile">
             <Avatar shape="square" size={100} src={item.coverBackground} />
             <div className="status">
-              {item.user.isOnline === "online" ? (
+              {item.user[0].isOnline ? (
                 <Avatar shape="square" size={12} src={OnlineStatus} />
               ) : (
                 <Avatar shape="square" size={12} src={OfflineStatus} />
