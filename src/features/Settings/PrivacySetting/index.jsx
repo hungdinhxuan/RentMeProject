@@ -134,7 +134,7 @@ export default function PrivacySetting() {
                   <Input.Password />
                 </Form.Item>
                 <Form.Item {...tailFormItemLayout}>
-                  <Button type="primary" htmlType="submit">
+                  <Button htmlType="submit">
                     Submit
                   </Button>
                 </Form.Item>
