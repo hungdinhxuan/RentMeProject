@@ -1,0 +1,53 @@
+.privacy__setting {
+    .ant-tabs-nav-wrap {
+        color: var(--text-footer);
+        font-size: 1.2rem;
+    }
+    .ant-tabs-top > .ant-tabs-nav::before {
+        border-bottom: none;
+    }
+    .ant-tabs-tab {
+        font-size: 18px;
+    }
+
+    .ant-tabs-tab.ant-tabs-tab-active {
+        .ant-tabs-tab-btn {
+            color: var(--text-hover);
+        }
+    }
+    .ant-tabs-tab-btn:active {
+        color: var(--text-hover);
+    }
+    .ant-tabs-tab:hover {
+        color: var(--text-hover);
+    }
+    .ant-tabs-ink-bar {
+        background: var(--text-hover);
+    }
+
+    .ant-tabs-content-holder {
+        color: var(--color-default);
+    }
+    // form {
+    //     label {
+    //         color: var(--text-footer);
+    //         padding: 0;
+    //         line-height: 1.2;
+    //         font-size: 12px;
+    //         font-weight: 400;
+    //         margin-bottom: 8px;
+    //     }
+    //     input {
+    //         font-size: 14px;
+    //         color: var(--color-default);
+    //         background: var(--color-button) !important;
+    //         border: 1px solid var(--button-hover);
+    //         &:hover {
+    //             border-color: var(--text-field);
+    //         }
+            
+    //     }
+        
+       
+    // }
+}
