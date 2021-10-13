@@ -13,7 +13,7 @@ class Auth {
     const { username, password } = req.body;
     try {
       const user = await User.findOne({ username });
-      console.log(username);
+      // console.log(username);
       if (!user) {
         return res.status(401).json({
           success: false,
@@ -255,7 +255,7 @@ class Auth {
         .status(403)
         .json({ success: true, message: 'Email is not verified' });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return res.status(500).json({
         success: false,
         message: 'Internal Server Error',

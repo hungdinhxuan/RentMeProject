@@ -26,7 +26,7 @@ import * as yup from "yup";
 import { AsyncSignin } from "../AuthSlice";
 import "./SignIn.scss";
 import Loading from "components/Loading";
-
+import socket from "socket";
 
 function Copyright() {
   return (

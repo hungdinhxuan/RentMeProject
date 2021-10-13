@@ -336,7 +336,7 @@ class UsersController {
         let skip = (page - 1) * limit;
 
         if (status == 'true') {
-          console.log('get online players');
+          // console.log('get online players');
           player_profiles = await PlayerProfiles.aggregate([
             {
               $lookup: {
@@ -373,7 +373,7 @@ class UsersController {
             { $limit: limit },
           ]);
         } else {
-          console.log('get offline players');
+          // console.log('get offline players');
           player_profiles = await PlayerProfiles.aggregate([
             {
               $lookup: {
@@ -479,7 +479,7 @@ class UsersController {
           // "Định dạng file không hợp lệ, Chỉ .png, .jpg và .jpeg được cho phép",
         });
       }
-
+      
       //Check if files exist
       if (!req.files)
         return res.status(400).json({ message: 'No picture attached!' });
