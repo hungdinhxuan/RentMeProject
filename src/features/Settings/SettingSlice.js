@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "axiosClient";
-import { toastSuccess } from "components/Toastify/toastHelper";
+import { toastError, toastSuccess } from "components/Toastify/toastHelper";
 import Swal from "sweetalert2";
 const initialState = {
   fileAvatar: null,
@@ -8,13 +8,6 @@ const initialState = {
   error: null,
 };
 
-const handleNoti = (icon, title, text) => {
-  Swal.fire({
-    icon: `${icon}`,
-    title: `${title}`,
-    text: `${text}`,
-  });
-};
 
 export const AsyncUpdateAvatar = createAsyncThunk(
   "setting/updateAvatar",
@@ -54,6 +47,19 @@ export const AsyncUpdateProfile = createAsyncThunk(
   }
 );
 
+export const AsyncUpdatePassword = createAsyncThunk(
+  "setting/updatePassword",
+  async (values, { rejectWithValue }) => {
+    try {
+      console.log(values);
+      const response = await axiosClient.patch(`users/${values.id}/password`, values);
+      return response;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 const SettingSlice = createSlice({
   name: "setting",
   initialState,
@@ -66,7 +72,7 @@ const SettingSlice = createSlice({
       state.fileAvatar = action.payload;
       state.loading = false;
       state.error = null;
-      toastSuccess();
+      toastSuccess('Update avatar successful!');
     },
     [AsyncUpdateAvatar.rejected]: (state, action) => {
       state.fileAvatar = null;
@@ -79,13 +85,28 @@ const SettingSlice = createSlice({
     [AsyncUpdateProfile.fulfilled]: (state, action) => {
       state.loading = false;
       state.error = null;
-      toastSuccess();
+      toastSuccess('Update profile successful!');
     },
     [AsyncUpdateProfile.rejected]: (state, action) => {
       state.fileAvatar = null;
       state.loading = false;
       state.error = action.payload;
-      console.log(action.payload);
+      
+    },
+    // Change password
+    [AsyncUpdatePassword.pending]: (state) => {
+      state.loading = true;
+    },
+    [AsyncUpdatePassword.fulfilled]: (state) => {
+      state.loading = false;
+      state.error = null;
+      toastSuccess('Change password successful!');
+    },
+    [AsyncUpdatePassword.rejected]: (state, action) => {
+      state.fileAvatar = null;
+      state.loading = false;
+      state.error = action.payload;
+      toastError();
     },
   },
 });
