@@ -19,15 +19,10 @@ function MainRentPlayer() {
   const dispatch = useDispatch();
   const socket = useContext(socketContext);
 
-  
-
   useEffect(() => {
     dispatch(AsyncLoadUser());
     dispatch(AsyncLoadPlayer());
-    socket.on("connect", () => {
-      console.log("ok");
-    });
-  }, [dispatch,socket]);
+  }, [dispatch]);
 
   return (
     <div className="main__layout">
