@@ -11,22 +11,26 @@ module.exports = (app) => {
   const passport = require('passport');
   const httpServer = createServer(app);
   const io = new Server(httpServer, { cors: '*', path: '/mysocket' });
-  // console.log(passport);
+
+
   const wrap = (middleware) => (socket, next) =>
     middleware(socket.request, {}, next);
   io.use(wrap(passport.initialize()));
   io.use(wrap(passport.session()));
   io.use(wrap(passport.authenticate('jwt')));
+
   // Store online user in {} ex: {username1: Set(socket1, socket2)}
 
   let userPeers = []; // Using for video call
 
   io.on('connection', async (socket) => {
+
     // console.log('hello!', socket.request.session.passport.user);
     socket.username = socket.request.session.passport.user.username;
     socket.role = socket.request.session.passport.user.role;
     
     addClientToObj(socket.username, socket.id, socket.role, io);
+    // console.log(socket.id);
 
     socket.on('disconnect', async () => {
       // console.log(socket.userId + ' is ' + socket.userStatus);
