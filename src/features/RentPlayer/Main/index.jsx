@@ -22,7 +22,11 @@ function MainRentPlayer() {
   useEffect(() => {
     dispatch(AsyncLoadUser());
     dispatch(AsyncLoadPlayer());
-  }, [dispatch]);
+    socket.on("refreshPlayerList", () => {
+      console.log("ok");
+      dispatch(AsyncLoadPlayer());
+    });
+  }, [dispatch, socket]);
 
   return (
     <div className="main__layout">

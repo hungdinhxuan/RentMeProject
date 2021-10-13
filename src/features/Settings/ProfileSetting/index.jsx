@@ -1,5 +1,5 @@
 import { Avatar } from "antd";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./ProfileSetting.scss";
 import ImgCrop from "antd-img-crop";
@@ -17,9 +17,12 @@ import { toast, ToastContainer } from "react-toastify";
 import { toastSuccess } from "components/Toastify/toastHelper";
 import Loading from "components/Loading";
 import Cities from "constants/Cities";
+import { socketContext } from "socket";
 
 function ProfileSetting() {
   const { user } = useSelector((state) => state.auth);
+
+
   const { fileAvatar, loading } = useSelector((state) => state.setting);
   const [valueForm, setValueForm] = useState({
     fullName: user?.fullName,
@@ -29,7 +32,7 @@ function ProfileSetting() {
     gender: user?.gender,
   });
   const [startDate, setStartDate] = useState(new Date(user?.birthDate));
-  const [genderState, setGenderState] = useState(user.gender);
+  const [genderState, setGenderState] = useState(user?.gender);
   const fileList = [];
   const dispatch = useDispatch();
 
@@ -58,6 +61,7 @@ function ProfileSetting() {
 
   useEffect(() => {
     dispatch(AsyncLoadUser());
+    
   }, [fileAvatar, dispatch]);
   
 

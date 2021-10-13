@@ -233,7 +233,7 @@ router.post('/generate-sample-profile-player', async (req, res) => {
         birthDate: randomDate(new Date(1992, 0, 1), new Date(2002, 0, 1)),
         gender: 'female',
         avatar: avatarResult.resources[index / 4].secure_url,
-        
+        role: 2
       });
     }
 

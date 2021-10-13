@@ -7,7 +7,7 @@ import { PublicRoute } from "components/Layouts/PublicRoute";
 import Loading from "components/Loading";
 import PageNotFound from "components/PageNotFound";
 import routes from "constants/routes";
-import { createContext, React, Suspense } from "react";
+import { createContext, React, Suspense, useEffect } from "react";
 import MessengerCustomerChat from "react-messenger-customer-chat";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
