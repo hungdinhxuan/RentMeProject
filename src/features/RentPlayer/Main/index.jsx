@@ -28,9 +28,7 @@ function MainRentPlayer() {
       console.log('ok');
       dispatch(AsyncLoadPlayer());  
     });
-    socket.on('connect', () => {
-      console.log('running');
-    })
+    
   }, [dispatch,socket]);
 
   return (

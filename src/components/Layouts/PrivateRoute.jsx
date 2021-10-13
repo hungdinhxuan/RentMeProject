@@ -1,7 +1,9 @@
-import { AsyncLoadUser } from "features/Auth/AuthSlice";
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+
+import React, { useEffect, useContext } from "react";
+import { useSelector } from "react-redux";
 import { Redirect, Route, useLocation } from "react-router";
+// import socket from "socket";
+import { socketAuth, socketContext } from "socket";
 
 export function PrivateRoute({
   component: Component,
@@ -11,6 +13,12 @@ export function PrivateRoute({
 
   const { isAuthenticated } = useSelector((state) => state.auth);
   const location = useLocation();
+  const socket = useContext(socketContext)
+  useEffect(() => {
+    if(localStorage.getItem('token')){
+      socketAuth()
+    }
+  }, [socket])
   
   return (
     <Route

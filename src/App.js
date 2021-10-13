@@ -15,7 +15,6 @@ import socket, { socketContext } from "socket";
 AOS.init();
 
 function App() {
-
   const showLayout = (routes) => {
     if (routes && routes.length > 0) {
       return routes.map((route, index) => {

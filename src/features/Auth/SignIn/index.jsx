@@ -14,7 +14,7 @@ import AnhBackGround from "assets/acct_creation_bg.jpg";
 import Facebook from "assets/facebook.png";
 import Google from "assets/google.png";
 import axiosClient from "axiosClient";
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import GoogleLogin from "react-google-login";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -26,9 +26,10 @@ import * as yup from "yup";
 import { AsyncSignin } from "../AuthSlice";
 import "./SignIn.scss";
 import Loading from "components/Loading";
-import socket from "socket";
+import { socketAuth, socketContext } from "socket";
 
 function Copyright() {
+  
   return (
     <Typography
       variant="body2"
@@ -114,6 +115,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignIn(props) {
+  const socket = useContext(socketContext)
   const classes = useStyles();
 
   // Form
@@ -171,6 +173,7 @@ export default function SignIn(props) {
   const { referrer } = props.location.state || { referrer: { pathname: "/" } };
     
   if (user || isAuthenticated ) {
+    socketAuth()
     history.push(referrer);
   }
 
