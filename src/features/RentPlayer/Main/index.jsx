@@ -14,19 +14,23 @@ function MainRentPlayer() {
   const handleChange = (value) => {
     console.log(`selected ${value}`);
   };
-
+  
   const { listPlayers } = useSelector((state) => state.players);
   const dispatch = useDispatch();
   const socket = useContext(socketContext);
 
   
-
+  
   useEffect(() => {
     dispatch(AsyncLoadUser());
     dispatch(AsyncLoadPlayer());
-    socket.on("connect", () => {
-      console.log("ok");
+    socket.on("refreshPlayerList", () => {
+      console.log('ok');
+      dispatch(AsyncLoadPlayer());  
     });
+    socket.on('connect', () => {
+      console.log('running');
+    })
   }, [dispatch,socket]);
 
   return (
