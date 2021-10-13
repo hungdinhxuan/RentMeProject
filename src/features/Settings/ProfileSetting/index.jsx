@@ -63,7 +63,7 @@ function ProfileSetting() {
     dispatch(AsyncLoadUser());
     
   }, [fileAvatar, dispatch]);
-  console.log(valueForm);
+  
 
   return (
     <div className="profile__setting">

@@ -14,8 +14,6 @@ function CardList({ item }) {
     console.log("open audio");
   };
 
-  // console.log(item);
-
   return (
     <div className="card__details col-xl-3 col-md-6 col-12">
       <Link to={`/playerdou/${item._id}`}>
