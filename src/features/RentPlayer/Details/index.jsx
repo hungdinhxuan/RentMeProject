@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useLocation, useRouteMatch } from "react-router";
+import { useHistory,  useRouteMatch } from "react-router";
 import { Image, Rate, Avatar } from "antd";
 import "./Details.scss";
 import Ha from "assets/Ha.jpg";
 import { AsyncLoadPlayerDetails } from "../PlayerSlice";
 import { useDispatch, useSelector } from "react-redux";
 
-export default function PlayerDetails(props) {
+export default function PlayerDetails() {
   const match = useRouteMatch();
   const history = useHistory();
   const [visible, setVisible] = useState(false);
 
   // console.log(location);
-  const { player, loading, error } = useSelector((state) => state.players);
+  const { player,  error } = useSelector((state) => state.players);
 
   if (error) {
     history.push("/error");
@@ -21,7 +21,7 @@ export default function PlayerDetails(props) {
   useEffect(() => {
     dispatch(AsyncLoadPlayerDetails(match.params.cardId));
     
-  }, []);
+  }, [dispatch, match.params.cardId]);
 
 
   return (

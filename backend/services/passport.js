@@ -16,7 +16,6 @@ module.exports = () => {
       try {
         const user = await User.findById(jwt_payload.sub).select('-password ');
         if (user) {
-          //   console.log(user);
           return done(null, user);
         } else {
           return done(null, false);

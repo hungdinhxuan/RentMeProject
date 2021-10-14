@@ -1,5 +1,3 @@
-import React, { useEffect } from "react";
-import { Spin, Space } from "antd";
 import Lottie from "react-lottie";
 import "./Loading.scss";
 import LoadingAnimation from "assets/8370-loading.json";
