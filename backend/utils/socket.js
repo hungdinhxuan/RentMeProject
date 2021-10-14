@@ -57,6 +57,7 @@ module.exports = (app) => {
 
     socket.on('logout', () => {
       removeClientFromObj(socket.username, socket.id, socket.role, io, 'logout');
+      
     })
   
     // socket.on('chat message', (recipientUserName, messageContent) => {

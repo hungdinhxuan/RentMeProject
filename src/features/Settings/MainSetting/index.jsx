@@ -4,7 +4,7 @@ import { NavLink, useHistory, useLocation } from "react-router-dom";
 import { Redirect } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "features/Auth/AuthSlice";
-import { socketContext } from "socket";
+import { socketContext,socketAuth } from "socket";
 
 export default function SidebarSetting() {
   const socket = useContext(socketContext)
@@ -15,7 +15,7 @@ export default function SidebarSetting() {
     e.preventDefault();
     localStorage.removeItem("token");
     dispatch(logout());
-    socket.emit('logout')
+    socket.emit('logout');
     history.push("/");
   };
   return (
