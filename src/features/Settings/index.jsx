@@ -4,6 +4,7 @@ import SidebarSetting from "./MainSetting";
 import PrivacySetting from "./PrivacySetting";
 import ProfileSetting from "./ProfileSetting";
 import "./Settings.scss";
+import WalletSetting from "./WalletSetting";
 
 export default function Settings() {
   return (
@@ -15,6 +16,7 @@ export default function Settings() {
         <Switch>
           <Route exact path="/setting/profile" component={ProfileSetting} />
           <Route exact path="/setting/privacy" component={PrivacySetting} />
+          <Route exact path="/setting/wallet" component={WalletSetting} />
         </Switch>
       </div>
     </div>

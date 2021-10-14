@@ -30,7 +30,7 @@ export default function PrivacySetting() {
   const onSubmit = (values) => {
     console.log("Received values of form: ", values);
     values.id = user._id;
-    dispatch(AsyncUpdatePassword(values))
+    dispatch(AsyncUpdatePassword(values));
     form.resetFields();
   };
   console.log(passwordState);
@@ -66,7 +66,7 @@ export default function PrivacySetting() {
       },
     },
   };
-  
+
   return (
     <div className="privacy__setting">
       <div className="row">
@@ -134,9 +134,7 @@ export default function PrivacySetting() {
                   <Input.Password />
                 </Form.Item>
                 <Form.Item {...tailFormItemLayout}>
-                  <Button htmlType="submit">
-                    Submit
-                  </Button>
+                  <Button htmlType="submit">Submit</Button>
                 </Form.Item>
               </Form>
             </TabPane>
@@ -146,7 +144,7 @@ export default function PrivacySetting() {
           </Tabs>
         </div>
       </div>
-      <ToastContainer/>
+      <ToastContainer />
     </div>
   );
 }

@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { useHistory, useLocation, useRouteMatch } from "react-router";
-import { Image, Rate, Avatar } from "antd";
-import "./Details.scss";
+import { Avatar, Image, Rate } from "antd";
 import Ha from "assets/Ha.jpg";
-import { AsyncLoadPlayerDetails } from "../PlayerSlice";
+import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory, useRouteMatch } from "react-router";
+import { AsyncLoadPlayerDetails } from "../PlayerSlice";
+import "./Details.scss";
 
 export default function PlayerDetails(props) {
   const match = useRouteMatch();
@@ -53,7 +53,7 @@ export default function PlayerDetails(props) {
                 </div>
               </div>
               <div className="rent-time">
-                <p>I'm ready</p>
+                {player?.user.isOnline ? <p>I'm ready</p> : <p style={{color: "red"}}>I'm offline</p>}
               </div>
               <div className="social-icon">
                 <a
