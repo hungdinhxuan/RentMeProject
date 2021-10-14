@@ -44,6 +44,12 @@ const routes = [
     main: Settings
   },
   {
+    path: "/setting/wallet",
+    exact: false,
+    layout: PrivateLayout,
+    main: Settings
+  },
+  {
     path: "/forgot-password",
     exact: false,
     layout: PublicLayout,
