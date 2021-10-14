@@ -25,7 +25,6 @@ module.exports = (app) => {
 
   let userPeers = []; // Using for video call
 
-<<<<<<< HEAD
   io.on('connection', (socket) => {
     socket.auth = false;
 
@@ -45,77 +44,6 @@ module.exports = (app) => {
           socket.role = user.role;
           addClientToObj(socket.username, socket.id, socket.role, io);
         }
-=======
-  io.on('connection', async (socket) => {
-
-    console.log('hello!', socket.request.session.passport.user);
-    socket.username = socket.request.session.passport.user.username;
-    socket.role = socket.request.session.passport.user.role;
-    
-    addClientToObj(socket.username, socket.id, socket.role, io);
-    // console.log(socket.id);
-
-    socket.on('disconnect', async () => {
-      // console.log(socket.userId + ' is ' + socket.userStatus);
-      removeClientFromObj(socket.username, socket.id, socket.role, io);
-      const user = userLeave(socket.id);
-      if (user) {
-        socket.broadcast.to(user.room).emit('message', {
-          name: 'Admin',
-          msg: `${user.name} has left to room`,
-        });
-
-        let allMembersInRoom = users
-          .filter((_user) => _user.room === user.room)
-          .map((user) => user.peerID);
-        io.to(user.room).emit('allMembers', allMembersInRoom);
-      }
-
-      userPeers = userPeers.filter((id) => id !== socket.peerID);
-
-      if (socket.client.conn.server.clientsCount == 0) {
-        userPeers = [];
-      }
-    });
-
-    socket.on('logout', () => {
-      removeClientFromObj(socket.username, socket.id, socket.role, io, 'logout');
-      
-    })
-  
-    // socket.on('chat message', (recipientUserName, messageContent) => {
-    //   //get all clients (socketIds) of recipient
-    //   let recipientSocketIds = userSocketIdObj.get(recipientUserName);
-    //   for (let socketId of recipientSocketIds) {
-    //     io.to(socketId).emit('new message', messageContent);
-    //   }
-    // });
-    socket.on('joinRoom', ({ name, room, peerID }) => {
-      const user = userJoin({ id: socket.id, name, room, peerID });
-      if (peerID) userPeers.push(peerID);
-      socket.join(user.room);
-      socket.peerID = peerID;
-
-      // Wellcome room
-      socket.emit('message', { name: 'Admin', msg: 'Wellcome to chat app' });
-
-      let allMembersInRoom = users
-        .filter((user) => user.room === room)
-        .map((user) => user.peerID);
-
-      io.to(room).emit('allMembers', allMembersInRoom);
-
-      socket.broadcast.to(user.room).emit('message', {
-        name: 'Admin',
-        msg: `${name} has joined to room`,
-      });
-    });
-
-    socket.on('sendMessage', ({ name, msg, room }) => {
-      io.to(room).emit('message', {
-        name,
-        msg,
->>>>>>> a2402c92580dd5f19a1f7895fde93057addb14c8
       });
     });
 
