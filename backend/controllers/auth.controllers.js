@@ -34,7 +34,7 @@ class Auth {
         message: 'username or password is not correct',
       });
     } catch (error) {
-      console.log(error);
+      
       return res.status(500).json({
         success: false,
         message: 'Internal Server Error',
@@ -221,14 +221,14 @@ class Auth {
   async googleLogin(req, res, next) {
     const client = new OAuth2Client(`${process.env.GOOGLE_CLIENT_ID}`);
     const { tokenId } = req.body;
-    // console.log(req.body);
+    
     try {
       const response = await client.verifyIdToken({
         idToken: tokenId,
         audience: `${process.env.GOOGLE_CLIENT_ID}`,
       });
       const { sub, email_verified, name, email, picture } = response.payload;
-      console.log(response.payload);
+    
       if (email_verified) {
         let user = await User.findOne({ email });
         if (!user) {
