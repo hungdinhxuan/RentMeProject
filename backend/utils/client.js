@@ -21,21 +21,7 @@ async function addClientToObj(username, socketId, role, io) {
   }
 
   async function removeClientFromObj(username, socketId, role, io, event=null) {
-    if(event == 'logout'){
-      delete userSocketIdObj[username];
-      try {
-        await User.findOneAndUpdate({ username }, { isOnline: false },  {new: true});
-        
-        if(role == 2){
-          // Notify to client to load player list
-          console.log('emit disconnected');
-          io.emit('refreshPlayerList')
-        }
-        console.log(`${username} is offline`);
-      } catch (error) {
-        console.log(error);
-      }
-    }
+ 
     if (userSocketIdObj.hasOwnProperty(username)) {
       let userSocketIdSet = userSocketIdObj[username];
       userSocketIdSet.delete(socketId);

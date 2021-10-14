@@ -1,8 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useLocation } from "react-router";
 import { Avatar, Space, Rate } from "antd";
-import Ha from "assets/Ha.jpg";
 import OnlineStatus from "assets/onlineStatus.png";
 import OfflineStatus from "assets/offlineStatus.png";
 import PriceCard from "assets/priceCard.png";
@@ -52,7 +50,7 @@ function CardList({ item }) {
                       <div></div>
                     </div>
                     <div className="shape--right">
-                      <i class="bi bi-play"></i>
+                      <i className="bi bi-play"></i>
                       <audio src=""></audio>
                     </div>
                   </div>
