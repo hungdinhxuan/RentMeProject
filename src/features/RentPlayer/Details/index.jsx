@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useHistory,  useRouteMatch } from "react-router";
+import { useHistory, useRouteMatch } from "react-router";
 import { Image, Rate, Avatar } from "antd";
 import "./Details.scss";
 import Ha from "assets/Ha.jpg";
-import { AsyncLoadPlayerDetails } from "../PlayerSlice";
 import { useDispatch, useSelector } from "react-redux";
+import { AsyncLoadPlayerDetails } from "../PlayerSlice";
+import "./Details.scss";
 
 export default function PlayerDetails() {
   const match = useRouteMatch();
@@ -12,7 +13,7 @@ export default function PlayerDetails() {
   const [visible, setVisible] = useState(false);
 
   // console.log(location);
-  const { player,  error } = useSelector((state) => state.players);
+  const { player, error } = useSelector((state) => state.players);
 
   if (error) {
     history.push("/error");
@@ -20,9 +21,7 @@ export default function PlayerDetails() {
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(AsyncLoadPlayerDetails(match.params.cardId));
-    
   }, [dispatch, match.params.cardId]);
-
 
   return (
     <div className="details">
@@ -53,7 +52,11 @@ export default function PlayerDetails() {
                 </div>
               </div>
               <div className="rent-time">
-                <p>I'm ready</p>
+                {player?.user.isOnline ? (
+                  <p>I'm ready</p>
+                ) : (
+                  <p style={{ color: "red" }}>I'm offline</p>
+                )}
               </div>
               <div className="social-icon">
                 <a
@@ -129,9 +132,7 @@ export default function PlayerDetails() {
                   Business Tour, Call mess.
                   {player?.shortDesc}
                 </p>
-                <p>
-                 {player?.longDesc}
-                </p>
+                <p>{player?.longDesc}</p>
               </div>
               <div className="video-player-profile title-player-profile row">
                 <div className="col-12">
