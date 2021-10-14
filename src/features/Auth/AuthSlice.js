@@ -1,9 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "axiosClient";
-import { toastSuccess } from "components/Toastify/toastHelper";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
-import socket from 'socket'
 
 const handleNoti = (icon, title, text) => {
   Swal.fire({

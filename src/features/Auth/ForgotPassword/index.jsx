@@ -9,7 +9,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { AsyncForgotPassword } from "../AuthSlice";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import AnhBackGround from "assets/acct_creation_bg.jpg";
 
 export default function ForgotPassword() {

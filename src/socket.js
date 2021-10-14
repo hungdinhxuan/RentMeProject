@@ -11,5 +11,6 @@ export const socketAuth = () => {
     Authorization: `Bearer ${localStorage.getItem("token")}`,
   };
   socket.io.connect();
+  console.log(`called socket connect with ${localStorage.getItem("token")}`);
 };
 export const socketContext = createContext();

@@ -1,5 +1,5 @@
 import { Avatar } from "antd";
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./ProfileSetting.scss";
 import ImgCrop from "antd-img-crop";
@@ -13,17 +13,17 @@ import {
   AsyncUpdateAvatar,
   AsyncUpdateProfile,
 } from "features/Settings/SettingSlice";
-import { toast, ToastContainer } from "react-toastify";
-import { toastSuccess } from "components/Toastify/toastHelper";
-import Loading from "components/Loading";
+import {  ToastContainer } from "react-toastify";
+
+
 import Cities from "constants/Cities";
-import { socketContext } from "socket";
+
 
 function ProfileSetting() {
   const { user } = useSelector((state) => state.auth);
 
 
-  const { fileAvatar, loading } = useSelector((state) => state.setting);
+  const { fileAvatar } = useSelector((state) => state.setting);
   const [valueForm, setValueForm] = useState({
     fullName: user?.fullName,
     nickname: user?.nickname,

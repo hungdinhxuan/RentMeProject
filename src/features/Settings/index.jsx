@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Switch, useLocation } from "react-router";
+import { Route, Switch } from "react-router";
 import SidebarSetting from "./MainSetting";
 import PrivacySetting from "./PrivacySetting";
 import ProfileSetting from "./ProfileSetting";

@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "axiosClient";
 import { toastError, toastSuccess } from "components/Toastify/toastHelper";
-import Swal from "sweetalert2";
+
 const initialState = {
   fileAvatar: null,
   loading: false,

@@ -5,16 +5,8 @@ import {
   Tabs,
   Form,
   Input,
-  InputNumber,
-  Cascader,
-  Select,
-  Row,
-  Col,
-  Checkbox,
   Button,
-  AutoComplete,
 } from "antd";
-import { AppleOutlined, AndroidOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { AsyncUpdatePassword } from "../SettingSlice";
@@ -23,7 +15,7 @@ import { ToastContainer } from "react-toastify";
 const { TabPane } = Tabs;
 
 export default function PrivacySetting() {
-  const [passwordState, setPasswordState] = useState(null);
+  const [passwordState] = useState(null);
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const [form] = Form.useForm();
