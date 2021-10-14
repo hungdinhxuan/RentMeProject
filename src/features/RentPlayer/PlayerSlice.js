@@ -1,15 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "axiosClient";
-import { ToastContainer, toast } from "react-toastify";
-import Swal from "sweetalert2";
 
-const handleNoti = (icon, title, text) => {
-  Swal.fire({
-    icon: `${icon}`,
-    title: `${title}`,
-    text: `${text}`,
-  });
-};
+
+// const handleNoti = (icon, title, text) => {
+//   Swal.fire({
+//     icon: `${icon}`,
+//     title: `${title}`,
+//     text: `${text}`,
+//   });
+// };
 
 const initialState = {
   listPlayers: null,

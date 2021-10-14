@@ -1,7 +1,6 @@
 import React, {useContext} from "react";
 import "./SidebarSetting.scss";
-import { NavLink, useHistory, useLocation } from "react-router-dom";
-import { Redirect } from "react-router-dom";
+import { NavLink, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "features/Auth/AuthSlice";
 import { socketContext,socketAuth } from "socket";
@@ -13,9 +12,9 @@ export default function SidebarSetting() {
   const dispatch = useDispatch();
   const handleLogout = (e) => {
     e.preventDefault();
-    localStorage.removeItem("token");
     dispatch(logout());
-    socket.emit('logout');
+    socket.emit('logout')
+    localStorage.removeItem("token");
     history.push("/");
   };
   return (

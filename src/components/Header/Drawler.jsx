@@ -1,12 +1,10 @@
-import { Avatar, Drawer, Space, Card, Switch  } from "antd";
-import AvatarProfile from "assets/default_avatar.png";
+import { Avatar, Drawer, Space, Switch  } from "antd";
 import OnlineStatus from "assets/onlineStatus.png";
 import React from "react";
 import "./Drawer.scss";
 
 import Wallet from "assets/wallet.png";
 import Coupon from "assets/coupon.png";
-import EpalPlus from "assets/EpalPlus.png";
 import { Link } from "react-router-dom";
 
 function Drawler(props) {
@@ -50,7 +48,7 @@ function Drawler(props) {
             </Space>
             <i
               style={{ fontSize: "16px", color: "#fff" }}
-              class="bi bi-caret-right"
+              className="bi bi-caret-right"
             ></i>
           </div>
           <div className="detailInfo__drawer">
@@ -109,7 +107,7 @@ function Drawler(props) {
               <Space size={0} style={{ padding: "10px" }}>
                 <div className="left d-flex">
                   <div className="icon">
-                    <i class="bi bi-headset"></i>
+                    <i className="bi bi-headset"></i>
                   </div>
                   <div className="text--item">Live Support</div>
                 </div>
@@ -119,7 +117,7 @@ function Drawler(props) {
               <Space size={0} style={{ padding: "10px" }}>
                 <div className="left d-flex">
                   <div className="icon">
-                    <i class="bi bi-flag"></i>
+                    <i className="bi bi-flag"></i>
                   </div>
                   <div className="text--item">Report</div>
                 </div>
@@ -129,7 +127,7 @@ function Drawler(props) {
               <Space size={0} style={{ padding: "10px" }}>
                 <div className="left d-flex">
                   <div className="icon">
-                    <i class="bi bi-headset"></i>
+                    <i className="bi bi-headset"></i>
                   </div>
                   <div className="text--item">Light Mode</div>
                 </div>
@@ -142,7 +140,7 @@ function Drawler(props) {
               <Space size={0} style={{ padding: "10px" }}>
                 <div className="left d-flex">
                   <div className="icon">
-                    <i class="bi bi-gear"></i>
+                    <i className="bi bi-gear"></i>
                   </div>
                   <div className="text--item" >
                     <Link to="/setting/profile">Settings</Link>

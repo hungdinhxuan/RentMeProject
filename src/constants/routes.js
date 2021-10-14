@@ -3,9 +3,8 @@ import { PrivateLayout } from "components/Layouts/PrivateLayout";
 import SignIn from "features/Auth/SignIn";
 import SignUp from "features/Auth/SignUp";
 import Settings from "features/Settings";
-import PageNotFound from "components/PageNotFound";
 import { lazy} from "react";
-import PrivacySetting from "features/Settings/PrivacySetting";
+
 
 const Home = lazy(() => import("features/Home/index.jsx"));
 const ForgotPassword = lazy(() =>

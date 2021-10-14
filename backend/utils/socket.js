@@ -25,7 +25,7 @@ module.exports = (app) => {
 
   io.on('connection', async (socket) => {
 
-    // console.log('hello!', socket.request.session.passport.user);
+    console.log('hello!', socket.request.session.passport.user);
     socket.username = socket.request.session.passport.user.username;
     socket.role = socket.request.session.passport.user.role;
     
