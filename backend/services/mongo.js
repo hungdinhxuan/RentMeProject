@@ -14,7 +14,6 @@ const connectAndRetry  = async () => {
   }
   try {
     await mongoose.connect(MONGO_URL);
-    console.log(MONGO_URL);
     console.log('Connect to database successfully');
   } catch (error) {
     

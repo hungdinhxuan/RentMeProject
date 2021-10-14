@@ -14,7 +14,7 @@ import AnhBackGround from "assets/acct_creation_bg.jpg";
 import Facebook from "assets/facebook.png";
 import Google from "assets/google.png";
 import axiosClient from "axiosClient";
-import React, {  useState } from "react";
+import React, { useState } from "react";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import GoogleLogin from "react-google-login";
 import ReCAPTCHA from "react-google-recaptcha";
@@ -26,9 +26,7 @@ import * as yup from "yup";
 import { AsyncSignin } from "../AuthSlice";
 import "./SignIn.scss";
 import Loading from "components/Loading";
-import { socketAuth } from "socket";
-
-
+import socket from "socket";
 
 function Copyright() {
   return (
@@ -116,7 +114,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignIn(props) {
-
   const classes = useStyles();
 
   // Form
@@ -150,7 +147,6 @@ export default function SignIn(props) {
 
   // Capcha google
   const [capcha, setCapcha] = useState(true);
-  
 
   const onSubmit = async (data) => {
     dispatch(AsyncSignin(data));
@@ -172,8 +168,8 @@ export default function SignIn(props) {
   const { referrer } = props.location.state || { referrer: { pathname: "/" } };
 
   if (user || isAuthenticated) {
-    socketAuth();
-    
+    socket.emit("authenticate", localStorage.getItem("token"));
+
     history.push(referrer);
   }
 
@@ -214,6 +210,7 @@ export default function SignIn(props) {
       });
       // console.log(res);
       localStorage.setItem("token", res.token);
+      socket.emit('authenticate', res.token);
       history.push(referrer);
     } catch (error) {}
   };
@@ -226,6 +223,7 @@ export default function SignIn(props) {
       });
       // console.log(res.data);
       localStorage.setItem("token", res.token);
+      socket.emit('authenticate', res.token);
       history.push(referrer);
     } catch (error) {
       console.log(error);
