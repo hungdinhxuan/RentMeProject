@@ -239,7 +239,7 @@ router.post('/generate-sample-profile-player', async (req, res) => {
 
     users = await User.insertMany(users);
 
-    console.log('here');
+    
     const imgResult = await cloudinary.search
       .expression(
         'rentme-sample-data/*', // add your folder
@@ -274,8 +274,6 @@ router.post('/generate-sample-profile-player', async (req, res) => {
         userId: users[parseInt((index + 1) / 4)]._id,
       });
     }
-    
-    console.log(player_profiles);
 
     player_profiles = await PlayerProfiles.insertMany(player_profiles);
     res.send({
