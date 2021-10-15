@@ -1,19 +1,19 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import "./SidebarSetting.scss";
 import { NavLink, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "features/Auth/AuthSlice";
-import { socketContext,socketAuth } from "socket";
+import { socketContext } from "socket";
 
 export default function SidebarSetting() {
-  const socket = useContext(socketContext)
+  const socket = useContext(socketContext);
   const history = useHistory();
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const handleLogout = (e) => {
     e.preventDefault();
     dispatch(logout());
-    socket.emit('logout')
+    socket.emit("logout");
     localStorage.removeItem("token");
     history.push("/");
   };
