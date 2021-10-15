@@ -8,6 +8,7 @@ import React from "react";
 import "./WalletSetting.scss";
 import Withdraw from "assets/Withdraw.png";
 import { useEffect } from "react";
+import TableWallet from "./TableWallet";
 
 const { TabPane } = Tabs;
 export default function WalletSetting() {
@@ -83,7 +84,11 @@ export default function WalletSetting() {
                     </div>
 
                     <div className="items-right">
-                      <Form {...formItemLayout} form={form}  onFinish={handleSubmit}>
+                      <Form
+                        {...formItemLayout}
+                        form={form}
+                        onFinish={handleSubmit}
+                      >
                         <Form.Item
                           name="method"
                           rules={[
@@ -113,7 +118,7 @@ export default function WalletSetting() {
                             rules={[
                               {
                                 required: true,
-                                message: "Please input money",
+                                message: "Please input your money",
                               },
                             ]}
                           >
@@ -151,7 +156,11 @@ export default function WalletSetting() {
                     </div>
 
                     <div className="items-right">
-                      <Form {...formItemLayout} form={form} onFinish={handleSubmit}>
+                      <Form
+                        {...formItemLayout}
+                        form={form}
+                        onFinish={handleSubmit}
+                      >
                         <Form.Item
                           name="method"
                           rules={[
@@ -200,7 +209,7 @@ export default function WalletSetting() {
 
               {/* History */}
               <TabPane tab={<span>History</span>} key="3">
-                Tab 3
+                <TableWallet />
               </TabPane>
             </Tabs>
           </div>
