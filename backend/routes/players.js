@@ -1,9 +1,20 @@
 const express = require('express');
 const router = express.Router();
-const UserController = require('../controllers/users.controllers');
+const PlayerController = require('../controllers/players.controllers');
 const passport = require('passport');
 
-router.get('/', UserController.filterPlayers)
-router.get('/:id', UserController.getOnePlayer)
+router.get('/', 
+  /*  
+        #swagger.tags = ['Players']  
+       
+    */
+PlayerController.filterPlayers)
+router.get('/:id', 
+  /*  
+        #swagger.tags = ['Players']  
+        #swagger.parameters['id'] = { description: 'Player ID' }
+
+    */
+PlayerController.getOnePlayer)
 
 module.exports = router;
