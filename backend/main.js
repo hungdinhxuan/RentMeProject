@@ -10,6 +10,9 @@ const hpp = require('hpp');
 
 if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
   require('dotenv').config();
+  const swaggerUi = require('swagger-ui-express');
+  const swaggerDocument = require('./swagger-output.json');
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   // app.use(require('morgan')('combined'));
 }
 

@@ -20,6 +20,10 @@ const { girlName, longDesc, shortDesc } = require('../init-data');
 const Services = require('../models/services.models')
 
 router.get('/', async (req, res) => {
+   /*  
+        #swagger.tags = ['Dev']  
+       
+    */
   try {
     const player_profile = await PlayerProfiles.findOne({
       _id: req.query.id}
@@ -49,6 +53,10 @@ router.get('/', async (req, res) => {
 });
 
 router.post('/upload-images', (req, res) => {
+   /*  
+        #swagger.tags = ['Dev']  
+       
+    */
   upload(
     multer.mimeTypes.image,
     multer.multerError.image,
@@ -115,6 +123,10 @@ router.post('/upload-images', (req, res) => {
 });
 
 router.post('/upload-image', (req, res) => {
+   /*  
+        #swagger.tags = ['Dev']  
+       
+    */
   upload(
     multer.mimeTypes.image,
     multer.multerError.image,
@@ -176,9 +188,20 @@ router.post('/upload-image', (req, res) => {
   });
 });
 
-router.post('/upload-video', (req, res) => {});
+router.post('/upload-video', (req, res) => {
+   /*  
+        #swagger.tags = ['Dev']  
+       
+    */
+});
 
-router.post('/upload-audio', (req, res) => {});
+router.post('/upload-audio', (req, res) => {
+ /*  
+        #swagger.tags = ['Dev']  
+       
+    */
+
+});
 
 // nickname: { type: String, require: true },
 //     shortDesc: { type: String, default: '', maxLength: 255, required: true},
@@ -196,6 +219,10 @@ router.post('/upload-audio', (req, res) => {});
 //     },
 
 router.delete('/users', async (req, res) => {
+   /*  
+        #swagger.tags = ['Dev']  
+       
+    */
   try {
     await User.deleteMany()
     await PlayerProfiles.deleteMany()
@@ -206,6 +233,10 @@ router.delete('/users', async (req, res) => {
   }
 })
 router.post('/generate-sample-profile-player', async (req, res) => {
+   /*  
+        #swagger.tags = ['Dev']  
+       
+    */
   const max_results = 50 * 4;
   
   try {

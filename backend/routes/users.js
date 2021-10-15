@@ -11,6 +11,9 @@ const {
 } = require('../middleware/validate');
 
 router.get(
+  /*  
+        #swagger.tags = ['Users']  
+    */
   '/',
   // passport.authenticate('jwt', { session: false }),
   // AdminRole,
@@ -18,6 +21,12 @@ router.get(
 );
 
 router.post(
+  /*  
+        #swagger.tags = ['Users']  
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
   '/',
   passport.authenticate('jwt', { session: false }),
   AdminRole,
@@ -27,12 +36,26 @@ router.post(
 );
 
 router.get(
+  /*  
+        #swagger.tags = ['Users']  
+        #swagger.parameters['id'] = { description: 'User ID' }
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
   '/:id',
   passport.authenticate('jwt', { session: false }),
   UserController.getOne,
 );
 
 router.put(
+   /*  
+        #swagger.tags = ['Users']  
+        #swagger.parameters['id'] = { description: 'User ID' }
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
   '/:id',
   passport.authenticate('jwt', { session: false }),
   validateNewUserInfo(),
@@ -41,12 +64,26 @@ router.put(
 );
 
 router.patch(
+   /*  
+        #swagger.tags = ['Users']  
+        #swagger.parameters['id'] = { description: 'User ID' }
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
   '/:id/avatar',
   passport.authenticate('jwt', { session: false }),
   UserController.changeAvatar,
 );
 
 router.patch(
+   /*  
+        #swagger.tags = ['Users']  
+        #swagger.parameters['id'] = { description: 'User ID' }
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
   '/:id/password',
   passport.authenticate('jwt', { session: false }),
   validateNewPassword(),
@@ -55,6 +92,13 @@ router.patch(
 );
 
 router.delete(
+   /*  
+        #swagger.tags = ['Users']  
+        #swagger.parameters['id'] = { description: 'User ID' }
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
   '/:id/soft',
   passport.authenticate('jwt', { session: false }),
   AdminRole,

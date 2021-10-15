@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
-
 const Schema = mongoose.Schema;
 const mongoose_delete = require('mongoose-delete');
 const { ListCities } = require('../utils/config');
+
 
 const UsersSchema = new Schema(
   {
@@ -30,7 +30,7 @@ const UsersSchema = new Schema(
       required: true,
     },
     balance: { type: Number, default: 0 },
-    nickname: { type: String, default: '' },
+    nickname: { type: String, default: '', maxlength: 200},
     desc: { type: String, default: '', maxLength: 1000 },
     isOnline: { type: Boolean, default: false, required: true },
     birthDate: { type: Date, default: '2000-01-01', required: true },
@@ -59,5 +59,7 @@ UsersSchema.plugin(mongoose_delete, {
   deletedBy: true,
   deletedByType: String,
 });
+
+
 
 module.exports = mongoose.model('users', UsersSchema);

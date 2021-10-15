@@ -4,15 +4,22 @@ const validate = require('../middleware/validate');
 const verifyRecaptcha = require('../middleware/verifyReptcha');
 const authController = require('../controllers/auth.controllers');
 const passport = require('passport');
-const {loginLimiter, registerLimiter} = require('../middleware/limitRequests')
+const {
+  loginLimiter,
+  registerLimiter,
+} = require('../middleware/limitRequests');
 
 router.get('/', passport.authenticate('jwt', { session: false }), (req, res) =>
-  res.send(req.user),
+  /*
+        #swagger.tags = ['Auth']
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
+  res.status(200).send(req.user),
 );
 
-
-if(process.env.NODE_ENV === 'production') {
-
+if (process.env.NODE_ENV === 'production') {
   router.post(
     '/login',
     verifyRecaptcha,
@@ -21,8 +28,18 @@ if(process.env.NODE_ENV === 'production') {
     loginLimiter,
     authController.login,
   );
-}else{
+} else {
   router.post(
+    /*  
+        #swagger.tags = ['Auth']  
+        #swagger.parameters['obj'] = {
+                in: 'body',
+                description: 'Adding new user.',
+                schema: {
+                    username: 'rentme1',
+                    password: 'Str0ng!Passw0rd',
+                }
+        } */
     '/login',
     validate.validateLogin(),
     validate.handleValidationErrors,
@@ -30,10 +47,26 @@ if(process.env.NODE_ENV === 'production') {
   );
 }
 
-router.post('/google', authController.googleLogin);
-router.post('/facebook', authController.facebookLogin);
+router.post(
+  '/google',
+  /*  
+        #swagger.tags = ['Auth']  
+         */
+  authController.googleLogin,
+);
+router.post(
+  '/facebook',
+  /*  
+        #swagger.tags = ['Auth']  
+        */
+  authController.facebookLogin,
+);
 
 router.post(
+  /*  
+        #swagger.tags = ['Auth']  
+        
+   */
   '/register',
   validate.validateRegisterUser(),
   validate.handleValidationErrors,
@@ -41,7 +74,21 @@ router.post(
   authController.register,
 );
 
-router.patch('/forgot-password', authController.forgotPassword);
-router.get('/reset-password', authController.resetPassword);
+router.patch(
+  '/forgot-password',
+  /*  
+        #swagger.tags = ['Auth']  
+        
+*/
+  authController.forgotPassword,
+);
+router.get(
+  '/reset-password',
+  /*  
+        #swagger.tags = ['Auth']  
+        
+*/
+  authController.resetPassword,
+);
 
 module.exports = router;
