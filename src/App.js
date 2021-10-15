@@ -11,7 +11,7 @@ import {  React, Suspense } from "react";
 import MessengerCustomerChat from "react-messenger-customer-chat";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
-import { socket, socketContext } from "socket";
+
 AOS.init();
 
 function App() {
@@ -49,7 +49,6 @@ function App() {
     }
   };
   return (
-    <socketContext.Provider value={socket}>
       <Suspense fallback={<Loading />}>
         <BrowserRouter>
           <Switch>
@@ -64,7 +63,7 @@ function App() {
           />
         </BrowserRouter>
       </Suspense>
-    </socketContext.Provider>
+    
   );
 }
 export default App;
