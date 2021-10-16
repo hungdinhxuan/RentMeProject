@@ -4,10 +4,10 @@ import { toastError, toastSuccess } from "components/Toastify/toastHelper";
 
 const initialState = {
   fileAvatar: null,
+  money: null,
   loading: false,
   error: null,
 };
-
 
 export const AsyncUpdateAvatar = createAsyncThunk(
   "setting/updateAvatar",
@@ -52,7 +52,10 @@ export const AsyncUpdatePassword = createAsyncThunk(
   async (values, { rejectWithValue }) => {
     try {
       console.log(values);
-      const response = await axiosClient.patch(`users/${values.id}/password`, values);
+      const response = await axiosClient.patch(
+        `users/${values.id}/password`,
+        values
+      );
       return response;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -60,7 +63,20 @@ export const AsyncUpdatePassword = createAsyncThunk(
   }
 );
 
-
+export const AsyncTransactWallet = createAsyncThunk(
+  "setting/updatePassword",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axiosClient.post(
+        `users/${values.id}/transactions`,
+        values
+      );
+      return response;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
 
 const SettingSlice = createSlice({
   name: "setting",
@@ -74,7 +90,7 @@ const SettingSlice = createSlice({
       state.fileAvatar = action.payload;
       state.loading = false;
       state.error = null;
-      toastSuccess('Update avatar successful!');
+      toastSuccess("Update avatar successful!");
     },
     [AsyncUpdateAvatar.rejected]: (state, action) => {
       state.fileAvatar = null;
@@ -87,13 +103,12 @@ const SettingSlice = createSlice({
     [AsyncUpdateProfile.fulfilled]: (state, action) => {
       state.loading = false;
       state.error = null;
-      toastSuccess('Update profile successful!');
+      toastSuccess("Update profile successful!");
     },
     [AsyncUpdateProfile.rejected]: (state, action) => {
       state.fileAvatar = null;
       state.loading = false;
       state.error = action.payload;
-      
     },
     // Change password
     [AsyncUpdatePassword.pending]: (state) => {
@@ -102,13 +117,29 @@ const SettingSlice = createSlice({
     [AsyncUpdatePassword.fulfilled]: (state) => {
       state.loading = false;
       state.error = null;
-      toastSuccess('Change password successful!');
+      toastSuccess("Change password successful!");
     },
     [AsyncUpdatePassword.rejected]: (state, action) => {
       state.fileAvatar = null;
       state.loading = false;
       state.error = action.payload;
       toastError();
+    },
+    // Transact wallet
+    [AsyncTransactWallet.pending]: (state) => {
+      state.loading = true;
+    },
+    [AsyncTransactWallet.fulfilled]: (state, action) => {
+      state.money = action.payload;
+      state.loading = false;
+      state.error = null;
+      toastSuccess("Successful!");
+    },
+    [AsyncTransactWallet.rejected]: (state, action) => {
+      state.money = null;
+      state.loading = false;
+      state.error = action.payload;
+      toastError('Failed to deposit/withdraw');
     },
   },
 });

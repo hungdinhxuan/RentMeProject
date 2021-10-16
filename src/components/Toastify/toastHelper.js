@@ -12,8 +12,8 @@ export const toastSuccess = (text) => {
     });
 };
 
-export const toastError = () => {
-  toast.error('Update failed!', {
+export const toastError = (text) => {
+  toast.error(text || 'Update failed!', {
     position: "bottom-right",
     autoClose: 3000,
     hideProgressBar: false,
