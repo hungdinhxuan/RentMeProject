@@ -76,6 +76,19 @@ router.post(
   UserController.transact,
 );
 
+router.get(
+    /*  
+        #swagger.tags = ['Users']  
+        #swagger.parameters['id'] = { description: 'User ID' }
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
+  '/:id/transactions',
+  passport.authenticate('jwt', { session: false }),
+  UserController.getUserTransactions,
+);
+
 router.patch(
   /*  
         #swagger.tags = ['Users']  
