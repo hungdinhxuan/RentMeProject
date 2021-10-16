@@ -261,8 +261,9 @@ class UsersController {
       paymentMethod,
     }).save((err, transaction) => {
       if (err) {
-        if(err.message){ // error because new Error()
-          return res.status(500).json({success: false, message: err.message});
+        if (err.message) {
+          // error because new Error()
+          return res.status(500).json({ success: false, message: err.message });
         }
         return res.status(500).json(err);
       } else {
@@ -273,6 +274,18 @@ class UsersController {
         });
       }
     });
+  }
+  async getUserTransactions(req, res) {
+    try {
+      const transactions = await Transaction.find({ userId: req.user._id });
+      return res.status(200).json({ success: true, transactions });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message || 'Internal Server Error',
+        error,
+      });
+    }
   }
 }
 
