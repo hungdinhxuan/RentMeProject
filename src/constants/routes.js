@@ -7,6 +7,7 @@ import { lazy} from "react";
 
 
 const Home = lazy(() => import("features/Home/index.jsx"));
+
 const ForgotPassword = lazy(() =>
   import("features/Auth/ForgotPassword/index.jsx")
 );
