@@ -214,6 +214,29 @@
         ]
       }
     },
+    "/api/users/{id}/transactions": {
+      "post": {
+        "tags": [
+          "Users"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "User ID"
+          }
+        ],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
     "/api/users/{id}/avatar": {
       "patch": {
         "tags": [

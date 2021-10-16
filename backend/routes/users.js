@@ -7,7 +7,7 @@ const {
   validateRegisterUser,
   validateNewPassword,
   handleValidationErrors,
-  validateNewUserInfo
+  validateNewUserInfo,
 } = require('../middleware/validate');
 
 router.get(
@@ -49,7 +49,7 @@ router.get(
 );
 
 router.put(
-   /*  
+  /*  
         #swagger.tags = ['Users']  
         #swagger.parameters['id'] = { description: 'User ID' }
         #swagger.security = [{
@@ -63,8 +63,21 @@ router.put(
   UserController.changeUserInfo,
 );
 
+router.post(
+  /*  
+        #swagger.tags = ['Users']  
+        #swagger.parameters['id'] = { description: 'User ID' }
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
+  '/:id/transactions',
+  passport.authenticate('jwt', { session: false }),
+  UserController.transact,
+);
+
 router.patch(
-   /*  
+  /*  
         #swagger.tags = ['Users']  
         #swagger.parameters['id'] = { description: 'User ID' }
         #swagger.security = [{
@@ -77,7 +90,7 @@ router.patch(
 );
 
 router.patch(
-   /*  
+  /*  
         #swagger.tags = ['Users']  
         #swagger.parameters['id'] = { description: 'User ID' }
         #swagger.security = [{
@@ -92,7 +105,7 @@ router.patch(
 );
 
 router.delete(
-   /*  
+  /*  
         #swagger.tags = ['Users']  
         #swagger.parameters['id'] = { description: 'User ID' }
         #swagger.security = [{

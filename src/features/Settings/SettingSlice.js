@@ -60,6 +60,8 @@ export const AsyncUpdatePassword = createAsyncThunk(
   }
 );
 
+
+
 const SettingSlice = createSlice({
   name: "setting",
   initialState,

@@ -17,18 +17,31 @@ const TransactionsSchema = new Schema(
 );
 
 TransactionsSchema.pre('save', async function (next) {
+  const transact = this;
   try {
     const user = await User.findById(transact.userId);
     if (transact.type === 'withdraw') {
       if (user.balance < transact.money) {
-        next(new Error('Cannot withdraw with money greater than balance'));
+        next(new Error(`Cannot withdraw with money greater than balance (current balance: ${user.balance})`));
+        return;
+      }
+      if(transact.money <= 0){
+        next(new Error(`Cannot withdraw with zero or negative money`));
         return;
       }
       user.balance = user.balance - transact.money;
+      transact.money = -transact.money
       user.save();
-      console.log(user.balance, transact.money);
       return next();
     } else if (transact.type === 'deposit') {
+      if(transact.money > 1000){
+        next(new Error(`Maximum deposit is 1000$`));
+        return;
+      }
+      if(transact.money <= 0){
+        next(new Error(`Cannot deposit with zero or negative money`));
+        return;
+      }
       user.balance = user.balance + transact.money;
       user.save();
       next();

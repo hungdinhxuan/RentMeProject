@@ -1,15 +1,13 @@
 const User = require('../models/users.models');
-const Transaction = require('../models/transactions.models')
+const Transaction = require('../models/transactions.models');
 const argon2 = require('argon2');
 const { multer } = require('../utils/config');
 const multerLib = require('multer');
 const streamifier = require('streamifier');
 const { cloudinary, upload } = require('../services/multer');
 
-
 class UsersController {
   async getOne(req, res) {
-    
     const id = req.params.id;
     if (req.user._id == id) {
       return res.send(req.user);
@@ -254,15 +252,25 @@ class UsersController {
     }
   }
 
-  
-
   async transact(req, res) {
-    const { userId, money, type } = req.body;
-    new Transaction({ userId, money, type }).save((err, transaction) => {
+    const { money, type, paymentMethod } = req.body;
+    new Transaction({
+      userId: req.user._id,
+      money,
+      type,
+      paymentMethod,
+    }).save((err, transaction) => {
       if (err) {
+        if(err.message){ // error because new Error()
+          return res.status(500).json({success: false, message: err.message});
+        }
         return res.status(500).json(err);
       } else {
-        return res.status(201).json({ success: true, transaction });
+        return res.status(201).json({
+          success: true,
+          transaction,
+          message: `${type} successfully !!`,
+        });
       }
     });
   }
