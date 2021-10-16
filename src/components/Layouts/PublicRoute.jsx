@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { Route } from "react-router";
 
-
 export function PublicRoute({ component: Component, layout: Layout, ...rest }) {
   const dispatch = useDispatch();
 
