@@ -7,6 +7,7 @@ const initialState = {
   money: null,
   loading: false,
   error: null,
+  historyTransact: null,
 };
 
 export const AsyncUpdateAvatar = createAsyncThunk(
@@ -64,10 +65,25 @@ export const AsyncUpdatePassword = createAsyncThunk(
 );
 
 export const AsyncTransactWallet = createAsyncThunk(
-  "setting/updatePassword",
+  "setting/transactWallet",
   async (values, { rejectWithValue }) => {
     try {
       const response = await axiosClient.post(
+        `users/${values.id}/transactions`,
+        values
+      );
+      return response;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const AsyncTransactHistory = createAsyncThunk(
+  "setting/transactHistory",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axiosClient.get(
         `users/${values.id}/transactions`,
         values
       );
@@ -139,7 +155,21 @@ const SettingSlice = createSlice({
       state.money = null;
       state.loading = false;
       state.error = action.payload;
-      toastError('Failed to deposit/withdraw');
+      toastError("Failed to deposit/withdraw");
+    },
+    // Load History Transaction
+    [AsyncTransactHistory.pending]: (state) => {
+      state.loading = true;
+    },
+    [AsyncTransactHistory.fulfilled]: (state, action) => {
+      state.historyTransact = action.payload.transactions;
+      state.loading = false;
+      state.error = null;
+    },
+    [AsyncTransactHistory.rejected]: (state, action) => {
+      state.historyTransact = null;
+      state.loading = false;
+      state.error = action.payload;
     },
   },
 });
