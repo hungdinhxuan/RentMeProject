@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "axiosClient";
-import { ToastContainer, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 
 const handleNoti = (icon, title, text) => {
@@ -16,6 +16,7 @@ const initialState = {
   loading: false,
   error: null,
   isAuthenticated: false,
+  userSignup: null
 };
 
 export const AsyncLoadUser = createAsyncThunk(
@@ -36,7 +37,7 @@ export const AsyncSignin = createAsyncThunk(
     try {
       const response = await axiosClient.post("/auth/login", values);
       handleNoti("success", "Đăng nhập thành công", "");
-
+  
       if (response.success) {
         localStorage.setItem("token", response.token);
       }
@@ -65,7 +66,7 @@ export const AsyncForgotPassword = createAsyncThunk(
   "auth/forgot-password",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axiosClient.post("/auth/forgot-password", values);
+      const response = await axiosClient.patch("/auth/forgot-password", values);
       toast("Gửi email thành công", {
         position: "bottom-center",
         autoClose: 2000,
@@ -80,10 +81,46 @@ export const AsyncForgotPassword = createAsyncThunk(
   }
 );
 
+// file IMG
+export const AsyncUpdateAvatar = createAsyncThunk(
+  "setting/updateAvatar",
+  async (values, { rejectWithValue }) => {
+    try {
+      const formData = new FormData();
+      formData.append("image", values.file);
+      console.log(values);
+      const config = {
+        headers: {
+          "content-type": "multipart/form-data",
+        },
+      };
+
+      const response = await axiosClient.patch(
+        `/users/${values.id}/avatar`,
+        formData,
+        config
+      );
+      
+      return response;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+
+
+
 const AuthSlice = createSlice({
   name: "auth",
   initialState,
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      state.user = null;
+      state.loading = false;
+      state.isAuthenticated = false;
+    }
+  },
   extraReducers: {
     [AsyncLoadUser.pending]: (state) => {
       state.loading = true;
@@ -106,9 +143,11 @@ const AuthSlice = createSlice({
     [AsyncSignin.fulfilled]: (state) => {
       state.loading = false;
       state.error = null;
+      state.isAuthenticated = true;
     },
     [AsyncSignin.rejected]: (state, action) => {
       state.error = action.payload.message || "Đăng nhập không thành công";
+      state.loading = false;
       handleNoti("error", "Đăng nhập thất bại", `${state.error}`);
     },
 
@@ -116,7 +155,7 @@ const AuthSlice = createSlice({
       state.loading = true;
     },
     [AsyncSignup.fulfilled]: (state, action) => {
-      state.user = action.payload;
+      state.userSignup = action.payload;
       state.loading = false;
       state.error = null;
     },
@@ -143,5 +182,6 @@ const AuthSlice = createSlice({
 });
 
 const { reducer } = AuthSlice;
+export const {logout} = AuthSlice.actions;
 
 export default reducer;

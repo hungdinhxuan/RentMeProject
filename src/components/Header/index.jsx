@@ -1,49 +1,21 @@
 import { Avatar, Badge } from "antd";
-import { UserOutlined } from "@ant-design/icons";
 import Logo from "assets/player-dou-a.jpg";
 import React, { useEffect, useRef, useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { useSelector } from "react-redux";
-import { NavLink, useHistory, useLocation } from "react-router-dom";
+import {  useSelector } from "react-redux";
+import { NavLink, useHistory } from "react-router-dom";
 import Drawler from "./Drawler";
 import "./Header.scss";
-import Ha from 'assets/Ha.jpg'
 
 function Header() {
-  const { user, loading, error } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
 
-  const [header, setHeader] = useState(false);
   const [userHeader, setUserHeader] = useState(true);
   const [visible, setVisible] = useState(false);
   const [navScroll, setnavSroll] = useState("");
 
   const navRef = useRef();
   navRef.current = navScroll;
-  const location = useLocation();
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const show = window.scrollY > 10;
-      if (show) {
-        setnavSroll("header__scroll");
-      } else {
-        setnavSroll("");
-      }
-    };
-    document.addEventListener("scroll", handleScroll);
-
-    return () => {
-      document.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
-
-  
-  
-  useEffect(() => {
-    if (user) {
-      setUserHeader(false);
-    }
-  }, [user]);
 
   const handleShowDrawler = () => {
     setVisible(true);
@@ -62,6 +34,26 @@ function Header() {
   const handleSignUp = () => {
     history.push("/signup");
   };
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const show = window.scrollY > 10;
+      if (show) {
+        setnavSroll("header__scroll");
+      } else {
+        setnavSroll("");
+      }
+    };
+    document.addEventListener("scroll", handleScroll);
+
+    return () => {
+      document.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    user ? setUserHeader(false) : setUserHeader(true);
+  }, [user]);
 
   return (
     <header className={navScroll}>
@@ -146,12 +138,12 @@ function Header() {
                   <div className="message__badge">
                     <Badge count={1}>
                       <div className="message-icon">
-                        <i class="bi bi-envelope"></i>
+                        <i className="bi bi-envelope"></i>
                       </div>
                     </Badge>
                   </div>
                   <div className="user__icon" onClick={handleShowDrawler}>
-                    <Avatar size={28} src={Ha} />
+                    <Avatar size={28} src={user.avatar} />
                   </div>
                 </div>
               )}
@@ -159,7 +151,7 @@ function Header() {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <Drawler visible={visible} Close={handleClose} />
+      <Drawler visible={visible} Close={handleClose} avatar={user?.avatar} />
     </header>
   );
 }

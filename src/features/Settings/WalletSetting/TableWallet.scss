@@ -1,0 +1,28 @@
+.history {
+    padding: 10px;
+    table {
+        border: 1px solid #c4c3e6;
+    }
+    .ant-table thead > tr > th {
+        color: var(--text-footer) !important;
+        background: #21212c !important;
+        border: none !important;
+    }
+    .ant-table-tbody {
+        background: var(--background-card);
+    }
+    .ant-table-tbody > tr > td {
+        border-bottom: 1px solid var(--color-button);
+        color: var(--color-default);
+    }
+    // Unset background when hover
+    .ant-table-tbody > tr.ant-table-row-level-0:hover > td {
+        background: unset;
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .ant-table-tbody > tr > td {
+        padding: 10px !important;
+    }
+}

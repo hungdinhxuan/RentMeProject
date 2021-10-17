@@ -4,10 +4,12 @@ README.md
 .gitignore
 .eslintrc.js
 .prettierrc
-Makefile
-init-data
 test.js
 dist
 core
 .env
+test.env
+yarn-error.log
+swagger.js
+swagger-output.json
 yarn-error.log

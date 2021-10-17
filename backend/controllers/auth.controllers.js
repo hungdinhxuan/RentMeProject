@@ -1,4 +1,4 @@
-const User = require('../models/users');
+const User = require('../models/users.models');
 const argon2 = require('argon2');
 const path = require('path');
 const fs = require('fs');
@@ -13,7 +13,7 @@ class Auth {
     const { username, password } = req.body;
     try {
       const user = await User.findOne({ username });
-      console.log(username);
+      // console.log(username);
       if (!user) {
         return res.status(401).json({
           success: false,
@@ -34,7 +34,7 @@ class Auth {
         message: 'username or password is not correct',
       });
     } catch (error) {
-      console.log(error);
+      
       return res.status(500).json({
         success: false,
         message: 'Internal Server Error',
@@ -221,14 +221,14 @@ class Auth {
   async googleLogin(req, res, next) {
     const client = new OAuth2Client(`${process.env.GOOGLE_CLIENT_ID}`);
     const { tokenId } = req.body;
-    // console.log(req.body);
+    
     try {
       const response = await client.verifyIdToken({
         idToken: tokenId,
         audience: `${process.env.GOOGLE_CLIENT_ID}`,
       });
       const { sub, email_verified, name, email, picture } = response.payload;
-      console.log(response.payload);
+    
       if (email_verified) {
         let user = await User.findOne({ email });
         if (!user) {
@@ -238,6 +238,7 @@ class Auth {
             password: await argon2.hash(`${Math.random()}`),
             fullName: name,
             avatar: picture,
+            typeAccount: 'google'
           });
         }
         const token = jwt.sign({ sub: user._id }, privateKey, {
@@ -254,7 +255,7 @@ class Auth {
         .status(403)
         .json({ success: true, message: 'Email is not verified' });
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return res.status(500).json({
         success: false,
         message: 'Internal Server Error',
@@ -280,6 +281,7 @@ class Auth {
           password: await argon2.hash(`${Math.random()}`),
           fullName: name,
           avatar: picture.data.url,
+          typeAccount: 'facebook'
         });
       }
       const token = jwt.sign({ sub: user._id }, privateKey, {

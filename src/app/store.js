@@ -1,10 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import AuthReducer from "features/Auth/AuthSlice";
-import counterReducer from "../features/counter/counterSlice";
+import SettingReducer from 'features/Settings/SettingSlice';
+import PlayerReducer from 'features/RentPlayer/PlayerSlice'
 
 const rootReducer = {
-  counter: counterReducer,
   auth: AuthReducer,
+  setting: SettingReducer,
+  players: PlayerReducer
 };
 export const store = configureStore({
   reducer: rootReducer,

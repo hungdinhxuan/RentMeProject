@@ -1,13 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { useLocation } from "react-router";
 import { Avatar, Space, Rate } from "antd";
-import Ha from "assets/Ha.jpg";
 import OnlineStatus from "assets/onlineStatus.png";
+import OfflineStatus from "assets/offlineStatus.png";
 import PriceCard from "assets/priceCard.png";
 import "./CardList.scss";
 
-function CardList() {
+function CardList({ item }) {
   const handleAudio = (e) => {
     e.preventDefault();
     console.log("open audio");
@@ -15,32 +14,31 @@ function CardList() {
 
   return (
     <div className="card__details col-xl-3 col-md-6 col-12">
-      <Link to="/playerdou/details">
+      <Link to={`/playerdou/${item._id}`}>
         <div className="card__items">
           <div className="profile">
-            <Avatar shape="square" size={100} src={Ha} />
+            <Avatar shape="square" size={100} src={item.coverBackground} />
             <div className="status">
-              <Avatar shape="square" size={12} src={OnlineStatus} />
+              {item.user[0].isOnline ? (
+                <Avatar shape="square" size={12} src={OnlineStatus} />
+              ) : (
+                <Avatar shape="square" size={12} src={OfflineStatus} />
+              )}
             </div>
           </div>
           <div className="box">
             <div className="box__container">
-              <div className="title">Hello kitty</div>
+              <div className="title">{item.nickname}</div>
               <div className="intro">
                 <div className="games">
                   <Space size={4} style={{ flexWrap: "wrap" }}>
-                    <div className="categories">League of Legends</div>
-                    <div className="categories">Wild rift</div>
+                    {/* <div className="categories">League of Legends</div>
+                    <div className="categories">Wild rift</div> */}
+                    {item?.services.map((val, index) => <div className="categories" key={index}>{val.name}</div>)}
                   </Space>
                 </div>
                 <div className="desc">
-                  <div className="text">
-                    Hi! I'm Ha. If you're looking to get carried I might not be
-                    the right person. But, we can play and have fun. I usually
-                    play Heimerdinger. Well not usually, I always play Heimer.
-                    Yes? That's a smol potato clip of me playing league but yes.
-                    Also, if we lose, you get one game on the house. xD
-                  </div>
+                  <div className="text">{item.shortDesc}</div>
                 </div>
               </div>
               <div className="corner">
@@ -52,7 +50,7 @@ function CardList() {
                       <div></div>
                     </div>
                     <div className="shape--right">
-                      <i class="bi bi-play"></i>
+                      <i className="bi bi-play"></i>
                       <audio src=""></audio>
                     </div>
                   </div>
@@ -67,7 +65,7 @@ function CardList() {
                       <Avatar src={PriceCard} size={16} />
                     </div>
                     <div className="prices--details">
-                      <span>5</span>
+                      <span>{item.pricePerHour}</span>
                       <span>. 00</span>
                       <span>/USD</span>
                     </div>
