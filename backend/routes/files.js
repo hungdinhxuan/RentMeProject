@@ -1,10 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const FilesController = require('../controllers/files.controllers')
+const FilesController = require('../controllers/files.controllers');
 
-
-router.post('/users', FilesController.insertUsersWithExcel)
-router.get('/users', FilesController.downloadUsersExcel)
-
+router.post(
+  '/users',
+  /*  
+        #swagger.tags = ['Dev']  
+       
+    */
+  FilesController.insertUsersWithExcel,
+);
+router.get(
+  '/users',
+  /*  
+        #swagger.tags = ['Dev']  
+       
+    */
+  FilesController.downloadUsersExcel,
+);
 
 module.exports = router;
