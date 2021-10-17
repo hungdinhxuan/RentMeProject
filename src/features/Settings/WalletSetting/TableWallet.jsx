@@ -1,17 +1,19 @@
 import { Table, Tag } from "antd";
 import React from "react";
+import { useSelector } from "react-redux";
 import "./TableWallet.scss";
 
 export default function TableWallet() {
-  const a = new Date().toLocaleString();
+  const { historyTransact } = useSelector((state) => state.setting);
+  
 
   const columns = [
     {
-      title: "Index",
-      dataIndex: "index",
-      render: (text) => {
+      title: "Transaction ID",
+      dataIndex: "_id",
+      render: (text,index) => {
         return {
-          children: text,
+          children: index._id.slice(5,15),
           props: {
             "data-tip": "a very long text",
           },
@@ -20,125 +22,42 @@ export default function TableWallet() {
     },
     {
       title: "Amount",
-      dataIndex: "amount",
+      dataIndex: `money`,
       key: "amount",
     },
     {
       title: "Time",
-      dataIndex: "time",
-      render: (text) => {
-        return {
-          children: text,
-          props: {
-            "data-tip": "a very long text",
-          },
-        };
+      dataIndex: "createdAt",
+      render: (text, index) => {
+        return `${index.createdAt.slice(0, 10)} at ${index.createdAt.slice(
+          12,
+          16
+        )}`;
       },
     },
     {
       title: "Status",
-      key: "status",
-      dataIndex: "status",
-      render: (tags) => (
-        <>
-          {tags.map((tag) => {
-            let color = "geekblue" ;
-            if (tag === "withdraw") {
-              color = "volcano";
-            }
-            return (
-              <Tag color={color} key={tag}>
-                {tag.toUpperCase()}
-              </Tag>
-            );
-          })}
-        </>
-      ),
+      key: "type",
+      dataIndex: "type",
+      render: (text) => {
+        let color = "geekblue";
+        if (text === "deposit") {
+          color = "volcano";
+        }
+        return (
+          <Tag color={color} key={text}>
+            {text.toUpperCase()}
+          </Tag>
+        );
+      },
     },
   ];
 
-  const data = [
-    {
-      key: "1",
-      index: "John Brown",
-      amount: 32,
-      time: a,
-      status: ["add", "withdraw"],
-    },
-    {
-      key: "2",
-      index: "John Brown",
-      amount: 32,
-      time: a,
-      status: ["withdraw"],
-    },
-    {
-        key: "3",
-        index: "John Brown",
-        amount: 32,
-        time: a,
-        status: ["withdraw"],
-      },
-      {
-        key: "4",
-        index: "John Brown",
-        amount: 32,
-        time: a,
-        status: ["withdraw"],
-      },
-      {
-        key: "5",
-        index: "John Brown",
-        amount: 32,
-        time: a,
-        status: ["withdraw"],
-      },
-      {
-        key: "6",
-        index: "John Brown",
-        amount: 32,
-        time: a,
-        status: ["withdraw"],
-      },
-      {
-        key: "7",
-        index: "John Brown",
-        amount: 32,
-        time: a,
-        status: ["withdraw"],
-      },
-      {
-        key: "8",
-        index: "John Brown",
-        amount: 32,
-        time: a,
-        status: ["withdraw"],
-      },
-      {
-        key: "9",
-        index: "John Brown",
-        amount: 32,
-        time: a,
-        status: ["withdraw"],
-      },
-      {
-        key: "10",
-        index: "John Brown",
-        amount: 32,
-        time: a,
-        status: ["withdraw"],
-      },
-      {
-        key: "11",
-        index: "John Brown",
-        amount: 32,
-        time: a,
-        status: ["withdraw"],
-      },
-  ];
   return (
     <div className="history">
-      <Table columns={columns} dataSource={data} />
+      {historyTransact && (
+        <Table columns={columns} dataSource={historyTransact} />
+      )}
     </div>
   );
 }

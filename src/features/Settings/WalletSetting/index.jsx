@@ -6,11 +6,11 @@ import Money from "assets/Money.png";
 import Withdraw from "assets/Withdraw.png";
 import Zalopay from "assets/zalopay.png";
 import { AsyncLoadUser } from "features/Auth/AuthSlice";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { ToastContainer } from "react-toastify";
-import { AsyncTransactWallet } from "../SettingSlice";
+import { AsyncTransactHistory, AsyncTransactWallet } from "../SettingSlice";
 import TableWallet from "./TableWallet";
 import "./WalletSetting.scss";
 
@@ -71,7 +71,8 @@ export default function WalletSetting() {
 
   useEffect(() => {
     dispatch(AsyncLoadUser());
-  }, [money, dispatch]);
+    dispatch(AsyncTransactHistory({ id: user?._id }));
+  }, [money, dispatch, user?._id]);
 
   return (
     <div className="wallet__setting">
