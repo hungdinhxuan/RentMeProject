@@ -4,7 +4,7 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const fs = require('fs');
 const path = require('path');
 const publicKey = fs.readFileSync(path.join(__dirname, '../public.pem'));
-const User = require('../models/users');
+const User = require('../models/users.models');
 
 module.exports = () => {
   var opts = {};
@@ -16,7 +16,6 @@ module.exports = () => {
       try {
         const user = await User.findById(jwt_payload.sub).select('-password ');
         if (user) {
-          //   console.log(user);
           return done(null, user);
         } else {
           return done(null, false);

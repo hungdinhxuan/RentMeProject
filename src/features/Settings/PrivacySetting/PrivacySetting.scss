@@ -1,0 +1,81 @@
+.privacy__setting {
+    .ant-tabs-nav-wrap {
+        color: var(--text-footer);
+        font-size: 1.2rem;
+    }
+    .ant-tabs-top > .ant-tabs-nav::before {
+        border-bottom: none;
+    }
+    .ant-tabs-tab {
+        font-size: 18px;
+    }
+
+    .ant-tabs-tab.ant-tabs-tab-active {
+        .ant-tabs-tab-btn {
+            color: var(--text-hover);
+        }
+    }
+    .ant-tabs-tab-btn:active {
+        color: var(--text-hover);
+    }
+    .ant-tabs-tab:hover {
+        color: var(--text-hover);
+    }
+    .ant-tabs-ink-bar {
+        background: var(--text-hover);
+    }
+
+    .ant-tabs-content-holder {
+        color: var(--color-default);
+    }
+    // form {
+    .ant-form-item {
+        .ant-form-item-label {
+            label {
+                color: var(--text-footer);
+            }
+        }
+    }
+
+    // Input antd
+    .ant-form-item-control {
+        button {
+            width: 100%;
+            background-color: var(--button-hover1);
+            color: var(--color-default);
+            outline: none;
+            box-shadow: none;
+            border-color: var(--text-hover);
+            &:hover {
+                background-color: var(--text-hover);
+                border-color: var(--text-hover);
+            }
+        }
+        .ant-input-affix-wrapper {
+            border: 1px solid var(--button-hover);
+            color: var(--color-default);
+            background: var(--color-button);
+            &:hover {
+                border-color: var(--text-field);
+                background: none;
+            }
+            &:focus {
+                border-color: var(--text-field);
+                box-shadow: none;
+                outline: none;
+            }
+            input {
+                background: var(--color-button);
+                color: var(--color-default);
+                &:hover {
+                    background: none;
+                }
+            }
+            .ant-input-suffix {
+                .anticon {
+                    color: var(--text-footer);
+                }
+            }
+        }
+    }
+}

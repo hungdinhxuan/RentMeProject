@@ -8,7 +8,7 @@ const ServicesSchema = new Schema(
     desc: { type: 'string' , default: '', maxLength: 2000},
     picture: { type: 'string' , default: ''},
   },
-  { timestamps: true },
+  { timestamps: true, versionKey: false  },
 );
 
 ServicesSchema.plugin(mongoose_delete, {

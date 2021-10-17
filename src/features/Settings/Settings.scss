@@ -1,6 +1,11 @@
 .setting__main {
-    height: 100%;
+    height: 100vh;
     width: 100%;
-    padding: 100px 0 48px 0;
-
+    padding-top: 80px;
+    &.row {
+        margin: 0;
+    }
+    .setting__main--menu {
+        background: var(--color-button);
+    }
 }

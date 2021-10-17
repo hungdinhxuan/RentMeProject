@@ -1,14 +1,27 @@
-import React, { useState } from "react";
-import { useLocation, useRouteMatch } from "react-router";
+import React, { useEffect, useState } from "react";
+import { useHistory, useRouteMatch } from "react-router";
 import { Image, Rate, Avatar } from "antd";
 import "./Details.scss";
 import Ha from "assets/Ha.jpg";
+import { useDispatch, useSelector } from "react-redux";
+import { AsyncLoadPlayerDetails } from "../PlayerSlice";
+import "./Details.scss";
 
 export default function PlayerDetails() {
-  const location = useLocation();
-  // console.log(location);
-
+  const match = useRouteMatch();
+  const history = useHistory();
   const [visible, setVisible] = useState(false);
+
+  // console.log(location);
+  const { player, error } = useSelector((state) => state.players);
+
+  if (error) {
+    history.push("/error");
+  }
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(AsyncLoadPlayerDetails(match.params.cardId));
+  }, [dispatch, match.params.cardId]);
 
   return (
     <div className="details">
@@ -22,7 +35,7 @@ export default function PlayerDetails() {
                   width={260}
                   height={260}
                   style={{ objectFit: "cover", borderRadius: "10px" }}
-                  src="https://gw.alipayobjects.com/zos/antfincdn/LlvErxo8H9/photo-1503185912284-5271ff81b9a8.webp"
+                  src={player?.coverBackground}
                   onClick={() => setVisible(true)}
                 />
                 <div style={{ display: "none" }}>
@@ -32,14 +45,18 @@ export default function PlayerDetails() {
                       onVisibleChange: (vis) => setVisible(vis),
                     }}
                   >
-                    <Image src="https://gw.alipayobjects.com/zos/antfincdn/LlvErxo8H9/photo-1503185912284-5271ff81b9a8.webp" />
-                    <Image src="https://gw.alipayobjects.com/zos/antfincdn/cV16ZqzMjW/photo-1473091540282-9b846e7965e3.webp" />
-                    <Image src="https://gw.alipayobjects.com/zos/antfincdn/x43I27A55%26/photo-1438109491414-7198515b166b.webp" />
+                    {player?.albums.map((item, index) => (
+                      <Image key={index} src={item} />
+                    ))}
                   </Image.PreviewGroup>
                 </div>
               </div>
               <div className="rent-time">
-                <p>I'm ready</p>
+                {player?.user.isOnline ? (
+                  <p>I'm ready</p>
+                ) : (
+                  <p style={{ color: "red" }}>I'm offline</p>
+                )}
               </div>
               <div className="social-icon">
                 <a
@@ -57,7 +74,7 @@ export default function PlayerDetails() {
             </div>
 
             <div className="player__profile--right col-lg-3 order-lg-2">
-              <p className="price-profile">5.00 USD/G</p>
+              <p className="price-profile">{player?.pricePerHour}.00 USD/G</p>
               <div className="rate-profile">
                 <Rate
                   value={5}
@@ -75,7 +92,7 @@ export default function PlayerDetails() {
             <div className="player__profile--main col-lg-6 order-lg-1">
               <div className="name-profile">
                 <div className="center-item col-lg-12">
-                  <span className="name__player">SuYii 🐶</span>
+                  <span className="name__player">{player?.nickname} </span>
                   <button className="btn-follow-player">Follow Me</button>
                 </div>
               </div>
@@ -113,21 +130,9 @@ export default function PlayerDetails() {
                 <p>
                   Thuê đi, nhìn cái gì. Ơ kìa 🌸.Hát hò, LOL, ĐTCL, Aram,
                   Business Tour, Call mess.
+                  {player?.shortDesc}
                 </p>
-                <p>
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsa
-                  dolorem sunt fugit molestiae nostrum beatae numquam quis,
-                  repellendus accusamus reprehenderit natus, ad debitis mollitia
-                  facere laborum ex suscipit saepe doloribus rerum! Dignissimos
-                  obcaecati, incidunt aliquid odio sunt iusto fugiat nostrum
-                  dicta quas vitae minima accusamus nesciunt enim cumque nulla
-                  inventore ex dolor sequi at ipsa quia nam vero! Distinctio
-                  ullam cupiditate quam. Ducimus eius, porro ab alias non
-                  similique quam natus, labore molestiae iusto dolores
-                  laboriosam architecto est aspernatur aliquam quisquam? Odio
-                  vitae doloribus accusamus at vel autem quasi, dolore eaque
-                  commodi dolor, doloremque neque est rerum corrupti eos ex.
-                </p>
+                <p>{player?.longDesc}</p>
               </div>
               <div className="video-player-profile title-player-profile row">
                 <div className="col-12">
@@ -136,9 +141,9 @@ export default function PlayerDetails() {
                     height="350"
                     src="https://www.youtube.com/embed/1WLSitEnnCg"
                     title="YouTube video player"
-                    frameborder="0"
+                    frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
+                    allowFullScreen
                   ></iframe>
                 </div>
               </div>

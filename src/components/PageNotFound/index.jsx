@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import "./PageNotFound.scss";
 export default function PageNotFound() {
+  
   return (
     <div id="notfound">
       <div className="notfound">
