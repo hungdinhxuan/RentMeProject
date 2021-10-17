@@ -262,6 +262,7 @@ class PlayersControllers {
       }
     });
   }
+  
 }
 
 module.exports = new PlayersControllers();
