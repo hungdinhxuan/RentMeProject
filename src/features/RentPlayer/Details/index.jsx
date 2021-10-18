@@ -6,19 +6,46 @@ import Ha from "assets/Ha.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { AsyncLoadPlayerDetails } from "../PlayerSlice";
 import "./Details.scss";
+import { Modal, Button, Select } from "antd";
 
 export default function PlayerDetails() {
   const match = useRouteMatch();
   const history = useHistory();
   const [visible, setVisible] = useState(false);
+  const { Option } = Select;
 
   // console.log(location);
   const { player, error } = useSelector((state) => state.players);
+  const {user } = useSelector((state) => state.auth);
 
   if (error) {
     history.push("/error");
   }
   const dispatch = useDispatch();
+
+  // Modal rent player
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleSubmit = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleChangeHours = (values) => {
+    console.log(values);
+  };
+
+  const handleMoreAmount = () => {
+    history.push("/setting/wallet");
+  };
+
   useEffect(() => {
     dispatch(AsyncLoadPlayerDetails(match.params.cardId));
   }, [dispatch, match.params.cardId]);
@@ -84,7 +111,9 @@ export default function PlayerDetails() {
                 />
               </div>
               <div className="action-profile">
-                <button className="btn-style purple">Rent</button>
+                <button className="btn-style purple" onClick={showModal}>
+                  Rent
+                </button>
                 <button className="btn-style white">Donate</button>
                 <button className="btn-style white">Chat</button>
               </div>
@@ -181,6 +210,48 @@ export default function PlayerDetails() {
           </div>
         </div>
       </div>
+      <Modal
+        title="Rent Player"
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={[
+          <Button className="submit-form" key="Submit" onClick={handleSubmit}>
+            Submit
+          </Button>,
+          <Button key="Cancel" onClick={handleCancel}>
+            Cancel
+          </Button>,
+        ]}
+      >
+        <table>
+          <tr>
+            <td>Player: </td>
+            <td>{player?.nickname}</td>
+          </tr>
+          <tr>
+            <td>Rent Time: </td>
+            <td>
+              <Select defaultValue="1" onChange={handleChangeHours}>
+                <Option value="1">1h</Option>
+                <Option value="2">2h</Option>
+              </Select>
+            </td>
+          </tr>
+          <tr>
+            <td>Final price: </td>
+            <td>{player?.pricePerHour} usd/h</td>
+          </tr>
+          <tr>
+            <td>Current balance: </td>
+            <td>
+              <span className="total-amount">{user?.balance}usd</span>
+              <span className="more-amount" onClick={handleMoreAmount}>
+                +
+              </span>
+            </td>
+          </tr>
+        </table>
+      </Modal>
     </div>
   );
 }

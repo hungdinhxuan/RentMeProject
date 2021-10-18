@@ -1,5 +1,6 @@
 const PlayerProfiles = require('../models/player_profiles.models');
 
+const mongoose = require('mongoose');
 class PlayersControllers {
   async getAllPlayers(req, res) {
     const { page, limit } = req.query;
