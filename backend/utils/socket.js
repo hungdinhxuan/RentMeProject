@@ -9,12 +9,14 @@ module.exports = (app) => {
   } = require('./client');
   const { userJoin, getUser, userLeave, users } = require('./usersMeet');
   const passport = require('passport');
+
   const httpServer = createServer(app);
   const io = new Server(httpServer, { cors: '*', path: '/mysocket' });
   const jwt = require('jsonwebtoken');
   const fs = require('fs');
   const publicKey = fs.readFileSync('public.pem');
-
+  const Trading = require('../models/tradings.models');
+  const uuid = require('uuid');
   // const wrap = (middleware) => (socket, next) =>
   //   middleware(socket.request, {}, next);
   // io.use(wrap(passport.initialize()));
@@ -65,6 +67,39 @@ module.exports = (app) => {
       removeClientFromObj(socket.username, socket.id, socket.role, io);
       socket.auth = false;
     });
+
+    socket.on('rent player', async (data) => {
+      if (socket.auth) {
+        const { renterId, playerId, money, time } = data;
+        const player = await User.findById(playerId);
+        if (!player) {
+          socket.emit('rent player', 'this user does not exist');
+        } else if (player.status == 'busy') {
+          socket.emit('rent player', 'this player is rent by another user');
+        } else {
+          const trading = await Trading.create({
+            renterId,
+            playerId,
+            money,
+            time,
+            status: 'pending',
+          });
+        }
+      }
+    });
+
+    socket.on('rent player', async (data) => {
+      const {playerId, time, money} = data
+      try {
+        const player = await User.findById(playerId)
+        if(player){
+          
+        }
+      } catch (error) {
+        socket.emit("response renter", "Internal Server Error")
+      }
+    })
+    
   });
 
   // io.on('connection', async (socket) => {

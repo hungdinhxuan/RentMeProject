@@ -11,7 +11,7 @@ const TradingsSchema = new Schema(
       type: String,
       enum: ['aborted', 'pending', 'performing', 'done'],
     },
-    content: {type: String, maxlength: 500},
+    // content: {type: String, maxlength: 500},
     expireIn: {type: Number, default: 20},
     idRoom: {type: String, required: true, maxlength: 255},
     roomPassword: {type: String, required: true, maxlength: 255}

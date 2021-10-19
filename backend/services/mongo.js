@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const User = require('../models/users.models')
 const connectAndRetry  = async () => {
   let MONGO_URL;
   if (process.env.NODE_ENV === 'production') {
@@ -15,6 +15,9 @@ const connectAndRetry  = async () => {
   try {
     await mongoose.connect(MONGO_URL);
     console.log('Connect to database successfully');
+    // disconnect all users
+    await User.updateMany({}, {isOnline: false, status: 'free'})
+    console.log('All users disconnected');
   } catch (error) {
     
     console.log('Cannot connect to database - retrying in 5 sec ...');

@@ -24,6 +24,8 @@ async function addClientToObj(username, socketId, role, io) {
   console.log(userSocketIdObj);
 }
 
+
+
 async function removeClientFromObj(username, socketId, role, io, event = null) {
   if (userSocketIdObj.hasOwnProperty(username)) {
     let userSocketIdSet = userSocketIdObj[username];
@@ -70,6 +72,7 @@ async function removeClientFromObj(username, socketId, role, io, event = null) {
     }
   }
 }
+
 
 module.exports = {
   userSocketIdObj,
