@@ -1,8 +1,8 @@
-import { Avatar, Badge } from "antd";
+import { Avatar, Badge, Dropdown, Menu, Modal,Button } from "antd";
 import Logo from "assets/player-dou-a.jpg";
 import React, { useEffect, useRef, useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import {  useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import { NavLink, useHistory } from "react-router-dom";
 import Drawler from "./Drawler";
 import "./Header.scss";
@@ -34,6 +34,41 @@ function Header() {
   const handleSignUp = () => {
     history.push("/signup");
   };
+
+  // Dropdown message
+  const message = "Giao dịch thành công từ: ...";
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [idModal, setIdModal] = useState("1");
+
+  const handleSubmit = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+  const showModal = (id) => {
+    console.log(id.key);
+    setIsModalVisible(true);
+    setIdModal(id.key);
+  };
+  const menu = (
+    <Menu>
+      <Menu.Item key="1" onClick={showModal}>
+        <div>
+          {message.length > 28
+            ? "Bạn nhận được 1 lời mời giao dịch từ..."
+            : message}
+        </div>
+      </Menu.Item>
+      <Menu.Item key="2" onClick={showModal}>
+        <div>2nd menu item</div>
+      </Menu.Item>
+      <Menu.Item key="3" onClick={showModal}>
+        <div>3rd menu item</div>
+      </Menu.Item>
+    </Menu>
+  );
 
   useEffect(() => {
     const handleScroll = () => {
@@ -105,7 +140,7 @@ function Header() {
                   className="nav__item"
                   activeClassName="nav__item--active"
                 >
-                  BXH
+                  ChatRoom
                 </NavLink>
               </Nav.Link>
               <Nav.Link href="#">
@@ -136,12 +171,15 @@ function Header() {
               ) : (
                 <div className="message d-flex align-items-center">
                   <div className="message__badge">
-                    <Badge count={1}>
-                      <div className="message-icon">
-                        <i className="bi bi-envelope"></i>
-                      </div>
-                    </Badge>
+                    <Dropdown overlay={menu} placement="bottomLeft" arrow>
+                      <Badge count={1}>
+                        <div className="message-icon">
+                          <i className="bi bi-envelope"></i>
+                        </div>
+                      </Badge>
+                    </Dropdown>
                   </div>
+
                   <div className="user__icon" onClick={handleShowDrawler}>
                     <Avatar size={28} src={user.avatar} />
                   </div>
@@ -152,6 +190,28 @@ function Header() {
         </Container>
       </Navbar>
       <Drawler visible={visible} Close={handleClose} avatar={user?.avatar} />
+      <>
+        <Modal
+          title="Message Notification"
+          visible={isModalVisible && idModal === "1"}
+          
+          onCancel={handleCancel}
+          footer={[
+            <Button className="submit-form" key="Submit" onClick={handleSubmit}>
+            Submit
+          </Button>,
+            <Button key="Cancel" onClick={handleCancel}>
+              Cancel
+            </Button>,
+          ]}
+        >
+          <p>
+            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odio
+            laboriosam praesentium atque est eveniet porro modi eaque nemo ea
+            voluptate ad, error, illum, tempore consectetur.
+          </p>
+        </Modal>
+      </>
     </header>
   );
 }
