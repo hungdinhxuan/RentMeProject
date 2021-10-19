@@ -33,6 +33,7 @@ const UsersSchema = new Schema(
     nickname: { type: String, default: '', maxlength: 200},
     desc: { type: String, default: '', maxLength: 1000 },
     isOnline: { type: Boolean, default: false, required: true },
+    status: {type: String, enum: ['free', 'busy'], required: true, default: 'free'},
     birthDate: { type: Date, default: '2000-01-01', required: true },
     following: [{ type: mongoose.Types.ObjectId, ref: 'users' }],
     follower: [{ type: mongoose.Types.ObjectId, ref: 'users' }],
