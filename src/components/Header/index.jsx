@@ -5,7 +5,8 @@ import {
   removeMessage,
   getAllMessagesAsync,
   updateMessageAsync,
-  removeMessageAsync
+  removeMessageAsync,
+  updateMessage,
 } from "features/Settings/MessageSlice";
 import React, { useEffect, useRef, useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
@@ -36,10 +37,10 @@ function Header() {
 
   const handleDeleteMessage = () => {
     setIsModalVisible(false);
-    dispatch(removeMessageAsync(
-      { userId: user._id, messageId: messages[idModal]._id }
-    ))
-  }
+    dispatch(
+      removeMessageAsync({ userId: user._id, messageId: messages[idModal]._id })
+    );
+  };
 
   const history = useHistory();
 
@@ -57,7 +58,7 @@ function Header() {
   const [idModal, setIdModal] = useState("0");
 
   const handleSubmit = () => {
-    socket.emit("confirm rent",messages[idModal] )
+    socket.emit("confirm rent", messages[idModal]);
     setIsModalVisible(false);
   };
 
@@ -66,9 +67,9 @@ function Header() {
   };
 
   const handleDecline = () => {
-    socket.emit('decline rent', messages[idModal])
+    socket.emit("decline rent", messages[idModal]);
     setIsModalVisible(false);
-  }
+  };
   const showModal = (id) => {
     dispatch(
       updateMessageAsync({ userId: user?._id, messageId: messages[id.key]._id })
@@ -122,25 +123,31 @@ function Header() {
 
   useEffect(() => {
     const loadData = (data) => dispatch(addNewMessage(data));
-    const confirmRentMsg = (data) => dispatch(addNewMessage(data))
+    const confirmRentMsg = (data) =>
+      data.updatedMessage
+        ? dispatch(updateMessage(data.updatedMessage))
+        : dispatch(addNewMessage(data.message));
+
     const declineMsg = (data) => {
-      alert(data.message)
-      if(data.msgId){
-        return dispatch(removeMessage(data.msgId))
+      alert(data.message);
+      if (data.msgId) {
+        return dispatch(removeMessage(data.msgId));
       }
-    }
+    };
 
     socket.on("response renter", loadData);
     socket.on("response player", loadData);
-    socket.on("response confirm rent", confirmRentMsg)
-
-    socket.on("response decline rent", declineMsg)
+    socket.on("response confirm rent", confirmRentMsg);
+    socket.on("response error renter", (data) => {
+      alert(data);
+    });
+    socket.on("response decline rent", declineMsg);
     // Note: Clear socket when change state.
     return () => {
-      socket.off("response decline rent", declineMsg)
+      socket.off("response decline rent", declineMsg);
       socket.off("response renter", loadData);
       socket.off("response player", loadData);
-      socket.off("response confirm rent", confirmRentMsg)
+      socket.off("response confirm rent", confirmRentMsg);
     };
   }, [dispatch]);
 
@@ -270,8 +277,12 @@ function Header() {
                   </Button>,
                 ]
               : [
-                <Button key="Delete" onClick={handleDeleteMessage} style={{color: "red", borderColor: "red"}}>
-                    Delete 
+                  <Button
+                    key="Delete"
+                    onClick={handleDeleteMessage}
+                    style={{ color: "red", borderColor: "red" }}
+                  >
+                    Delete
                   </Button>,
                   <Button key="Cancel" onClick={handleCancel}>
                     Cancel
