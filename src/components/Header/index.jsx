@@ -1,18 +1,22 @@
-import { Avatar, Badge, Dropdown, Menu, Modal,Button } from "antd";
+import { Avatar, Badge, Dropdown, Menu, Modal, Button } from "antd";
 import Logo from "assets/player-dou-a.jpg";
 import React, { useEffect, useRef, useState } from "react";
+import { getAllMessagesAsync, addNewMessage} from "features/Settings/MessageSlice";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { NavLink, useHistory } from "react-router-dom";
 import Drawler from "./Drawler";
 import "./Header.scss";
+import socket from "socket";
 
 function Header() {
   const { user } = useSelector((state) => state.auth);
-
+  const dispatch = useDispatch();
+  const { messages } = useSelector((state) => state.messages);
   const [userHeader, setUserHeader] = useState(true);
   const [visible, setVisible] = useState(false);
   const [navScroll, setnavSroll] = useState("");
+  
 
   const navRef = useRef();
   navRef.current = navScroll;
@@ -36,9 +40,9 @@ function Header() {
   };
 
   // Dropdown message
-  const message = "Giao dịch thành công từ: ...";
+  // const message = "Giao dịch thành công từ: ...";
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [idModal, setIdModal] = useState("1");
+  const [idModal, setIdModal] = useState("0");
 
   const handleSubmit = () => {
     setIsModalVisible(false);
@@ -48,25 +52,17 @@ function Header() {
     setIsModalVisible(false);
   };
   const showModal = (id) => {
-    console.log(id.key);
+    // console.log(id.);
     setIsModalVisible(true);
     setIdModal(id.key);
   };
   const menu = (
     <Menu>
-      <Menu.Item key="1" onClick={showModal}>
-        <div>
-          {message.length > 28
-            ? "Bạn nhận được 1 lời mời giao dịch từ..."
-            : message}
-        </div>
-      </Menu.Item>
-      <Menu.Item key="2" onClick={showModal}>
-        <div>2nd menu item</div>
-      </Menu.Item>
-      <Menu.Item key="3" onClick={showModal}>
-        <div>3rd menu item</div>
-      </Menu.Item>
+      {messages?.map((msg, index) => (
+        <Menu.Item key={index} onClick={showModal}>
+          <div>{msg?.content?.length >= 60 ? `${msg?.content?.slice(0, 40)}...`: msg?.content}</div>
+        </Menu.Item>
+      ))}
     </Menu>
   );
 
@@ -87,8 +83,21 @@ function Header() {
   }, []);
 
   useEffect(() => {
+    dispatch(getAllMessagesAsync(user?._id));
+    console.log(user);
     user ? setUserHeader(false) : setUserHeader(true);
-  }, [user]);
+  }, [dispatch, user]);
+
+  useEffect(() => {
+    socket.on("response renter", (data) => {
+      console.log("Renter data: ", data);
+      dispatch(addNewMessage(data))
+    })
+    socket.on("response player", (data) => {
+      console.log("Player data: ", data);
+      dispatch(addNewMessage(data))
+    })
+  }, [dispatch])
 
   return (
     <header className={navScroll}>
@@ -193,22 +202,19 @@ function Header() {
       <>
         <Modal
           title="Message Notification"
-          visible={isModalVisible && idModal === "1"}
-          
+          visible={isModalVisible }
           onCancel={handleCancel}
           footer={[
             <Button className="submit-form" key="Submit" onClick={handleSubmit}>
-            Submit
-          </Button>,
+              Submit
+            </Button>,
             <Button key="Cancel" onClick={handleCancel}>
               Cancel
             </Button>,
           ]}
         >
           <p>
-            Lorem ipsum dolor sit, amet consectetur adipisicing elit. Odio
-            laboriosam praesentium atque est eveniet porro modi eaque nemo ea
-            voluptate ad, error, illum, tempore consectetur.
+            {messages[idModal]?.content}
           </p>
         </Modal>
       </>

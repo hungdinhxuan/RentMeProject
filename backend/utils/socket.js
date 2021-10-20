@@ -9,7 +9,7 @@ module.exports = (app) => {
   } = require('./client');
   const { userJoin, getUser, userLeave, users } = require('./usersMeet');
   const passport = require('passport');
-
+  const Message = require('../models/messages.models');
   const httpServer = createServer(app);
   const io = new Server(httpServer, { cors: '*', path: '/mysocket' });
   const jwt = require('jsonwebtoken');
@@ -71,35 +71,60 @@ module.exports = (app) => {
     socket.on('rent player', async (data) => {
       if (socket.auth) {
         const { renterId, playerId, money, time } = data;
+        
         const player = await User.findById(playerId);
         if (!player) {
-          socket.emit('rent player', 'this user does not exist');
-        } else if (player.status == 'busy') {
-          socket.emit('rent player', 'this player is rent by another user');
-        } else {
-          const trading = await Trading.create({
-            renterId,
-            playerId,
-            money,
-            time,
-            status: 'pending',
-          });
+          socket.emit('response renter', 'this user does not exist');
+        } else if (player.status == 'busy' ) {
+          socket.emit('response renter', 'this player is rent by another user');
+        } else if(!player.isOnline){
+          socket.emit('response renter', 'this player is offline');
+        }
+         else {
+          try {
+            const trading = await Trading.create({
+              renterId,
+              playerId,
+              money,
+              time,
+              status: 'pending',
+              idRoom: uuid.v4().toString(),
+              roomPassword: uuid.v4().toString(),
+            });
+            const renter = await User.findOne({ username: socket.username });
+            const player = await User.findById(playerId);
+            const system = await User.findOne({ username: 'system' });
+            const msgForRenter = await Message.create({
+              senderId: system._id,
+              receiverId: renterId,
+              content: `You sent a request to ${player.fullName} successful !!`,
+            });
+            const msgForPlayer = await Message.create({
+              senderId: system._id,
+              receiverId: playerId,
+              content: `${renter.fullName} wish to rent you within ${time} hours with ${money}$. Current trading ID: ${trading._id}`,
+            });
+
+            // response to all current socket of renter
+            if(userSocketIdObj[socket.username]){
+
+              for (let socketId of userSocketIdObj[socket.username]) {
+                io.to(socketId).emit('response renter', msgForRenter);
+              }
+            }
+            // response to all current socket of player
+            if(userSocketIdObj[player.username]){
+
+              for (let socketId of userSocketIdObj[player.username]) {
+                io.to(socketId).emit('response player', msgForPlayer);
+              }
+            }
+          } catch (error) {
+            console.log(error);
+          }
         }
       }
     });
-
-    socket.on('rent player', async (data) => {
-      const {playerId, time, money} = data
-      try {
-        const player = await User.findById(playerId)
-        if(player){
-          
-        }
-      } catch (error) {
-        socket.emit("response renter", "Internal Server Error")
-      }
-    })
-    
   });
 
   // io.on('connection', async (socket) => {
