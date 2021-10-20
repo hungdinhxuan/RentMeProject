@@ -7,16 +7,24 @@ import { useDispatch, useSelector } from "react-redux";
 import { AsyncLoadPlayerDetails } from "../PlayerSlice";
 import "./Details.scss";
 import { Modal, Button, Select } from "antd";
+import socket from "socket";
 
 export default function PlayerDetails() {
   const match = useRouteMatch();
   const history = useHistory();
   const [visible, setVisible] = useState(false);
+
   const { Option } = Select;
 
-  // console.log(location);
   const { player, error } = useSelector((state) => state.players);
-  const {user } = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
+  const [moneyState, setMoneyState] = useState("");
+  const [formRentPlayer, setformRentPlayer] = useState({
+    renterId: "",
+    playerId: "",
+    money: "",
+    time: 1,
+  });
 
   if (error) {
     history.push("/error");
@@ -31,6 +39,31 @@ export default function PlayerDetails() {
   };
 
   const handleSubmit = () => {
+    if (formRentPlayer.money && formRentPlayer.time) {
+      console.log({
+        ...formRentPlayer,
+        renterId: user._id,
+        playerId: player.user._id,
+      });
+      socket.emit("rent player", {
+        ...formRentPlayer,
+        renterId: user._id,
+        playerId: player.user._id,
+      });
+    } else {
+      console.log({
+        time: 1,
+        money: player.pricePerHour,
+        renterId: user._id,
+        playerId: player.user._id,
+      });
+      socket.emit("rent player", {
+        time: 1,
+        money: player.pricePerHour,
+        renterId: user._id,
+        playerId: player.user._id,
+      })
+    }
     setIsModalVisible(false);
   };
 
@@ -39,7 +72,12 @@ export default function PlayerDetails() {
   };
 
   const handleChangeHours = (values) => {
-    console.log(values);
+    setMoneyState(player?.pricePerHour * values);
+    setformRentPlayer({
+      ...formRentPlayer,
+      time: values,
+      money: player?.pricePerHour * values,
+    });
   };
 
   const handleMoreAmount = () => {
@@ -232,14 +270,17 @@ export default function PlayerDetails() {
             <td>Rent Time: </td>
             <td>
               <Select defaultValue="1" onChange={handleChangeHours}>
-                <Option value="1">1h</Option>
-                <Option value="2">2h</Option>
+               
+                {[...Array(25)].map((x, i) =>
+                  i ? <Option value={i} key={i}>{i}h</Option> : ""
+                )}
+                
               </Select>
             </td>
           </tr>
           <tr>
             <td>Final price: </td>
-            <td>{player?.pricePerHour} usd/h</td>
+            <td>{moneyState || player?.pricePerHour} usd</td>
           </tr>
           <tr>
             <td>Current balance: </td>
