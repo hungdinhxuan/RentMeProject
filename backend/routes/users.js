@@ -160,4 +160,10 @@ router.patch(
   messagesControlllers.readMsg,
 );
 
+router.delete(
+ '/:id/messages/:msgId' ,
+ passport.authenticate('jwt', { session: false }),
+ messagesControlllers.deleteById,
+)
+
 module.exports = router;

@@ -22,8 +22,8 @@ body {
     "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  user-select: none;
-  -webkit-user-select: none;
+  /* user-select: none;
+  -webkit-user-select: none; */
   -webkit-touch-callout: none;
 }
 
