@@ -71,7 +71,7 @@ module.exports = (app) => {
     socket.on('rent player', async (data) => {
       if (socket.auth) {
         const { renterId, playerId, money, time } = data;
-        
+        console.log(socket.id);
         const player = await User.findById(playerId);
         if (!player) {
           socket.emit('response renter', 'this user does not exist');

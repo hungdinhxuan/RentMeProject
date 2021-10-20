@@ -7,6 +7,9 @@ const initialState = {
 export const getAllMessagesAsync = createAsyncThunk("messages/getAll", async (userId) => {
   return await axiosClient.get(`/users/${userId}/messages`)
 });
+export const updateMessageAsync = createAsyncThunk("messages/updateMessage", async (values) => {
+  return await axiosClient.patch(`/users/${values.userId}/messages/${values.messageId}`)
+});
 
 
 const MessageSlice = createSlice({
@@ -23,7 +26,15 @@ const MessageSlice = createSlice({
   extraReducers: (builder) => {
     builder.addCase(getAllMessagesAsync.fulfilled, (state, action) => {
       state.messages = action.payload;
-    });
+    })
+    .addCase(updateMessageAsync.fulfilled, (state, action) => {
+      state.messages = state.messages.map((mess) => {
+        if(mess._id === action.payload.newMessage._id){
+            mess.status = "read";
+        }
+        return mess;
+      });
+    })
   },
 });
 

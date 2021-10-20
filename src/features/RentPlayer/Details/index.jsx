@@ -39,30 +39,28 @@ export default function PlayerDetails() {
   };
 
   const handleSubmit = () => {
-    if (formRentPlayer.money && formRentPlayer.time) {
-      console.log({
-        ...formRentPlayer,
-        renterId: user._id,
-        playerId: player.user._id,
-      });
-      socket.emit("rent player", {
-        ...formRentPlayer,
-        renterId: user._id,
-        playerId: player.user._id,
-      });
+    if (user.balance > (moneyState || player?.pricePerHour)) {
+      if (formRentPlayer.money && formRentPlayer.time) {
+        console.log({
+          ...formRentPlayer,
+          renterId: user._id,
+          playerId: player.user._id,
+        });
+        socket.emit("rent player", {
+          ...formRentPlayer,
+          renterId: user._id,
+          playerId: player.user._id,
+        });
+      } else {
+        socket.emit("rent player", {
+          time: 1,
+          money: player.pricePerHour,
+          renterId: user._id,
+          playerId: player.user._id,
+        });
+      }
     } else {
-      console.log({
-        time: 1,
-        money: player.pricePerHour,
-        renterId: user._id,
-        playerId: player.user._id,
-      });
-      socket.emit("rent player", {
-        time: 1,
-        money: player.pricePerHour,
-        renterId: user._id,
-        playerId: player.user._id,
-      })
+      alert("Not enough money");
     }
     setIsModalVisible(false);
   };
@@ -129,7 +127,7 @@ export default function PlayerDetails() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <i class="bi bi-facebook"></i>
+                  <i className="bi bi-facebook"></i>
                 </a>
               </div>
               <div className="member-since">
@@ -270,11 +268,15 @@ export default function PlayerDetails() {
             <td>Rent Time: </td>
             <td>
               <Select defaultValue="1" onChange={handleChangeHours}>
-               
                 {[...Array(25)].map((x, i) =>
-                  i ? <Option value={i} key={i}>{i}h</Option> : ""
+                  i ? (
+                    <Option value={i} key={i}>
+                      {i}h
+                    </Option>
+                  ) : (
+                    ""
+                  )
                 )}
-                
               </Select>
             </td>
           </tr>
