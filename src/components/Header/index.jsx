@@ -1,13 +1,17 @@
-import { Avatar, Badge, Dropdown, Menu, Modal, Button } from "antd";
+import { Avatar, Badge, Button, Dropdown, Menu, Modal } from "antd";
 import Logo from "assets/player-dou-a.jpg";
+import {
+  addNewMessage,
+  getAllMessagesAsync,
+  updateMessageAsync,
+} from "features/Settings/MessageSlice";
 import React, { useEffect, useRef, useState } from "react";
-import { getAllMessagesAsync, addNewMessage} from "features/Settings/MessageSlice";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useHistory } from "react-router-dom";
+import socket from "socket";
 import Drawler from "./Drawler";
 import "./Header.scss";
-import socket from "socket";
 
 function Header() {
   const { user } = useSelector((state) => state.auth);
@@ -16,7 +20,6 @@ function Header() {
   const [userHeader, setUserHeader] = useState(true);
   const [visible, setVisible] = useState(false);
   const [navScroll, setnavSroll] = useState("");
-  
 
   const navRef = useRef();
   navRef.current = navScroll;
@@ -52,7 +55,9 @@ function Header() {
     setIsModalVisible(false);
   };
   const showModal = (id) => {
-    // console.log(id.);
+    dispatch(
+      updateMessageAsync({ userId: user?._id, messageId: messages[id.key]._id })
+    );
     setIsModalVisible(true);
     setIdModal(id.key);
   };
@@ -60,12 +65,25 @@ function Header() {
     <Menu>
       {messages?.map((msg, index) => (
         <Menu.Item key={index} onClick={showModal}>
-          <div>{msg?.content?.length >= 60 ? `${msg?.content?.slice(0, 40)}...`: msg?.content}</div>
+          <div
+            style={
+              msg.status === "unread"
+                ? { fontWeight: "600" }
+                : { fontWeight: "normal" }
+            }
+          >
+            {msg?.content?.length >= 60
+              ? `${msg?.content?.slice(0, 40)}...`
+              : msg?.content}
+          </div>
         </Menu.Item>
       ))}
     </Menu>
   );
 
+  // Check message.
+
+  // Life-cycle
   useEffect(() => {
     const handleScroll = () => {
       const show = window.scrollY > 10;
@@ -84,20 +102,19 @@ function Header() {
 
   useEffect(() => {
     dispatch(getAllMessagesAsync(user?._id));
-    console.log(user);
     user ? setUserHeader(false) : setUserHeader(true);
   }, [dispatch, user]);
 
   useEffect(() => {
-    socket.on("response renter", (data) => {
-      console.log("Renter data: ", data);
-      dispatch(addNewMessage(data))
-    })
-    socket.on("response player", (data) => {
-      console.log("Player data: ", data);
-      dispatch(addNewMessage(data))
-    })
-  }, [dispatch])
+    const loadData = (data) => dispatch(addNewMessage(data));
+    socket.on("response renter", loadData);
+    socket.on("response player", loadData);
+    // Note: Clear socket when change state.
+    return () => {
+      socket.off("response renter", loadData);
+      socket.off("response player", loadData);
+    };
+  }, [dispatch]);
 
   return (
     <header className={navScroll}>
@@ -181,7 +198,13 @@ function Header() {
                 <div className="message d-flex align-items-center">
                   <div className="message__badge">
                     <Dropdown overlay={menu} placement="bottomLeft" arrow>
-                      <Badge count={1}>
+                      <Badge
+                        count={
+                          messages.filter(
+                            (mess, index) => mess.status === "unread"
+                          ).length
+                        }
+                      >
                         <div className="message-icon">
                           <i className="bi bi-envelope"></i>
                         </div>
@@ -202,20 +225,30 @@ function Header() {
       <>
         <Modal
           title="Message Notification"
-          visible={isModalVisible }
+          visible={isModalVisible}
           onCancel={handleCancel}
-          footer={[
-            <Button className="submit-form" key="Submit" onClick={handleSubmit}>
-              Submit
-            </Button>,
-            <Button key="Cancel" onClick={handleCancel}>
-              Cancel
-            </Button>,
-          ]}
+          footer={
+            messages[idModal]?.content.includes("Current trading ID:")
+              ? [
+                  <Button
+                    className="submit-form"
+                    key="Submit"
+                    onClick={handleSubmit}
+                  >
+                    Confirm
+                  </Button>,
+                  <Button key="Cancel" onClick={handleCancel}>
+                    Decline
+                  </Button>,
+                ]
+              : [
+                  <Button key="Cancel" onClick={handleCancel}>
+                    Cancel
+                  </Button>,
+                ]
+          }
         >
-          <p>
-            {messages[idModal]?.content}
-          </p>
+          <p>{messages[idModal]?.content}</p>
         </Modal>
       </>
     </header>

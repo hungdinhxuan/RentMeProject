@@ -66,8 +66,8 @@ class MessagesController {
   async readMsg(req, res) {
     try {
       const { msgId } = req.params;
-      await Messages.findByIdAndUpdate(msgId, { status: 'read' });
-      return res.status(200).json({ success: true, message: 'ok' });
+      const newMessage = await Messages.findByIdAndUpdate(msgId, { status: 'read' });
+      return res.status(200).json({ success: true, message: 'ok',newMessage });
     } catch (error) {
       return res.status(500).json({
         success: false,

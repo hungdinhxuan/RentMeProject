@@ -30,7 +30,7 @@ function MainRentPlayer() {
     socket.on("refreshPlayerList", () => {
       dispatch(AsyncLoadPlayer());
     });  
-  }, [dispatch])
+  }, [])
 
   return (
     <div className="main__layout">
