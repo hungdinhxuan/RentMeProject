@@ -43,6 +43,14 @@ const MessageSlice = createSlice({
         (msg) => msg._id !== action.payload
       );
     },
+    updateMessage(state, action){
+      state.messages = state.messages.map((mess) => {
+        if (mess._id === action.payload._id) {
+          mess = action.payload;
+        }
+        return mess;
+      });
+    }
   },
   extraReducers: (builder) => {
     builder
@@ -65,5 +73,5 @@ const MessageSlice = createSlice({
 });
 
 const { reducer } = MessageSlice;
-export const { addNewMessage, removeMessage } =MessageSlice.actions;
+export const { addNewMessage, removeMessage, updateMessage } =MessageSlice.actions;
 export default reducer;
