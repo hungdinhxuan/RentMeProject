@@ -64,10 +64,12 @@ const MessageSlice = createSlice({
           }
           return mess;
         });
+
       }).addCase(removeMessageAsync.fulfilled, (state, action) => {
         state.messages = state.messages.filter(
           (msg) => msg._id !== action.payload.msgId
         );
+        
       }) 
   },
 });
