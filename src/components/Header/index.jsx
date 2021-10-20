@@ -162,7 +162,7 @@ function Header() {
               </Nav.Link>
               <Nav.Link href="#">
                 <NavLink
-                  to="/bxh"
+                  to="/chat-room"
                   className="nav__item"
                   activeClassName="nav__item--active"
                 >
