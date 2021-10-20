@@ -16,7 +16,7 @@ module.exports = (app) => {
   const fs = require('fs');
   const publicKey = fs.readFileSync('public.pem');
   const Trading = require('../models/tradings.models');
-  const uuid = require('uuid');
+  
   // const wrap = (middleware) => (socket, next) =>
   //   middleware(socket.request, {}, next);
   // io.use(wrap(passport.initialize()));
@@ -75,12 +75,11 @@ module.exports = (app) => {
         const player = await User.findById(playerId);
         if (!player) {
           socket.emit('response renter', 'this user does not exist');
-        } else if (player.status == 'busy' ) {
+        } else if (player.status == 'busy') {
           socket.emit('response renter', 'this player is rent by another user');
-        } else if(!player.isOnline){
+        } else if (!player.isOnline) {
           socket.emit('response renter', 'this player is offline');
-        }
-         else {
+        } else {
           try {
             const trading = await Trading.create({
               renterId,
@@ -88,8 +87,9 @@ module.exports = (app) => {
               money,
               time,
               status: 'pending',
-              idRoom: uuid.v4().toString(),
-              roomPassword: uuid.v4().toString(),
+              // Tao strong password with 8 characters
+              roomId: Math.random().toString(36).slice(-8),
+              roomPassword: Math.random().toString(36).slice(-8),
             });
             const renter = await User.findOne({ username: socket.username });
             const player = await User.findById(playerId);
@@ -102,19 +102,17 @@ module.exports = (app) => {
             const msgForPlayer = await Message.create({
               senderId: system._id,
               receiverId: playerId,
-              content: `${renter.fullName} wish to rent you within ${time} hours with ${money}$. Current trading ID: ${trading._id}`,
+              content: `${renter.fullName}(${renter._id}) wish to rent you within ${time} hours with ${money}$. Current trading ID: ${trading._id}`,
             });
 
             // response to all current socket of renter
-            if(userSocketIdObj[socket.username]){
-
+            if (userSocketIdObj[socket.username]) {
               for (let socketId of userSocketIdObj[socket.username]) {
                 io.to(socketId).emit('response renter', msgForRenter);
               }
             }
             // response to all current socket of player
-            if(userSocketIdObj[player.username]){
-
+            if (userSocketIdObj[player.username]) {
               for (let socketId of userSocketIdObj[player.username]) {
                 io.to(socketId).emit('response player', msgForPlayer);
               }
@@ -125,7 +123,80 @@ module.exports = (app) => {
         }
       }
     });
+    socket.on('decline rent', async (data) => {
+      if (socket.auth) {
+        const {  content, _id, receiverId } = data; // data is message from system sent to player
+        try {
+          const sender = await User.findById(content.match(/\(([^)]+)\)/)[1]) // get id value in round bracket
+          const player = await User.findById(receiverId)
+          await Message.findByIdAndDelete(_id);
+
+          if (userSocketIdObj[socket.username]) {
+            // Tra ve cho player
+
+            for (let socketId of userSocketIdObj[socket.username]) {
+              io.to(socketId).emit('response decline rent', {
+                message: `You declined request from ${sender.fullName}`,
+                msgId: _id,
+              });
+            }
+          }
+          
+          
+          if (userSocketIdObj[sender.username]) {
+            // Tra ve cho renter
+            
+            for (let socketId of userSocketIdObj[sender.username]) {
+              io.to(socketId).emit('response decline rent', {
+                message: `Your request are declined by ${player.fullName}`,
+              });
+            }
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    });
+    socket.on('confirm rent', async (data) => {
+      if(socket.auth){
+        const {content, receiverId} = data
+        try {
+          const tradingId = content.split(" Current trading ID: ")[1]
+          const trading = await Trading.findById(tradingId)
+          const renter = await User.findById(trading.renterId)
+          const system = await User.findOne({username: "system"})
+          if(trading){
+            const msgForRenter = await Message.create({
+              senderId: system._id,
+              receiverId: renter._id,
+              content: `Trading ${tradingId} accepted by ${socket.username}.\n Room ID: ${trading.roomId}, Room Password: ${trading.roomPassword}`,
+            });
+            const msgForPlayer = await Message.create({
+              senderId: system._id,
+              receiverId: receiverId,
+              content: `You are accepted ${tradingId} with ${renter.username}.\n Room ID: ${trading.roomId}, Room Password: ${trading.roomPassword}`,
+            });
+            if (userSocketIdObj[socket.username]) {
+              for (let socketId of userSocketIdObj[socket.username]) {
+                io.to(socketId).emit('response confirm rent', msgForPlayer);
+              }
+            }
+            
+            if (userSocketIdObj[renter.username]) {
+              for (let socketId of userSocketIdObj[renter.username]) {
+                io.to(socketId).emit('response confirm rent', msgForRenter);
+              }
+            }
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
+    })
   });
+
+
+  
 
   // io.on('connection', async (socket) => {
 

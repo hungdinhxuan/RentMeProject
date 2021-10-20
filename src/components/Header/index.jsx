@@ -2,8 +2,10 @@ import { Avatar, Badge, Button, Dropdown, Menu, Modal } from "antd";
 import Logo from "assets/player-dou-a.jpg";
 import {
   addNewMessage,
+  removeMessage,
   getAllMessagesAsync,
   updateMessageAsync,
+  removeMessageAsync
 } from "features/Settings/MessageSlice";
 import React, { useEffect, useRef, useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
@@ -32,6 +34,13 @@ function Header() {
     setVisible(false);
   };
 
+  const handleDeleteMessage = () => {
+    setIsModalVisible(false);
+    dispatch(removeMessageAsync(
+      { userId: user._id, messageId: messages[idModal]._id }
+    ))
+  }
+
   const history = useHistory();
 
   const handleLogin = () => {
@@ -48,12 +57,18 @@ function Header() {
   const [idModal, setIdModal] = useState("0");
 
   const handleSubmit = () => {
+    socket.emit("confirm rent",messages[idModal] )
     setIsModalVisible(false);
   };
 
   const handleCancel = () => {
     setIsModalVisible(false);
   };
+
+  const handleDecline = () => {
+    socket.emit('decline rent', messages[idModal])
+    setIsModalVisible(false);
+  }
   const showModal = (id) => {
     dispatch(
       updateMessageAsync({ userId: user?._id, messageId: messages[id.key]._id })
@@ -107,12 +122,25 @@ function Header() {
 
   useEffect(() => {
     const loadData = (data) => dispatch(addNewMessage(data));
+    const confirmRentMsg = (data) => dispatch(addNewMessage(data))
+    const declineMsg = (data) => {
+      alert(data.message)
+      if(data.msgId){
+        return dispatch(removeMessage(data.msgId))
+      }
+    }
+
     socket.on("response renter", loadData);
     socket.on("response player", loadData);
+    socket.on("response confirm rent", confirmRentMsg)
+
+    socket.on("response decline rent", declineMsg)
     // Note: Clear socket when change state.
     return () => {
+      socket.off("response decline rent", declineMsg)
       socket.off("response renter", loadData);
       socket.off("response player", loadData);
+      socket.off("response confirm rent", confirmRentMsg)
     };
   }, [dispatch]);
 
@@ -237,11 +265,14 @@ function Header() {
                   >
                     Confirm
                   </Button>,
-                  <Button key="Cancel" onClick={handleCancel}>
+                  <Button key="Decline" onClick={handleDecline}>
                     Decline
                   </Button>,
                 ]
               : [
+                <Button key="Delete" onClick={handleDeleteMessage} style={{color: "red", borderColor: "red"}}>
+                    Delete 
+                  </Button>,
                   <Button key="Cancel" onClick={handleCancel}>
                     Cancel
                   </Button>,
