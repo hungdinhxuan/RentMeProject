@@ -123,10 +123,13 @@ function Header() {
 
   useEffect(() => {
     const loadData = (data) => dispatch(addNewMessage(data));
-    const confirmRentMsg = (data) =>
-      data.updatedMessage
-        ? dispatch(updateMessage(data.updatedMessage))
-        : dispatch(addNewMessage(data.message));
+
+    const confirmRentMsg = (data) => {
+      if(data.updatedMessage){
+        dispatch(updateMessage(data.updatedMessage))
+      }
+      dispatch(addNewMessage(data.message));
+    }
 
     const declineMsg = (data) => {
       alert(data.message);
@@ -135,12 +138,14 @@ function Header() {
       }
     };
 
+    const errorMsg = (data) => {
+      alert(data);
+    }
+
     socket.on("response renter", loadData);
     socket.on("response player", loadData);
     socket.on("response confirm rent", confirmRentMsg);
-    socket.on("response error renter", (data) => {
-      alert(data);
-    });
+    socket.on("response error renter", errorMsg)
     socket.on("response decline rent", declineMsg);
     // Note: Clear socket when change state.
     return () => {
@@ -148,6 +153,7 @@ function Header() {
       socket.off("response renter", loadData);
       socket.off("response player", loadData);
       socket.off("response confirm rent", confirmRentMsg);
+      socket.off("response error renter", errorMsg)
     };
   }, [dispatch]);
 

@@ -125,6 +125,7 @@ module.exports = (app) => {
                   'response error renter',
                   `This player is in another trasaction`,
                 );
+                return;
               }
             }
 
