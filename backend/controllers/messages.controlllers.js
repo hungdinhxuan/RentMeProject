@@ -1,4 +1,3 @@
-const { Message } = require('@material-ui/icons');
 const Messages = require('../models/messages.models');
 
 class MessagesController {
