@@ -4,6 +4,7 @@ import SignIn from "features/Auth/SignIn";
 import SignUp from "features/Auth/SignUp";
 import Settings from "features/Settings";
 import { lazy} from "react";
+import ChatRoom from "features/ChatRoom";
 
 
 const Home = lazy(() => import("features/Home/index.jsx"));
@@ -62,6 +63,12 @@ const routes = [
     layout: PrivateLayout,
     main: RentPlayer
   },
+  {
+    path: "/chat-room",
+    exact: false,
+    layout: PrivateLayout,
+    main: ChatRoom
+  }
 ];
 
 export default routes;
