@@ -1,11 +1,11 @@
-import Chat from "components/Chat";
+import VideoChat from "components/VideoChat";
 import React, { useState } from "react";
 import "./ChatRoom.scss";
 
 export default function ChatRoom() {
   const [userName, setUserName] = useState("");
   const [room, setRoom] = useState("");
-  const [showChat, setShowChat] = useState(false);
+  const [showChat, setShowChat] = useState(true);
 
   const handleChange = (e) => {
     setUserName(e.target.value);
@@ -33,7 +33,7 @@ export default function ChatRoom() {
           <button onClick={joinRoom}>Join A Room</button>
         </div>
       ) : (
-        <Chat username={userName} room={room} />
+        <VideoChat username={userName} room={room} />
       )}
     </div>
   );
