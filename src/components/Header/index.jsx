@@ -1,40 +1,31 @@
+import { Avatar, Badge, Button, Dropdown, Menu, Modal } from "antd";
 import Logo from "assets/player-dou-a.jpg";
+import {
+  addNewMessage,
+  removeMessage,
+  getAllMessagesAsync,
+  updateMessageAsync,
+  removeMessageAsync,
+  updateMessage,
+} from "features/Settings/MessageSlice";
 import React, { useEffect, useRef, useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import { NavLink, useHistory, useLocation } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { NavLink, useHistory } from "react-router-dom";
+import socket from "socket";
 import Drawler from "./Drawler";
 import "./Header.scss";
 
 function Header() {
-  const [header, setHeader] = useState(false);
-  const [user, setUser] = useState(false);
+  const { user } = useSelector((state) => state.auth);
+  const dispatch = useDispatch();
+  const { messages } = useSelector((state) => state.messages);
+  const [userHeader, setUserHeader] = useState(true);
   const [visible, setVisible] = useState(false);
   const [navScroll, setnavSroll] = useState("");
 
   const navRef = useRef();
   navRef.current = navScroll;
-  const location = useLocation();
-  
-
-  useEffect(() => {
-    const handleScroll = () => {
-      const show = window.scrollY > 10;
-      if (show) {
-        setnavSroll("header__scroll");
-      } else {
-        setnavSroll("");
-      }
-    };
-    document.addEventListener("scroll", handleScroll);
-    if (userInfo) {
-      setUser(false);
-    }
-    
-
-    return () => {
-      document.removeEventListener("scroll", handleScroll);
-    };
-  }, []);
 
   const handleShowDrawler = () => {
     setVisible(true);
@@ -42,6 +33,13 @@ function Header() {
 
   const handleClose = () => {
     setVisible(false);
+  };
+
+  const handleDeleteMessage = () => {
+    setIsModalVisible(false);
+    dispatch(
+      removeMessageAsync({ userId: user._id, messageId: messages[idModal]._id })
+    );
   };
 
   const history = useHistory();
@@ -54,7 +52,110 @@ function Header() {
     history.push("/signup");
   };
 
-  const userInfo = localStorage.getItem("token");
+  // Dropdown message
+  // const message = "Giao dịch thành công từ: ...";
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [idModal, setIdModal] = useState("0");
+
+  const handleSubmit = () => {
+    socket.emit("confirm rent", messages[idModal]);
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleDecline = () => {
+    socket.emit("decline rent", messages[idModal]);
+    setIsModalVisible(false);
+  };
+  const showModal = (id) => {
+    dispatch(
+      updateMessageAsync({ userId: user?._id, messageId: messages[id.key]._id })
+    );
+    setIsModalVisible(true);
+    setIdModal(id.key);
+  };
+  const menu = (
+    <Menu>
+      {messages?.map((msg, index) => (
+        <Menu.Item key={index} onClick={showModal}>
+          <div
+            style={
+              msg.status === "unread"
+                ? { fontWeight: "600" }
+                : { fontWeight: "normal" }
+            }
+          >
+            {msg?.content?.length >= 60
+              ? `${msg?.content?.slice(0, 40)}...`
+              : msg?.content}
+          </div>
+        </Menu.Item>
+      ))}
+    </Menu>
+  );
+
+  // Check message.
+
+  // Life-cycle
+  useEffect(() => {
+    const handleScroll = () => {
+      const show = window.scrollY > 10;
+      if (show) {
+        setnavSroll("header__scroll");
+      } else {
+        setnavSroll("");
+      }
+    };
+    document.addEventListener("scroll", handleScroll);
+
+    return () => {
+      document.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
+  useEffect(() => {
+    dispatch(getAllMessagesAsync(user?._id));
+    user ? setUserHeader(false) : setUserHeader(true);
+  }, [dispatch, user]);
+
+  useEffect(() => {
+    const loadData = (data) => dispatch(addNewMessage(data));
+
+    const confirmRentMsg = (data) => {
+      if(data.updatedMessage){
+        dispatch(updateMessage(data.updatedMessage))
+      }
+      dispatch(addNewMessage(data.message));
+    }
+
+    const declineMsg = (data) => {
+      alert(data.message);
+      if (data.msgId) {
+        return dispatch(removeMessage(data.msgId));
+      }
+    };
+
+    const errorMsg = (data) => {
+      alert(data);
+    }
+
+    socket.on("response renter", loadData);
+    socket.on("response player", loadData);
+    socket.on("response confirm rent", confirmRentMsg);
+    socket.on("response error renter", errorMsg)
+    socket.on("response decline rent", declineMsg);
+    // Note: Clear socket when change state.
+    return () => {
+      socket.off("response decline rent", declineMsg);
+      socket.off("response renter", loadData);
+      socket.off("response player", loadData);
+      socket.off("response confirm rent", confirmRentMsg);
+      socket.off("response error renter", errorMsg)
+    };
+  }, [dispatch]);
 
   return (
     <header className={navScroll}>
@@ -102,11 +203,11 @@ function Header() {
               </Nav.Link>
               <Nav.Link href="#">
                 <NavLink
-                  to="/bxh"
+                  to="/chat-room"
                   className="nav__item"
                   activeClassName="nav__item--active"
                 >
-                  BXH
+                  ChatRoom
                 </NavLink>
               </Nav.Link>
               <Nav.Link href="#">
@@ -121,34 +222,83 @@ function Header() {
               </Nav.Link>
             </Nav>
             <div className="justify-content-end">
-              <button className="button__login" onClick={handleLogin}>
-                Log in
-              </button>
-              <button
-                style={{ marginLeft: "12px" }}
-                className="button__signup"
-                onClick={handleSignUp}
-              >
-                Sign up
-              </button>
+              {userHeader ? (
+                <>
+                  <button className="button__login" onClick={handleLogin}>
+                    Log in
+                  </button>
+                  <button
+                    style={{ marginLeft: "12px" }}
+                    className="button__signup"
+                    onClick={handleSignUp}
+                  >
+                    Sign up
+                  </button>
+                </>
+              ) : (
+                <div className="message d-flex align-items-center">
+                  <div className="message__badge">
+                    <Dropdown overlay={menu} placement="bottomLeft" arrow>
+                      <Badge
+                        count={
+                          messages.filter(
+                            (mess, index) => mess.status === "unread"
+                          ).length
+                        }
+                      >
+                        <div className="message-icon">
+                          <i className="bi bi-envelope"></i>
+                        </div>
+                      </Badge>
+                    </Dropdown>
+                  </div>
 
-              {/* <div className="message d-flex align-items-center">
-                <div className="message__badge">
-                  <Badge count={1}>
-                    <div className="message-icon">
-                      <i class="bi bi-envelope"></i>
-                    </div>
-                  </Badge>
+                  <div className="user__icon" onClick={handleShowDrawler}>
+                    <Avatar size={28} src={user.avatar} />
+                  </div>
                 </div>
-                <div className="user__icon" onClick={handleShowDrawler}>
-                  <Avatar size={28} icon={<UserOutlined />} />
-                </div>
-              </div> */}
+              )}
             </div>
           </Navbar.Collapse>
         </Container>
       </Navbar>
-      <Drawler visible={visible} Close={handleClose} />
+      <Drawler visible={visible} Close={handleClose} avatar={user?.avatar} />
+      <>
+        <Modal
+          title="Message Notification"
+          visible={isModalVisible}
+          onCancel={handleCancel}
+          footer={
+            messages[idModal]?.content.includes("Current trading ID:")
+              ? [
+                  <Button
+                    className="submit-form"
+                    key="Submit"
+                    onClick={handleSubmit}
+                  >
+                    Confirm
+                  </Button>,
+                  <Button key="Decline" onClick={handleDecline}>
+                    Decline
+                  </Button>,
+                ]
+              : [
+                  <Button
+                    key="Delete"
+                    onClick={handleDeleteMessage}
+                    style={{ color: "red", borderColor: "red" }}
+                  >
+                    Delete
+                  </Button>,
+                  <Button key="Cancel" onClick={handleCancel}>
+                    Cancel
+                  </Button>,
+                ]
+          }
+        >
+          <p>{messages[idModal]?.content}</p>
+        </Modal>
+      </>
     </header>
   );
 }

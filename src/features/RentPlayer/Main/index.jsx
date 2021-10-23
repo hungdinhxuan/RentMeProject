@@ -1,18 +1,36 @@
-import React from "react";
+import React, {  useEffect } from "react";
 
 import { Select } from "antd";
 import "./RentPlayer.scss";
 import CardList from "../Card/index";
-
+import { AsyncLoadPlayer } from "../PlayerSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { AsyncLoadUser } from "features/Auth/AuthSlice";
+import socket from 'socket'
 
 function MainRentPlayer() {
-  
-
   //   Select
   const { Option } = Select;
   const handleChange = (value) => {
     console.log(`selected ${value}`);
   };
+
+  const { listPlayers } = useSelector((state) => state.players);
+  const dispatch = useDispatch();
+
+
+  useEffect(() => {
+    dispatch(AsyncLoadUser());
+    dispatch(AsyncLoadPlayer());
+    
+  }, [dispatch]);
+
+  
+  useEffect(() => {
+    socket.on("refreshPlayerList", () => {
+      dispatch(AsyncLoadPlayer());
+    });  
+  }, [])
 
   return (
     <div className="main__layout">
@@ -77,12 +95,12 @@ function MainRentPlayer() {
         </div>
         <div className="card__rent">
           <div className="card__container">
-              <div className="cardList row">
-                <CardList />
-                <CardList />
-                <CardList />
-                <CardList />
-              </div>
+            <div className="cardList row">
+              {listPlayers &&
+                listPlayers.map((item) => {
+                  return <CardList item={item} key={item._id} />;
+                })}
+            </div>
           </div>
         </div>
       </div>

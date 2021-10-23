@@ -1,0 +1,101 @@
+.profile__setting {
+    padding: 30px;
+    .row {
+        margin: 0;
+        div {
+            h3 {
+                color: var(--color-default);
+                margin-bottom: 30px;
+                font-size: 24px;
+            }
+            .profile__setting--avatar {
+                margin: 30px 0;
+                .right-avatar {
+                    display: flex;
+                    align-items: center;
+                    margin-left: 15px;
+                    cursor: pointer;
+                    .ant-upload {
+                        background: #ccc;
+                        color: #000;
+                    }
+                }
+            }
+            .line {
+                width: 100%;
+                height: 1px;
+                background: var(--button-hover);
+                margin: 24px 0;
+            }
+        }
+        .title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--color-default);
+            margin-bottom: 24px;
+        }
+        .profile__setting--form {
+            form {
+                label {
+                    color: var(--text-footer);
+                    padding: 0;
+                    line-height: 1.2;
+                    font-size: 12px;
+                    font-weight: 400;
+                    margin-bottom: 8px;
+                }
+                input {
+                    font-size: 14px;
+                    color: var(--color-default);
+                    background: var(--color-button) !important;
+                    border: 1px solid var(--button-hover);
+                    &:hover {
+                        border-color: var(--text-field);
+                    }
+                    
+                }
+                select {
+                    font-size: 14px;
+                    color: var(--color-default);
+                    background: var(--color-button) !important;
+                    border: 1px solid var(--button-hover);
+                    &:hover {
+                        border-color: var(--text-field);
+                    }
+                }
+                .ant-radio-group {
+                    .ant-radio-wrapper {
+                        .ant-radio:hover {
+                            .ant-radio-inner {
+                                border-color: var(--text-hover) !important;
+                            }
+                        }
+
+                        .ant-radio-checked {
+                            .ant-radio-inner {
+                                border-color: var(--text-hover) !important;
+                            }
+                        }
+                        .ant-radio-inner::after {
+                            background-color: var(--text-hover);
+                        }
+                    }
+                }
+            }
+        }
+        .submit-form {
+            height: 54px;
+            color: #fff;
+            border: 0;
+            border-radius: 5px;
+            line-height: 49px;
+            font-size: 19px;
+            background-color: var(--button-hover1);
+            margin: 22px 0;
+            width: 100%;
+            &:hover {
+                background-color: var(--text-hover);
+            }
+        }
+    }
+}
