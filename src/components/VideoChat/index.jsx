@@ -413,7 +413,10 @@ export default function VideoChat() {
     socket.emit("join-call", "aduvip");
     socketId = socket.id;
     socket.on("chat-message", addMessage);
+
+    
     const handleUserLeft = (id) => {
+      console.log(`Test: ${id}`);
       let video = document.querySelector(`[data-socket="${id}"]`);
       if (video !== null) {
         elms--;
