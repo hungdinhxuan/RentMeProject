@@ -1,0 +1,182 @@
+.wallet__setting {
+    .wallet__setting--payment {
+        .ant-tabs-nav-wrap {
+            color: var(--text-footer);
+            font-size: 1.2rem;
+        }
+        .ant-tabs-top > .ant-tabs-nav::before {
+            border-bottom: none;
+        }
+        .ant-tabs-tab {
+            font-size: 18px;
+        }
+
+        .ant-tabs-tab.ant-tabs-tab-active {
+            .ant-tabs-tab-btn {
+                color: var(--text-hover);
+            }
+        }
+        .ant-tabs-tab-btn:active {
+            color: var(--text-hover);
+        }
+        .ant-tabs-tab:hover {
+            color: var(--text-hover);
+        }
+        .ant-tabs-ink-bar {
+            background: var(--text-hover);
+        }
+
+        .ant-tabs-content-holder {
+            color: var(--color-default);
+        }
+
+        .payment-method {
+            width: 100%;
+            .method-items {
+                background: var(--color-button);
+                padding: 10px;
+                .items-left {
+                    h2 {
+                        color: var(--text-footer);
+                    }
+                    .balance {
+                        display: flex;
+                        img:first-child {
+                            width: 100px;
+                            height: 100px;
+                        }
+                        &-content {
+                            margin-left: 16px;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: space-around;
+                            .title {
+                                color: var(--color-default);
+                                font-size: 18px;
+                            }
+                            .icon {
+                                img {
+                                    width: 100%;
+                                    height: 100%;
+                                }
+                            }
+                            .money {
+                                line-height: 1;
+                                span {
+                                    font-size: 32px;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .items-right {
+                    form {
+                        select {
+                            font-size: 14px;
+                            color: var(--color-default);
+                            border: 1px solid var(--button-hover);
+                            &:hover {
+                                border-color: var(--text-field);
+                            }
+                        }
+                        .ant-radio-group {
+                            width: 100%;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            .ant-radio-wrapper {
+                                span {
+                                    img {
+                                        width: 80px;
+                                        height: 80px;
+                                        object-fit: cover;
+                                    }
+                                }
+
+                                .ant-radio:hover {
+                                    .ant-radio-inner {
+                                        border-color: var(--text-hover) !important;
+                                    }
+                                }
+
+                                .ant-radio-checked {
+                                    .ant-radio-inner {
+                                        border-color: var(--text-hover) !important;
+                                    }
+                                }
+                                .ant-radio-inner::after {
+                                    background-color: var(--text-hover);
+                                }
+                            }
+                        }
+
+                        // Label && input
+                        .ant-form-item {
+                            .ant-form-item-label {
+                                label {
+                                    color: var(--text-footer);
+                                }
+                            }
+                        }
+
+                        .ant-form-item-control-input {
+                            button {
+                                width: 100%;
+                                background-color: var(--button-hover1);
+                                color: var(--color-default);
+                                outline: none;
+                                box-shadow: none;
+                                border-color: var(--text-hover);
+                                &:hover {
+                                    background-color: var(--text-hover);
+                                    border-color: var(--text-hover);
+                                }
+                            }
+                            input {
+                                background: var(--color-button);
+                                color: var(--color-default);
+                                border: 1px solid var(--button-hover);
+                                width: 50%;
+                                &:hover {
+                                    background: none;
+                                    border-color: var(--text-field);
+                                }
+                                &:focus {
+                                    border-color: var(--text-field);
+                                    box-shadow: none;
+                                    outline: none;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 576px) {
+    .wallet__setting {
+        .wallet__setting--payment {
+            .payment-method {
+                width: 100%;
+                .method-items {
+                    form {
+                        .ant-radio-group {
+                            .ant-radio-wrapper {
+                                span {
+                                    img {
+                                        width: 70px;
+                                        height: 70px;
+                                        object-fit: cover;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

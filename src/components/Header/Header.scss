@@ -123,6 +123,21 @@ header {
     }
 }
 
+// Modal antd
+.ant-modal-header {
+    text-align: center;
+}
+.ant-modal-footer {
+    button.ant-btn.submit-form {
+        opacity: 1;
+        color: #fff;
+        background-color: var(--text-hover);
+        border: 1px solid var(---text-hover);
+        font-size: 14px;
+        font-weight: 600;
+    }
+}
+
 .header__scroll {
     background: #302f3d;
     position: fixed;
@@ -188,7 +203,6 @@ header {
 }
 
 @media only screen and (max-width: 768px) {
-    
     header {
         nav {
             .container {

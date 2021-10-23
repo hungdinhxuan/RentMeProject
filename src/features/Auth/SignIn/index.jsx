@@ -15,6 +15,7 @@ import Facebook from "assets/facebook.png";
 import Google from "assets/google.png";
 import axiosClient from "axiosClient";
 import React, { useState } from "react";
+import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import GoogleLogin from "react-google-login";
 import ReCAPTCHA from "react-google-recaptcha";
 // React-hook-form
@@ -24,8 +25,8 @@ import { Link, useHistory } from "react-router-dom";
 import * as yup from "yup";
 import { AsyncSignin } from "../AuthSlice";
 import "./SignIn.scss";
-import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
-
+import Loading from "components/Loading";
+import socket from "socket";
 
 function Copyright() {
   return (
@@ -112,7 +113,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function SignIn() {
+export default function SignIn(props) {
   const classes = useStyles();
 
   // Form
@@ -146,7 +147,6 @@ export default function SignIn() {
 
   // Capcha google
   const [capcha, setCapcha] = useState(true);
-  const recaptchaRef = React.useRef();
 
   const onSubmit = async (data) => {
     dispatch(AsyncSignin(data));
@@ -160,15 +160,21 @@ export default function SignIn() {
   };
 
   // Xử lý redux
-  const { user, loading, error } = useSelector((state) => state.auth);
+  const { user, loading, isAuthenticated } = useSelector((state) => state.auth);
   const history = useHistory();
   const dispatch = useDispatch();
 
   // Sau khi có tài khoản
-  if (localStorage.getItem("token")) {
-    
-    // return <Redirect to="/" />
-    history.push("/");
+  const { referrer } = props.location.state || { referrer: { pathname: "/" } };
+
+  if (user || isAuthenticated) {
+    socket.emit("authenticate", localStorage.getItem("token"));
+
+    history.push(referrer);
+  }
+
+  if (loading) {
+    return <Loading />;
   }
 
   const googleButtonStyle = {
@@ -199,33 +205,30 @@ export default function SignIn() {
     // console.log(response);
     // console.log(`${process.env.REACT_APP_API}/auth/google`);
     try {
-      const res = await axiosClient.post('/auth/google', {
+      const res = await axiosClient.post("/auth/google", {
         tokenId: response.tokenId,
       });
       // console.log(res);
       localStorage.setItem("token", res.token);
-      history.push("/");
-      
+      socket.emit('authenticate', res.token);
+      history.push(referrer);
     } catch (error) {}
   };
 
   const responseFacebook = async (response) => {
-
-
     try {
       const { accessToken } = response;
-      const res = await axiosClient.post('/auth/facebook', {
+      const res = await axiosClient.post("/auth/facebook", {
         accessToken,
       });
       // console.log(res.data);
       localStorage.setItem("token", res.token);
-      history.push("/");
+      socket.emit('authenticate', res.token);
+      history.push(referrer);
     } catch (error) {
       console.log(error);
     }
   };
-
-  
 
   return (
     <Grid container component="main" maxwidth="xs" className={classes.root}>
@@ -362,7 +365,6 @@ export default function SignIn() {
           </form>
         </div>
       </Grid>
-      
     </Grid>
   );
 }

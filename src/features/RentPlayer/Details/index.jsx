@@ -1,14 +1,90 @@
-import React, { useState } from "react";
-import { useLocation, useRouteMatch } from "react-router";
+import React, { useEffect, useState } from "react";
+import { useHistory, useRouteMatch } from "react-router";
 import { Image, Rate, Avatar } from "antd";
 import "./Details.scss";
 import Ha from "assets/Ha.jpg";
+import { useDispatch, useSelector } from "react-redux";
+import { AsyncLoadPlayerDetails } from "../PlayerSlice";
+import "./Details.scss";
+import { Modal, Button, Select } from "antd";
+import socket from "socket";
 
 export default function PlayerDetails() {
-  const location = useLocation();
-  // console.log(location);
-
+  const match = useRouteMatch();
+  const history = useHistory();
   const [visible, setVisible] = useState(false);
+
+  const { Option } = Select;
+
+  const { player, error } = useSelector((state) => state.players);
+  const { user } = useSelector((state) => state.auth);
+  const [moneyState, setMoneyState] = useState("");
+  const [formRentPlayer, setformRentPlayer] = useState({
+    renterId: "",
+    playerId: "",
+    money: "",
+    time: 1,
+  });
+
+  if (error) {
+    history.push("/error");
+  }
+  const dispatch = useDispatch();
+
+  // Modal rent player
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleSubmit = () => {
+    if (user.balance > (moneyState || player?.pricePerHour)) {
+      if (formRentPlayer.money && formRentPlayer.time) {
+        console.log({
+          ...formRentPlayer,
+          renterId: user._id,
+          playerId: player.user._id,
+        });
+        socket.emit("rent player", {
+          ...formRentPlayer,
+          renterId: user._id,
+          playerId: player.user._id,
+        });
+      } else {
+        socket.emit("rent player", {
+          time: 1,
+          money: player.pricePerHour,
+          renterId: user._id,
+          playerId: player.user._id,
+        });
+      }
+    } else {
+      alert("Not enough money");
+    }
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleChangeHours = (values) => {
+    setMoneyState(player?.pricePerHour * values);
+    setformRentPlayer({
+      ...formRentPlayer,
+      time: values,
+      money: player?.pricePerHour * values,
+    });
+  };
+
+  const handleMoreAmount = () => {
+    history.push("/setting/wallet");
+  };
+
+  useEffect(() => {
+    dispatch(AsyncLoadPlayerDetails(match.params.cardId));
+  }, [dispatch, match.params.cardId]);
 
   return (
     <div className="details">
@@ -22,7 +98,7 @@ export default function PlayerDetails() {
                   width={260}
                   height={260}
                   style={{ objectFit: "cover", borderRadius: "10px" }}
-                  src="https://gw.alipayobjects.com/zos/antfincdn/LlvErxo8H9/photo-1503185912284-5271ff81b9a8.webp"
+                  src={player?.coverBackground}
                   onClick={() => setVisible(true)}
                 />
                 <div style={{ display: "none" }}>
@@ -32,14 +108,18 @@ export default function PlayerDetails() {
                       onVisibleChange: (vis) => setVisible(vis),
                     }}
                   >
-                    <Image src="https://gw.alipayobjects.com/zos/antfincdn/LlvErxo8H9/photo-1503185912284-5271ff81b9a8.webp" />
-                    <Image src="https://gw.alipayobjects.com/zos/antfincdn/cV16ZqzMjW/photo-1473091540282-9b846e7965e3.webp" />
-                    <Image src="https://gw.alipayobjects.com/zos/antfincdn/x43I27A55%26/photo-1438109491414-7198515b166b.webp" />
+                    {player?.albums.map((item, index) => (
+                      <Image key={index} src={item} />
+                    ))}
                   </Image.PreviewGroup>
                 </div>
               </div>
               <div className="rent-time">
-                <p>I'm ready</p>
+                {player?.user.isOnline ? (
+                  <p>I'm ready</p>
+                ) : (
+                  <p style={{ color: "red" }}>I'm offline</p>
+                )}
               </div>
               <div className="social-icon">
                 <a
@@ -47,7 +127,7 @@ export default function PlayerDetails() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <i class="bi bi-facebook"></i>
+                  <i className="bi bi-facebook"></i>
                 </a>
               </div>
               <div className="member-since">
@@ -57,7 +137,7 @@ export default function PlayerDetails() {
             </div>
 
             <div className="player__profile--right col-lg-3 order-lg-2">
-              <p className="price-profile">5.00 USD/G</p>
+              <p className="price-profile">{player?.pricePerHour}.00 USD/G</p>
               <div className="rate-profile">
                 <Rate
                   value={5}
@@ -67,7 +147,9 @@ export default function PlayerDetails() {
                 />
               </div>
               <div className="action-profile">
-                <button className="btn-style purple">Rent</button>
+                <button className="btn-style purple" onClick={showModal}>
+                  Rent
+                </button>
                 <button className="btn-style white">Donate</button>
                 <button className="btn-style white">Chat</button>
               </div>
@@ -75,7 +157,7 @@ export default function PlayerDetails() {
             <div className="player__profile--main col-lg-6 order-lg-1">
               <div className="name-profile">
                 <div className="center-item col-lg-12">
-                  <span className="name__player">SuYii 🐶</span>
+                  <span className="name__player">{player?.nickname} </span>
                   <button className="btn-follow-player">Follow Me</button>
                 </div>
               </div>
@@ -113,21 +195,9 @@ export default function PlayerDetails() {
                 <p>
                   Thuê đi, nhìn cái gì. Ơ kìa 🌸.Hát hò, LOL, ĐTCL, Aram,
                   Business Tour, Call mess.
+                  {player?.shortDesc}
                 </p>
-                <p>
-                  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ipsa
-                  dolorem sunt fugit molestiae nostrum beatae numquam quis,
-                  repellendus accusamus reprehenderit natus, ad debitis mollitia
-                  facere laborum ex suscipit saepe doloribus rerum! Dignissimos
-                  obcaecati, incidunt aliquid odio sunt iusto fugiat nostrum
-                  dicta quas vitae minima accusamus nesciunt enim cumque nulla
-                  inventore ex dolor sequi at ipsa quia nam vero! Distinctio
-                  ullam cupiditate quam. Ducimus eius, porro ab alias non
-                  similique quam natus, labore molestiae iusto dolores
-                  laboriosam architecto est aspernatur aliquam quisquam? Odio
-                  vitae doloribus accusamus at vel autem quasi, dolore eaque
-                  commodi dolor, doloremque neque est rerum corrupti eos ex.
-                </p>
+                <p>{player?.longDesc}</p>
               </div>
               <div className="video-player-profile title-player-profile row">
                 <div className="col-12">
@@ -136,9 +206,9 @@ export default function PlayerDetails() {
                     height="350"
                     src="https://www.youtube.com/embed/1WLSitEnnCg"
                     title="YouTube video player"
-                    frameborder="0"
+                    frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen
+                    allowFullScreen
                   ></iframe>
                 </div>
               </div>
@@ -176,6 +246,55 @@ export default function PlayerDetails() {
           </div>
         </div>
       </div>
+      <Modal
+        title="Rent Player"
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={[
+          <Button className="submit-form" key="Submit" onClick={handleSubmit}>
+            Submit
+          </Button>,
+          <Button key="Cancel" onClick={handleCancel}>
+            Cancel
+          </Button>,
+        ]}
+      >
+        <table>
+          <tr>
+            <td>Player: </td>
+            <td>{player?.nickname}</td>
+          </tr>
+          <tr>
+            <td>Rent Time: </td>
+            <td>
+              <Select defaultValue="1" onChange={handleChangeHours}>
+                {[...Array(25)].map((x, i) =>
+                  i ? (
+                    <Option value={i} key={i}>
+                      {i}h
+                    </Option>
+                  ) : (
+                    ""
+                  )
+                )}
+              </Select>
+            </td>
+          </tr>
+          <tr>
+            <td>Final price: </td>
+            <td>{moneyState || player?.pricePerHour} usd</td>
+          </tr>
+          <tr>
+            <td>Current balance: </td>
+            <td>
+              <span className="total-amount">{user?.balance}usd</span>
+              <span className="more-amount" onClick={handleMoreAmount}>
+                +
+              </span>
+            </td>
+          </tr>
+        </table>
+      </Modal>
     </div>
   );
 }

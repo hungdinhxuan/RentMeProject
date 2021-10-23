@@ -153,17 +153,22 @@ export default function SignUp() {
   });
 
   // Redux register
-  const { user, loading, error } = useSelector((state) => state.auth);
+  const { error, isAuthenticated } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const history = useHistory();
+
   const onSubmit = (data) => {
   
     dispatch(AsyncSignup(data));
     if (!error) {
-      return history.push("/signin");
+      history.push("/signin");
     }
     reset();
   };
+
+  if(isAuthenticated){
+    history.push("/");
+  }
 
   return (
     <Grid container component="main" maxwidth="xs" className={classes.root}>

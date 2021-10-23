@@ -1,0 +1,11 @@
+.setting__main {
+    height: 100vh;
+    width: 100%;
+    padding-top: 80px;
+    &.row {
+        margin: 0;
+    }
+    .setting__main--menu {
+        background: var(--color-button);
+    }
+}

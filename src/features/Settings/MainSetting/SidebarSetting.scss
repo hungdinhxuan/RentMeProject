@@ -1,0 +1,46 @@
+.menu {
+    font-family: "Poppins";
+    height: 100%;
+    .menu__setting {
+        padding: 10px 25px 30px;
+        .menu__setting--tile {
+            height: 24px;
+            font-size: 12px;
+            font-weight: 400;
+            color: var(--text-footer);
+            line-height: 24px;
+            padding-left: 8px;
+        }
+
+        .setting__item {
+            text-decoration: none;
+            color: var(--text-field);
+            
+        }
+        .setting__item--active {
+            .setting__list {
+                background: var(--background-color);
+                border-radius: 4px;
+            }
+        }
+        hr {
+            height: 2px;
+            background: var(--button-hover);
+        }
+        .setting__list {
+            height: 40px;
+            font-size: 14px;
+            font-weight: 400;
+            color: var(--color-default);
+            line-height: 40px;
+            user-select: none;
+            cursor: pointer;
+            padding-left: 8px;
+            transition: all 0.2s;
+            &:hover {
+                background: var(--background-color);
+                border-radius: 4px;
+            }
+        }
+    }
+}

@@ -9,7 +9,7 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { useHistory } from "react-router";
 import { useSelector, useDispatch } from "react-redux";
 import { AsyncForgotPassword } from "../AuthSlice";
-import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import AnhBackGround from "assets/acct_creation_bg.jpg";
 
 export default function ForgotPassword() {
@@ -19,14 +19,16 @@ export default function ForgotPassword() {
     history.push("/signin");
   };
 
-  const { loading, error } = useSelector((state) => state.auth);
+  const { isAuthenticated } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const handleSubmit = () => {
     dispatch(AsyncForgotPassword(values));
     setValues({ email: "" });
   };
+  if (isAuthenticated) {
+    history.push("/");
+  }
 
- 
   return (
     <div
       style={{
@@ -64,7 +66,7 @@ export default function ForgotPassword() {
           </DialogActions>
         </Dialog>
       </div>
-      <ToastContainer pauseOnFocusLoss={false}/>
+      <ToastContainer pauseOnFocusLoss={false} />
     </div>
   );
 }
