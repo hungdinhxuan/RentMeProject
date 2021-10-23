@@ -180,9 +180,13 @@ export default function VideoChat() {
   //   Process joinroom by socket
   const connectToSocketServer = () => {
     socket.on('signal', gotMessageFromServer)
-    socket.on('connect', () => {
-      socketId = socket.id
 
+    socket.on('connect', () => {
+      socket.emit('join-call', "aduvip")
+      socketId = socket.id
+      
+
+      socket.on('chat-message', addMessage)
       socket.on('user-left', (id) => {
         let video = document.querySelector(`[data-socket="${id}"]`)
         if (video !== null) {
@@ -374,7 +378,8 @@ export default function VideoChat() {
 
   useEffect(() => {
     getUserMedia()
-    connectToSocketServer()
+    // connectToSocketServer()
+    //
   }, [state.video, state.audio])
 
   const getDislayMediaSuccess = (stream) => {
@@ -430,7 +435,7 @@ export default function VideoChat() {
         }),
     )
   }
-
+  
   const getDislayMedia = () => {
     console.log(state.screen)
     if (state.screen) {
@@ -449,25 +454,22 @@ export default function VideoChat() {
       return { ...prevState, video: !prevState.video }
     })
 
-  const handleAudio = () =>
-    setState((prevState) => {
-      return { ...prevState, audio: !prevState.audio }
-    })
+  const handleAudio = () => setState({ ...state, audio: !state.audio })
 
-  useEffect(() => {
-    getUserMedia()
-  }, [state.audio])
+  // useEffect(() => {
+  //   getUserMedia()
+  // }, [state.audio])
 
   const handleScreen = () =>
     setState((prevState) => {
       return {
         ...prevState,
         screen: !prevState.screen,
-        video: !prevState.video,
+        video: false,
       }
     })
 
-  // Process media
+  // Process media share screen
   useEffect(() => {
     getDislayMedia()
   }, [state.screen])
@@ -483,16 +485,25 @@ export default function VideoChat() {
   const openChat = () => setState({ ...state, showModal: true, newmessages: 0 })
   const closeChat = () => setState({ ...state, showModal: false })
   const handleMessage = (e) => setState({ ...state, message: e.target.value })
-
+  console.log(state);
   const addMessage = (data, sender, socketIdSender) => {
+    console.log(data, sender, socketIdSender);
     setState((prevState) => ({
       ...prevState,
       messages: [...prevState.messages, { sender: sender, data: data }],
     }))
+    
+    // setState({...state, messages: [...state.messages,  { sender: sender, data: data }] })
     if (socketIdSender !== socketId) {
-      setState({ newmessages: state.newmessages + 1 })
+      // setState({...state, newmessages: state.newmessages + 1 })
+      setState((prevState) => ({
+        ...prevState,
+        newmessages: prevState.newmessages + 1,
+      }))
     }
   }
+
+  console.log(state.messages);
   const handleUsername = (e) => setState({ username: e.target.value })
 
   const sendMessage = () => {
@@ -507,11 +518,16 @@ export default function VideoChat() {
     })
 
   useEffect(() => {
-    connect()
+    // connect()
     getPermissions()
-    // connectToSocketServer();
+    
   }, [])
 
+  useEffect(() => {
+    connectToSocketServer();
+  }, [state.messages])
+
+  console.log(videoAvailable);
   return (
     <div>
       <div>
