@@ -71,6 +71,31 @@ module.exports = (app) => {
       // console.log(`${socket.id} disconnected with ${reason}`);
       removeClientFromObj(socket.username, socket.id, socket.role, io);
       socket.auth = false;
+      //
+      var diffTime = Math.abs(timeOnline[socket.id] - new Date());
+      var key;
+      for (const [k, v] of JSON.parse(
+        JSON.stringify(Object.entries(connections))
+      )) {
+        for (let a = 0; a < v.length; ++a) {
+          if (v[a] === socket.id) {
+            key = k;
+  
+            for (let a = 0; a < connections[key].length; ++a) {
+              io.to(connections[key][a]).emit("user-left", socket.id);
+            }
+  
+            var index = connections[key].indexOf(socket.id);
+            connections[key].splice(index, 1);
+  
+            console.log(key, socket.id, Math.ceil(diffTime / 1000));
+  
+            if (connections[key].length === 0) {
+              delete connections[key];
+            }
+          }
+        }
+      }
     });
 
     socket.on('rent player', async (data) => {
@@ -329,35 +354,9 @@ module.exports = (app) => {
           );
         }
       }
-      console.log(`${sender}: ${data} `);
+      console.log(`${sender}: ${data}`);
     });
   
-    socket.on("disconnect", () => {
-      var diffTime = Math.abs(timeOnline[socket.id] - new Date());
-      var key;
-      for (const [k, v] of JSON.parse(
-        JSON.stringify(Object.entries(connections))
-      )) {
-        for (let a = 0; a < v.length; ++a) {
-          if (v[a] === socket.id) {
-            key = k;
-  
-            for (let a = 0; a < connections[key].length; ++a) {
-              io.to(connections[key][a]).emit("user-left", socket.id);
-            }
-  
-            var index = connections[key].indexOf(socket.id);
-            connections[key].splice(index, 1);
-  
-            console.log(key, socket.id, Math.ceil(diffTime / 1000));
-  
-            if (connections[key].length === 0) {
-              delete connections[key];
-            }
-          }
-        }
-      }
-    });
 
   });
 
