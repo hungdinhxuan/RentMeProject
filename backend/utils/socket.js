@@ -16,7 +16,10 @@ module.exports = (app) => {
   const fs = require('fs');
   const publicKey = fs.readFileSync('public.pem');
   const Trading = require('../models/tradings.models');
-
+  const xss = require("xss");
+  const sanitizeString = (str) => {
+    return xss(str);
+  };
   // const wrap = (middleware) => (socket, next) =>
   //   middleware(socket.request, {}, next);
   // io.use(wrap(passport.initialize()));
@@ -25,7 +28,9 @@ module.exports = (app) => {
 
   // Store online user in {} ex: {username1: Set(socket1, socket2)}
 
-  let userPeers = []; // Using for video call
+  let connections = {}; /// Lưu trữ thông tin phòng và tất cả các socket id trong room đó {room1: [socket.id], roomn : [socket.id]}
+  let messages = {}; 
+  let timeOnline = {}; 
 
   io.on('connection', (socket) => {
     socket.auth = false;
@@ -249,107 +254,112 @@ module.exports = (app) => {
         }
       }
     });
+
+    socket.on("join-call", (path) => {
+      if (connections[path] === undefined) {
+        connections[path] = [];
+      }
+      connections[path].push(socket.id);
+  
+      timeOnline[socket.id] = new Date();
+  
+      // Duyệt qua tất cả các kết nối của room hiện tại rồi emit đến tất cả các socket trong room
+      for (let a = 0; a < connections[path].length; ++a) {
+        io.to(connections[path][a]).emit(
+          "user-joined",
+          socket.id,
+          connections[path]
+        );
+      }
+  
+      /// Nếu mà  có message trong room hiện tại thì gửi về cho tất cả các socket ở trong room
+      if (messages[path] !== undefined) { 
+        for (let a = 0; a < messages[path].length; ++a) {
+          io.to(socket.id).emit(
+            "chat-message",
+            messages[path][a]["data"],
+            messages[path][a]["sender"],
+            messages[path][a]["socket-id-sender"]
+          );
+        }
+      }
+  
+      console.log(path, connections[path]);
+    });
+  
+    socket.on("signal", (toId, message) => {
+      io.to(toId).emit("signal", socket.id, message);
+    });
+  
+    socket.on("chat-message", (data, sender) => {
+      data = sanitizeString(data);
+      sender = sanitizeString(sender);
+      console.log(`${sender}: ${data}`);
+      var key;
+      var ok = false;
+  
+      /// for Duyệt qua các phòng và array socketId của phòng đó để tìm xem socketId đang ở phòng naò dựa vào key và ok===true
+      for (const [k, v] of Object.entries(connections)) {
+        for (let a = 0; a < v.length; ++a) {
+          if (v[a] === socket.id) {
+            key = k;
+            ok = true;
+          }
+        }
+      }
+  
+      // Nếu 
+      if (ok === true) {
+        if (messages[key] === undefined) {
+          messages[key] = [];
+        }
+        messages[key].push({
+          sender: sender,
+          data: data,
+          "socket-id-sender": socket.id,
+        });
+        // console.log("message", key, ":", sender, data);
+  
+        for (let a = 0; a < connections[key].length; ++a) {
+          io.to(connections[key][a]).emit(
+            "chat-message",
+            data,
+            sender,
+            socket.id
+          );
+        }
+      }
+      console.log(`${sender}: ${data} `);
+    });
+  
+    socket.on("disconnect", () => {
+      var diffTime = Math.abs(timeOnline[socket.id] - new Date());
+      var key;
+      for (const [k, v] of JSON.parse(
+        JSON.stringify(Object.entries(connections))
+      )) {
+        for (let a = 0; a < v.length; ++a) {
+          if (v[a] === socket.id) {
+            key = k;
+  
+            for (let a = 0; a < connections[key].length; ++a) {
+              io.to(connections[key][a]).emit("user-left", socket.id);
+            }
+  
+            var index = connections[key].indexOf(socket.id);
+            connections[key].splice(index, 1);
+  
+            console.log(key, socket.id, Math.ceil(diffTime / 1000));
+  
+            if (connections[key].length === 0) {
+              delete connections[key];
+            }
+          }
+        }
+      }
+    });
+
   });
-
-  // io.on('connection', async (socket) => {
-
-  //   socket.username = socket.request.session.passport.user.username;
-  //   socket.role = socket.request.session.passport.user.role;
-
-  //   addClientToObj(socket.username, socket.id, socket.role, io);
-  //   // console.log(socket.id);
-
-  //   socket.on('disconnect', async () => {
-  //     // console.log(socket.userId + ' is ' + socket.userStatus);
-  //     removeClientFromObj(socket.username, socket.id, socket.role, io);
-  //     const user = userLeave(socket.id);
-  //     if (user) {
-  //       socket.broadcast.to(user.room).emit('message', {
-  //         name: 'Admin',
-  //         msg: `${user.name} has left to room`,
-  //       });
-
-  //       let allMembersInRoom = users
-  //         .filter((_user) => _user.room === user.room)
-  //         .map((user) => user.peerID);
-  //       io.to(user.room).emit('allMembers', allMembersInRoom);
-  //     }
-
-  //     userPeers = userPeers.filter((id) => id !== socket.peerID);
-
-  //     if (socket.client.conn.server.clientsCount == 0) {
-  //       userPeers = [];
-  //     }
-  //   });
-
-  //   socket.on('logout', () => {
-  //     removeClientFromObj(socket.username, socket.id, socket.role, io, 'logout');
-  //   })
-
-  //   // socket.on('chat message', (recipientUserName, messageContent) => {
-  //   //   //get all clients (socketIds) of recipient
-  //   //   let recipientSocketIds = userSocketIdObj.get(recipientUserName);
-  //   //   for (let socketId of recipientSocketIds) {
-  //   //     io.to(socketId).emit('new message', messageContent);
-  //   //   }
-  //   // });
-  //   socket.on('joinRoom', ({ name, room, peerID }) => {
-  //     const user = userJoin({ id: socket.id, name, room, peerID });
-  //     if (peerID) userPeers.push(peerID);
-  //     socket.join(user.room);
-  //     socket.peerID = peerID;
-
-  //     // Wellcome room
-  //     socket.emit('message', { name: 'Admin', msg: 'Wellcome to chat app' });
-
-  //     let allMembersInRoom = users
-  //       .filter((user) => user.room === room)
-  //       .map((user) => user.peerID);
-
-  //     io.to(room).emit('allMembers', allMembersInRoom);
-
-  //     socket.broadcast.to(user.room).emit('message', {
-  //       name: 'Admin',
-  //       msg: `${name} has joined to room`,
-  //     });
-  //   });
-
-  //   socket.on('sendMessage', ({ name, msg, room }) => {
-  //     io.to(room).emit('message', {
-  //       name,
-  //       msg,
-  //     });
-  //   });
-
-  //   socket.on('peerClose', ({ peerId }) => {
-  //     if (peerId) {
-  //       userPeers = userPeers.filter((id) => id !== peerId);
-  //       socket.peerID = null;
-  //       let user = userLeave(socket.id);
-
-  //       if (user) {
-  //         socket.broadcast.to(user.room).emit('message', {
-  //           name: 'Admin',
-  //           msg: `${user.name} has left to room`,
-  //         });
-
-  //         let allMembersInRoom = users
-  //           .filter((_user) => _user.room === user.room)
-  //           .map((user) => user.peerID);
-  //         io.to(user.room).emit('allMembers', allMembersInRoom);
-  //       }
-  //     }
-  //   });
-
-  //   socket.on('getPeers', ({ room }) => {
-  //     console.log(room);
-  //     let peers = users
-  //       .filter((user) => user.room === room)
-  //       .map((user) => user.peerId);
-
-  //     io.to(room).emit('sendPeers', peers);
-  //   });
-  // });
 
   httpServer.listen(4000);
 };
