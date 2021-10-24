@@ -72,27 +72,21 @@ module.exports = (app) => {
       removeClientFromObj(socket.username, socket.id, socket.role, io);
       socket.auth = false;
       //
-      var diffTime = Math.abs(timeOnline[socket.id] - new Date());
-      var key;
-      for (const [k, v] of JSON.parse(
-        JSON.stringify(Object.entries(connections))
-      )) {
-        for (let a = 0; a < v.length; ++a) {
-          if (v[a] === socket.id) {
-            key = k;
-  
-            for (let a = 0; a < connections[key].length; ++a) {
-              io.to(connections[key][a]).emit("user-left", socket.id);
+
+      // var diffTime = Math.abs(timeOnline[socket.id] - new Date());
+      // var key;
+      for (const [key, val] of Object.entries(connections))
+      {
+        for(let socketId of val){ // Kiem tra xem socketId do thuoc room nao
+          if(socketId === socket.id){ // neu tim thay thi thong bao den tat cac cac socket con lai trogn room
+            for(let socketId2 of val){ 
+              io.to(socketId2).emit("user-left", socket.id);
             }
-  
-            var index = connections[key].indexOf(socket.id);
-            connections[key].splice(index, 1);
-  
-            console.log(key, socket.id, Math.ceil(diffTime / 1000));
-  
-            if (connections[key].length === 0) {
+            connections[key].delete(socket.id) // delete connections ra khoir room
+            if (connections[key].size === 0) { /// Neu khong con ket noi nao nua thi xoa room
               delete connections[key];
             }
+            break
           }
         }
       }
@@ -282,18 +276,23 @@ module.exports = (app) => {
 
     socket.on("join-call", (path) => {
       if (connections[path] === undefined) {
-        connections[path] = [];
+        connections[path] = new Set([]);
+        
       }
-      connections[path].push(socket.id);
+      connections[path].add(socket.id);
+      console.log("🚀 ~ file: socket.js ~ line 283 ~ socket.on ~ connections[path]", connections[path])
   
       timeOnline[socket.id] = new Date();
   
       // Duyệt qua tất cả các kết nối của room hiện tại rồi emit đến tất cả các socket trong room
-      for (let a = 0; a < connections[path].length; ++a) {
-        io.to(connections[path][a]).emit(
+      
+      for(let socketId of connections[path]){
+      console.log("🚀 ~ file: socket.js ~ line 290 ~ socket.on ~ connections[path]", connections[path])
+        
+        io.to(socketId).emit(
           "user-joined",
           socket.id,
-          connections[path]
+          Array.from(connections[path])
         );
       }
   
@@ -324,11 +323,20 @@ module.exports = (app) => {
       var ok = false;
   
       /// for Duyệt qua các phòng và array socketId của phòng đó để tìm xem socketId đang ở phòng naò dựa vào key và ok===true
-      for (const [k, v] of Object.entries(connections)) {
-        for (let a = 0; a < v.length; ++a) {
-          if (v[a] === socket.id) {
-            key = k;
-            ok = true;
+      // for (const [k, v] of Object.entries(connections)) {
+      //   for (let a = 0; a < v.length; ++a) {
+      //     if (v[a] === socket.id) {
+      //       key = k;
+      //       ok = true;
+      //     }
+      //   }
+      // }
+
+      for(const [k, val] of Object.entries(connections)){
+        for(let socketId of val){
+          if(socketId === socket.id){
+            key = k
+            ok = true
           }
         }
       }
@@ -345,8 +353,17 @@ module.exports = (app) => {
         });
         // console.log("message", key, ":", sender, data);
   
-        for (let a = 0; a < connections[key].length; ++a) {
-          io.to(connections[key][a]).emit(
+        // for (let a = 0; a < connections[key].length; ++a) {
+        //   io.to(connections[key][a]).emit(
+        //     "chat-message",
+        //     data,
+        //     sender,
+        //     socket.id
+        //   );
+        // }
+
+        for(let socketId of connections[key]){
+            io.to(socketId).emit(
             "chat-message",
             data,
             sender,
