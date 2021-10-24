@@ -15,6 +15,7 @@ import { NavLink, useHistory } from "react-router-dom";
 import socket from "socket";
 import Drawler from "./Drawler";
 import "./Header.scss";
+import Swal from "sweetalert2";
 
 function Header() {
   const { user } = useSelector((state) => state.auth);
@@ -132,14 +133,26 @@ function Header() {
     }
 
     const declineMsg = (data) => {
-      alert(data.message);
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: data.message,
+        showConfirmButton: false,
+        timer: 1000
+      })
       if (data.msgId) {
         return dispatch(removeMessage(data.msgId));
       }
     };
 
     const errorMsg = (data) => {
-      alert(data);
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: data,
+        showConfirmButton: false,
+        timer: 1000
+      })
     }
 
     socket.on("response renter", loadData);
