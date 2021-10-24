@@ -9,7 +9,7 @@ class TradingsController {
         //   socket.emit('error-auth-room', 'Room Id or Room Password is not correct')
         return res.status(404).json({
           success: false,
-          message: 'RoomId or Password password is not correct',
+          message: 'RoomId or Room password is not correct',
         });
       } else {
         if (trading.status === 'aborted') {

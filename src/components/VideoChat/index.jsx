@@ -14,6 +14,7 @@ import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import "./VideoChat.scss";
 import {abortTrading} from 'features/ChatRoom/ChatRoomSlice'
+import Swal from "sweetalert2";
 
 let connections = {};
 
@@ -522,7 +523,13 @@ export default function VideoChat() {
     };
 
     const handleAbortTrading = (data) => {
-      alert(data)
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: data,
+        showConfirmButton: false,
+        timer: 1000
+      })
       dispatch(abortTrading())
       history.push('/')
     }
