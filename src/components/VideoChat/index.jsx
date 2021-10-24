@@ -355,7 +355,8 @@ export default function VideoChat() {
       let tracks = localVideoref.current.srcObject.getTracks();
       tracks.forEach((track) => track.stop());
     } catch (e) {}
-    history.push("/");
+    // history.push("/");
+    window.location.href = "/"
   };
 
   const openChat = () =>
@@ -422,11 +423,14 @@ export default function VideoChat() {
         elms--;
         video.parentNode.removeChild(video);
         let main = document.getElementById("main");
+        delete connections[id]
         changeCssVideos(main);
       }
     };
 
     const handleUserJoin = (id, clients) => {
+    console.log("🚀 ~ file: index.jsx ~ line 431 ~ handleUserJoin ~ id, clients", id, clients)
+      
       clients.forEach((socketListId) => {
         connections[socketListId] = new RTCPeerConnection(peerConnectionConfig);
         // Wait for their ice candidate
