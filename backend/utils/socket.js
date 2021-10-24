@@ -16,7 +16,7 @@ module.exports = (app) => {
   const fs = require('fs');
   const publicKey = fs.readFileSync('public.pem');
   const Trading = require('../models/tradings.models');
-  const xss = require("xss");
+  const xss = require('xss');
   const sanitizeString = (str) => {
     return xss(str);
   };
@@ -29,8 +29,8 @@ module.exports = (app) => {
   // Store online user in {} ex: {username1: Set(socket1, socket2)}
 
   let connections = {}; /// Lưu trữ thông tin phòng và tất cả các socket id trong room đó {room1: [socket.id], roomn : [socket.id]}
-  let messages = {}; 
-  let timeOnline = {}; 
+  let messages = {};
+  let timeOnline = {};
 
   io.on('connection', (socket) => {
     socket.auth = false;
@@ -75,18 +75,20 @@ module.exports = (app) => {
 
       // var diffTime = Math.abs(timeOnline[socket.id] - new Date());
       // var key;
-      for (const [key, val] of Object.entries(connections))
-      {
-        for(let socketId of val){ // Kiem tra xem socketId do thuoc room nao
-          if(socketId === socket.id){ // neu tim thay thi thong bao den tat cac cac socket con lai trogn room
-            for(let socketId2 of val){ 
-              io.to(socketId2).emit("user-left", socket.id);
+      for (const [key, val] of Object.entries(connections)) {
+        for (let socketId of val) {
+          // Kiem tra xem socketId do thuoc room nao
+          if (socketId === socket.id) {
+            // neu tim thay thi thong bao den tat cac cac socket con lai trogn room
+            for (let socketId2 of val) {
+              io.to(socketId2).emit('user-left', socket.id);
             }
-            connections[key].delete(socket.id) // delete connections ra khoir room
-            if (connections[key].size === 0) { /// Neu khong con ket noi nao nua thi xoa room
+            connections[key].delete(socket.id); // delete connections ra khoir room
+            if (connections[key].size === 0) {
+              /// Neu khong con ket noi nao nua thi xoa room
               delete connections[key];
             }
-            break
+            break;
           }
         }
       }
@@ -116,7 +118,6 @@ module.exports = (app) => {
           } else {
             // Kiem tra xem renter da gui request den cho player truoc do hay chua
             for (let trading of tradings) {
-              
               if (trading.status === 'pending') {
                 let expireTradingDate = new Date(trading.createdAt);
                 expireTradingDate.setMinutes(
@@ -130,7 +131,7 @@ module.exports = (app) => {
                   // Van con han su dung nhung ma renter van click rent
                   const timeRemain = parseInt(
                     (Math.abs(
-                    new Date().getTime() -
+                      new Date().getTime() -
                         new Date(trading.createdAt).getTime(),
                     ) /
                       (1000 * 60)) %
@@ -140,11 +141,10 @@ module.exports = (app) => {
                     'response error renter',
                     `You have already requested to this player !!! Please try in ${timeRemain} minutes`,
                   );
-                  
+
                   return;
-                } 
-              }
-              else if(trading.status === 'performing') {
+                }
+              } else if (trading.status === 'performing') {
                 socket.emit(
                   'response error renter',
                   `This player is in another trasaction`,
@@ -239,12 +239,16 @@ module.exports = (app) => {
           const tradingId = content.split(' Current trading ID: ')[1];
           const trading = await Trading.findByIdAndUpdate(
             tradingId,
-            { status: 'performing'},
+            { status: 'performing' },
             { new: true },
           );
           const renter = await User.findById(trading.renterId);
           const system = await User.findOne({ username: 'system' });
-          const updatedMessage = await Message.findByIdAndUpdate(_id, {content:  content.split(' Current trading ID: ')[0]}, {new: true})
+          const updatedMessage = await Message.findByIdAndUpdate(
+            _id,
+            { content: content.split(' Current trading ID: ')[0] },
+            { new: true },
+          );
           if (trading) {
             const msgForRenter = await Message.create({
               senderId: system._id,
@@ -258,70 +262,81 @@ module.exports = (app) => {
             });
             if (userSocketIdObj[socket.username]) {
               for (let socketId of userSocketIdObj[socket.username]) {
-                io.to(socketId).emit('response confirm rent', {message: msgForPlayer, updatedMessage});
+                io.to(socketId).emit('response confirm rent', {
+                  message: msgForPlayer,
+                  updatedMessage,
+                });
               }
             }
 
             if (userSocketIdObj[renter.username]) {
               for (let socketId of userSocketIdObj[renter.username]) {
-                io.to(socketId).emit('response confirm rent', {message: msgForRenter});
+                io.to(socketId).emit('response confirm rent', {
+                  message: msgForRenter,
+                });
               }
             }
           }
         } catch (error) {
-          console.log(error);
+          console.log(
+            '🚀 ~ file: socket.js ~ line 272 ~ socket.on ~ error',
+            error,
+          );
         }
       }
     });
 
-    socket.on("join-call", (path) => {
+    socket.on('join-call', (path) => {
       if (connections[path] === undefined) {
         connections[path] = new Set([]);
-        
       }
       connections[path].add(socket.id);
-      console.log("🚀 ~ file: socket.js ~ line 283 ~ socket.on ~ connections[path]", connections[path])
-  
+
+      // Join room
+      socket.join(path);
+
       timeOnline[socket.id] = new Date();
-  
+
       // Duyệt qua tất cả các kết nối của room hiện tại rồi emit đến tất cả các socket trong room
-      
-      for(let socketId of connections[path]){
-      console.log("🚀 ~ file: socket.js ~ line 290 ~ socket.on ~ connections[path]", connections[path])
-        
-        io.to(socketId).emit(
-          "user-joined",
-          socket.id,
-          Array.from(connections[path])
-        );
-      }
-  
+
+      // for(let socketId of connections[path]){
+      // console.log("🚀 ~ file: socket.js ~ line 290 ~ socket.on ~ connections[path]", connections[path])
+
+      //   io.to(socketId).emit(
+      //     "user-joined",
+      //     socket.id,
+      //     Array.from(connections[path])
+      //   );
+      // }
+
+      io.to(path).emit('user-joined', socket.id, Array.from(connections[path]));
+
       /// Nếu mà  có message trong room hiện tại thì gửi về cho tất cả các socket ở trong room
-      if (messages[path] !== undefined) { 
+      if (messages[path] !== undefined) {
         for (let a = 0; a < messages[path].length; ++a) {
           io.to(socket.id).emit(
-            "chat-message",
-            messages[path][a]["data"],
-            messages[path][a]["sender"],
-            messages[path][a]["socket-id-sender"]
+            'chat-message',
+            messages[path][a]['data'],
+            messages[path][a]['sender'],
+            messages[path][a]['socket-id-sender'],
           );
         }
       }
-  
+
       console.log(path, connections[path]);
     });
-  
-    socket.on("signal", (toId, message) => {
-      io.to(toId).emit("signal", socket.id, message);
+
+    socket.on('signal', (toId, message) => {
+      io.to(toId).emit('signal', socket.id, message);
     });
-  
-    socket.on("chat-message", (data, sender) => {
+
+    socket.on('chat-message', (data, sender) => {
       data = sanitizeString(data);
       sender = sanitizeString(sender);
       console.log(`${sender}: ${data}`);
       var key;
       var ok = false;
-  
+
       /// for Duyệt qua các phòng và array socketId của phòng đó để tìm xem socketId đang ở phòng naò dựa vào key và ok===true
       // for (const [k, v] of Object.entries(connections)) {
       //   for (let a = 0; a < v.length; ++a) {
@@ -332,16 +347,16 @@ module.exports = (app) => {
       //   }
       // }
 
-      for(const [k, val] of Object.entries(connections)){
-        for(let socketId of val){
-          if(socketId === socket.id){
-            key = k
-            ok = true
+      for (const [k, val] of Object.entries(connections)) {
+        for (let socketId of val) {
+          if (socketId === socket.id) {
+            key = k;
+            ok = true;
           }
         }
       }
-  
-      // Nếu 
+
+      // Nếu
       if (ok === true) {
         if (messages[key] === undefined) {
           messages[key] = [];
@@ -349,10 +364,10 @@ module.exports = (app) => {
         messages[key].push({
           sender: sender,
           data: data,
-          "socket-id-sender": socket.id,
+          'socket-id-sender': socket.id,
         });
         // console.log("message", key, ":", sender, data);
-  
+
         // for (let a = 0; a < connections[key].length; ++a) {
         //   io.to(connections[key][a]).emit(
         //     "chat-message",
@@ -362,19 +377,31 @@ module.exports = (app) => {
         //   );
         // }
 
-        for(let socketId of connections[key]){
-            io.to(socketId).emit(
-            "chat-message",
-            data,
-            sender,
-            socket.id
-          );
+        for (let socketId of connections[key]) {
+          io.to(socketId).emit('chat-message', data, sender, socket.id);
         }
       }
       console.log(`${sender}: ${data}`);
     });
-  
 
+    socket.on('abort trading', async (tradingId, path) => {
+      try {
+         await Trading.findByIdAndUpdate(tradingId, {status: 'aborted'})
+        // emit to all clients in room
+        io.to(path).emit('abort trading', 'Trading is aborted')
+      } catch (error) {
+        console.log("🚀 ~ file: socket.js ~ line 391 ~ socket.on ~ error", error)
+      }
+    });
+
+    socket.on('done trading', async (tradingId, path) => {
+      try {
+        await Trading.findByIdAndUpdate(tradingId, {status: 'done'})
+        io.to(path).emit('done trading', 'Trading is finished')
+      } catch (error) {
+        console.log("🚀 ~ file: socket.js ~ line 401 ~ socket.on ~ error", error)
+      }
+    })
   });
 
   httpServer.listen(4000);

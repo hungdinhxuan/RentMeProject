@@ -1,39 +1,53 @@
 import VideoChat from "components/VideoChat";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { authRoomAsync } from "./ChatRoomSlice";
 import "./ChatRoom.scss";
 
 export default function ChatRoom() {
-  const [userName, setUserName] = useState("");
-  const [room, setRoom] = useState("");
-  const [showChat, setShowChat] = useState(true);
+  const dispatch = useDispatch();
+  const [roomId, setRoomId] = useState("");
+  const [roomPassword, setRoomPassword] = useState("");
+  const { authRoom } = useSelector((state) => state.chatRoom);
 
-  const handleChange = (e) => {
-    setUserName(e.target.value);
-  };
   const joinRoom = () => {
     console.log("Join room");
-    if (userName !== "" && room !== "") {
-      setShowChat(true);
+    if (roomId !== "" && roomPassword !== "") {
+      // setShowChat(true);
+      dispatch(authRoomAsync({ roomId, roomPassword }));
     }
+    setRoomId("");
+    setRoomPassword("");
   };
 
+  // console.log(authRoom);
+
+  console.log(roomId, roomPassword);
   return (
     <div className="chat-rom">
-      {!showChat ? (
+      {!authRoom ? (
         <div className="joinChatContainer">
           <h3>Join A Chat</h3>
-          <input type="text" placeholder="Room ID..." onChange={handleChange} />
+          <input
+            type="text"
+            placeholder="Room ID..."
+            onChange={(e) => {
+              setRoomId(e.target.value);
+            }}
+            value={roomId}
+          />
           <input
             type="text"
             placeholder="Password Room..."
             onChange={(event) => {
-              setRoom(event.target.value);
+              setRoomPassword(event.target.value);
             }}
+            value={roomPassword}
           />
           <button onClick={joinRoom}>Join A Room</button>
         </div>
       ) : (
-        <VideoChat username={userName} room={room} />
+        <VideoChat />
       )}
     </div>
   );
