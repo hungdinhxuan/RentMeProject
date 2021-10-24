@@ -11,8 +11,10 @@ import ChatIcon from "@material-ui/icons/Chat";
 import Modal from "react-bootstrap/Modal";
 import socket from "socket";
 import { useHistory } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import "./VideoChat.scss";
+import {abortTrading} from 'features/ChatRoom/ChatRoomSlice'
+import Swal from "sweetalert2";
 
 let connections = {};
 
@@ -32,7 +34,9 @@ let audioAvailable = false;
 export default function VideoChat() {
   const localVideoref = createRef();
   const history = useHistory();
+  const dispatch = useDispatch()
   const { user } = useSelector((state) => state.auth);
+  const {roomId, tradingId} = useSelector((state) => state.chatRoom);
   const [state, setState] = useState({
     video: false,
     audio: false,
@@ -356,7 +360,9 @@ export default function VideoChat() {
       tracks.forEach((track) => track.stop());
     } catch (e) {}
     // history.push("/");
-    window.location.href = "/";
+    // socket.emit('abort trading')
+    socket.emit('abort trading', tradingId, roomId)
+    // window.location.href = "/"
   };
 
   const openChat = () =>
@@ -411,12 +417,12 @@ export default function VideoChat() {
   /// processing socket
   useEffect(() => {
     socket.on("signal", gotMessageFromServer);
-    socket.emit("join-call", "aduvip");
+    socket.emit("join-call", roomId);
     socketId = socket.id;
     socket.on("chat-message", addMessage);
 
     const handleUserLeft = (id) => {
-      console.log(`Test: ${id}`);
+      console.log(`${id} has left`);
       let video = document.querySelector(`[data-socket="${id}"]`);
       if (video !== null) {
         elms--;
@@ -513,19 +519,34 @@ export default function VideoChat() {
                   id2,
                   JSON.stringify({ sdp: connections[id2].localDescription })
                 );
-              })
+        })
               .catch((e) => console.log(e));
           });
         }
       }
     };
+
+    const handleAbortTrading = (data) => {
+      Swal.fire({
+        position: 'center',
+        icon: 'success',
+        title: data,
+        showConfirmButton: false,
+        timer: 1000
+      })
+      dispatch(abortTrading())
+      history.push('/')
+    }
+    
     socket.on("user-left", handleUserLeft);
     socket.on("user-joined", handleUserJoin);
+    socket.on('abort trading', handleAbortTrading)
     return () => {
       socket.off("signal", gotMessageFromServer);
       socket.off("chat-message", addMessage);
       socket.off("user-left", handleUserLeft);
       socket.off("user-joined", handleUserJoin);
+      socket.off('abort trading', handleAbortTrading)
     };
   }, []);
 

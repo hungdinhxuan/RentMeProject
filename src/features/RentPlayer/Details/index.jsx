@@ -8,7 +8,7 @@ import { AsyncLoadPlayerDetails } from "../PlayerSlice";
 import "./Details.scss";
 import { Modal, Button, Select } from "antd";
 import socket from "socket";
-
+import Swal from "sweetalert2";
 export default function PlayerDetails() {
   const match = useRouteMatch();
   const history = useHistory();
@@ -60,7 +60,13 @@ export default function PlayerDetails() {
         });
       }
     } else {
-      alert("Not enough money");
+      Swal.fire({
+        position: 'center',
+        icon: 'info',
+        title: 'Not enough money',
+        showConfirmButton: false,
+        timer: 1000
+      })
     }
     setIsModalVisible(false);
   };
