@@ -1,8 +1,8 @@
 import VideoChat from "components/VideoChat";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { authRoomAsync } from "./ChatRoomSlice";
 import "./ChatRoom.scss";
+import { authRoomAsync } from "./ChatRoomSlice";
 
 export default function ChatRoom() {
   const dispatch = useDispatch();
@@ -13,16 +13,12 @@ export default function ChatRoom() {
   const joinRoom = () => {
     console.log("Join room");
     if (roomId !== "" && roomPassword !== "") {
-      // setShowChat(true);
       dispatch(authRoomAsync({ roomId, roomPassword }));
     }
     setRoomId("");
     setRoomPassword("");
   };
 
-  // console.log(authRoom);
-
-  console.log(roomId, roomPassword);
   return (
     <div className="chat-rom">
       {!authRoom ? (

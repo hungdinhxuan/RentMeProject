@@ -50,7 +50,7 @@ export default function VideoChat() {
     // Random data
     username: user?.fullName,
   });
-  console.log(state);
+  
 
   //   Asked Media: Audio, Screen, Camera
   const getPermissions = async () => {
@@ -168,7 +168,7 @@ export default function VideoChat() {
     let dst = oscillator.connect(ctx.createMediaStreamDestination());
     oscillator.start();
     ctx.resume();
-    return Object.assign(dst.stream.getAudioTracks()[0], { enabled: false });
+    return Object.assign(dst.stream.getAudioTracks()[0], { enabled: true });
   };
 
   const black = ({ width = 640, height = 480 } = {}) => {
@@ -379,9 +379,9 @@ export default function VideoChat() {
     setState({ ...state, showModal: true, newmessages: 0 });
   const closeChat = () => setState({ ...state, showModal: false });
   const handleMessage = (e) => setState({ ...state, message: e.target.value });
-  console.log(state);
+  
   const addMessage = (data, sender, socketIdSender) => {
-    console.log(data, sender, socketIdSender);
+    
     setState((prevState) => ({
       ...prevState,
       messages: [...prevState.messages, { sender: sender, data: data }],
@@ -402,11 +402,7 @@ export default function VideoChat() {
     setState({ ...state, message: "", sender: state.username });
   };
 
-  const connect = () =>
-    setState((prevState) => {
-      getMedia();
-      return { ...prevState, askForUsername: false };
-    });
+  
 
   // webcam and mic
   useEffect(() => {
@@ -431,22 +427,21 @@ export default function VideoChat() {
     socketId = socket.id;
     socket.on("chat-message", addMessage);
 
-    
     const handleUserLeft = (id) => {
-      console.log(`${id} has left`);
+      
       let video = document.querySelector(`[data-socket="${id}"]`);
       if (video !== null) {
         elms--;
         video.parentNode.removeChild(video);
         let main = document.getElementById("main");
-        delete connections[id]
+        delete connections[id];
         changeCssVideos(main);
       }
     };
 
     const handleUserJoin = (id, clients) => {
-    console.log("🚀 ~ file: index.jsx ~ line 431 ~ handleUserJoin ~ id, clients", id, clients)
       
+
       clients.forEach((socketListId) => {
         connections[socketListId] = new RTCPeerConnection(peerConnectionConfig);
         // Wait for their ice candidate
@@ -475,6 +470,7 @@ export default function VideoChat() {
             let cssMesure = changeCssVideos(main);
 
             let video = document.createElement("video");
+            video.classList.add("col-12", "col-md-4");
 
             let css = {
               minWidth: cssMesure.minWidth,
@@ -501,6 +497,7 @@ export default function VideoChat() {
         if (window.localStream !== undefined && window.localStream !== null) {
           connections[socketListId].addStream(window.localStream);
         } else {
+          // Mic
           let blackSilence = (...args) =>
             new MediaStream([black(...args), silence()]);
           window.localStream = blackSilence();
@@ -641,7 +638,7 @@ export default function VideoChat() {
           </Modal.Footer>
         </Modal>
 
-        <div className="container-layout">
+        <div className="container-layout row">
           <div
             id="main"
             className="flex-container"
@@ -652,13 +649,12 @@ export default function VideoChat() {
               ref={localVideoref}
               autoPlay
               muted
+              className="col-md-4 col-12"
               style={{
                 borderStyle: "solid",
                 borderColor: "#bdbdbd",
-                margin: "10px",
                 objectFit: "fill",
                 width: "100%",
-                height: "100%",
               }}
             ></video>
           </div>
