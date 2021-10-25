@@ -50,7 +50,7 @@ export default function VideoChat() {
     // Random data
     username: user?.fullName,
   });
-  console.log(state);
+  
 
   //   Asked Media: Audio, Screen, Camera
   const getPermissions = async () => {
@@ -369,9 +369,9 @@ export default function VideoChat() {
     setState({ ...state, showModal: true, newmessages: 0 });
   const closeChat = () => setState({ ...state, showModal: false });
   const handleMessage = (e) => setState({ ...state, message: e.target.value });
-  console.log(state);
+  
   const addMessage = (data, sender, socketIdSender) => {
-    console.log(data, sender, socketIdSender);
+    
     setState((prevState) => ({
       ...prevState,
       messages: [...prevState.messages, { sender: sender, data: data }],
@@ -422,7 +422,7 @@ export default function VideoChat() {
     socket.on("chat-message", addMessage);
 
     const handleUserLeft = (id) => {
-      console.log(`${id} has left`);
+      
       let video = document.querySelector(`[data-socket="${id}"]`);
       if (video !== null) {
         elms--;
@@ -434,11 +434,7 @@ export default function VideoChat() {
     };
 
     const handleUserJoin = (id, clients) => {
-      console.log(
-        "🚀 ~ file: index.jsx ~ line 431 ~ handleUserJoin ~ id, clients",
-        id,
-        clients
-      );
+      
 
       clients.forEach((socketListId) => {
         connections[socketListId] = new RTCPeerConnection(peerConnectionConfig);
@@ -495,6 +491,7 @@ export default function VideoChat() {
         if (window.localStream !== undefined && window.localStream !== null) {
           connections[socketListId].addStream(window.localStream);
         } else {
+          // Mic
           let blackSilence = (...args) =>
             new MediaStream([black(...args), silence()]);
           window.localStream = blackSilence();

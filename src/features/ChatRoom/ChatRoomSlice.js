@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "axiosClient";
+import Swal from "sweetalert2";
+
 
 const initialState = {
     roomId: null,
@@ -35,7 +37,13 @@ const ChatRoomSlice = createSlice({
             state.tradingId = action.payload.tradingId
             state.authRoom = true
         }).addCase(authRoomAsync.rejected,  (state, action) => {
-            console.log(action.payload);
+            Swal.fire({
+                position: 'center',
+                icon: 'warning',
+                title: action.payload.message,
+                showConfirmButton: false,
+                timer: 1000
+              })
         })
     }
 })
