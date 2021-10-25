@@ -38,9 +38,31 @@ function Header() {
 
   const handleDeleteMessage = () => {
     setIsModalVisible(false);
-    dispatch(
-      removeMessageAsync({ userId: user._id, messageId: messages[idModal]._id })
-    );
+    
+    //messages[idModal].content.match(/^Trading [a-z 0-9]* accepted by .* Room ID: .* Room Password: .*/g)[0] === messages[idModal].content
+    const checker = messages[idModal].content.match(/^Trading [a-z 0-9]* accepted by .*\s Room ID: .*, Room Password: .*/g)
+    if(checker && checker[0] === messages[idModal].content){
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "This message contain infomation about Room ID as well as Room Password. Please consider before making decision. You won't be able to revert this! ",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(
+            removeMessageAsync({ userId: user._id, messageId: messages[idModal]._id })
+          );
+        }
+      })
+    }
+    else{
+      dispatch(
+        removeMessageAsync({ userId: user._id, messageId: messages[idModal]._id })
+      );
+    }
   };
 
   const history = useHistory();

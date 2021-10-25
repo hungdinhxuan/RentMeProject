@@ -355,14 +355,24 @@ export default function VideoChat() {
     });
 
   const handleEndCall = () => {
-    try {
-      let tracks = localVideoref.current.srcObject.getTracks();
-      tracks.forEach((track) => track.stop());
-    } catch (e) {}
-    // history.push("/");
-    // socket.emit('abort trading')
-    socket.emit('abort trading', tradingId, roomId)
-    // window.location.href = "/"
+    Swal.fire({
+      title: 'Are you sure?',
+      text: "You won't be able to revert this!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes, abort it!',
+      cancelButtonText: 'No, cancel!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        try {
+          let tracks = localVideoref.current.srcObject.getTracks();
+          tracks.forEach((track) => track.stop());
+        } catch (e) {}
+        socket.emit('abort trading', tradingId, roomId, user.username)
+      }
+    })
   };
 
   const openChat = () =>

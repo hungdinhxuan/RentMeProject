@@ -1,4 +1,5 @@
 const PlayerProfiles = require('../models/player_profiles.models');
+const Reviews = require('../models/reviews.models')
 
 const mongoose = require('mongoose');
 class PlayersControllers {
@@ -259,11 +260,22 @@ class PlayersControllers {
         console.log(`Uploaded ${imageResponses.length}`);
         res.json({ images: imageResponses });
       } catch (error) {
-        return res.status(500).send(error);
+        return res.status(500).json({success: false, message: error.message || 'Internal Server Error'});
       }
     });
   }
-  
+  async getReviews(req, res){
+    try {
+      const {id} = req.params
+      const reviews = await Reviews.find({playerProfileId: id})
+      return res.status(200).json({success: true, reviews})
+    } catch (error) {
+      return res.status(500).json({success: false, message: error.message || 'Internal Server Error'});
+    }
+  }
+  async createReview(req, res){
+    
+  }
 }
 
 module.exports = new PlayersControllers();
