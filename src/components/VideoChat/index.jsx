@@ -402,11 +402,7 @@ export default function VideoChat() {
     setState({ ...state, message: "", sender: state.username });
   };
 
-  const connect = () =>
-    setState((prevState) => {
-      getMedia();
-      return { ...prevState, askForUsername: false };
-    });
+  
 
   // webcam and mic
   useEffect(() => {
