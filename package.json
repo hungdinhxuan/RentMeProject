@@ -28,6 +28,7 @@
     "react-facebook-login": "^4.1.1",
     "react-google-login": "^5.2.2",
     "react-google-recaptcha": "^2.1.0",
+    "react-hls-player": "^3.0.7",
     "react-hook-form": "^7.15.3",
     "react-lottie": "^1.2.3",
     "react-messenger-customer-chat": "^0.8.0",

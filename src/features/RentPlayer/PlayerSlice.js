@@ -2,14 +2,6 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "axiosClient";
 
 
-// const handleNoti = (icon, title, text) => {
-//   Swal.fire({
-//     icon: `${icon}`,
-//     title: `${title}`,
-//     text: `${text}`,
-//   });
-// };
-
 const initialState = {
   listPlayers: null,
   loading: false,
