@@ -337,7 +337,7 @@ u
   }
 
 
-  /// Rent player
+  
 }
 
 module.exports = new UsersController();
