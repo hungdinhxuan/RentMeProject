@@ -1,5 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "axiosClient";
+import {ToastSweet} from "components/SweetAlert2";
+
 const initialState = {
   messages: [],
 };
@@ -42,15 +44,16 @@ const MessageSlice = createSlice({
       state.messages = state.messages.filter(
         (msg) => msg._id !== action.payload
       );
+      ToastSweet("success", "message removed");
     },
-    updateMessage(state, action){
+    updateMessage(state, action) {
       state.messages = state.messages.map((mess) => {
         if (mess._id === action.payload._id) {
           mess = action.payload;
         }
         return mess;
       });
-    }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -64,16 +67,17 @@ const MessageSlice = createSlice({
           }
           return mess;
         });
-
-      }).addCase(removeMessageAsync.fulfilled, (state, action) => {
+      })
+      .addCase(removeMessageAsync.fulfilled, (state, action) => {
         state.messages = state.messages.filter(
           (msg) => msg._id !== action.payload.msgId
         );
-        
-      }) 
+        ToastSweet("success", "message removed");
+      });
   },
 });
 
 const { reducer } = MessageSlice;
-export const { addNewMessage, removeMessage, updateMessage } =MessageSlice.actions;
+export const { addNewMessage, removeMessage, updateMessage } =
+  MessageSlice.actions;
 export default reducer;

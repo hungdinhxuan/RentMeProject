@@ -272,10 +272,8 @@ class PlayersControllers {
   }
   async getReviews(req, res) {
     try {
-      const { id } = req.params;
-      const reviews = await Reviews.find({ playerProfileId: id })
-        .populate('userId')
-        .select('avatar');
+      const { id } = req.params; //profile id
+      const reviews = await Reviews.find({playerProfileId: id}).populate({path: 'userId', select: 'avatar _id fullName'})
       return res.status(200).send(reviews);
     } catch (error) {
       return res
@@ -314,7 +312,8 @@ class PlayersControllers {
         userId: trading.renterId,
         playerProfileId: player_profile._id,
         content,
-        rating,
+        rating, 
+        tradingId
       });
       return res
         .status(201)
