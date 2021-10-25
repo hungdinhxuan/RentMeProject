@@ -235,6 +235,27 @@
             "Authorization": []
           }
         ]
+      },
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "User ID"
+          }
+        ],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       }
     },
     "/api/users/{id}/avatar": {
@@ -304,6 +325,65 @@
             "Authorization": []
           }
         ]
+      }
+    },
+    "/api/users/{id}/messages": {
+      "get": {
+        "tags": [
+          "Users"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "User ID"
+          }
+        ],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/api/users/{id}/messages/{msgId}": {
+      "patch": {
+        "tags": [
+          "Users"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "User ID"
+          },
+          {
+            "name": "msgId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Message ID"
+          }
+        ],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [],
+        "description": "",
+        "parameters": [],
+        "responses": {}
       }
     },
     "/api/services/": {
@@ -506,15 +586,47 @@
         "responses": {}
       }
     },
+    "/api/players/{id}/reviews": {
+      "get": {
+        "tags": [
+          "Players"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Player ID"
+          }
+        ],
+        "responses": {}
+      }
+    },
     "/api/files/users": {
       "post": {
-        "tags": [],
+        "tags": [
+          "Dev"
+        ],
         "description": "",
         "parameters": [],
         "responses": {}
       },
       "get": {
-        "tags": [],
+        "tags": [
+          "Dev"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/tradings/": {
+      "post": {
+        "tags": [
+          "Tradings"
+        ],
         "description": "",
         "parameters": [],
         "responses": {}

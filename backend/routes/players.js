@@ -17,4 +17,24 @@ router.get('/:id',
     */
 PlayerController.getOnePlayer)
 
+router.get('/:id/reviews', 
+  /*  
+        #swagger.tags = ['Players']  
+        #swagger.parameters['id'] = { description: 'Player ID' }
+
+    */
+PlayerController.getReviews)
+
+router.post('/:id/reviews', 
+  /*  
+        #swagger.tags = ['Players']  
+        #swagger.security = [{
+            "Authorization": []
+        }]
+        #swagger.parameters['id'] = { description: 'Player ID' }
+
+    */
+passport.authenticate('jwt', {session: false}),
+PlayerController.createReview)
+
 module.exports = router;
