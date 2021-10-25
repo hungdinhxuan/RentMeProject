@@ -1,6 +1,6 @@
 .flex-container {
     // height: calc(100% - 150px);
-    height: 80%;
+    height: 100%;
     width: 100%;
     /* margin: 0 auto; */
     display: flex;
@@ -12,7 +12,7 @@
     video {
         background-image: url("../../assets/StreamLayout2.png");
         background-repeat: no-repeat;
-        background-size: cover!important;
+        background-size: 100% 100% !important;
         color: #fff !important;
         border: none !important;
         background-position: center;
