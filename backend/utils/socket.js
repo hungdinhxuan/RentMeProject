@@ -15,6 +15,7 @@ module.exports = (app) => {
   const publicKey = fs.readFileSync('public.pem');
   const Trading = require('../models/tradings.models');
   const Transfer = require('../models/transfers.models')
+  const PlayerProfile = require('../models/player_profiles.models')
   const xss = require('xss');
   const sanitizeString = (str) => {
     return xss(str);
@@ -414,20 +415,30 @@ module.exports = (app) => {
                 console.log("🚀 ~ file: socket.js ~ line 411 ~ socket.on ~ err", err)
               }
             })
-          } else if(user._id.equals(trading.renterId)){
-            await Trading.findByIdAndUpdate(tradingId, {status: 'done', reason: `${username} is finished trading soon ....`})
+            await Trading.findByIdAndUpdate(tradingId, {status: 'aborted', reason: `Trading is aborted by ${username}`})
+
+            // emit cho ca 2
             io.to(path).emit(
               'abort trading',
-              `Trading is aborted by ${username}`,
+              `Trading is aborted by ${user.fullName}`,
             );
-            return  
+          } else if(user._id.equals(trading.renterId)){
+            // renter abort
+            await Trading.findByIdAndUpdate(tradingId, {status: 'done', reason: `${username} is finished trading soon ....`})
+            const player = await User.findById(trading.playerId)
+            const player_profile = PlayerProfile.findOne({userId: player._id})
+            // emit to all current socket of player
+            for(let socketId of userSocketIdObj[player.username]){
+              io.to(socketId).emit('abort trading', `Trading is aborted by ${user.fullName}`)
+            }
+            
+            /// emit to all current socket of renter
+            for(let socketId of userSocketIdObj[user.username]){
+              io.to(socketId).emit('response abort trading for renter', player_profile._id)
+            }
           }
-          await Trading.findByIdAndUpdate(tradingId, {status: 'aborted', reason: `Trading is aborted by ${username}`})
-          // emit to all clients in room
-          io.to(path).emit(
-            'abort trading',
-            `Trading is aborted by ${username}`,
-          );
+          
+        
         } catch (error) {
           console.log(
             '🚀 ~ file: socket.js ~ line 391 ~ socket.on ~ error',

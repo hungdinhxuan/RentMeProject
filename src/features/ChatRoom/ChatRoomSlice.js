@@ -1,7 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "axiosClient";
 import Swal from "sweetalert2";
-
+import {ToastSweet} from 'components/SweetAlert2'
 
 const initialState = {
     roomId: null,
@@ -13,6 +13,16 @@ const initialState = {
 export const authRoomAsync = createAsyncThunk("chatroom/auth", async(values, {rejectWithValue}) => {
     try {
         const response = await axiosClient.post('/tradings', values)
+        return response
+    } catch (error) {
+        return rejectWithValue(error.response.data)
+    }
+})
+
+
+export const createReviewAsync = createAsyncThunk("chatroom/createReview", async(values, {rejectWithValue}) => {
+    try {
+        const response = await axiosClient.post(`/players/${values.playerId}/reviews`, values)
         return response
     } catch (error) {
         return rejectWithValue(error.response.data)
@@ -44,6 +54,10 @@ const ChatRoomSlice = createSlice({
                 showConfirmButton: false,
                 timer: 1000
               })
+        }).addCase(createReviewAsync.fulfilled, (state, action) => {
+            ToastSweet('success', action.payload.message)
+        }).addCase(createReviewAsync.rejected, (state, action) => {
+            ToastSweet('error', action.payload.message)
         })
     }
 })
