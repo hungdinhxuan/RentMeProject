@@ -8,6 +8,12 @@ import "./Details.scss";
 import { Modal, Button, Select } from "antd";
 import socket from "socket";
 import Swal from "sweetalert2";
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en.json";
+TimeAgo.addDefaultLocale(en);
+
+const timeAgo = new TimeAgo("en-US");
+
 export default function PlayerDetails() {
   const match = useRouteMatch();
   const params = useParams();
@@ -142,7 +148,7 @@ export default function PlayerDetails() {
               </div>
               <div className="member-since">
                 <span>Join Date: </span>
-                <span>1/3/2021</span>
+                <span>{new Date(player?.createdAt).toDateString()}</span>
               </div>
             </div>
 
@@ -236,7 +242,7 @@ export default function PlayerDetails() {
                         <div className="review-content">
                           <p>{review.userId.fullName}</p>
                           <p className="review-time">
-                            {new Date(review.createdAt).toLocaleString()}
+                            {timeAgo.format(new Date(review.createdAt))}
                           </p>
                           <p className="content-player-comment">
                             {review.content}
