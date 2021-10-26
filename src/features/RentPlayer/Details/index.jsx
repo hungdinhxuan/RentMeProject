@@ -3,7 +3,7 @@ import { useHistory, useRouteMatch, useParams } from "react-router";
 import { Image, Rate, Avatar } from "antd";
 import "./Details.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { AsyncLoadPlayerDetails, AsyncGetReviews, AsyncDonateMoney } from "../PlayerSlice";
+import { AsyncLoadPlayerDetails, AsyncGetReviews, AsyncDonateMoney, AsyncFollowPlayer} from "../PlayerSlice";
 import "./Details.scss";
 import { Modal, Button, Select } from "antd";
 import socket from "socket";
@@ -106,7 +106,9 @@ export default function PlayerDetails() {
     });
   };
 
-  
+  const handleFollow = () => {
+    dispatch(AsyncFollowPlayer(params.cardId))
+  }
 
   const handleMoreAmount = () => {
     history.push("/setting/wallet");
@@ -126,7 +128,7 @@ export default function PlayerDetails() {
 
   useEffect(() => {
     dispatch(AsyncLoadPlayerDetails(match.params.cardId));
-  }, [dispatch, match.params.cardId]);
+  }, [dispatch, match.params.cardId], player?.user?.follower);
 
   // const test = AverageRating(reviews);
   // console.log(test);
@@ -157,7 +159,7 @@ export default function PlayerDetails() {
                       onVisibleChange: (vis) => setVisible(vis),
                     }}
                   >
-                    {player?.albums.map((item, index) => (
+                    {player?.albums?.map((item, index) => (
                       <Image key={index} src={item} />
                     ))}
                   </Image.PreviewGroup>
@@ -207,7 +209,9 @@ export default function PlayerDetails() {
               <div className="name-profile">
                 <div className="center-item col-lg-12">
                   <span className="name__player">{player?.nickname} </span>
-                  <button className="btn-follow-player">Follow Me</button>
+                  {player?.user?.follower?.indexOf(user._id) === -1 ?
+                  <button className="btn-follow-player" onClick={handleFollow}>Following Me</button> : <button className="btn-follow-player" onClick={handleFollow}>Unfollowing me</button> 
+                  }
                 </div>
               </div>
               <div className="nav-player-profile row">
@@ -215,7 +219,7 @@ export default function PlayerDetails() {
                   <div className="nav__item-name">
                     <span>Followers</span>
                   </div>
-                  <div className="nav__item-value">82 people</div>
+                  <div className="nav__item-value">{player?.user?.follower?.length} people</div>
                 </div>
                 <div className="col-lg-3 col-6">
                   <div className="nav__item-name">
@@ -265,7 +269,7 @@ export default function PlayerDetails() {
                 <span>Comment</span>
               </div>
               <div className="text-center comment-player-profile">
-                {reviews.map((review) => (
+                {reviews?.map((review) => (
                   <div className="col-lg-12">
                     <div className="fullsize">
                       <div className="comment-image">

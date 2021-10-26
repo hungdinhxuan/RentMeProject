@@ -15,7 +15,15 @@ const loginLimiter = rateLimit({
     'This ip is blocked in 1h because try to perform brute force is not allowed !!!!',
 });
 
+const followLimiter = rateLimit({
+  windowMs: 1 * 60 *  1000, // 1 minute window
+  max: 1, // start blocking after 1 requests
+  message:
+    'Please try again after 1p',
+})
+
 module.exports = {
   loginLimiter,
   registerLimiter,
+  followLimiter
 };

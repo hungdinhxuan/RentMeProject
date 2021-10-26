@@ -4,7 +4,7 @@ import socket from "socket";
 import Swal from "sweetalert2";
 
 const initialState = {
-  listPlayers: null,
+  listPlayers: [],
   loading: false,
   error: null,
   player: null,
@@ -20,6 +20,7 @@ export const AsyncLoadPlayer = createAsyncThunk(
       );
       return response;
     } catch (err) {
+      
       return rejectWithValue(err.response.data);
     }
   }
@@ -60,6 +61,18 @@ async (values, { rejectWithValue }) => {
 }
 )
 
+export const AsyncFollowPlayer = createAsyncThunk("player/follow", 
+async (values, { rejectWithValue }) => {
+  try {
+    const response = await axiosClient.patch(`/players/${values}/follow`);
+    return response;
+  } catch (error) {
+    
+    return rejectWithValue(error.response);
+  }
+}
+)
+
 const PlayerSlice = createSlice({
   name: "player",
   initialState,
@@ -78,7 +91,7 @@ const PlayerSlice = createSlice({
       state.error = null;
     },
     [AsyncLoadPlayer.rejected]: (state, action) => {
-      state.listPlayers = null;
+      state.listPlayers = [];
       state.loading = false;
       state.error = action.payload.message;
     },
@@ -110,9 +123,24 @@ const PlayerSlice = createSlice({
       state.error = null;
     },
     [AsyncDonateMoney.rejected]: (state, action) => {
-      
       Swal.fire({
         title: action.payload.message || 'something wrong happen',
+        icon: 'error'
+      })
+    },
+    [AsyncFollowPlayer.fulfilled]: (state, action) => {
+      state.player.user.follower = action.payload.player.follower
+      state.loading = false;
+      state.error = null;
+      Swal.fire({
+        title: action.payload.message,
+        icon: 'success'
+      })
+    },
+    [AsyncFollowPlayer.rejected]: (state, action) => {
+      
+      Swal.fire({
+        title: action.payload.data || action.payload || 'something wrong happen please try again 1p',
         icon: 'error'
       })
     }
