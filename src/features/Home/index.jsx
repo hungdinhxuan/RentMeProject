@@ -12,7 +12,7 @@ function Home() {
   window.onunload = () => {
     window.scrollTo(0, 0);
   };
-  const [visible, setVisible] = useState(true);
+  const [visible, setVisible] = useState(false);
   const [rate, setRate] = useState(5);
   const handleOk = () => {};
 
