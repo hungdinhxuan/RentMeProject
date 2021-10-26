@@ -1,4 +1,4 @@
-import React, { createRef, useState, useEffect } from "react";
+import React, { createRef, useState, useEffect, useRef } from "react";
 import { IconButton, Badge, Input, Button } from "@material-ui/core";
 import VideocamIcon from "@material-ui/icons/Videocam";
 import VideocamOffIcon from "@material-ui/icons/VideocamOff";
@@ -21,6 +21,7 @@ import Swal from "sweetalert2";
 import { Modal as ModalRating, Rate } from "antd";
 
 import { Button as ButtonAntd } from "antd";
+import CoutdownTime from "./CoutdownTime";
 
 let connections = {};
 
@@ -43,11 +44,10 @@ export default function VideoChat() {
   const history = useHistory();
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const { roomId, tradingId } = useSelector((state) => state.chatRoom);
-  console.log(
-    "🚀 ~ file: index.jsx ~ line 44 ~ VideoChat ~ tradingId",
-    tradingId
+  const { roomId, tradingId, expireTime } = useSelector(
+    (state) => state.chatRoom
   );
+
   const [state, setState] = useState({
     video: false,
     audio: false,
@@ -65,10 +65,9 @@ export default function VideoChat() {
   const [visible, setVisible] = useState(false);
   const [rate, setRate] = useState(5);
   const [rateContent, setRateContent] = useState("");
-
+  
   const handleOk = () => {
     setVisible(false);
-    console.log(tradingId);
 
     dispatch(
       createReviewAsync({
@@ -114,34 +113,6 @@ export default function VideoChat() {
         navigator.mediaDevices
           .getUserMedia({ video: videoAvailable, audio: audioAvailable })
           .then((stream) => {
-            console.log(
-              "🚀 ~ file: index.jsx ~ line 105 ~ handleOk ~ tradingId",
-              tradingId
-            );
-            console.log(
-              "🚀 ~ file: index.jsx ~ line 105 ~ handleOk ~ tradingId",
-              tradingId
-            );
-            console.log(
-              "🚀 ~ file: index.jsx ~ line 108 ~ .then ~ tradingId",
-              tradingId
-            );
-            console.log(
-              "🚀 ~ file: index.jsx ~ line 108 ~ .then ~ tradingId",
-              tradingId
-            );
-            console.log(
-              "🚀 ~ file: index.jsx ~ line 105 ~ handleOk ~ tradingId",
-              tradingId
-            );
-            console.log(
-              "🚀 ~ file: index.jsx ~ line 111 ~ .then ~ tradingId",
-              tradingId
-            );
-            console.log(
-              "🚀 ~ file: index.jsx ~ line 111 ~ .then ~ tradingId",
-              tradingId
-            );
             window.localStream = stream;
             localVideoref.current.srcObject = stream;
           })
@@ -435,10 +406,7 @@ export default function VideoChat() {
           tracks.forEach((track) => track.stop());
         } catch (e) {}
         socket.emit("abort trading", tradingId, roomId, user.username);
-        console.log(
-          "🚀 ~ file: index.jsx ~ line 406 ~ handleEndCall ~ tradingId",
-          tradingId
-        );
+        
       }
     });
   };
@@ -626,6 +594,7 @@ export default function VideoChat() {
     };
   }, []);
 
+  
   return (
     <div>
       <div>
@@ -669,6 +638,12 @@ export default function VideoChat() {
               <ChatIcon />
             </IconButton>
           </Badge>
+          <span
+            className="time-expired"
+            style={{ color: "red", marginLeft: 15 }}
+          >
+            <CoutdownTime expiredTime={expireTime}/>
+          </span>
         </div>
 
         <Modal
