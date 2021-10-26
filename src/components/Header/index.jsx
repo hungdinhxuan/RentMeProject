@@ -41,7 +41,8 @@ function Header() {
     
     //messages[idModal].content.match(/^Trading [a-z 0-9]* accepted by .* Room ID: .* Room Password: .*/g)[0] === messages[idModal].content
     const checker = messages[idModal].content.match(/^Trading [a-z 0-9]* accepted by .*\s Room ID: .*, Room Password: .*/g)
-    if(checker && checker[0] === messages[idModal].content){
+    const checker2 = messages[idModal].content.match(/^You are accepted [a-z 0-9]* with .*\s Room ID: .*, Room Password: .*/g)
+    if((checker && checker[0] === messages[idModal].content) || (checker2 && checker2[0] === messages[idModal].content)){
       Swal.fire({
         title: 'Are you sure?',
         text: "This message contain infomation about Room ID as well as Room Password. Please consider before making decision. You won't be able to revert this! ",

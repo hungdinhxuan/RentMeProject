@@ -13,8 +13,11 @@ import socket from "socket";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import "./VideoChat.scss";
-import {abortTrading} from 'features/ChatRoom/ChatRoomSlice'
+import {abortTrading, createReviewAsync} from 'features/ChatRoom/ChatRoomSlice'
 import Swal from "sweetalert2";
+import { Modal as ModalRating, Rate } from "antd";
+
+// import { Modal, Button, Rate } from "antd";
 
 let connections = {};
 
@@ -30,6 +33,7 @@ let socketId = null;
 let elms = 0;
 let videoAvailable = false;
 let audioAvailable = false;
+let player_profile_id = ''
 
 export default function VideoChat() {
   const localVideoref = createRef();
@@ -37,6 +41,7 @@ export default function VideoChat() {
   const dispatch = useDispatch()
   const { user } = useSelector((state) => state.auth);
   const {roomId, tradingId} = useSelector((state) => state.chatRoom);
+  console.log("🚀 ~ file: index.jsx ~ line 44 ~ VideoChat ~ tradingId", tradingId)
   const [state, setState] = useState({
     video: false,
     audio: false,
@@ -50,7 +55,31 @@ export default function VideoChat() {
     // Random data
     username: user?.fullName,
   });
+
+  const [visible, setVisible] = useState(false);
+  const [rate, setRate] = useState(5);
+  const [rateContent, setRateContent] = useState('')
   
+  const handleOk = () => {
+    setVisible(false)
+    console.log(tradingId);
+
+    dispatch(createReviewAsync({
+      playerId: player_profile_id,
+      tradingId,
+      content: rateContent,
+      rating: rate
+    }))
+
+    dispatch(abortTrading())
+    history.push('/')
+  };
+  const handleCancel = () => {
+    setVisible(false)
+    dispatch(abortTrading())
+    history.push('/')
+  };
+
 
   //   Asked Media: Audio, Screen, Camera
   const getPermissions = async () => {
@@ -78,6 +107,13 @@ export default function VideoChat() {
         navigator.mediaDevices
           .getUserMedia({ video: videoAvailable, audio: audioAvailable })
           .then((stream) => {
+      console.log("🚀 ~ file: index.jsx ~ line 105 ~ handleOk ~ tradingId", tradingId)
+      console.log("🚀 ~ file: index.jsx ~ line 105 ~ handleOk ~ tradingId", tradingId)
+      console.log("🚀 ~ file: index.jsx ~ line 108 ~ .then ~ tradingId", tradingId)
+      console.log("🚀 ~ file: index.jsx ~ line 108 ~ .then ~ tradingId", tradingId)
+      console.log("🚀 ~ file: index.jsx ~ line 105 ~ handleOk ~ tradingId", tradingId)
+      console.log("🚀 ~ file: index.jsx ~ line 111 ~ .then ~ tradingId", tradingId)
+      console.log("🚀 ~ file: index.jsx ~ line 111 ~ .then ~ tradingId", tradingId)
             window.localStream = stream;
             localVideoref.current.srcObject = stream;
           })
@@ -371,6 +407,7 @@ export default function VideoChat() {
           tracks.forEach((track) => track.stop());
         } catch (e) {}
         socket.emit('abort trading', tradingId, roomId, user.username)
+        console.log("🚀 ~ file: index.jsx ~ line 406 ~ handleEndCall ~ tradingId", tradingId)
       }
     })
   };
@@ -540,16 +577,27 @@ export default function VideoChat() {
       dispatch(abortTrading())
       history.push('/')
     }
+
+    const handleAbortTradingRenter = (data) => {
+      player_profile_id = data
+      setVisible(true)
+    }
     
     socket.on("user-left", handleUserLeft);
     socket.on("user-joined", handleUserJoin);
+
+    // happen when player abort trading
     socket.on('abort trading', handleAbortTrading)
+
+    // happen when renter abort trading
+    socket.on('response abort trading for renter', handleAbortTradingRenter)
     return () => {
       socket.off("signal", gotMessageFromServer);
       socket.off("chat-message", addMessage);
       socket.off("user-left", handleUserLeft);
       socket.off("user-joined", handleUserJoin);
       socket.off('abort trading', handleAbortTrading)
+      socket.off('response abort trading for renter', handleAbortTradingRenter)
     };
   }, []);
 
@@ -660,6 +708,15 @@ export default function VideoChat() {
           </div>
         </div>
       </div>
+      <ModalRating
+        title="Please describe your experience"
+        visible={visible}
+        onOk={handleOk}
+        onCancel={handleCancel}
+      >
+        <Rate onChange={(val) => setRate(val)} value={rate} />
+        <textarea className="text-center" style={{display: "block"}} onChange={(e) => setRateContent(e.target.value)} placeholder="Write your comment here!"/>
+      </ModalRating>
     </div>
   );
 }

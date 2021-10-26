@@ -7,6 +7,7 @@ const initialState = {
   loading: false,
   error: null,
   player: null,
+  reviews: []
 };
 
 export const AsyncLoadPlayer = createAsyncThunk(
@@ -27,12 +28,22 @@ export const AsyncLoadPlayerDetails = createAsyncThunk(
   "player/loadplayerdetails",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axiosClient.get(
-        `/players/${values}`
-      );
+      const response = await axiosClient.get(`/players/${values}`);
       return response;
     } catch (err) {
       return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const AsyncGetReviews = createAsyncThunk(
+  "player/loadReviews",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axiosClient.get(`/players/${values}/reviews`);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
     }
   }
 );
@@ -41,9 +52,9 @@ const PlayerSlice = createSlice({
   name: "player",
   initialState,
   reducers: {
-    playerDetails: (state,action) => {
+    playerDetails: (state, action) => {
       state.player = action.payload;
-    }
+    },
   },
   extraReducers: {
     [AsyncLoadPlayer.pending]: (state) => {
@@ -59,7 +70,7 @@ const PlayerSlice = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     },
-    
+
     [AsyncLoadPlayerDetails.fulfilled]: (state, action) => {
       state.player = action.payload;
       state.loading = false;
@@ -70,6 +81,12 @@ const PlayerSlice = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     },
+
+    [AsyncGetReviews.fulfilled]: (state, action) => {
+      state.reviews = action.payload;
+      state.loading = false;
+      state.error = null;
+    }
   },
 });
 

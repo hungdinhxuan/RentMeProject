@@ -25,6 +25,7 @@ router.get('/:id/reviews',
     */
 PlayerController.getReviews)
 
+
 router.post('/:id/reviews', 
   /*  
         #swagger.tags = ['Players']  
