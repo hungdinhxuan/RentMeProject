@@ -1,0 +1,82 @@
+.streamhub {
+    background: #fff;
+    position: relative;
+    height: 100vh;
+    &.row {
+        margin: 0;
+    }
+
+    .streamhub-video {
+        padding-top: 15px;
+        .video-layout {
+            background: url("../../assets/StreamLayout4.png") no-repeat;
+            width: 1000px;
+            height: 900px;
+            position: relative;
+            background-size: contain;
+            video {
+                margin-top: 206px;
+                margin-left: 42px;
+            }
+        }
+    }
+    .global-chat {
+        margin-top: 194px;
+        height: 50%;
+        &__details {
+            border: 1px solid #f0f0f0;
+            background-color: #fff;
+            padding: 10px;
+            border-radius: 15px;
+            height: 100%;
+            .global-chat__display {
+                height: 100%;
+                overflow: auto;
+                position: relative;
+                margin-bottom: 10px;
+                transition: height 0.3s;
+                overscroll-behavior: contain;
+                .scroll-message {
+                    height: 100%;
+                    margin-bottom: 10px;
+                    .global_message__item {
+                        margin-top: 0;
+                        padding-top: 5px;
+                        .message__item--left {
+                            padding-right: 10px;
+                            display: table-cell;
+                            vertical-align: middle;
+                        }
+                        .message__item--center {
+                            display: table-cell;
+                            vertical-align: middle;
+                            width: 100%;
+                            .chat-name {
+                                margin-bottom: 0;
+                                margin-right: 5px;
+                                white-space: normal;
+                                word-break: break-word;
+                                font-size: 13.5px;
+                            }
+                            .mess-global {
+                                margin-bottom: 0;
+                                margin-right: 5px;
+                                white-space: normal;
+                                word-break: break-word;
+                                font-size: 13.5px;
+                            }
+                        }
+                    }
+                }
+                .input-form {
+                    #formChatText {
+                        padding-left: 10px;
+                        padding-right: 10px;
+                        border-radius: 12px;
+                        width: 100%;
+                    }
+                }
+            }
+        }
+    }
+}

@@ -10,7 +10,7 @@ const {
   handleValidationErrors,
   validateNewUserInfo,
 } = require('../middleware/validate');
-const messagesControlllers = require('../controllers/messages.controlllers');
+const MessagesControlllers = require('../controllers/messages.controlllers');
 
 router.get(
   /*  
@@ -157,13 +157,48 @@ router.patch(
     */
   '/:id/messages/:msgId',
   passport.authenticate('jwt', { session: false }),
-  messagesControlllers.readMsg,
+  MessagesControlllers.readMsg,
 );
 
 router.delete(
+   /*  
+        #swagger.tags = ['Users']  
+        #swagger.parameters['id'] = { description: 'User ID' }
+        #swagger.parameters['msgId'] = { description: 'Message ID' }
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
  '/:id/messages/:msgId' ,
  passport.authenticate('jwt', { session: false }),
- messagesControlllers.deleteById,
+ MessagesControlllers.deleteById,
 )
+
+
+router.delete(
+     /*  
+        #swagger.tags = ['Users']  
+        #swagger.parameters['id'] = { description: 'User ID' }
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
+  '/:id/messages', 
+passport.authenticate('jwt', { session: false })
+)
+
+router.get('/:id/transfers', 
+   /*  
+        #swagger.tags = ['Users']  
+        #swagger.parameters['id'] = { description: 'User ID' }
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
+passport.authenticate('jwt', { session: false }),
+UsersController.getTransfers
+)
+
+
 
 module.exports = router;
