@@ -3,7 +3,7 @@ import { useHistory, useRouteMatch, useParams } from "react-router";
 import { Image, Rate, Avatar } from "antd";
 import "./Details.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { AsyncLoadPlayerDetails, AsyncGetReviews } from "../PlayerSlice";
+import { AsyncLoadPlayerDetails, AsyncGetReviews, AsyncDonateMoney } from "../PlayerSlice";
 import "./Details.scss";
 import { Modal, Button, Select } from "antd";
 import socket from "socket";
@@ -37,6 +37,22 @@ export default function PlayerDetails() {
   }
   const dispatch = useDispatch();
 
+  const handleDonate = async () => {
+    let { value: money } =  await Swal.fire({
+      title: 'Enter the amount you want to donate',
+      input: 'text',
+    })
+    money = parseInt(money)
+    if (money) {
+      if(money > user.balance){
+        Swal.fire({title: "You don't have enough money to donate", icon: "error"})
+      }else{
+        dispatch(AsyncDonateMoney({id: params.cardId, money}))
+      }
+    }else{
+      Swal.fire({title: "Please input money valid", icon: "error"})
+    }
+  }
   // Modal rent player
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -89,6 +105,8 @@ export default function PlayerDetails() {
       money: player?.pricePerHour * values,
     });
   };
+
+  
 
   const handleMoreAmount = () => {
     history.push("/setting/wallet");
@@ -181,7 +199,7 @@ export default function PlayerDetails() {
                 <button className="btn-style purple" onClick={showModal}>
                   Rent
                 </button>
-                <button className="btn-style white">Donate</button>
+                <button className="btn-style white" onClick={handleDonate}>Donate</button>
                 <button className="btn-style white">Chat</button>
               </div>
             </div>

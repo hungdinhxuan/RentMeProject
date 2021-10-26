@@ -30,7 +30,7 @@ TransfersSchema.pre('save', async function (next) {
         next(new Error(`Cannot donate with money greater than current balance`));
         return;
       }
-      if(transact.money <= 0){
+      if(transfer.money <= 0){
         next(new Error(`Cannot donate with zero or negative money`));
         return;
       }

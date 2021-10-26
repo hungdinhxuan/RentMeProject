@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useHistory } from "react-router";
+import socket from 'socket'
 
-export default function CoutdownTime({ expiredTime }) {
+
+
+export default function CoutdownTime({ expiredTime, tradingId, path }) {
+
   const [time, setTime] = useState(0);
-  const history = useHistory();
-
   // Function Convert Time
   const msToTime = (duration) => {
     var seconds = Math.floor((duration / 1000) % 60),
@@ -23,6 +24,7 @@ export default function CoutdownTime({ expiredTime }) {
       const distance =new Date(expiredTime).getTime() - new Date().getTime();
       setTime(msToTime(distance));
       if (distance < 0) {
+        socket.emit('done trading', tradingId, path)
         clearInterval(intervalRef.current);
       }
     }, 1000);

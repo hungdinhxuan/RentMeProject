@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "axiosClient";
-
+import socket from "socket";
+import Swal from "sweetalert2";
 
 const initialState = {
   listPlayers: null,
@@ -48,6 +49,17 @@ export const AsyncGetReviews = createAsyncThunk(
   }
 );
 
+export const AsyncDonateMoney = createAsyncThunk("player/donate", 
+async (values, { rejectWithValue }) => {
+  try {
+    const response = await axiosClient.post(`/players/${values.id}/donate`, {money: values.money});
+    return response;
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+}
+)
+
 const PlayerSlice = createSlice({
   name: "player",
   initialState,
@@ -86,6 +98,23 @@ const PlayerSlice = createSlice({
       state.reviews = action.payload;
       state.loading = false;
       state.error = null;
+    },
+    [AsyncDonateMoney.fulfilled]: (state, action) => {
+      const {playerName, money, message} = action.payload
+      Swal.fire({
+        title: message,
+        icon: 'success'
+      })
+      socket.emit('donate money', playerName, money)
+      state.loading = false;
+      state.error = null;
+    },
+    [AsyncDonateMoney.rejected]: (state, action) => {
+      
+      Swal.fire({
+        title: action.payload.message || 'something wrong happen',
+        icon: 'error'
+      })
     }
   },
 });

@@ -54,6 +54,39 @@ module.exports = (app) => {
       });
     });
 
+    // runing per 20p to check if status is pending then emit to user and remove 
+    setInterval(async () => {
+      const tradings = await Trading.find().lean()
+      let expireTradingDate 
+      
+      tradings.forEach(async (trading, index) => {
+
+        if(trading.status === 'pending'){
+
+          expireTradingDate = new Date(trading.createdAt);
+          expireTradingDate.setMinutes(
+            expireTradingDate.getMinutes() + trading.expireIn,
+          );
+          // Het han roi ma van pending
+          if(expireTradingDate.getTime() < new Date().getTime()){
+            try {
+              await Trading.findByIdAndDelete(trading._id)
+              const player = await User.findById(trading.playerId)
+              const renter = await User.findById(trading.renterId)
+              if(userSocketIdObj[renter.username]){
+                for(let socketId of userSocketIdObj[renter.username]){
+                    console.log('emitted because expire');
+                    io.to(socketId).emit('expire rent player',`Your trading between you and ${player.fullName} is automatically removed because time is expired` )
+                }
+              }
+            } catch (error) {
+              console.log("🚀 ~ file: socket.js ~ line 75 ~ tradings.forEach ~ error", error)
+            }
+          }
+        }
+      })
+    }, 20 * 60 * 1000) 
+
     socket.on('logout', () => {
       if (socket.auth) {
         socket.auth = false;
@@ -235,10 +268,17 @@ module.exports = (app) => {
     });
     socket.on('confirm rent', async (data) => {
       if (socket.auth) {
+        let trading
         const { content, receiverId, _id } = data;
         try {
           const tradingId = content.split(' Current trading ID: ')[1];
-          const trading = await Trading.findByIdAndUpdate(
+          trading = await Trading.findById(tradingId)
+          if(!trading){ /// Trading is not exist anymore
+            await Message.findByIdAndDelete(_id)
+            socket.emit('error trading', 'Trading is removed by system because overcome time')
+            return
+          }
+          trading = await Trading.findByIdAndUpdate(
             tradingId,
             { status: 'performing' },
             { new: true },
@@ -258,7 +298,18 @@ module.exports = (app) => {
             { content: content.split(' Current trading ID: ')[0] },
             { new: true },
           );
+
           if (trading) {
+            let expireTradingDate = new Date(trading.createdAt);
+            expireTradingDate.setMinutes(
+              expireTradingDate.getMinutes() + trading.expireIn,
+            );
+
+            if(expireTradingDate.getTime() < new Date().getTime()){
+              socket.emit('trading error', 'Trading expired and removed')
+              await Trading.findByIdAndDelete(tradingId)
+               return               
+            }
             const msgForRenter = await Message.create({
               senderId: system._id,
               receiverId: renter._id,
@@ -449,16 +500,29 @@ module.exports = (app) => {
     });
 
     socket.on('done trading', async (tradingId, path) => {
-      try {
-        await Trading.findByIdAndUpdate(tradingId, { status: 'done' });
-        io.to(path).emit('done trading', 'Trading is finished');
-      } catch (error) {
-        console.log(
-          '🚀 ~ file: socket.js ~ line 401 ~ socket.on ~ error',
-          error,
-        );
+      if(socket.auth){
+        try {
+          await Trading.findByIdAndUpdate(tradingId, { status: 'done' });
+          io.to(path).emit('done trading', 'Trading is finished');
+        } catch (error) {
+          console.log(
+            '🚀 ~ file: socket.js ~ line 401 ~ socket.on ~ error',
+            error,
+          );
+        }
       }
     });
+
+    socket.on('donate money', async (playerName, money) => {
+      if(socket.auth){
+        if(userSocketIdObj[playerName]){
+          const sender = await User.findOne({username: socket.username})
+          for(let socketId of userSocketIdObj[playerName]){
+            io.to(socketId).emit('response donate money player', `${sender.fullName} donate ${money} $ for you !!!!`)
+          }
+        }
+      }
+    })
   });
 
   httpServer.listen(4000);
