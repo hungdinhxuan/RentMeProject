@@ -94,7 +94,7 @@ export default function PlayerDetails() {
 
   useEffect(() => {
     dispatch(AsyncGetReviews(params.cardId));
-  }, [dispatch]);
+  }, [dispatch, params.cardId]);
 
   return (
     <div className="details">

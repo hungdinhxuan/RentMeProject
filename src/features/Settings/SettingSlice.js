@@ -7,7 +7,8 @@ const initialState = {
   money: null,
   loading: false,
   error: null,
-  historyTransact: null,
+  historyTransact: [],
+  historyTransfer: []
 };
 
 export const AsyncUpdateAvatar = createAsyncThunk(
@@ -94,6 +95,19 @@ export const AsyncTransactHistory = createAsyncThunk(
   }
 );
 
+export const AsyncTransferHistory = createAsyncThunk(
+  "setting/transferHistory",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axiosClient.get(
+        `users/${values}/transfers`);
+      return response;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+)
+
 const SettingSlice = createSlice({
   name: "setting",
   initialState,
@@ -167,10 +181,15 @@ const SettingSlice = createSlice({
       state.error = null;
     },
     [AsyncTransactHistory.rejected]: (state, action) => {
-      state.historyTransact = null;
+      state.historyTransact = [];
       state.loading = false;
       state.error = action.payload;
     },
+    [AsyncTransferHistory.fulfilled]: (state, action) => {
+      state.historyTransfer = action.payload;
+      state.loading = false;
+      state.error = null;
+    }
   },
 });
 
