@@ -144,7 +144,7 @@ function ContentHome() {
                 <ReactTwitchEmbedVideo
                   channel={channel || "valorant"}
                   width="100%"
-                  height="413"
+                  height="380"
                   layout="video"
                   autoplay="false"
                   targetClass="youtube__video"

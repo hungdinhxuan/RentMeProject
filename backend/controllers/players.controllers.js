@@ -1,4 +1,7 @@
 const PlayerProfiles = require('../models/player_profiles.models');
+const Reviews = require('../models/reviews.models');
+const Trading = require('../models/tradings.models');
+const Transfer = require('../models/transfers.models')
 
 const mongoose = require('mongoose');
 class PlayersControllers {
@@ -259,11 +262,105 @@ class PlayersControllers {
         console.log(`Uploaded ${imageResponses.length}`);
         res.json({ images: imageResponses });
       } catch (error) {
-        return res.status(500).send(error);
+        return res
+          .status(500)
+          .json({
+            success: false,
+            message: error.message || 'Internal Server Error',
+          });
       }
     });
   }
-  
+  async getReviews(req, res) {
+    try {
+      const { id } = req.params; //profile id
+      const reviews = await Reviews.find({playerProfileId: id}).populate({path: 'userId', select: 'avatar _id fullName'})
+      return res.status(200).send(reviews);
+    } catch (error) {
+      return res
+        .status(500)
+        .json({
+          success: false,
+          message: error.message || 'Internal Server Error',
+        });
+    }
+  }
+  async createReview(req, res) {
+    try {
+      const { tradingId, content, rating } = req.body;
+      const trading = await Trading.findById(tradingId);
+      if (
+        trading.status === 'pending' ||
+        trading.status === 'performing' ||
+        trading.status === 'aborted'
+      ) {
+        return res
+          .status(400)
+          .json({ success: false, messsage: 'Trading is not valid' });
+      }
+      if (!trading.renterId.equals(req.user._id)) {
+        return res
+          .status(400)
+          .json({
+            success: false,
+            message: 'Cannot review because user is not valid',
+          });
+      }
+      const player_profile = await PlayerProfiles.findOne({
+        userId: trading.playerId,
+      });
+      const review = await Reviews.create({
+        userId: trading.renterId,
+        playerProfileId: player_profile._id,
+        content,
+        rating, 
+        tradingId
+      });
+      return res
+        .status(201)
+        .json({ success: true, message: 'Review Success!', review });
+    } catch (error) {
+      return res
+        .status(500)
+        .json({
+          success: false,
+          message: error.message || 'Internal Server Error',
+        });
+    }
+  }
+  async donate(req, res){
+    const {money} = req.body
+    const playerProfileId = req.params.id
+    try {
+      const playerProfile = await PlayerProfiles.findById(playerProfileId).populate('userId', 'username fullName')
+      await new Transfer({
+        sender: req.user._id,
+        receiver: playerProfile.userId,
+        money,
+        type: "donate",
+      }).save((err, transfer) => {
+        if(err){
+          return res.status(500).json({
+            success: false,
+            message: err.message || 'Internal Server Error',
+            error: err,
+          });
+        }
+        return res.status(200).json({
+          success: true,
+          message: `Donate to ${playerProfile.userId.fullName} successful!`,
+          playerName: playerProfile.userId.username,
+          money
+        })
+      })
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message || 'Internal Server Error',
+        error,
+      });
+    }
+  }
 }
 
 module.exports = new PlayersControllers();

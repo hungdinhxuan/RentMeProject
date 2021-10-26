@@ -1,22 +1,28 @@
 import React, { useEffect, useState } from "react";
-import { useHistory, useRouteMatch } from "react-router";
+import { useHistory, useRouteMatch, useParams } from "react-router";
 import { Image, Rate, Avatar } from "antd";
 import "./Details.scss";
-import Ha from "assets/Ha.jpg";
 import { useDispatch, useSelector } from "react-redux";
-import { AsyncLoadPlayerDetails } from "../PlayerSlice";
+import { AsyncLoadPlayerDetails, AsyncGetReviews, AsyncDonateMoney } from "../PlayerSlice";
 import "./Details.scss";
 import { Modal, Button, Select } from "antd";
 import socket from "socket";
+import Swal from "sweetalert2";
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en.json";
+TimeAgo.addDefaultLocale(en);
+
+const timeAgo = new TimeAgo("en-US");
 
 export default function PlayerDetails() {
   const match = useRouteMatch();
+  const params = useParams();
   const history = useHistory();
   const [visible, setVisible] = useState(false);
 
   const { Option } = Select;
 
-  const { player, error } = useSelector((state) => state.players);
+  const { player, error, reviews } = useSelector((state) => state.players);
   const { user } = useSelector((state) => state.auth);
   const [moneyState, setMoneyState] = useState("");
   const [formRentPlayer, setformRentPlayer] = useState({
@@ -31,6 +37,22 @@ export default function PlayerDetails() {
   }
   const dispatch = useDispatch();
 
+  const handleDonate = async () => {
+    let { value: money } =  await Swal.fire({
+      title: 'Enter the amount you want to donate',
+      input: 'text',
+    })
+    money = parseInt(money)
+    if (money) {
+      if(money > user.balance){
+        Swal.fire({title: "You don't have enough money to donate", icon: "error"})
+      }else{
+        dispatch(AsyncDonateMoney({id: params.cardId, money}))
+      }
+    }else{
+      Swal.fire({title: "Please input money valid", icon: "error"})
+    }
+  }
   // Modal rent player
   const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -60,7 +82,13 @@ export default function PlayerDetails() {
         });
       }
     } else {
-      alert("Not enough money");
+      Swal.fire({
+        position: "center",
+        icon: "info",
+        title: "Not enough money",
+        showConfirmButton: false,
+        timer: 1000,
+      });
     }
     setIsModalVisible(false);
   };
@@ -78,13 +106,34 @@ export default function PlayerDetails() {
     });
   };
 
+  
+
   const handleMoreAmount = () => {
     history.push("/setting/wallet");
+  };
+
+  const AverageRating = (data) => {
+    const a = data.reduce((prev, current) => {
+      return prev + current.rating;
+    }, 0);
+    const DecimalString = ((a / data.length) * 1.0).toString();
+    if (DecimalString.split(".")[1] > 5) {
+      return Math.ceil(a / data.length);
+    } else {
+      return Math.floor(a / data.length);
+    }
   };
 
   useEffect(() => {
     dispatch(AsyncLoadPlayerDetails(match.params.cardId));
   }, [dispatch, match.params.cardId]);
+
+  // const test = AverageRating(reviews);
+  // console.log(test);
+
+  useEffect(() => {
+    dispatch(AsyncGetReviews(params.cardId));
+  }, [dispatch, params.cardId]);
 
   return (
     <div className="details">
@@ -132,7 +181,7 @@ export default function PlayerDetails() {
               </div>
               <div className="member-since">
                 <span>Join Date: </span>
-                <span>1/3/2021</span>
+                <span>{new Date(player?.createdAt).toDateString()}</span>
               </div>
             </div>
 
@@ -140,7 +189,7 @@ export default function PlayerDetails() {
               <p className="price-profile">{player?.pricePerHour}.00 USD/G</p>
               <div className="rate-profile">
                 <Rate
-                  value={5}
+                  value={AverageRating(reviews)}
                   count={5}
                   disabled
                   style={{ fontSize: "16px" }}
@@ -150,7 +199,7 @@ export default function PlayerDetails() {
                 <button className="btn-style purple" onClick={showModal}>
                   Rent
                 </button>
-                <button className="btn-style white">Donate</button>
+                <button className="btn-style white" onClick={handleDonate}>Donate</button>
                 <button className="btn-style white">Chat</button>
               </div>
             </div>
@@ -216,31 +265,34 @@ export default function PlayerDetails() {
                 <span>Comment</span>
               </div>
               <div className="text-center comment-player-profile">
-                <div className="col-lg-12">
-                  <div className="fullsize">
-                    <div className="comment-image">
-                      <Avatar src={Ha} size={40} />
-                    </div>
-                    <div className="comment-content">
-                      <div className="review-content">
-                        <p>Aix</p>
-                        <p className="review-time">23:47:55, 1/10/2021</p>
-                        <p className="content-player-comment">
-                          You are the number one.
-                        </p>
+                {reviews.map((review) => (
+                  <div className="col-lg-12">
+                    <div className="fullsize">
+                      <div className="comment-image">
+                        <Avatar src={review.userId.avatar} size={40} />
                       </div>
-                      <div className="review-rating">
-                        <Rate
-                          value={5}
-                          count={5}
-                          disabled
-                          style={{ fontSize: "14px" }}
-                        />
+                      <div className="comment-content">
+                        <div className="review-content">
+                          <p>{review.userId.fullName}</p>
+                          <p className="review-time">
+                            {timeAgo.format(new Date(review.createdAt))}
+                          </p>
+                          <p className="content-player-comment">
+                            {review.content}
+                          </p>
+                        </div>
+                        <div className="review-rating">
+                          <Rate
+                            value={review.rating}
+                            count={5}
+                            disabled
+                            style={{ fontSize: "14px" }}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-lg-12"></div>
+                ))}
               </div>
             </div>
           </div>

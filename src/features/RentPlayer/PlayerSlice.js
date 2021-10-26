@@ -1,20 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "axiosClient";
-
-
-// const handleNoti = (icon, title, text) => {
-//   Swal.fire({
-//     icon: `${icon}`,
-//     title: `${title}`,
-//     text: `${text}`,
-//   });
-// };
+import socket from "socket";
+import Swal from "sweetalert2";
 
 const initialState = {
   listPlayers: null,
   loading: false,
   error: null,
   player: null,
+  reviews: []
 };
 
 export const AsyncLoadPlayer = createAsyncThunk(
@@ -35,9 +29,7 @@ export const AsyncLoadPlayerDetails = createAsyncThunk(
   "player/loadplayerdetails",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axiosClient.get(
-        `/players/${values}`
-      );
+      const response = await axiosClient.get(`/players/${values}`);
       return response;
     } catch (err) {
       return rejectWithValue(err.response.data);
@@ -45,13 +37,36 @@ export const AsyncLoadPlayerDetails = createAsyncThunk(
   }
 );
 
+export const AsyncGetReviews = createAsyncThunk(
+  "player/loadReviews",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axiosClient.get(`/players/${values}/reviews`);
+      return response;
+    } catch (error) {
+      return rejectWithValue(error.response.data);
+    }
+  }
+);
+
+export const AsyncDonateMoney = createAsyncThunk("player/donate", 
+async (values, { rejectWithValue }) => {
+  try {
+    const response = await axiosClient.post(`/players/${values.id}/donate`, {money: values.money});
+    return response;
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+}
+)
+
 const PlayerSlice = createSlice({
   name: "player",
   initialState,
   reducers: {
-    playerDetails: (state,action) => {
+    playerDetails: (state, action) => {
       state.player = action.payload;
-    }
+    },
   },
   extraReducers: {
     [AsyncLoadPlayer.pending]: (state) => {
@@ -67,7 +82,7 @@ const PlayerSlice = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     },
-    
+
     [AsyncLoadPlayerDetails.fulfilled]: (state, action) => {
       state.player = action.payload;
       state.loading = false;
@@ -78,6 +93,29 @@ const PlayerSlice = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     },
+
+    [AsyncGetReviews.fulfilled]: (state, action) => {
+      state.reviews = action.payload;
+      state.loading = false;
+      state.error = null;
+    },
+    [AsyncDonateMoney.fulfilled]: (state, action) => {
+      const {playerName, money, message} = action.payload
+      Swal.fire({
+        title: message,
+        icon: 'success'
+      })
+      socket.emit('donate money', playerName, money)
+      state.loading = false;
+      state.error = null;
+    },
+    [AsyncDonateMoney.rejected]: (state, action) => {
+      
+      Swal.fire({
+        title: action.payload.message || 'something wrong happen',
+        icon: 'error'
+      })
+    }
   },
 });
 

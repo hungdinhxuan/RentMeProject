@@ -29,10 +29,7 @@ export default function TableWallet() {
       title: "Time",
       dataIndex: "createdAt",
       render: (text, index) => {
-        return `${index.createdAt.slice(0, 10)} at ${index.createdAt.slice(
-          12,
-          16
-        )}`;
+        return new Date(index.createdAt).toLocaleDateString()
       },
     },
     {

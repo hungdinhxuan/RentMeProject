@@ -109,8 +109,6 @@ export const AsyncUpdateAvatar = createAsyncThunk(
 );
 
 
-
-
 const AuthSlice = createSlice({
   name: "auth",
   initialState,
@@ -181,7 +179,6 @@ const AuthSlice = createSlice({
   },
 });
 
-const { reducer } = AuthSlice;
-export const {logout} = AuthSlice.actions;
 
-export default reducer;
+export const {logout} = AuthSlice.actions;
+export default AuthSlice.reducer;

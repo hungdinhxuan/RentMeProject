@@ -5,7 +5,7 @@ import SignUp from "features/Auth/SignUp";
 import Settings from "features/Settings";
 import { lazy} from "react";
 import ChatRoom from "features/ChatRoom";
-
+import StreamHub from 'features/StreamHub'
 
 const Home = lazy(() => import("features/Home/index.jsx"));
 
@@ -62,6 +62,12 @@ const routes = [
     exact: false,
     layout: PrivateLayout,
     main: RentPlayer
+  },
+  {
+    path: "/streamhub",
+    exact: false,
+    layout: PublicLayout,
+    main: StreamHub
   },
   {
     path: "/chat-room",

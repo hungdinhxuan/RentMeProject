@@ -15,7 +15,8 @@ import { NavLink, useHistory } from "react-router-dom";
 import socket from "socket";
 import Drawler from "./Drawler";
 import "./Header.scss";
-
+import Swal from "sweetalert2";
+import {ToastSweet} from "components/SweetAlert2"
 function Header() {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -37,9 +38,32 @@ function Header() {
 
   const handleDeleteMessage = () => {
     setIsModalVisible(false);
-    dispatch(
-      removeMessageAsync({ userId: user._id, messageId: messages[idModal]._id })
-    );
+    
+    //messages[idModal].content.match(/^Trading [a-z 0-9]* accepted by .* Room ID: .* Room Password: .*/g)[0] === messages[idModal].content
+    const checker = messages[idModal].content.match(/^Trading [a-z 0-9]* accepted by .*\s Room ID: .*, Room Password: .*/g)
+    const checker2 = messages[idModal].content.match(/^You are accepted [a-z 0-9]* with .*\s Room ID: .*, Room Password: .*/g)
+    if((checker && checker[0] === messages[idModal].content) || (checker2 && checker2[0] === messages[idModal].content)){
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "This message contain infomation about Room ID as well as Room Password. Please consider before making decision. You won't be able to revert this! ",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(
+            removeMessageAsync({ userId: user._id, messageId: messages[idModal]._id })
+          );
+        }
+      })
+    }
+    else{
+      dispatch(
+        removeMessageAsync({ userId: user._id, messageId: messages[idModal]._id })
+      );
+    }
   };
 
   const history = useHistory();
@@ -132,14 +156,38 @@ function Header() {
     }
 
     const declineMsg = (data) => {
-      alert(data.message);
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: data.message,
+        showConfirmButton: false,
+        timer: 1000
+      })
       if (data.msgId) {
         return dispatch(removeMessage(data.msgId));
       }
     };
 
     const errorMsg = (data) => {
-      alert(data);
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: data,
+        showConfirmButton: false,
+        timer: 1000
+      })
+    }
+
+    const handleExpireRentPlayer = (data) => {
+      ToastSweet("warning", data)
+    }
+
+    const handleTradingError = (data) => {
+      ToastSweet("error", data)
+    }
+
+    const handleResponseDonateMoneyForPlayer = (data) => {
+      ToastSweet("success", data)
     }
 
     socket.on("response renter", loadData);
@@ -147,6 +195,9 @@ function Header() {
     socket.on("response confirm rent", confirmRentMsg);
     socket.on("response error renter", errorMsg)
     socket.on("response decline rent", declineMsg);
+    socket.on('expire rent player', handleExpireRentPlayer)
+    socket.on('trading error', handleTradingError)
+    socket.on('response donate money player', handleResponseDonateMoneyForPlayer)
     // Note: Clear socket when change state.
     return () => {
       socket.off("response decline rent", declineMsg);
@@ -154,6 +205,9 @@ function Header() {
       socket.off("response player", loadData);
       socket.off("response confirm rent", confirmRentMsg);
       socket.off("response error renter", errorMsg)
+      socket.off('expire rent player', handleExpireRentPlayer)
+      socket.off('trading error', handleTradingError)
+      socket.off('response donate money player', handleResponseDonateMoneyForPlayer)
     };
   }, [dispatch]);
 

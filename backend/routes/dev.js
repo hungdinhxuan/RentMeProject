@@ -1,18 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const {
-  uploadAudiosS3,
-  uploadImagesCloudinary,
-  s3,
-  bucket_name,
-  uploadVideosCloudinary,
-  cloudinary,
   upload,
 } = require('../services/multer');
 const { multer } = require('../utils/config');
 const multerLib = require('multer');
 const streamifier = require('streamifier');
-const validate = require('../middleware/validate');
 const User = require('../models/users.models');
 const PlayerProfiles = require('../models/player_profiles.models');
 const Message = require('../models/messages.models')
