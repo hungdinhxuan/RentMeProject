@@ -3,7 +3,7 @@ const Transaction = require('../models/transactions.models');
 const argon2 = require('argon2');
 const { multer } = require('../utils/config');
 const multerLib = require('multer');
-const streamifier = require('streamifier');
+const Transfer = require('../models/transfers.models');
 const { cloudinary, upload } = require('../services/multer');
 
 /* 
@@ -296,7 +296,7 @@ class UsersController {
       });
     }
   }
-u
+  u;
 
   // Transactions
 
@@ -336,8 +336,23 @@ u
     }
   }
 
-
-  
+  async getTransfers(req, res) {
+    try {
+      const userId = req.user._id;
+      const transfers = await Transfer.find({
+        $or: [{ sender: userId }, { receiver: userId }],
+      })
+        .populate({ path: 'sender', ref: 'users', select: 'fullName' })
+        .populate({ path: 'receiver', ref: 'users', select: 'fullName' });
+      return res.status(200).send(transfers);
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message || 'Internal Server Error',
+        error,
+      });
+    }
+  }
 }
 
 module.exports = new UsersController();

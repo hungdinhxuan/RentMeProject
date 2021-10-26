@@ -7,7 +7,8 @@ const initialState = {
     roomId: null,
     roomPassword: null,
     tradingId: null,
-    authRoom: false
+    authRoom: false,
+    expireTime: null
 };
 
 export const authRoomAsync = createAsyncThunk("chatroom/auth", async(values, {rejectWithValue}) => {
@@ -38,6 +39,7 @@ const ChatRoomSlice = createSlice({
             state.roomPassword =  null
             state.tradingId = null
             state.authRoom = false
+            state.expireTime = null
         }
     },
     extraReducers: (builder) => {
@@ -46,6 +48,7 @@ const ChatRoomSlice = createSlice({
             state.roomPassword = action.payload.roomPassword
             state.tradingId = action.payload.tradingId
             state.authRoom = true
+            state.expireTime = action.payload.expireTime
         }).addCase(authRoomAsync.rejected,  (state, action) => {
             Swal.fire({
                 position: 'center',
