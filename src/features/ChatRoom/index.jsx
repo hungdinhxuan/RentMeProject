@@ -11,7 +11,7 @@ export default function ChatRoom() {
   const { authRoom } = useSelector((state) => state.chatRoom);
 
   const joinRoom = () => {
-    console.log("Join room");
+    
     if (roomId !== "" && roomPassword !== "") {
       dispatch(authRoomAsync({ roomId, roomPassword }));
     }

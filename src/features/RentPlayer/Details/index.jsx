@@ -94,9 +94,24 @@ export default function PlayerDetails() {
     history.push("/setting/wallet");
   };
 
+  const AverageRating = (data) => {
+    const a = data.reduce((prev, current) => {
+      return prev + current.rating;
+    }, 0);
+    const DecimalString = ((a / data.length) * 1.0).toString();
+    if (DecimalString.split(".")[1] > 5) {
+      return Math.ceil(a / data.length);
+    } else {
+      return Math.floor(a / data.length);
+    }
+  };
+
   useEffect(() => {
     dispatch(AsyncLoadPlayerDetails(match.params.cardId));
   }, [dispatch, match.params.cardId]);
+
+  // const test = AverageRating(reviews);
+  // console.log(test);
 
   useEffect(() => {
     dispatch(AsyncGetReviews(params.cardId));
@@ -156,7 +171,7 @@ export default function PlayerDetails() {
               <p className="price-profile">{player?.pricePerHour}.00 USD/G</p>
               <div className="rate-profile">
                 <Rate
-                  value={5}
+                  value={AverageRating(reviews)}
                   count={5}
                   disabled
                   style={{ fontSize: "16px" }}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
 import { useSelector } from "react-redux";
 import { Avatar } from "antd";
@@ -8,10 +8,23 @@ export default function ChatStream() {
   const [currentMessage, setCurrentMessage] = useState("");
   const a = [...Array(25)];
 
+  // Using ref
+  const typingTimeOutRef = useRef(null);
+
   const handleChangeMessage = (e) => {
-    console.log(e.target.value);
-    setCurrentMessage(e.target.value);
+    const { value } = e.target;
+    setCurrentMessage(value);
+    if (typingTimeOutRef.current) {
+      clearTimeout(typingTimeOutRef.current);
+    }
+    typingTimeOutRef.current = setTimeout(() => {
+      setCurrentMessage(value);
+    }, 1000);
   };
+
+  // console.log('Hello');
+  console.log(currentMessage);
+
   const sendMessage = () => {
     setCurrentMessage("");
   };
@@ -43,6 +56,7 @@ export default function ChatStream() {
         <div className="input-form">
           <input
             type="text"
+            ref={typingTimeOutRef}
             placeholder="Enter to send message"
             id="formChatText"
             onChange={handleChangeMessage}
