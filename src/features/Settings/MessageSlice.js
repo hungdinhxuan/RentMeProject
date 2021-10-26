@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "axiosClient";
-import {ToastSweet} from "components/SweetAlert2";
+import { ToastSweet } from "components/SweetAlert2";
 
 const initialState = {
   messages: [],

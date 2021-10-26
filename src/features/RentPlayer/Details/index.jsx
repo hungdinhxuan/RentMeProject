@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { useHistory, useRouteMatch, useParams } from "react-router";
 import { Image, Rate, Avatar } from "antd";
 import "./Details.scss";
-import Ha from "assets/Ha.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import { AsyncLoadPlayerDetails, AsyncGetReviews } from "../PlayerSlice";
 import "./Details.scss";

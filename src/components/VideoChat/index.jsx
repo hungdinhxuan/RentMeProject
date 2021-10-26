@@ -13,11 +13,14 @@ import socket from "socket";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import "./VideoChat.scss";
-import {abortTrading, createReviewAsync} from 'features/ChatRoom/ChatRoomSlice'
+import {
+  abortTrading,
+  createReviewAsync,
+} from "features/ChatRoom/ChatRoomSlice";
 import Swal from "sweetalert2";
 import { Modal as ModalRating, Rate } from "antd";
 
-// import { Modal, Button, Rate } from "antd";
+import { Button as ButtonAntd } from "antd";
 
 let connections = {};
 
@@ -33,15 +36,18 @@ let socketId = null;
 let elms = 0;
 let videoAvailable = false;
 let audioAvailable = false;
-let player_profile_id = ''
+let player_profile_id = "";
 
 export default function VideoChat() {
   const localVideoref = createRef();
   const history = useHistory();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const {roomId, tradingId} = useSelector((state) => state.chatRoom);
-  console.log("🚀 ~ file: index.jsx ~ line 44 ~ VideoChat ~ tradingId", tradingId)
+  const { roomId, tradingId } = useSelector((state) => state.chatRoom);
+  console.log(
+    "🚀 ~ file: index.jsx ~ line 44 ~ VideoChat ~ tradingId",
+    tradingId
+  );
   const [state, setState] = useState({
     video: false,
     audio: false,
@@ -58,28 +64,29 @@ export default function VideoChat() {
 
   const [visible, setVisible] = useState(false);
   const [rate, setRate] = useState(5);
-  const [rateContent, setRateContent] = useState('')
-  
+  const [rateContent, setRateContent] = useState("");
+
   const handleOk = () => {
-    setVisible(false)
+    setVisible(false);
     console.log(tradingId);
 
-    dispatch(createReviewAsync({
-      playerId: player_profile_id,
-      tradingId,
-      content: rateContent,
-      rating: rate
-    }))
+    dispatch(
+      createReviewAsync({
+        playerId: player_profile_id,
+        tradingId,
+        content: rateContent,
+        rating: rate,
+      })
+    );
 
-    dispatch(abortTrading())
-    history.push('/')
+    dispatch(abortTrading());
+    history.push("/");
   };
   const handleCancel = () => {
-    setVisible(false)
-    dispatch(abortTrading())
-    history.push('/')
+    setVisible(false);
+    dispatch(abortTrading());
+    history.push("/");
   };
-
 
   //   Asked Media: Audio, Screen, Camera
   const getPermissions = async () => {
@@ -107,13 +114,34 @@ export default function VideoChat() {
         navigator.mediaDevices
           .getUserMedia({ video: videoAvailable, audio: audioAvailable })
           .then((stream) => {
-      console.log("🚀 ~ file: index.jsx ~ line 105 ~ handleOk ~ tradingId", tradingId)
-      console.log("🚀 ~ file: index.jsx ~ line 105 ~ handleOk ~ tradingId", tradingId)
-      console.log("🚀 ~ file: index.jsx ~ line 108 ~ .then ~ tradingId", tradingId)
-      console.log("🚀 ~ file: index.jsx ~ line 108 ~ .then ~ tradingId", tradingId)
-      console.log("🚀 ~ file: index.jsx ~ line 105 ~ handleOk ~ tradingId", tradingId)
-      console.log("🚀 ~ file: index.jsx ~ line 111 ~ .then ~ tradingId", tradingId)
-      console.log("🚀 ~ file: index.jsx ~ line 111 ~ .then ~ tradingId", tradingId)
+            console.log(
+              "🚀 ~ file: index.jsx ~ line 105 ~ handleOk ~ tradingId",
+              tradingId
+            );
+            console.log(
+              "🚀 ~ file: index.jsx ~ line 105 ~ handleOk ~ tradingId",
+              tradingId
+            );
+            console.log(
+              "🚀 ~ file: index.jsx ~ line 108 ~ .then ~ tradingId",
+              tradingId
+            );
+            console.log(
+              "🚀 ~ file: index.jsx ~ line 108 ~ .then ~ tradingId",
+              tradingId
+            );
+            console.log(
+              "🚀 ~ file: index.jsx ~ line 105 ~ handleOk ~ tradingId",
+              tradingId
+            );
+            console.log(
+              "🚀 ~ file: index.jsx ~ line 111 ~ .then ~ tradingId",
+              tradingId
+            );
+            console.log(
+              "🚀 ~ file: index.jsx ~ line 111 ~ .then ~ tradingId",
+              tradingId
+            );
             window.localStream = stream;
             localVideoref.current.srcObject = stream;
           })
@@ -392,33 +420,35 @@ export default function VideoChat() {
 
   const handleEndCall = () => {
     Swal.fire({
-      title: 'Are you sure?',
+      title: "Are you sure?",
       text: "You won't be able to revert this!",
-      icon: 'warning',
+      icon: "warning",
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Yes, abort it!',
-      cancelButtonText: 'No, cancel!'
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, abort it!",
+      cancelButtonText: "No, cancel!",
     }).then((result) => {
       if (result.isConfirmed) {
         try {
           let tracks = localVideoref.current.srcObject.getTracks();
           tracks.forEach((track) => track.stop());
         } catch (e) {}
-        socket.emit('abort trading', tradingId, roomId, user.username)
-        console.log("🚀 ~ file: index.jsx ~ line 406 ~ handleEndCall ~ tradingId", tradingId)
+        socket.emit("abort trading", tradingId, roomId, user.username);
+        console.log(
+          "🚀 ~ file: index.jsx ~ line 406 ~ handleEndCall ~ tradingId",
+          tradingId
+        );
       }
-    })
+    });
   };
 
   const openChat = () =>
     setState({ ...state, showModal: true, newmessages: 0 });
   const closeChat = () => setState({ ...state, showModal: false });
   const handleMessage = (e) => setState({ ...state, message: e.target.value });
-  
+
   const addMessage = (data, sender, socketIdSender) => {
-    
     setState((prevState) => ({
       ...prevState,
       messages: [...prevState.messages, { sender: sender, data: data }],
@@ -438,8 +468,6 @@ export default function VideoChat() {
     socket.emit("chat-message", state.message, state.username);
     setState({ ...state, message: "", sender: state.username });
   };
-
-  
 
   // webcam and mic
   useEffect(() => {
@@ -465,7 +493,6 @@ export default function VideoChat() {
     socket.on("chat-message", addMessage);
 
     const handleUserLeft = (id) => {
-      
       let video = document.querySelector(`[data-socket="${id}"]`);
       if (video !== null) {
         elms--;
@@ -477,8 +504,6 @@ export default function VideoChat() {
     };
 
     const handleUserJoin = (id, clients) => {
-      
-
       clients.forEach((socketListId) => {
         connections[socketListId] = new RTCPeerConnection(peerConnectionConfig);
         // Wait for their ice candidate
@@ -559,7 +584,7 @@ export default function VideoChat() {
                   id2,
                   JSON.stringify({ sdp: connections[id2].localDescription })
                 );
-        })
+              })
               .catch((e) => console.log(e));
           });
         }
@@ -568,36 +593,36 @@ export default function VideoChat() {
 
     const handleAbortTrading = (data) => {
       Swal.fire({
-        position: 'center',
-        icon: 'success',
+        position: "center",
+        icon: "success",
         title: data,
         showConfirmButton: false,
-        timer: 1000
-      })
-      dispatch(abortTrading())
-      history.push('/')
-    }
+        timer: 1000,
+      });
+      dispatch(abortTrading());
+      history.push("/");
+    };
 
     const handleAbortTradingRenter = (data) => {
-      player_profile_id = data
-      setVisible(true)
-    }
-    
+      player_profile_id = data;
+      setVisible(true);
+    };
+
     socket.on("user-left", handleUserLeft);
     socket.on("user-joined", handleUserJoin);
 
     // happen when player abort trading
-    socket.on('abort trading', handleAbortTrading)
+    socket.on("abort trading", handleAbortTrading);
 
     // happen when renter abort trading
-    socket.on('response abort trading for renter', handleAbortTradingRenter)
+    socket.on("response abort trading for renter", handleAbortTradingRenter);
     return () => {
       socket.off("signal", gotMessageFromServer);
       socket.off("chat-message", addMessage);
       socket.off("user-left", handleUserLeft);
       socket.off("user-joined", handleUserJoin);
-      socket.off('abort trading', handleAbortTrading)
-      socket.off('response abort trading for renter', handleAbortTradingRenter)
+      socket.off("abort trading", handleAbortTrading);
+      socket.off("response abort trading for renter", handleAbortTradingRenter);
     };
   }, []);
 
@@ -711,11 +736,24 @@ export default function VideoChat() {
       <ModalRating
         title="Please describe your experience"
         visible={visible}
-        onOk={handleOk}
-        onCancel={handleCancel}
+        footer={[
+          <ButtonAntd className="submit-form" key="Submit" onClick={handleOk}>
+            Confirm
+          </ButtonAntd>,
+          <ButtonAntd key="Cancel" onClick={handleCancel}>
+            Cancel
+          </ButtonAntd>,
+        ]}
       >
-        <Rate onChange={(val) => setRate(val)} value={rate} />
-        <textarea className="text-center" style={{display: "block"}} onChange={(e) => setRateContent(e.target.value)} placeholder="Write your comment here!"/>
+        <div className="text-center">
+          <Rate onChange={(val) => setRate(val)} value={rate} />
+          <textarea
+            className="text-center"
+            style={{ display: "block", width: "100%", height: "80px" }}
+            onChange={(e) => setRateContent(e.target.value)}
+            placeholder="Write your comment here!"
+          />
+        </div>
       </ModalRating>
     </div>
   );
