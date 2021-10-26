@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import { AsyncTransactHistory, AsyncTransactWallet } from "../SettingSlice";
+import TableTransact from "./TableTransact";
 import TableWallet from "./TableWallet";
 import "./WalletSetting.scss";
 
@@ -73,6 +74,7 @@ export default function WalletSetting() {
     dispatch(AsyncLoadUser());
     dispatch(AsyncTransactHistory({ id: user?._id }));
   }, [money, dispatch, user?._id]);
+  
 
   return (
     <div className="wallet__setting">
@@ -218,8 +220,12 @@ export default function WalletSetting() {
               </TabPane>
 
               {/* History */}
-              <TabPane tab={<span>History</span>} key="3">
+              <TabPane tab={<span>History Wallet</span>} key="3">
                 <TableWallet />
+              </TabPane>
+              {/* History transact */}
+              <TabPane tab={<span>History</span>} key="4">
+                <TableTransact />
               </TabPane>
             </Tabs>
           </div>
