@@ -5,6 +5,7 @@ const { multer } = require('../utils/config');
 const multerLib = require('multer');
 const Transfer = require('../models/transfers.models');
 const { cloudinary, upload } = require('../services/multer');
+const PlayerProfile = require('../models/player_profiles.models')
 
 /* 
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
@@ -353,6 +354,7 @@ class UsersController {
       });
     }
   }
+  
 }
 
 module.exports = new UsersController();

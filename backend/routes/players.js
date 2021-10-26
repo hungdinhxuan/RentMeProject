@@ -38,4 +38,18 @@ router.post('/:id/reviews',
 passport.authenticate('jwt', {session: false}),
 PlayerController.createReview)
 
+
+router.post('/:id/donate', 
+  /*  
+        #swagger.tags = ['Players']  
+        #swagger.security = [{
+            "Authorization": []
+        }]
+        #swagger.parameters['id'] = { description: 'Player ID' }
+
+    */
+passport.authenticate('jwt', {session: false}),
+PlayerController.donate)
+
+
 module.exports = router;

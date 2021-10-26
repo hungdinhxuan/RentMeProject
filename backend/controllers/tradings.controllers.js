@@ -96,6 +96,7 @@ class TradingsController {
         });
     }
   }
+
 }
 
 module.exports = new TradingsController();

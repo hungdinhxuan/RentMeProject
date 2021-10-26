@@ -1,6 +1,7 @@
 const PlayerProfiles = require('../models/player_profiles.models');
 const Reviews = require('../models/reviews.models');
 const Trading = require('../models/tradings.models');
+const Transfer = require('../models/transfers.models')
 
 const mongoose = require('mongoose');
 class PlayersControllers {
@@ -325,6 +326,39 @@ class PlayersControllers {
           success: false,
           message: error.message || 'Internal Server Error',
         });
+    }
+  }
+  async donate(req, res){
+    const {money} = req.body
+    const playerProfileId = req.params.id
+    try {
+      const playerProfile = await PlayerProfiles.findById(playerProfileId).populate('userId', 'username fullName')
+      await new Transfer({
+        sender: req.user._id,
+        receiver: playerProfile.userId,
+        money,
+        type: "donate",
+      }).save((err, transfer) => {
+        if(err){
+          return res.status(500).json({
+            success: false,
+            message: err.message || 'Internal Server Error',
+            error: err,
+          });
+        }
+        return res.status(200).json({
+          success: true,
+          message: `Donate to ${playerProfile.userId.fullName} successful!`,
+          playerName: playerProfile.userId.username,
+          money
+        })
+      })
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message || 'Internal Server Error',
+        error,
+      });
     }
   }
 }

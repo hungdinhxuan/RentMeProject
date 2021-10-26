@@ -13,7 +13,7 @@ const initialState = {
 
 export const authRoomAsync = createAsyncThunk("chatroom/auth", async(values, {rejectWithValue}) => {
     try {
-        const response = await axiosClient.post('/tradings', values)
+        const response = await axiosClient.post('/tradings/auth', values)
         return response
     } catch (error) {
         return rejectWithValue(error.response.data)

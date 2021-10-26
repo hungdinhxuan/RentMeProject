@@ -576,6 +576,18 @@ export default function VideoChat() {
       setVisible(true);
     };
 
+    const handleDoneTrading = (data) => {
+      Swal.fire({
+        position: "center",
+        icon: "success",
+        title: data,
+        showConfirmButton: false,
+        timer: 1000,
+      });
+      dispatch(abortTrading());
+      history.push("/");
+    }
+
     socket.on("user-left", handleUserLeft);
     socket.on("user-joined", handleUserJoin);
 
@@ -584,6 +596,11 @@ export default function VideoChat() {
 
     // happen when renter abort trading
     socket.on("response abort trading for renter", handleAbortTradingRenter);
+
+
+    // happen when countdown == 0
+    socket.on('done trading', handleDoneTrading)
+
     return () => {
       socket.off("signal", gotMessageFromServer);
       socket.off("chat-message", addMessage);
@@ -591,6 +608,7 @@ export default function VideoChat() {
       socket.off("user-joined", handleUserJoin);
       socket.off("abort trading", handleAbortTrading);
       socket.off("response abort trading for renter", handleAbortTradingRenter);
+      socket.off('done trading', handleDoneTrading)
     };
   }, []);
 
@@ -642,7 +660,7 @@ export default function VideoChat() {
             className="time-expired"
             style={{ color: "red", marginLeft: 15 }}
           >
-            <CoutdownTime expiredTime={expireTime}/>
+            <CoutdownTime expiredTime={expireTime} tradingId={tradingId} path={roomId}/>
           </span>
         </div>
 

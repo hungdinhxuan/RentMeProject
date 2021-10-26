@@ -7,9 +7,10 @@ router.post(
     /*  
         #swagger.tags = ['Tradings']  
     */
-  '/',
+  '/auth',
   passport.authenticate('jwt', { session: false }),
   TradingsController.authRoom,
 );
+
 
 module.exports = router;

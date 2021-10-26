@@ -16,7 +16,7 @@ import socket from "socket";
 import Drawler from "./Drawler";
 import "./Header.scss";
 import Swal from "sweetalert2";
-
+import {ToastSweet} from "components/SweetAlert2"
 function Header() {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -178,11 +178,26 @@ function Header() {
       })
     }
 
+    const handleExpireRentPlayer = (data) => {
+      ToastSweet("warning", data)
+    }
+
+    const handleTradingError = (data) => {
+      ToastSweet("error", data)
+    }
+
+    const handleResponseDonateMoneyForPlayer = (data) => {
+      ToastSweet("success", data)
+    }
+
     socket.on("response renter", loadData);
     socket.on("response player", loadData);
     socket.on("response confirm rent", confirmRentMsg);
     socket.on("response error renter", errorMsg)
     socket.on("response decline rent", declineMsg);
+    socket.on('expire rent player', handleExpireRentPlayer)
+    socket.on('trading error', handleTradingError)
+    socket.on('response donate money player', handleResponseDonateMoneyForPlayer)
     // Note: Clear socket when change state.
     return () => {
       socket.off("response decline rent", declineMsg);
@@ -190,6 +205,9 @@ function Header() {
       socket.off("response player", loadData);
       socket.off("response confirm rent", confirmRentMsg);
       socket.off("response error renter", errorMsg)
+      socket.off('expire rent player', handleExpireRentPlayer)
+      socket.off('trading error', handleTradingError)
+      socket.off('response donate money player', handleResponseDonateMoneyForPlayer)
     };
   }, [dispatch]);
 
