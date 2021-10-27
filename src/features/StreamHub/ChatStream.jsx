@@ -1,12 +1,14 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect, useCallback} from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
-import { useSelector } from "react-redux";
 import { Avatar } from "antd";
+import socket from 'socket'
 
+const path = "stream"
 export default function ChatStream() {
-  const { user } = useSelector((state) => state.auth);
+  
   const [currentMessage, setCurrentMessage] = useState("");
-  const a = [...Array(25)];
+  const [messages, setMessages] = useState([]);
+
 
   // Using ref
   const typingTimeOutRef = useRef(null);
@@ -19,35 +21,54 @@ export default function ChatStream() {
     }
     typingTimeOutRef.current = setTimeout(() => {
       setCurrentMessage(value);
-    }, 1000);
+    }, 30);
   };
 
   // console.log('Hello');
   console.log(currentMessage);
 
+
   const sendMessage = () => {
+    socket.emit("message-streamhub", path, currentMessage)
     setCurrentMessage("");
   };
+
+  
+
+  console.log(messages);
+
+  useEffect(() => {
+    socket.emit('user-join-streamhub', path)
+    const handleMessageStreamhub = (msg) => {
+      console.log(msg);
+      setMessages([...messages, msg])
+    }
+    socket.on('message-streamhub', handleMessageStreamhub)
+    // return () => {
+    //   socket.off('message-streamhub', handleMessageStreamhub)
+    // }
+  }, [messages])
+
+
+
   return (
     <div className="global-chat__details">
       <div className="global-chat__display">
         {/* Map message from API */}
         <ScrollToBottom className="scroll-message">
-          {a.map((item, index) => (
+          {messages.map((item, index) => (
             <div className="global_message__item" key={index}>
               <div className="message__item--left">
-                <Avatar size={40} src={user?.avatar} />
+                <Avatar size={40} src={item?.avatar} />
               </div>
               <div className="message__item--center">
                 <div className="chat-name">
                   <strong className="name-player-review">
-                    {user?.fullName}
+                    {item.sender}
                   </strong>
                 </div>
                 <div className="mess-global">
-                  Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                  Dolorum dicta, nam tempore ipsum assumenda neque quia quo nisi
-                  enim voluptas corrupti facilis dolores totam fugit.
+                  {item.content}
                 </div>
               </div>
             </div>
