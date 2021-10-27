@@ -190,6 +190,10 @@ function Header() {
       ToastSweet("success", data)
     }
 
+    const handleFollowPlayer = (data) => {
+      ToastSweet("success", data)
+    }
+
     socket.on("response renter", loadData);
     socket.on("response player", loadData);
     socket.on("response confirm rent", confirmRentMsg);
@@ -198,6 +202,7 @@ function Header() {
     socket.on('expire rent player', handleExpireRentPlayer)
     socket.on('trading error', handleTradingError)
     socket.on('response donate money player', handleResponseDonateMoneyForPlayer)
+    socket.on('follow player', handleFollowPlayer)
     // Note: Clear socket when change state.
     return () => {
       socket.off("response decline rent", declineMsg);
@@ -208,6 +213,7 @@ function Header() {
       socket.off('expire rent player', handleExpireRentPlayer)
       socket.off('trading error', handleTradingError)
       socket.off('response donate money player', handleResponseDonateMoneyForPlayer)
+      socket.off('follow player', handleFollowPlayer)
     };
   }, [dispatch]);
 

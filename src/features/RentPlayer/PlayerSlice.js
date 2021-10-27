@@ -136,6 +136,9 @@ const PlayerSlice = createSlice({
         title: action.payload.message,
         icon: 'success'
       })
+      if(action.payload.message === 'following success'){
+        socket.emit('follow player', action.payload.player.username)
+      }
     },
     [AsyncFollowPlayer.rejected]: (state, action) => {
       
