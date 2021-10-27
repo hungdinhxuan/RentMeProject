@@ -4,10 +4,11 @@ import "aos/dist/aos.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { PrivateRoute } from "components/Layouts/PrivateRoute";
 import { PublicRoute } from "components/Layouts/PublicRoute";
+import { AdminRoute } from "components/Layouts/AdminRoute";
 import Loading from "components/Loading";
 import PageNotFound from "components/PageNotFound";
 import routes from "constants/routes";
-import {  React, Suspense } from "react";
+import { React, Suspense } from "react";
 import MessengerCustomerChat from "react-messenger-customer-chat";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
@@ -33,6 +34,16 @@ function App() {
               layout={route.layout}
             />
           );
+        } else if (route.path === "/admin") {
+          return (
+            <AdminRoute
+              key={index}
+              exact={route.exact}
+              path={route.path}
+              component={route.main}
+              layout={route.layout}
+            />
+          );
         } else {
           // Private route yêu cầu authentication
           return (
@@ -49,21 +60,20 @@ function App() {
     }
   };
   return (
-      <Suspense fallback={<Loading />}>
-        <BrowserRouter>
-          <Switch>
-            {showLayout(routes)}
-            <Route path="*" component={PageNotFound} />
-          </Switch>
+    <Suspense fallback={<Loading />}>
+      <BrowserRouter>
+        <Switch>
+          {showLayout(routes)}
+          <Route path="*" component={PageNotFound} />
+        </Switch>
 
-          <MessengerCustomerChat
-            pageId={process.env.REACT_APP_FACEBOOK_PAGE_ID}
-            appId={process.env.REACT_APP_FACEBOOK_APP_ID}
-            htmlRef={process.env.REACT_APP_FACEBOOK_HTML_REF}
-          />
-        </BrowserRouter>
-      </Suspense>
-    
+        <MessengerCustomerChat
+          pageId={process.env.REACT_APP_FACEBOOK_PAGE_ID}
+          appId={process.env.REACT_APP_FACEBOOK_APP_ID}
+          htmlRef={process.env.REACT_APP_FACEBOOK_HTML_REF}
+        />
+      </BrowserRouter>
+    </Suspense>
   );
 }
 export default App;
