@@ -21,7 +21,7 @@ export default function TableTransact() {
       key: "transaction",
       render: (text, index) => {
         return {
-          children: index.tradingId.slice(5, 15),
+          children: index._id.slice(5, 15),
           props: {
             "data-tip": "a very long text",
           },
