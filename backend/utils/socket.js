@@ -523,6 +523,17 @@ module.exports = (app) => {
         }
       }
     })
+
+    socket.on('follow player', async (playerName) => {
+      if(socket.auth){
+        if(userSocketIdObj[playerName]){
+          const sender = await User.findOne({username: socket.username})
+          for(let socketId of userSocketIdObj[playerName]){
+            io.to(socketId).emit('follow player', `${sender.fullName} is following you !!!!`)
+          }
+        }
+      }
+    })
   });
 
   httpServer.listen(4000);
