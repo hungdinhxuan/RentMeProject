@@ -1,3 +1,5 @@
+const path = require('path');
+
 module.exports = (app) => {
   const { createServer } = require('http');
   const { Server } = require('socket.io');
@@ -31,6 +33,12 @@ module.exports = (app) => {
   let connections = {}; /// Lưu trữ thông tin phòng và tất cả các socket id trong room đó {room1: [socket.id], roomn : [socket.id]}
   let messages = {};
   let timeOnline = {};
+
+
+
+  /// [room1: set(user1: set(socket id ) ), room2: set(user2: set(socket id ) ), ]
+  let connectionsStreamhub = {}
+  let messagesStreamhub = {}
 
   io.on('connection', (socket) => {
     socket.auth = false;
@@ -126,7 +134,28 @@ module.exports = (app) => {
           }
         }
       }
-    });
+
+      
+      // Streamhub 
+      for (const [path, setUsers] of Object.entries(connectionsStreamhub)) {
+        for(let user of setUsers){
+
+          //delete socket id out of user
+          if(connectionsStreamhub[path][user]){
+            connectionsStreamhub[path][user].delete(socket.id)
+            if(connectionsStreamhub[path][user].size === 0){
+              delete connectionsStreamhub[path][user]
+            }
+          }
+          // if no user in room then delete room
+          if(connectionsStreamhub[path].size === 0){
+            delete connectionsStreamhub[path]
+            delete messagesStreamhub[path]
+          }
+
+        }
+      }
+    }); 
 
     socket.on('rent player', async (data) => {
       if (socket.auth) {
@@ -534,7 +563,49 @@ module.exports = (app) => {
         }
       }
     })
+    /// Chat Stream
+    socket.on('user-join-streamhub', (path) => {
+      if(socket.auth){
+        if(!connectionsStreamhub[path]){ // Neu chua co room thi tao room = new Set()
+          connectionsStreamhub[path] = new Set()
+        }else{
+          if(!connectionsStreamhub[path][socket.username]){ // Neu username do chua vao room 
+            connectionsStreamhub[path].add(socket.username)
+          }else{
+            connectionsStreamhub[path][socket.username].add(socket.id)
+          }
+        } 
+        socket.join(path)
+      }
+    })
+
+    socket.on('message-streamhub', async (path, message) => {
+      if(socket.auth){
+        try {
+          
+          const user = await User.findOne({username: socket.username})
+          if(!messagesStreamhub[path] ){
+            messagesStreamhub[path] = []
+          }
+          const newMsg = {
+            sender: user.fullName,
+            content: message,
+            avatar: user.avatar
+          }
+          console.log("🚀 ~ file: socket.js ~ line 594 ~ socket.on ~ newMsg", newMsg)
+            messagesStreamhub[path].push(newMsg)
+            
+            io.to(path).emit('message-streamhub', newMsg)
+
+        } catch (error) {
+          console.log("🚀 ~ file: socket.js ~ line 594 ~ socket.on ~ error", error)
+        }
+      }
+    })
+
+   
   });
 
+  
   httpServer.listen(4000);
 };
