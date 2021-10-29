@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef} from "react";
 import { useHistory, useRouteMatch, useParams } from "react-router";
 import { Image, Rate, Avatar } from "antd";
 import "./Details.scss";
@@ -8,18 +8,16 @@ import "./Details.scss";
 import { Modal, Button, Select } from "antd";
 import socket from "socket";
 import Swal from "sweetalert2";
-import TimeAgo from "javascript-time-ago";
-import en from "javascript-time-ago/locale/en.json";
-TimeAgo.addDefaultLocale(en);
+import timeAgo from "utils/timeAgo"
+import getRandomVideoYoutube from "utils/randomVideoYoutube";
 
-const timeAgo = new TimeAgo("en-US");
 
 export default function PlayerDetails() {
   const match = useRouteMatch();
   const params = useParams();
   const history = useHistory();
   const [visible, setVisible] = useState(false);
-
+  const ref = useRef("EcZ1OCJECvY");
   const { Option } = Select;
 
   const { player, error, reviews } = useSelector((state) => state.players);
@@ -136,6 +134,13 @@ export default function PlayerDetails() {
   useEffect(() => {
     dispatch(AsyncGetReviews(params.cardId));
   }, [dispatch, params.cardId]);
+
+  useEffect(() => {
+
+    getRandomVideoYoutube().then((res) => {
+      ref.current = res
+    })    
+  }, [])
 
   return (
     <div className="details">
@@ -257,7 +262,7 @@ export default function PlayerDetails() {
                   <iframe
                     width="100%"
                     height="350"
-                    src="https://www.youtube.com/embed/1WLSitEnnCg"
+                    src={`https://www.youtube.com/embed/${ref.current}`}
                     title="YouTube video player"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -279,7 +284,7 @@ export default function PlayerDetails() {
                         <div className="review-content">
                           <p>{review.userId.fullName}</p>
                           <p className="review-time">
-                            {timeAgo.format(new Date(review.createdAt))}
+                            {timeAgo(new Date(review.createdAt))}
                           </p>
                           <p className="content-player-comment">
                             {review.content}
