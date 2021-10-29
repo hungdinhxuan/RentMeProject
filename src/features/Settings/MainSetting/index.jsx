@@ -45,6 +45,17 @@ export default function SidebarSetting() {
         ) : (
           <></>
         )}
+        {user?.role === 0 ? (
+          <NavLink
+            to="/admin"
+            className="setting__item"
+            activeClassName="setting__item--active"
+          >
+            <div className="setting__list">Admin Page</div>
+          </NavLink>
+        ) : (
+          <></>
+        )}
         <hr />
         <div className="setting__list" onClick={handleLogout}>
           Logout
