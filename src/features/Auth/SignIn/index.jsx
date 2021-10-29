@@ -167,9 +167,8 @@ export default function SignIn(props) {
   // Sau khi có tài khoản
   const { referrer } = props.location.state || { referrer: { pathname: "/" } };
 
-  if (user || isAuthenticated) {
+  if ((user && user.role !== 0) || isAuthenticated) {
     socket.emit("authenticate", localStorage.getItem("token"));
-
     history.push(referrer);
   }
 
@@ -210,7 +209,7 @@ export default function SignIn(props) {
       });
       // console.log(res);
       localStorage.setItem("token", res.token);
-      socket.emit('authenticate', res.token);
+      socket.emit("authenticate", res.token);
       history.push(referrer);
     } catch (error) {}
   };
@@ -223,7 +222,7 @@ export default function SignIn(props) {
       });
       // console.log(res.data);
       localStorage.setItem("token", res.token);
-      socket.emit('authenticate', res.token);
+      socket.emit("authenticate", res.token);
       history.push(referrer);
     } catch (error) {
       console.log(error);

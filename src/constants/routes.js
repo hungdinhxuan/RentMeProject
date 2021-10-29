@@ -6,7 +6,8 @@ import Settings from "features/Settings";
 import { lazy} from "react";
 import ChatRoom from "features/ChatRoom";
 import StreamHub from 'features/StreamHub'
-
+import { Redirect } from "react-router";
+import Admin from "features/Admin";
 const Home = lazy(() => import("features/Home/index.jsx"));
 
 const ForgotPassword = lazy(() =>
@@ -20,6 +21,12 @@ const routes = [
     exact: true,
     layout: PrivateLayout,
     main: Home
+  },
+  {
+    path: "/admin",
+    exact: true,
+    layout: PublicLayout,
+    main: Admin
   },
   {
     path: "/signin",
