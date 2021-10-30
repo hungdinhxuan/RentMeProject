@@ -6,7 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { AsyncLoadPlayerDetails, AsyncGetReviews, AsyncDonateMoney, AsyncFollowPlayer} from "../PlayerSlice";
 import "./Details.scss";
 import { Modal, Button, Select } from "antd";
-import socket from "socket";
+import socket from "utils/socket";
 import Swal from "sweetalert2";
 import timeAgo from "utils/timeAgo"
 import getRandomVideoYoutube from "utils/randomVideoYoutube";

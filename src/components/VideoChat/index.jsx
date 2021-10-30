@@ -9,7 +9,7 @@ import StopScreenShareIcon from "@material-ui/icons/StopScreenShare";
 import CallEndIcon from "@material-ui/icons/CallEnd";
 import ChatIcon from "@material-ui/icons/Chat";
 import Modal from "react-bootstrap/Modal";
-import socket from "socket";
+import socket from "utils/socket";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import "./VideoChat.scss";

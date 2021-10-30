@@ -6,7 +6,7 @@ import CardList from "../Card/index";
 import { AsyncLoadPlayer } from "../PlayerSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AsyncLoadUser } from "features/Auth/AuthSlice";
-import socket from 'socket'
+import socket from 'utils/socket'
 
 function MainRentPlayer() {
   //   Select

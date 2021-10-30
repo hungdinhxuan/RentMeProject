@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axiosClient from "axiosClient";
+import axiosClient from "utils/axiosClient";
 import { toastError, toastSuccess } from "components/Toastify/toastHelper";
 
 const initialState = {

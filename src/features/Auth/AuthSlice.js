@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axiosClient from "axiosClient";
+import axiosClient from "utils/axiosClient";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 
