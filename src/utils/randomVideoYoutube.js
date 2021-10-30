@@ -14,13 +14,13 @@ export default function getRandomVideoFromYoutube () {
     }
     axios.get(url, { params })
       .then(response => {
-      console.log("🚀 ~ file: randomVideoYoutube.js ~ line 13 ~ returnnewPromise ~ response", response.data)
         const video = response.data.items[Math.floor(Math.random() * response.data.items.length)].id.videoId
         resolve(video)
       })
       .catch(error => {
-        console.log("🚀 ~ file: randomVideoYoutube.js ~ line 19 ~ returnnewPromise ~ error", error.response)
         reject(error)
       })
   })
 }
+
+

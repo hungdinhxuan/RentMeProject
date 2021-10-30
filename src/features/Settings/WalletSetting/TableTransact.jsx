@@ -1,11 +1,11 @@
 import { Table, Tag } from "antd";
-import React, { useEffect } from "react";
+import React, { useEffect, memo } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import { AsyncTransferHistory } from "../SettingSlice";
 import "./TableTransact.scss";
 
-export default function TableTransact() {
+function TableTransact() {
   const { user } = useSelector((state) => state.auth);
   const { historyTransfer } = useSelector((state) => state.setting);
   const dispatch = useDispatch();
@@ -95,3 +95,4 @@ export default function TableTransact() {
     </div>
   );
 }
+export default memo(TableTransact);

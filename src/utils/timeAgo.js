@@ -22,3 +22,4 @@ export default function timeAgo(date) {
   }
   return Math.floor(seconds) + " seconds ago";
 }
+
