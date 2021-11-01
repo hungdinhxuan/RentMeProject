@@ -1,8 +1,8 @@
-const PlayerProfiles = require('../models/player_profiles.models');
-const Reviews = require('../models/reviews.models');
-const Trading = require('../models/tradings.models');
-const Transfer = require('../models/transfers.models');
-const User = require('../models/users.models');
+const PlayerProfiles = require('../models/player_profiles.model');
+const Reviews = require('../models/reviews.model');
+const Trading = require('../models/tradings.model');
+const Transfer = require('../models/transfers.model');
+const User = require('../models/users.model');
 
 const mongoose = require('mongoose');
 class PlayersControllers {

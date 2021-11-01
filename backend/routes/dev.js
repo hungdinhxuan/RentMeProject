@@ -6,12 +6,12 @@ const {
 const { multer } = require('../utils/config');
 const multerLib = require('multer');
 const streamifier = require('streamifier');
-const User = require('../models/users.models');
-const PlayerProfiles = require('../models/player_profiles.models');
-const Message = require('../models/messages.models')
+const User = require('../models/users.model');
+const PlayerProfiles = require('../models/player_profiles.model');
+const Message = require('../models/messages.model')
 const argon2 = require('argon2');
 const { girlName, longDesc, shortDesc } = require('../init-data');
-const Services = require('../models/services.models');
+const Services = require('../models/services.model');
 
 router.get('/', async (req, res) => {
   /*  
