@@ -9,7 +9,7 @@ import Box from "@material-ui/core/Box";
 import Grid from "@material-ui/core/Grid";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import Typography from "@material-ui/core/Typography";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/styles";
 import { Link } from "react-router-dom";
 import "./SignUp.scss";
 
@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   paper: {
-    margin: theme.spacing(1, 4),
+    // margin: theme.spacing(1, 4),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -59,12 +59,12 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "14px",
   },
   avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    // margin: theme.spacing(1),
+    // backgroundColor: theme.palette.secondary.main,
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
+    // marginTop: theme.spacing(1),
     height: "40px",
     fontSize: "14px",
     "& label": {
@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    // margin: theme.spacing(3, 0, 2),
     color: "#fff",
     background: "#8d65ea",
     "&:hover": {

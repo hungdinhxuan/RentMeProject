@@ -1,12 +1,13 @@
 import { yupResolver } from "@hookform/resolvers/yup";
 import { FormLabel } from "@material-ui/core";
+import { useTheme } from '@emotion/react';
 import Avatar from "@material-ui/core/Avatar";
 import Box from "@material-ui/core/Box";
 import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/styles";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -46,7 +47,9 @@ function Copyright() {
   );
 }
 
-const useStyles = makeStyles((theme) => ({
+
+
+const useStyles = (theme) => ({
   root: {
     height: "1000px",
     justifyContent: "center",
@@ -55,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   paper: {
-    margin: theme.spacing(8, 4),
+    // margin: theme.spacing(8, 4),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -63,12 +66,12 @@ const useStyles = makeStyles((theme) => ({
     fontSize: "14px",
   },
   avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
+    // margin: theme.spacing(1),
+    // backgroundColor: theme.palette.secondary.main,
   },
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
+    // marginTop: theme.spacing(1),
     height: "40px",
     fontSize: "14px",
     "& label": {
@@ -86,7 +89,7 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
+    // margin: theme.spacing(3, 0, 2),
     color: "#fff",
     background: "#8d65ea",
     "&:hover": {
@@ -111,11 +114,11 @@ const useStyles = makeStyles((theme) => ({
       color: "#8d65ea !important",
     },
   },
-}));
+});
 
 export default function SignIn(props) {
   const classes = useStyles();
-
+  
   // Form
   const initialValues = {
     username: "",

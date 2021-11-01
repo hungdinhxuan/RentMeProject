@@ -12,6 +12,7 @@ import { React, Suspense } from "react";
 import MessengerCustomerChat from "react-messenger-customer-chat";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.css";
+import 'react-perfect-scrollbar/dist/css/styles.css';
 
 AOS.init();
 
@@ -33,7 +34,7 @@ function App() {
               component={route.main}
               layout={route.layout}
             />
-          );
+          )
         } else if (route.path === "/admin") {
           return (
             <AdminRoute
