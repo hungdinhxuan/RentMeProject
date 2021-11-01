@@ -27,6 +27,10 @@
     {
       "name": "Dev",
       "description": "Dev endpoints"
+    },
+    {
+      "name": "Managements",
+      "description": "Managements endpoints"
     }
   ],
   "schemes": [
@@ -763,6 +767,90 @@
         "description": "",
         "parameters": [],
         "responses": {}
+      }
+    },
+    "/api/managements/users": {
+      "get": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/api/managements/users/soft": {
+      "delete": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/api/managements/users/force": {
+      "delete": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       }
     }
   },

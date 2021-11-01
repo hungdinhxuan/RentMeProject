@@ -8,15 +8,20 @@ const {
   loginLimiter,
   registerLimiter,
 } = require('../middlewares/limitRequests');
+const checkValidAccount = require('../middlewares/checkValidAccount');
 
-router.get('/', passport.authenticate('jwt', { session: false }), (req, res) =>
-  /*
+router.get(
+      /*
         #swagger.tags = ['Auth']
         #swagger.security = [{
             "Authorization": []
         }]
     */
-  res.status(200).send(req.user),
+
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  checkValidAccount,
+  (req, res) => res.status(200).send(req.user),
 );
 
 if (process.env.NODE_ENV === 'production') {
