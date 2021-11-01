@@ -8,6 +8,9 @@ import ChatRoom from "features/ChatRoom";
 import StreamHub from 'features/StreamHub'
 import { Redirect } from "react-router";
 import Admin from "features/Admin";
+import AdminLayout from "components/Layouts/AdminLayout";
+import Dashboard from "features/Admin/pages/Dashboard";
+import UserList from "features/Admin/pages/UserList";
 const Home = lazy(() => import("features/Home/index.jsx"));
 
 const ForgotPassword = lazy(() =>
@@ -25,7 +28,31 @@ const routes = [
   {
     path: "/admin",
     exact: true,
-    layout: PublicLayout,
+    layout: AdminLayout,
+    main: Admin
+  },
+  {
+    path: "/admin/dashboard",
+    exact: true,
+    layout: AdminLayout,
+    main: Admin
+  },
+  {
+    path: "/admin/players",
+    exact: true,
+    layout: AdminLayout,
+    main: Admin
+  },
+  {
+    path: "/admin/players/banned",
+    exact: true,
+    layout: AdminLayout,
+    main: Dashboard
+  },
+  {
+    path: "/admin/users",
+    exact: true,
+    layout: AdminLayout,
     main: Admin
   },
   {
