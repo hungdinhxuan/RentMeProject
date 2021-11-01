@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const User = require('../models/users.models')
+const User = require('../models/users.model')
 const connectAndRetry  = async () => {
   let MONGO_URL;
   if (process.env.NODE_ENV === 'production') {

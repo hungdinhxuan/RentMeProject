@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const PlayerController = require('../controllers/players.controllers');
+const PlayerController = require('../controllers/players.controller');
 const passport = require('passport');
-const { followLimiter } = require('../middleware/limitRequests');
+const { followLimiter } = require('../middlewares/limitRequests');
 
 router.get(
   '/',
