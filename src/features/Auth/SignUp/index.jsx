@@ -19,9 +19,9 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AsyncSignup } from "../AuthSlice";
 import { useSelector, useDispatch } from "react-redux";
+import { useHistory } from "react-router-dom";
 // React-hook-form
 import { useForm } from "react-hook-form";
-import { useHistory } from "react-router-dom";
 
 function Copyright() {
   return (
@@ -46,47 +46,47 @@ const useStyles = makeStyles((theme) => ({
     height: "1000px",
     justifyContent: "center",
     backgroundImage: `url(${AnhBackGround})`,
-    // padding: "90px 0",
+
     padding: "40px 0",
   },
 
   paper: {
-    // margin: theme.spacing(1, 4),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     color: "#C4C3E6",
     fontSize: "14px",
   },
-  avatar: {
-    // margin: theme.spacing(1),
-    // backgroundColor: theme.palette.secondary.main,
-  },
+
   form: {
     width: "100%", // Fix IE 11 issue.
-    // marginTop: theme.spacing(1),
     height: "40px",
     fontSize: "14px",
     "& label": {
       color: "#a7a7c6",
       fontSize: "14px",
     },
+
     "& input": {
       color: "#fff",
       border: "1px solid #4F4E60",
       height: "40px",
       borderRadius: "4px",
+      padding: "6px 0 7px",
+      transition: "all 0.3s",
+      "&:hover": {
+        border: "1px solid #af93ef",
+      },
     },
     "& span": {
       fontSize: "14px",
     },
   },
   submit: {
-    // margin: theme.spacing(3, 0, 2),
     color: "#fff",
-    background: "#8d65ea",
+    background: "#8d65ea !important",
     "&:hover": {
-      background: "#AF93EF",
+      background: "#AF93EF !important",
     },
   },
   Anh: {
@@ -99,8 +99,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   FormBackground: {
-    backgroundColor: "#302F3D",
-    maxWidth: "500px",
+    backgroundColor: "#302F3D !important",
+    maxWidth: "500px !important",
   },
   Hover: {
     "&:hover": {
@@ -158,7 +158,6 @@ export default function SignUp() {
   const history = useHistory();
 
   const onSubmit = (data) => {
-  
     dispatch(AsyncSignup(data));
     if (!error) {
       history.push("/signin");
@@ -166,12 +165,17 @@ export default function SignUp() {
     reset();
   };
 
-  if(isAuthenticated){
+  if (isAuthenticated) {
     history.push("/");
   }
 
   return (
-    <Grid container component="main" maxwidth="xs" className={classes.root}>
+    <Grid
+      container
+      component="main"
+      maxwidth="xs"
+      className={`${classes.root} signUp`}
+    >
       <CssBaseline />
       <Grid
         item
@@ -183,8 +187,13 @@ export default function SignUp() {
         square
         className={classes.FormBackground}
       >
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
+        <div className={classes.paper} style={{ margin: "64px 32px" }}>
+          <Avatar
+            sx={{
+              backgroundColor: (theme) => theme.palette.secondary.main,
+              margin: (theme) => theme.spacing(1),
+            }}
+          >
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -192,6 +201,7 @@ export default function SignUp() {
           </Typography>
           <form
             className={classes.form}
+            style={{ marginTop: 8 }}
             noValidate
             autoComplete="off"
             onSubmit={handleSubmit(onSubmit)}
@@ -255,6 +265,7 @@ export default function SignUp() {
               fullWidth
               variant="contained"
               className={classes.submit}
+              style={{ margin: "24px 0 16px" }}
             >
               Đăng Ký
             </Button>
