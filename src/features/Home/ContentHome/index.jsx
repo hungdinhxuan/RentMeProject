@@ -3,7 +3,7 @@ import { useHistory } from "react-router";
 import "./ContentHome.scss";
 import ReactTwitchEmbedVideo from "react-twitch-embed-video";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 // import AOS from "aos";
 
 function ContentHome() {
@@ -158,4 +158,4 @@ function ContentHome() {
   );
 }
 
-export default ContentHome;
+export default memo(ContentHome);

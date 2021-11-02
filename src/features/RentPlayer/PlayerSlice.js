@@ -1,6 +1,6 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axiosClient from "axiosClient";
-import socket from "socket";
+import axiosClient from "utils/axiosClient";
+import socket from "utils/socket";
 import Swal from "sweetalert2";
 
 const initialState = {

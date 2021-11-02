@@ -1,5 +1,5 @@
 const userSocketIdObj = {};
-const User = require('../models/users.models');
+const User = require('../models/users.model');
 
 async function addClientToObj(username, socketId, role, io) {
   if (!userSocketIdObj.hasOwnProperty(username)) {

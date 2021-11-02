@@ -12,7 +12,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useHistory } from "react-router-dom";
-import socket from "socket";
+import socket from "utils/socket";
 import Drawler from "./Drawler";
 import "./Header.scss";
 import Swal from "sweetalert2";

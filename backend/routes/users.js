@@ -1,16 +1,16 @@
 const express = require('express');
 const router = express.Router();
-const UsersController = require('../controllers/users.controllers');
-const MessagesController = require('../controllers/messages.controlllers');
+const UsersController = require('../controllers/users.controller');
+const MessagesController = require('../controllers/messages.controlller');
 const passport = require('passport');
-const { AdminRole } = require('../middleware/checkRoles');
+const { AdminRole } = require('../middlewares/checkRole');
 const {
   validateRegisterUser,
   validateNewPassword,
   handleValidationErrors,
   validateNewUserInfo,
-} = require('../middleware/validate');
-const MessagesControlllers = require('../controllers/messages.controlllers');
+} = require('../middlewares/validate');
+const MessagesControlllers = require('../controllers/messages.controlller');
 
 router.get(
   /*  

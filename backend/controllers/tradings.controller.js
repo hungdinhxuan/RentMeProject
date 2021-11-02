@@ -1,4 +1,4 @@
-const Trading = require('../models/tradings.models');
+const Trading = require('../models/tradings.model');
 
 class TradingsController {
   async authRoom(req, res) {

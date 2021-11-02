@@ -24,7 +24,6 @@
     "browserslist": "^4.17.0",
     "chart.js": "^3.5.1",
     "glob-parent": "^6.0.1",
-    "javascript-time-ago": "^2.3.10",
     "node-fetch": "^3.0.0",
     "node-sass": "^6.0.1",
     "qs": "^6.10.1",

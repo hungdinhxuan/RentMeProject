@@ -1,4 +1,4 @@
-import React from "react";
+import React, {memo} from "react";
 import { Carousel } from "react-bootstrap";
 import "./Carousel.scss";
 
@@ -7,6 +7,7 @@ function CarouselHeader() {
   const handleChange = (e) => {
     console.log(e.target.value);
   };
+  
   return (
     <div className="carousel__header">
       <Carousel fade>
@@ -98,4 +99,4 @@ function CarouselHeader() {
   );
 }
 
-export default CarouselHeader;
+export default memo(CarouselHeader);
