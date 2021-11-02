@@ -61,13 +61,6 @@ UsersSchema.plugin(mongoose_delete, {
   deletedByType: String,
 });
 
-UsersSchema.pre('save', async function(next) {
-  try {
-    this.password = await argon2.hash(this.password);
-    return next();
-  } catch (error) {
-    return next(error);
-  }
-})
+
 
 module.exports = mongoose.model('users', UsersSchema);
