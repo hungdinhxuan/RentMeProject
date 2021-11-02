@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { Redirect, Route, useLocation } from "react-router";
+import { Redirect, Route, useLocation } from "react-router-dom";
 
 
 export function PrivateRoute({
