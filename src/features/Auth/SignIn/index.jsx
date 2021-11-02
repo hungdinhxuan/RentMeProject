@@ -14,7 +14,7 @@ import { makeStyles } from "@material-ui/styles";
 import AnhBackGround from "assets/acct_creation_bg.jpg";
 import Facebook from "assets/facebook.png";
 import Google from "assets/google.png";
-import axiosClient from "axiosClient";
+import axiosClient from "utils/axiosClient";
 import Loading from "components/Loading";
 import React, { useState } from "react";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
