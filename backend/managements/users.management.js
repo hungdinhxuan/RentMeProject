@@ -1,7 +1,7 @@
 const User = require('../models/users.model');
 const argon2 = require('argon2');
 
-class ManagementController {
+class UsersManagement {
   async getUsers(req, res) {
     let { page, limit } = req.query;
     limit = limit || 50;
@@ -181,4 +181,4 @@ class ManagementController {
   }
 }
 
-module.exports = new ManagementController();
+module.exports = new UsersManagement();
