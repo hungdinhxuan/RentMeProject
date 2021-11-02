@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('../models/users.model')
 const connectAndRetry  = async () => {
+  
   let MONGO_URL;
   if (process.env.NODE_ENV === 'production') {
     MONGO_URL = `mongodb+srv://${process.env.MONGODB_USER}:${process.env.MONGODB_PASSWORD}@cluster0.rrcyu.mongodb.net/${process.env.MONGODB_DATABASE_NAME}?retryWrites=true&w=majority`;
