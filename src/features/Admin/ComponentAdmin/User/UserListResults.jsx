@@ -163,7 +163,7 @@ const UserListResults = ({ userList, ...rest }) => {
 };
 
 UserListResults.propTypes = {
-  players: PropTypes.array.isRequired,
+  userList: PropTypes.array.isRequired,
 };
 
 export default UserListResults;
