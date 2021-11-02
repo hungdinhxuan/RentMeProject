@@ -1,8 +1,8 @@
 const express = require('express');
 const router = express.Router();
-const ManagementController = require('../controllers/managements.controller');
 const passport = require('passport');
 const { AdminRole } = require('../middlewares/checkRole');
+const UsersManagement = require('../managements/users.management')
 
 router.get(
   /*  
@@ -14,7 +14,7 @@ router.get(
   '/users',
   passport.authenticate('jwt', { session: false }),
   AdminRole,
-  ManagementController.getUsers,
+  UsersManagement.getUsers,
 );
 
 router.post(
@@ -28,7 +28,7 @@ router.post(
 
   passport.authenticate('jwt', { session: false }),
   AdminRole,
-  ManagementController.createUser,
+  UsersManagement.createUser,
 );
 
 router.patch(
@@ -41,7 +41,7 @@ router.patch(
   '/users',
   passport.authenticate('jwt', { session: false }),
   AdminRole,
-  ManagementController.restoreUsers,
+  UsersManagement.restoreUsers,
 );
 
 router.delete(
@@ -54,7 +54,7 @@ router.delete(
   '/users/soft',
   passport.authenticate('jwt', { session: false }),
   AdminRole,
-  ManagementController.softDeleteUsers,
+  UsersManagement.softDeleteUsers,
 );
 
 router.delete(
@@ -67,7 +67,7 @@ router.delete(
   '/users/force',
   passport.authenticate('jwt', { session: false }),
   AdminRole,
-  ManagementController.forceDeleteUsers,
+  UsersManagement.forceDeleteUsers,
 );
 
 router.put(
@@ -80,6 +80,6 @@ router.put(
     */
   passport.authenticate('jwt', { session: false }),
   AdminRole,
-  ManagementController.updateUser,
+  UsersManagement.updateUser,
 );
 module.exports = router;
