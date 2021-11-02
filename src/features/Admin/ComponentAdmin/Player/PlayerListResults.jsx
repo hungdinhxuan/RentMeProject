@@ -44,6 +44,7 @@ const PlayerListResults = ({ players, ...rest }) => {
     setEditRows(temp);
   }, []);
 
+  console.log(editRows);
   const columns = [
     {
       field: "nickname",
