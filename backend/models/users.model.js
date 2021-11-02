@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const mongoose_delete = require('mongoose-delete');
 const { ListCities } = require('../utils/config');
-
+const argon2 = require('argon2');
 
 const UsersSchema = new Schema(
   {
@@ -33,7 +33,7 @@ const UsersSchema = new Schema(
     nickname: { type: String, default: '', maxlength: 200},
     desc: { type: String, default: '', maxLength: 1000 },
     isOnline: { type: Boolean, default: false, required: true },
-    status: {type: String, enum: ['free', 'busy'], required: true, default: 'free'},
+    status: {type: String, enum: ['free', 'busy', 'banned'], required: true, default: 'free'},
     birthDate: { type: Date, default: '2000-01-01', required: true },
     following: [{ type: mongoose.Types.ObjectId, ref: 'users' }],
     follower: [{ type: mongoose.Types.ObjectId, ref: 'users' }],
@@ -61,6 +61,13 @@ UsersSchema.plugin(mongoose_delete, {
   deletedByType: String,
 });
 
-
+UsersSchema.pre('save', async function(next) {
+  try {
+    this.password = await argon2.hash(this.password);
+    return next();
+  } catch (error) {
+    return next(error);
+  }
+})
 
 module.exports = mongoose.model('users', UsersSchema);

@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect, useCallback} from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
 import { Avatar } from "antd";
-import socket from 'socket'
+import socket from 'utils/socket'
 
 const path = "stream"
 export default function ChatStream() {
@@ -24,9 +24,7 @@ export default function ChatStream() {
     }, 30);
   };
 
-  // console.log('Hello');
-  console.log(currentMessage);
-
+  
 
   const sendMessage = () => {
     socket.emit("message-streamhub", path, currentMessage)
@@ -35,12 +33,10 @@ export default function ChatStream() {
 
   
 
-  console.log(messages);
-
   useEffect(() => {
     socket.emit('user-join-streamhub', path)
     const handleMessageStreamhub = (msg) => {
-      console.log(msg);
+      
       setMessages([...messages, msg])
     }
     socket.on('message-streamhub', handleMessageStreamhub)

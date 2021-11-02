@@ -1,11 +1,11 @@
-const User = require('../models/users.models');
-const Transaction = require('../models/transactions.models');
+const User = require('../models/users.model');
+const Transaction = require('../models/transactions.model');
 const argon2 = require('argon2');
 const { multer } = require('../utils/config');
 const multerLib = require('multer');
-const Transfer = require('../models/transfers.models');
+const Transfer = require('../models/transfers.model');
 const { cloudinary, upload } = require('../services/multer');
-const PlayerProfile = require('../models/player_profiles.models')
+const PlayerProfile = require('../models/player_profiles.model')
 
 /* 
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW

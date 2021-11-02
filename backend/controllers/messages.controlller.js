@@ -1,4 +1,4 @@
-const Messages = require('../models/messages.models');
+const Messages = require('../models/messages.model');
 
 class MessagesController {
   async getAllMsg(req, res) {
@@ -103,7 +103,7 @@ class MessagesController {
         });
       }
       await Messages.findByIdAndDelete(msgId);
-      // console.log('here');
+      
       return res
         .status(200)
         .json({ success: true, message: `message removed`, msgId });

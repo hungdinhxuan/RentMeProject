@@ -1,4 +1,4 @@
-const Service = require('../models/services.models');
+const Service = require('../models/services.model');
 
 class ServicesController {
   async getOne(req, res) {

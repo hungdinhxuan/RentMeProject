@@ -24,10 +24,11 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 // React-hook-form
 import { Link, useHistory } from "react-router-dom";
-import socket from "socket";
 import * as yup from "yup";
 import { AsyncSignin } from "../AuthSlice";
 import "./SignIn.scss";
+import socket from "utils/socket";
+
 
 function Copyright() {
   return (

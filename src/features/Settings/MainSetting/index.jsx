@@ -1,10 +1,11 @@
 import "./SidebarSetting.scss";
+import { memo } from "react";
 import { NavLink, useHistory } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "features/Auth/AuthSlice";
-import socket  from "socket";
+import socket  from "utils/socket";
 
-export default function SidebarSetting() {
+function SidebarSetting() {
   
   const history = useHistory();
   const { user } = useSelector((state) => state.auth);
@@ -16,6 +17,7 @@ export default function SidebarSetting() {
     socket.emit('logout')
     history.push("/");
   };
+  
   return (
     <div className="menu">
       <div className="menu__setting">
@@ -64,3 +66,4 @@ export default function SidebarSetting() {
     </div>
   );
 }
+export default memo(SidebarSetting)

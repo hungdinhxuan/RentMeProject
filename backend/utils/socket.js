@@ -3,21 +3,21 @@ const path = require('path');
 module.exports = (app) => {
   const { createServer } = require('http');
   const { Server } = require('socket.io');
-  const User = require('../models/users.models');
+  const User = require('../models/users.model');
   const {
     userSocketIdObj,
     addClientToObj,
     removeClientFromObj,
   } = require('./client');
-  const Message = require('../models/messages.models');
+  const Message = require('../models/messages.model');
   const httpServer = createServer(app);
   const io = new Server(httpServer, { cors: '*', path: '/mysocket' });
   const jwt = require('jsonwebtoken');
   const fs = require('fs');
   const publicKey = fs.readFileSync('public.pem');
-  const Trading = require('../models/tradings.models');
-  const Transfer = require('../models/transfers.models')
-  const PlayerProfile = require('../models/player_profiles.models')
+  const Trading = require('../models/tradings.model');
+  const Transfer = require('../models/transfers.model')
+  const PlayerProfile = require('../models/player_profiles.model')
   const xss = require('xss');
   const sanitizeString = (str) => {
     return xss(str);

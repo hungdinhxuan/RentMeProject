@@ -10,6 +10,7 @@
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "express-basic-auth": "^1.2.0",
     "express-mongo-sanitize": "^2.1.0",
     "express-rate-limit": "^5.4.0",
     "express-session": "^1.17.2",
@@ -29,6 +30,7 @@
     "passport-jwt": "^4.0.0",
     "socket.io": "^4.2.0",
     "streamifier": "^0.1.1",
+    "swagger-ui-express": "^4.1.6",
     "xlsx": "^0.17.2",
     "xss": "^1.0.10"
   },
@@ -40,9 +42,7 @@
     "morgan": "^1.10.0",
     "nodemon": "^2.0.12",
     "snyk": "^1.717.0",
-    "swagger-autogen": "^2.11.2",
-    "swagger-jsdoc": "^6.1.0",
-    "swagger-ui-express": "^4.1.6"
+    "swagger-autogen": "^2.12.4"
   },
   "scripts": {
     "start": "node main",

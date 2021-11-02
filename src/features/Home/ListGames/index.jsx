@@ -1,4 +1,4 @@
-import React from "react";
+import React, {memo} from "react";
 
 import Games from "constants/Games";
 import shadow from "assets/ListGames/shadow.png";
@@ -101,4 +101,4 @@ function ListGame() {
   );
 }
 
-export default ListGame;
+export default memo(ListGame);

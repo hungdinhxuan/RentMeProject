@@ -5,6 +5,7 @@ const devRouter = require('./dev');
 const playersRouter = require('./players');
 const filesRouter = require('./files');
 const tradingsRouter = require('./tradings')
+const managemnentsRouter = require('./managements');
 
 module.exports = (app) => {
   app.use('/api/auth', authRouter);
@@ -14,4 +15,5 @@ module.exports = (app) => {
   app.use('/api/players', playersRouter);
   app.use('/api/files', filesRouter);
   app.use('/api/tradings', tradingsRouter)
+  app.use('/api/managements', managemnentsRouter)
 };
