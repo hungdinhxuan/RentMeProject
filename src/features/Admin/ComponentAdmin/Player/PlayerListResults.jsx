@@ -44,7 +44,6 @@ const PlayerListResults = ({ players, ...rest }) => {
     setEditRows(temp);
   }, []);
 
-  console.log(editRows);
   const columns = [
     {
       field: "nickname",
@@ -154,7 +153,6 @@ const PlayerListResults = ({ players, ...rest }) => {
           rowsPerPageOptions={[5]}
           checkboxSelection
           disableSelectionOnClick
-          editRowsModel={editRows}
           getRowId={(row) => row._id}
           editMode="row"
           components={{ Toolbar: CustomToolbar }}
