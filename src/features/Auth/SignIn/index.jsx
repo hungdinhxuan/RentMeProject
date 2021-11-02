@@ -6,27 +6,29 @@ import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import { makeStyles } from "@material-ui/core/styles";
+import { createTheme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
+import { makeStyles } from "@material-ui/styles";
 import AnhBackGround from "assets/acct_creation_bg.jpg";
 import Facebook from "assets/facebook.png";
 import Google from "assets/google.png";
-import axiosClient from "utils/axiosClient";
+import axiosClient from "axiosClient";
+import Loading from "components/Loading";
 import React, { useState } from "react";
 import FacebookLogin from "react-facebook-login/dist/facebook-login-render-props";
 import GoogleLogin from "react-google-login";
 import ReCAPTCHA from "react-google-recaptcha";
-// React-hook-form
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
+// React-hook-form
 import { Link, useHistory } from "react-router-dom";
 import * as yup from "yup";
 import { AsyncSignin } from "../AuthSlice";
 import "./SignIn.scss";
-import Loading from "components/Loading";
 import socket from "utils/socket";
+
 
 function Copyright() {
   return (
@@ -46,6 +48,7 @@ function Copyright() {
   );
 }
 
+const themeMT = createTheme();
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "1000px",
@@ -55,20 +58,15 @@ const useStyles = makeStyles((theme) => ({
   },
 
   paper: {
-    margin: theme.spacing(8, 4),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
     color: "#C4C3E6",
     fontSize: "14px",
   },
-  avatar: {
-    margin: theme.spacing(1),
-    backgroundColor: theme.palette.secondary.main,
-  },
+
   form: {
     width: "100%", // Fix IE 11 issue.
-    marginTop: theme.spacing(1),
     height: "40px",
     fontSize: "14px",
     "& label": {
@@ -80,17 +78,21 @@ const useStyles = makeStyles((theme) => ({
       border: "1px solid #4F4E60",
       height: "40px",
       borderRadius: "4px",
+      padding: "6px 0 7px",
+      transition: "all 0.3s",
+      "&:hover": {
+        border: "1px solid #af93ef",
+      },
     },
     "& span": {
       fontSize: "14px",
     },
   },
   submit: {
-    margin: theme.spacing(3, 0, 2),
     color: "#fff",
-    background: "#8d65ea",
+    background: "#8d65ea !important",
     "&:hover": {
-      background: "#AF93EF",
+      background: "#AF93EF !important",
     },
   },
   Anh: {
@@ -103,8 +105,8 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   FormBackground: {
-    backgroundColor: "#302F3D",
-    maxWidth: "500px",
+    backgroundColor: "#302F3D !important",
+    maxWidth: "500px !important",
   },
   Hover: {
     "&:hover": {
@@ -201,8 +203,6 @@ export default function SignIn(props) {
   };
 
   const responseSuccessGoogle = async (response) => {
-    // console.log(response);
-    // console.log(`${process.env.REACT_APP_API}/auth/google`);
     try {
       const res = await axiosClient.post("/auth/google", {
         tokenId: response.tokenId,
@@ -230,7 +230,12 @@ export default function SignIn(props) {
   };
 
   return (
-    <Grid container component="main" maxwidth="xs" className={classes.root}>
+    <Grid
+      container
+      component="main"
+      maxwidth="xs"
+      className={`${classes.root} signIn`}
+    >
       <CssBaseline />
       <Grid
         item
@@ -242,18 +247,24 @@ export default function SignIn(props) {
         square
         className={classes.FormBackground}
       >
-        <div className={classes.paper}>
-          <Avatar className={classes.avatar}>
+        <div className={classes.paper} style={{ margin: "64px 32px" }}>
+          <Avatar
+            sx={{
+              backgroundColor: (theme) => theme.palette.secondary.main,
+              margin: (theme) => theme.spacing(1),
+            }}
+          >
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
             Đăng nhập
           </Typography>
           <form
-            className={classes.form}
             noValidate
             autoComplete="off"
             onSubmit={handleSubmit(onSubmit)}
+            className={classes.form}
+            style={{ marginTop: 8 }}
           >
             <FormLabel>Tài Khoản</FormLabel>
             <TextField
@@ -287,6 +298,7 @@ export default function SignIn(props) {
               variant="contained"
               className={classes.submit}
               disabled={capcha}
+              style={{ margin: "24px 0 16px" }}
             >
               Đăng nhập
             </Button>
@@ -318,7 +330,6 @@ export default function SignIn(props) {
                   style={{
                     height: "74px",
                     width: "300px",
-                    // border: "1px solid white",
                   }}
                 >
                   <ReCAPTCHA
