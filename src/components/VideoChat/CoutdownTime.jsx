@@ -30,6 +30,6 @@ export default function CoutdownTime({ expiredTime, tradingId, path }) {
     }, 1000);
 
     return () => clearInterval(intervalRef.current);
-  }, [time]);
+  }, [time, expiredTime, tradingId, path]);
   return <>{time}</>;
 }

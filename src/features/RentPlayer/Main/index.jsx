@@ -1,4 +1,4 @@
-import React, {  useEffect } from "react";
+import React, { useEffect } from "react";
 
 import { Select } from "antd";
 import "./RentPlayer.scss";
@@ -6,7 +6,7 @@ import CardList from "../Card/index";
 import { AsyncLoadPlayer } from "../PlayerSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { AsyncLoadUser } from "features/Auth/AuthSlice";
-import socket from 'utils/socket'
+import socket from "utils/socket";
 
 function MainRentPlayer() {
   //   Select
@@ -18,19 +18,21 @@ function MainRentPlayer() {
   const { listPlayers } = useSelector((state) => state.players);
   const dispatch = useDispatch();
 
-
   useEffect(() => {
     dispatch(AsyncLoadUser());
     dispatch(AsyncLoadPlayer());
-    
   }, [dispatch]);
 
-  
   useEffect(() => {
-    socket.on("refreshPlayerList", () => {
+    const handleRefresh = () => {
       dispatch(AsyncLoadPlayer());
-    });  
-  }, [])
+    };
+    socket.on("refreshPlayerList", handleRefresh);
+
+    return () => {
+      socket.off("refreshPlayerList", handleRefresh);
+    };
+  }, [dispatch]);
 
   return (
     <div className="main__layout">

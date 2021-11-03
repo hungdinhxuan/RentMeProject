@@ -2,7 +2,6 @@ import { Box, Container } from "@material-ui/core";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
-import { useLocation } from "react-router-dom";
 import { getAllUsersAsync } from "../AdminSlice";
 import UserListResults from "../ComponentAdmin/User/UserListResults";
 import UserListToolbar from "../ComponentAdmin/User/UserListToolbar";
@@ -13,7 +12,7 @@ const UserList = () => {
   useEffect(() => {
     dispatch(getAllUsersAsync());
   }, [dispatch]);
-  const location = useLocation();
+  
   return (
     <>
       <Helmet>

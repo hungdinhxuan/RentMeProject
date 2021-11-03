@@ -1,13 +1,7 @@
 import {
   Box,
-  Button,
-  Card,
-  CardContent,
-  TextField,
-  InputAdornment,
-  SvgIcon,
+  Button
 } from "@material-ui/core";
-import { Search as SearchIcon } from "react-feather";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { useDispatch } from "react-redux";
 import { AsyncLoadPlayer } from "features/RentPlayer/PlayerSlice";

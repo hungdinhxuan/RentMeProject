@@ -12,7 +12,7 @@ class Auth {
   async login(req, res, next) {
     const { username, password } = req.body;
     try {
-      const user = await User.findOne({ username });
+      const user = await User.findOneWithDeleted({ username });
       // console.log(username);
       if (!user) {
         return res.status(401).json({
@@ -23,6 +23,18 @@ class Auth {
       const verify = await argon2.verify(user.password, password);
       if (verify) {
         // console.log(verify);
+        if(user.deleted){
+          return res.status(401).json({
+            success: false,
+            message: 'Account is deleted ! Please contact admin to restore your account',
+          });
+        }
+        if(user.status === 'banned'){
+          return res.status(401).json({
+            success: false,
+            message: 'Account is banned ! Please contact admin to restore your account',
+          });
+        }
         const token = await jwt.sign({ sub: user._id }, privateKey, {
           algorithm: 'RS256',
           expiresIn: '24h',
@@ -45,13 +57,13 @@ class Auth {
   async register(req, res, next) {
     let { username, email, password, fullName } = req.body;
     try {
-      let user = await User.findOne({ username });
+      let user = await User.findOneWithDeleted({ username });
       if (user) {
         return res
           .status(406)
           .json({ success: false, message: 'username is used' });
       }
-      user = await User.findOne({ email });
+      user = await User.findOneWithDeleted({ email });
       
       
       if (user) {
@@ -79,7 +91,7 @@ class Auth {
 
   async forgotPassword(req, res, next) {
     const { email } = req.body;
-    const user = await User.findOne({ email: email });
+    const user = await User.findOneWithDeleted({ email: email });
     if (!user) {
       return res.status(400).json({
         success: false,
@@ -230,7 +242,8 @@ class Auth {
       const { sub, email_verified, name, email, picture } = response.payload;
     
       if (email_verified) {
-        let user = await User.findOne({ email });
+        let user = await User.findOneWithDeleted({ email });
+        
         if (!user) {
           user = await User.create({
             username: `google_${sub}`,
@@ -239,6 +252,18 @@ class Auth {
             fullName: name,
             avatar: picture,
             typeAccount: 'google'
+          });
+        }
+        if(user.deleted){
+          return res.status(401).json({
+            success: false,
+            message: 'Account is deleted ! Please contact admin to restore your account',
+          });
+        }
+        if(user.status === 'banned'){
+          return res.status(401).json({
+            success: false,
+            message: 'Account is banned ! Please contact admin to restore your account',
           });
         }
         const token = jwt.sign({ sub: user._id }, privateKey, {
@@ -273,7 +298,7 @@ class Auth {
       const data = await response.json();
       // console.log(data);
       const { id, email, name, picture } = data;
-      let user = await User.findOne({ email });
+      let user = await User.findOneWithDeleted({ email });
       if (!user) {
         user = await User.create({
           username: `facebook_${id}`,
@@ -282,6 +307,18 @@ class Auth {
           fullName: name,
           avatar: picture.data.url,
           typeAccount: 'facebook'
+        });
+      }
+      if(user.deleted){
+        return res.status(401).json({
+          success: false,
+          message: 'Account is deleted ! Please contact admin to restore your account',
+        });
+      }
+      if(user.status === 'banned'){
+        return res.status(401).json({
+          success: false,
+          message: 'Account is banned ! Please contact admin to restore your account',
         });
       }
       const token = jwt.sign({ sub: user._id }, privateKey, {

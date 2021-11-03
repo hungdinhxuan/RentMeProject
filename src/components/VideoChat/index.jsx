@@ -1,4 +1,4 @@
-import React, { createRef, useState, useEffect, useRef } from "react";
+import React, { createRef, useState, useEffect } from "react";
 import { IconButton, Badge, Input, Button } from "@material-ui/core";
 import VideocamIcon from "@material-ui/icons/Videocam";
 import VideocamOffIcon from "@material-ui/icons/VideocamOff";

@@ -3,6 +3,7 @@ import axiosClient from "utils/axiosClient";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 
+
 const handleNoti = (icon, title, text) => {
   Swal.fire({
     icon: `${icon}`,
@@ -133,6 +134,11 @@ const AuthSlice = createSlice({
       state.user = null;
       state.loading = false;
       state.isAuthenticated = false;
+      Swal.fire({
+        icon: "error",
+        title: action.payload.message || "Something Wrong Happened ! Please login again",
+        showConfirmButton: true,
+      });
     },
 
     [AsyncSignin.pending]: (state) => {
