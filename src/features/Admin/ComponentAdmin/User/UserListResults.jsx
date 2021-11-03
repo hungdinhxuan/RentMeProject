@@ -9,6 +9,9 @@ import OnlineStatus from "assets/onlineStatus.png";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { useCallback, useState } from "react";
+import { softDeleteUsersAsync } from "features/Admin/AdminSlice";
+import { useDispatch } from "react-redux";
+
 import "./User.scss";
 const role = {
   0: "admin",
@@ -25,6 +28,7 @@ function CustomToolbar() {
 }
 
 const UserListResults = ({ userList, ...rest }) => {
+  const dispatch = useDispatch();
   const [editRows, setEditRows] = useState({});
   const [selectionModel, setSelectionModel] = useState([]);
   const handleClick = () => {
@@ -43,7 +47,6 @@ const UserListResults = ({ userList, ...rest }) => {
     }
     setEditRows(temp);
   }, []);
-  
 
   const columns = [
     {
@@ -128,10 +131,22 @@ const UserListResults = ({ userList, ...rest }) => {
       renderCell: () => {
         return (
           <>
-            <button type="button" className="btn btn-outline-primary" onClick={handleClick}>
+            <button
+              type="button"
+              className="btn btn-outline-primary"
+              onClick={handleClick}
+            >
               Update
             </button>
-            <button type="button" className=" mx-2 btn btn-outline-danger" onClick={handleClick}>
+            <button
+              type="button"
+              className=" mx-2 btn btn-outline-danger"
+              onClick={() => {
+                
+                dispatch(softDeleteUsersAsync(selectionModel))
+                console.log("🚀 ~ file: UserListResults.jsx ~ line 147 ~ UserListResults ~ selectionModel", selectionModel)
+              }}
+            >
               Delete
             </button>
           </>

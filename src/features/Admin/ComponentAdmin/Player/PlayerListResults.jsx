@@ -6,7 +6,6 @@ import {
 } from "@mui/x-data-grid";
 import OfflineStatus from "assets/offlineStatus.png";
 import OnlineStatus from "assets/onlineStatus.png";
-import { prev } from "dom7";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { useCallback, useState } from "react";

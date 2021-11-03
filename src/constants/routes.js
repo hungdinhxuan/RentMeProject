@@ -6,11 +6,9 @@ import Settings from "features/Settings";
 import { lazy} from "react";
 import ChatRoom from "features/ChatRoom";
 import StreamHub from 'features/StreamHub'
-import { Redirect } from "react-router";
 import Admin from "features/Admin";
 import AdminLayout from "components/Layouts/AdminLayout";
 import Dashboard from "features/Admin/pages/Dashboard";
-import UserList from "features/Admin/pages/UserList";
 const Home = lazy(() => import("features/Home/index.jsx"));
 
 const ForgotPassword = lazy(() =>

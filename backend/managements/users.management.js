@@ -1,4 +1,5 @@
 const User = require('../models/users.model');
+const Player_Profile = require('../models/player_profiles.model')
 const argon2 = require('argon2');
 
 class UsersManagement {
@@ -63,23 +64,23 @@ class UsersManagement {
     });
   }
 
-  softDeleteUsers(req, res) {
+  async softDeleteUsers(req, res) {
     if (Object.prototype.toString.call(req.body.ids) === '[object Array]') {
-      User.delete({ _id: { $in: req.body.ids } }, (err, data) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({
-            success: false,
-            message: 'Internal Server Error',
-            err,
-          });
-        }
+      try {
+        await Player_Profile.delete({userId: {$in: req.body.ids}})
+
+        await User.delete({ _id: { $in: req.body.ids } })
         return res.status(200).json({
           success: true,
           message: 'deleted successfully !!',
           userIds: req.body.ids,
         });
-      });
+      } catch (error) {
+        return res.status(500).json({
+          success: false,
+          message: error.message || 'Internal Server Error',
+        });
+      }
     } else {
       return res.status(400).json({
         success: false,
@@ -88,23 +89,22 @@ class UsersManagement {
     }
   }
 
-  restoreUsers(req, res) {
+  async restoreUsers(req, res) {
     if (Object.prototype.toString.call(req.body.ids) === '[object Array]') {
-      User.restore({ _id: { $in: req.body.ids } }, (err, data) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({
-            success: false,
-            message: 'Internal Server Error',
-            err,
-          });
-        }
+      try {
+        await Player_Profile.restore({userId: {$in: req.body.ids}})
+        await User.restore({ _id: { $in: req.body.ids } })
         return res.status(200).json({
           success: true,
           message: 'restored successfully !!',
           userIds: req.body.ids,
         });
-      });
+      } catch (error) {
+        return res.status(500).json({
+          success: false,
+          message: error.message || 'Internal Server Error',
+        });
+      }
     } else {
       return res.status(400).json({
         success: false,
@@ -113,7 +113,7 @@ class UsersManagement {
     }
   }
 
-  forceDeleteUsers(req, res) {
+  async forceDeleteUsers(req, res) {
     if (Object.prototype.toString.call(req.body.ids) === '[object Array]') {
       if (req.body.ids.indexOf(req.user._id) > -1) {
         return res.status(400).json({
@@ -121,21 +121,21 @@ class UsersManagement {
           message: 'You can not delete yourself !!',
         });
       }
-      User.deleteMany({ _id: { $in: req.body.ids } }, (err, data) => {
-        if (err) {
-          console.log(err);
-          return res.status(500).json({
-            success: false,
-            message: 'Internal Server Error',
-            err,
-          });
-        }
+      try {
+        
+        await Player_Profile.deleteMany({userId: {$in: req.body.ids}})
+        await User.deleteMany({ _id: { $in: req.body.ids } });
         return res.status(200).json({
           success: true,
           message: 'deleted successfully !!',
           userIds: req.body.ids,
         });
-      });
+      } catch (error) { 
+        return res.status(500).json({
+          success: false,
+          message: error.message || 'Internal Server Error',
+        });
+      }
     } else {
       return res.status(400).json({
         success: false,
@@ -147,25 +147,41 @@ class UsersManagement {
   async updateUser(req, res) {
     const { _id, fullName, username, email, password, province, role } =
       req.body;
-    const roles = {
-      admin: 0,
-      streamer: 1,
-      player: 2,
-      user: 3,
-    };
+   
     try {
-      const user = await User.findOneAndUpdate(
-        { _id },
-        {
-          fullName,
-          username,
-          email,
-          password: await argon2.hash(password),
-          province,
-          role: roles[role],
-        },
-        { new: true },
-      );
+      let user = await User.findById(_id);
+      if (!user) {
+        return res.status(404).json({
+          success: false,
+          message: 'User not found',
+        });
+      }
+      if(!await argon2.verify(user.password, password)){ // if changed password
+        user = await User.findOneAndUpdate(
+          { _id },
+          {
+            fullName,
+            username,
+            email,
+            password: await argon2.hash(password),
+            province,
+            role,
+          },
+          { new: true },
+        );
+      }else{
+        user = await User.findOneAndUpdate(
+          { _id },
+          {
+            fullName,
+            username,
+            email,
+            province,
+            role,
+          },
+          { new: true },
+        );
+      }
       return res.status(200).json({
         success: true,
         message: 'updated successfully !!',

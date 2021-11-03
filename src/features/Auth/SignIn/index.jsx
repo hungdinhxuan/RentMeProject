@@ -6,7 +6,6 @@ import Button from "@material-ui/core/Button";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
-import { createTheme } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
@@ -28,7 +27,7 @@ import * as yup from "yup";
 import { AsyncSignin } from "../AuthSlice";
 import "./SignIn.scss";
 import socket from "utils/socket";
-
+import Swal from 'sweetalert2'
 
 function Copyright() {
   return (
@@ -48,7 +47,6 @@ function Copyright() {
   );
 }
 
-const themeMT = createTheme();
 const useStyles = makeStyles((theme) => ({
   root: {
     height: "1000px",
@@ -209,9 +207,22 @@ export default function SignIn(props) {
       });
       // console.log(res);
       localStorage.setItem("token", res.token);
+      Swal.fire({ 
+        icon: 'success',
+        title: 'Login successful',
+        showConfirmButton: false,
+        timer: 1500
+      })
       socket.emit("authenticate", res.token);
       history.push(referrer);
-    } catch (error) {}
+    } catch (error) {
+      
+      Swal.fire({ 
+        icon: 'error',
+        title: error.response.data.message || 'Something Wrong Happened !',
+        showConfirmButton: true
+      })
+    }
   };
 
   const responseFacebook = async (response) => {
@@ -222,10 +233,20 @@ export default function SignIn(props) {
       });
       // console.log(res.data);
       localStorage.setItem("token", res.token);
+      Swal.fire({ 
+        icon: 'success',
+        title: 'Login successful',
+        showConfirmButton: false,
+        timer: 1500
+      })
       socket.emit("authenticate", res.token);
       history.push(referrer);
     } catch (error) {
-      console.log(error);
+      Swal.fire({ 
+        icon: 'error',
+        title: error.response.data.message || 'Something Wrong Happened !',
+        showConfirmButton: true
+      })
     }
   };
 

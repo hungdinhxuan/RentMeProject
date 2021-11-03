@@ -12,7 +12,7 @@ function TableTransact() {
 
   useEffect(() => {
     dispatch(AsyncTransferHistory(user?.id));
-  }, []);
+  }, [dispatch, user?.id]);
 
   const columns = [
     {

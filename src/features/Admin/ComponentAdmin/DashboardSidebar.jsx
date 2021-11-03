@@ -6,7 +6,6 @@ import {
   List,
   Typography
 } from '@material-ui/core';
-import Ha from 'assets/Ha.jpg';
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
 import {

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { styled } from '@material-ui/core/styles';
 import DashboardNavbar from './DashboardNavbar';
 import DashboardSidebar from './DashboardSidebar';
-import { useHistory, useLocation } from 'react-router';
+import {  useLocation } from 'react-router';
 
 const DashboardLayoutRoot = styled('div')(
   ({ theme }) => ({
