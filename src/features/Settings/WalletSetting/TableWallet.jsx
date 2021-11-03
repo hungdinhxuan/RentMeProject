@@ -1,9 +1,9 @@
 import { Table, Tag } from "antd";
-import React from "react";
+import React, {memo} from "react";
 import { useSelector } from "react-redux";
 import "./TableWallet.scss";
 
-export default function TableWallet() {
+function TableWallet() {
   const { historyTransact } = useSelector((state) => state.setting);
   
 
@@ -29,10 +29,7 @@ export default function TableWallet() {
       title: "Time",
       dataIndex: "createdAt",
       render: (text, index) => {
-        return `${index.createdAt.slice(0, 10)} at ${index.createdAt.slice(
-          12,
-          16
-        )}`;
+        return new Date(index.createdAt).toLocaleDateString()
       },
     },
     {
@@ -61,3 +58,4 @@ export default function TableWallet() {
     </div>
   );
 }
+export default memo(TableWallet);

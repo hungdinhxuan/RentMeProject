@@ -1,7 +1,8 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axiosClient from "axiosClient";
+import axiosClient from "utils/axiosClient";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
+
 
 const handleNoti = (icon, title, text) => {
   Swal.fire({
@@ -109,8 +110,6 @@ export const AsyncUpdateAvatar = createAsyncThunk(
 );
 
 
-
-
 const AuthSlice = createSlice({
   name: "auth",
   initialState,
@@ -135,6 +134,11 @@ const AuthSlice = createSlice({
       state.user = null;
       state.loading = false;
       state.isAuthenticated = false;
+      Swal.fire({
+        icon: "error",
+        title: action.payload.message || "Something Wrong Happened ! Please login again",
+        showConfirmButton: true,
+      });
     },
 
     [AsyncSignin.pending]: (state) => {
@@ -181,7 +185,6 @@ const AuthSlice = createSlice({
   },
 });
 
-const { reducer } = AuthSlice;
-export const {logout} = AuthSlice.actions;
 
-export default reducer;
+export const {logout} = AuthSlice.actions;
+export default AuthSlice.reducer;

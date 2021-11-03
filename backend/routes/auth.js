@@ -1,22 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const validate = require('../middleware/validate');
-const verifyRecaptcha = require('../middleware/verifyReptcha');
-const authController = require('../controllers/auth.controllers');
+const validate = require('../middlewares/validate');
+const verifyRecaptcha = require('../middlewares/verifyReptcha');
+const authController = require('../controllers/auth.controller');
 const passport = require('passport');
 const {
   loginLimiter,
   registerLimiter,
-} = require('../middleware/limitRequests');
+} = require('../middlewares/limitRequests');
+const checkValidAccount = require('../middlewares/checkValidAccount');
 
-router.get('/', passport.authenticate('jwt', { session: false }), (req, res) =>
-  /*
+router.get(
+      /*
         #swagger.tags = ['Auth']
         #swagger.security = [{
             "Authorization": []
         }]
     */
-  res.status(200).send(req.user),
+
+  '/',
+  passport.authenticate('jwt', { session: false }),
+  checkValidAccount,
+  (req, res) => res.status(200).send(req.user),
 );
 
 if (process.env.NODE_ENV === 'production') {
