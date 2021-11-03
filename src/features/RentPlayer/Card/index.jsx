@@ -14,7 +14,7 @@ function CardList({ item }) {
 
   return (
     <div className="card__details col-xl-3 col-md-6 col-12">
-      <Link to={`/playerdou/${item._id}`}>
+      <Link to={`/playerdou/${item?._id}`}>
         <div className="card__items">
           <div className="profile">
             <Avatar shape="square" size={100} src={item.coverBackground} />

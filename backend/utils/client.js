@@ -1,5 +1,5 @@
 const userSocketIdObj = {};
-const User = require('../models/users.models');
+const User = require('../models/users.model');
 
 async function addClientToObj(username, socketId, role, io) {
   if (!userSocketIdObj.hasOwnProperty(username)) {
@@ -23,6 +23,8 @@ async function addClientToObj(username, socketId, role, io) {
   }
   console.log(userSocketIdObj);
 }
+
+
 
 async function removeClientFromObj(username, socketId, role, io, event = null) {
   if (userSocketIdObj.hasOwnProperty(username)) {
@@ -70,6 +72,7 @@ async function removeClientFromObj(username, socketId, role, io, event = null) {
     }
   }
 }
+
 
 module.exports = {
   userSocketIdObj,

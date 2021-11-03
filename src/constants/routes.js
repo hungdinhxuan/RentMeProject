@@ -4,8 +4,11 @@ import SignIn from "features/Auth/SignIn";
 import SignUp from "features/Auth/SignUp";
 import Settings from "features/Settings";
 import { lazy} from "react";
-
-
+import ChatRoom from "features/ChatRoom";
+import StreamHub from 'features/StreamHub'
+import Admin from "features/Admin";
+import AdminLayout from "components/Layouts/AdminLayout";
+import Dashboard from "features/Admin/pages/Dashboard";
 const Home = lazy(() => import("features/Home/index.jsx"));
 
 const ForgotPassword = lazy(() =>
@@ -19,6 +22,36 @@ const routes = [
     exact: true,
     layout: PrivateLayout,
     main: Home
+  },
+  {
+    path: "/admin",
+    exact: true,
+    layout: AdminLayout,
+    main: Admin
+  },
+  {
+    path: "/admin/dashboard",
+    exact: true,
+    layout: AdminLayout,
+    main: Admin
+  },
+  {
+    path: "/admin/players",
+    exact: true,
+    layout: AdminLayout,
+    main: Admin
+  },
+  {
+    path: "/admin/players/banned",
+    exact: true,
+    layout: AdminLayout,
+    main: Dashboard
+  },
+  {
+    path: "/admin/users",
+    exact: true,
+    layout: AdminLayout,
+    main: Admin
   },
   {
     path: "/signin",
@@ -62,6 +95,18 @@ const routes = [
     layout: PrivateLayout,
     main: RentPlayer
   },
+  {
+    path: "/streamhub",
+    exact: false,
+    layout: PublicLayout,
+    main: StreamHub
+  },
+  {
+    path: "/chat-room",
+    exact: false,
+    layout: PrivateLayout,
+    main: ChatRoom
+  }
 ];
 
 export default routes;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {memo} from "react";
 import "./TryRentme.scss";
 
 function TryRentme() {
@@ -30,4 +30,4 @@ function TryRentme() {
   );
 }
 
-export default TryRentme;
+export default memo(TryRentme);

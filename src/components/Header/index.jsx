@@ -1,15 +1,26 @@
-import { Avatar, Badge } from "antd";
+import { Avatar, Badge, Button, Dropdown, Menu, Modal } from "antd";
 import Logo from "assets/player-dou-a.jpg";
+import {
+  addNewMessage,
+  removeMessage,
+  getAllMessagesAsync,
+  updateMessageAsync,
+  removeMessageAsync,
+  updateMessage,
+} from "features/Settings/MessageSlice";
 import React, { useEffect, useRef, useState } from "react";
 import { Container, Nav, Navbar } from "react-bootstrap";
-import {  useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useHistory } from "react-router-dom";
+import socket from "utils/socket";
 import Drawler from "./Drawler";
 import "./Header.scss";
-
+import Swal from "sweetalert2";
+import {ToastSweet} from "components/SweetAlert2"
 function Header() {
   const { user } = useSelector((state) => state.auth);
-
+  const dispatch = useDispatch();
+  const { messages } = useSelector((state) => state.messages);
   const [userHeader, setUserHeader] = useState(true);
   const [visible, setVisible] = useState(false);
   const [navScroll, setnavSroll] = useState("");
@@ -25,6 +36,36 @@ function Header() {
     setVisible(false);
   };
 
+  const handleDeleteMessage = () => {
+    setIsModalVisible(false);
+    
+    //messages[idModal].content.match(/^Trading [a-z 0-9]* accepted by .* Room ID: .* Room Password: .*/g)[0] === messages[idModal].content
+    const checker = messages[idModal].content.match(/^Trading [a-z 0-9]* accepted by .*\s Room ID: .*, Room Password: .*/g)
+    const checker2 = messages[idModal].content.match(/^You are accepted [a-z 0-9]* with .*\s Room ID: .*, Room Password: .*/g)
+    if((checker && checker[0] === messages[idModal].content) || (checker2 && checker2[0] === messages[idModal].content)){
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "This message contain infomation about Room ID as well as Room Password. Please consider before making decision. You won't be able to revert this! ",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          dispatch(
+            removeMessageAsync({ userId: user._id, messageId: messages[idModal]._id })
+          );
+        }
+      })
+    }
+    else{
+      dispatch(
+        removeMessageAsync({ userId: user._id, messageId: messages[idModal]._id })
+      );
+    }
+  };
+
   const history = useHistory();
 
   const handleLogin = () => {
@@ -35,6 +76,54 @@ function Header() {
     history.push("/signup");
   };
 
+  // Dropdown message
+  // const message = "Giao dịch thành công từ: ...";
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [idModal, setIdModal] = useState("0");
+
+  const handleSubmit = () => {
+    socket.emit("confirm rent", messages[idModal]);
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleDecline = () => {
+    socket.emit("decline rent", messages[idModal]);
+    setIsModalVisible(false);
+  };
+  const showModal = (id) => {
+    dispatch(
+      updateMessageAsync({ userId: user?._id, messageId: messages[id.key]._id })
+    );
+    setIsModalVisible(true);
+    setIdModal(id.key);
+  };
+  const menu = (
+    <Menu>
+      {messages?.map((msg, index) => (
+        <Menu.Item key={index} onClick={showModal}>
+          <div
+            style={
+              msg.status === "unread"
+                ? { fontWeight: "600" }
+                : { fontWeight: "normal" }
+            }
+          >
+            {msg?.content?.length >= 60
+              ? `${msg?.content?.slice(0, 40)}...`
+              : msg?.content}
+          </div>
+        </Menu.Item>
+      ))}
+    </Menu>
+  );
+
+  // Check message.
+
+  // Life-cycle
   useEffect(() => {
     const handleScroll = () => {
       const show = window.scrollY > 10;
@@ -52,8 +141,81 @@ function Header() {
   }, []);
 
   useEffect(() => {
+    dispatch(getAllMessagesAsync(user?._id));
     user ? setUserHeader(false) : setUserHeader(true);
-  }, [user]);
+  }, [dispatch, user]);
+
+  useEffect(() => {
+    const loadData = (data) => dispatch(addNewMessage(data));
+
+    const confirmRentMsg = (data) => {
+      if(data.updatedMessage){
+        dispatch(updateMessage(data.updatedMessage))
+      }
+      dispatch(addNewMessage(data.message));
+    }
+
+    const declineMsg = (data) => {
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: data.message,
+        showConfirmButton: false,
+        timer: 1000
+      })
+      if (data.msgId) {
+        return dispatch(removeMessage(data.msgId));
+      }
+    };
+
+    const errorMsg = (data) => {
+      Swal.fire({
+        position: 'center',
+        icon: 'error',
+        title: data,
+        showConfirmButton: false,
+        timer: 1000
+      })
+    }
+
+    const handleExpireRentPlayer = (data) => {
+      ToastSweet("warning", data)
+    }
+
+    const handleTradingError = (data) => {
+      ToastSweet("error", data)
+    }
+
+    const handleResponseDonateMoneyForPlayer = (data) => {
+      ToastSweet("success", data)
+    }
+
+    const handleFollowPlayer = (data) => {
+      ToastSweet("success", data)
+    }
+
+    socket.on("response renter", loadData);
+    socket.on("response player", loadData);
+    socket.on("response confirm rent", confirmRentMsg);
+    socket.on("response error renter", errorMsg)
+    socket.on("response decline rent", declineMsg);
+    socket.on('expire rent player', handleExpireRentPlayer)
+    socket.on('trading error', handleTradingError)
+    socket.on('response donate money player', handleResponseDonateMoneyForPlayer)
+    socket.on('follow player', handleFollowPlayer)
+    // Note: Clear socket when change state.
+    return () => {
+      socket.off("response decline rent", declineMsg);
+      socket.off("response renter", loadData);
+      socket.off("response player", loadData);
+      socket.off("response confirm rent", confirmRentMsg);
+      socket.off("response error renter", errorMsg)
+      socket.off('expire rent player', handleExpireRentPlayer)
+      socket.off('trading error', handleTradingError)
+      socket.off('response donate money player', handleResponseDonateMoneyForPlayer)
+      socket.off('follow player', handleFollowPlayer)
+    };
+  }, [dispatch]);
 
   return (
     <header className={navScroll}>
@@ -101,11 +263,11 @@ function Header() {
               </Nav.Link>
               <Nav.Link href="#">
                 <NavLink
-                  to="/bxh"
+                  to="/chat-room"
                   className="nav__item"
                   activeClassName="nav__item--active"
                 >
-                  BXH
+                  ChatRoom
                 </NavLink>
               </Nav.Link>
               <Nav.Link href="#">
@@ -136,12 +298,21 @@ function Header() {
               ) : (
                 <div className="message d-flex align-items-center">
                   <div className="message__badge">
-                    <Badge count={1}>
-                      <div className="message-icon">
-                        <i className="bi bi-envelope"></i>
-                      </div>
-                    </Badge>
+                    <Dropdown overlay={menu} placement="bottomLeft" arrow>
+                      <Badge
+                        count={
+                          messages.filter(
+                            (mess, index) => mess.status === "unread"
+                          ).length
+                        }
+                      >
+                        <div className="message-icon">
+                          <i className="bi bi-envelope"></i>
+                        </div>
+                      </Badge>
+                    </Dropdown>
                   </div>
+
                   <div className="user__icon" onClick={handleShowDrawler}>
                     <Avatar size={28} src={user.avatar} />
                   </div>
@@ -152,6 +323,42 @@ function Header() {
         </Container>
       </Navbar>
       <Drawler visible={visible} Close={handleClose} avatar={user?.avatar} />
+      <>
+        <Modal
+          title="Message Notification"
+          visible={isModalVisible}
+          onCancel={handleCancel}
+          footer={
+            messages[idModal]?.content.includes("Current trading ID:")
+              ? [
+                  <Button
+                    className="submit-form"
+                    key="Submit"
+                    onClick={handleSubmit}
+                  >
+                    Confirm
+                  </Button>,
+                  <Button key="Decline" onClick={handleDecline}>
+                    Decline
+                  </Button>,
+                ]
+              : [
+                  <Button
+                    key="Delete"
+                    onClick={handleDeleteMessage}
+                    style={{ color: "red", borderColor: "red" }}
+                  >
+                    Delete
+                  </Button>,
+                  <Button key="Cancel" onClick={handleCancel}>
+                    Cancel
+                  </Button>,
+                ]
+          }
+        >
+          <p>{messages[idModal]?.content}</p>
+        </Modal>
+      </>
     </header>
   );
 }

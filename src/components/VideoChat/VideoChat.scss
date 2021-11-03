@@ -1,0 +1,62 @@
+.flex-container {
+    // height: calc(100% - 150px);
+    height: 100%;
+    width: 100%;
+    /* margin: 0 auto; */
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+
+    video {
+        background-image: url("../../assets/StreamLayout2.png");
+        background-repeat: no-repeat;
+        background-size: 100% 100% !important;
+        color: #fff !important;
+        border: none !important;
+        background-position: center;
+        display: block;
+        height: 100%;
+    }
+}
+
+.container-layout {
+    height: 100vh;
+    width: 100vw;
+    max-width: 100vw;
+    max-height: 100vh;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 15px;
+    &.row {
+        margin: 0px;
+    }
+}
+
+.div-send-msg {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.btn-down {
+    z-index: 2;
+    position: fixed;
+    bottom: 0px;
+    width: 100%;
+    height: auto;
+}
+
+.ant-modal-footer {
+    button.ant-btn.submit-form {
+        opacity: 1;
+        color: #fff;
+        background-color: var(--text-hover);
+        border: 1px solid var(---text-hover);
+        font-size: 14px;
+        font-weight: 600;
+    }
+}

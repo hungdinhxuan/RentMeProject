@@ -5,14 +5,13 @@ import "./Home.scss";
 import ListGame from "./ListGames";
 import Stories from "./Stories";
 import TryRentme from "./TryRentme";
-function Home() {
 
+function Home() {
   window.onunload = () => {
     window.scrollTo(0, 0);
   };
 
-  
-  
+
   return (
     <div className="home__main">
       <div className="home__body">

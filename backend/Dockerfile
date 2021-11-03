@@ -4,6 +4,7 @@ WORKDIR /app
 COPY --chown=node:node package.json yarn.lock ./
 RUN yarn install --production=true
 COPY --chown=node:node . .
+RUN node swagger.js
 EXPOSE 4000
 USER node
 CMD ["dumb-init", "node", "main.js" ]

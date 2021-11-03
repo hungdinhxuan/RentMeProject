@@ -3,7 +3,7 @@ import { useHistory } from "react-router";
 import "./ContentHome.scss";
 import ReactTwitchEmbedVideo from "react-twitch-embed-video";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 // import AOS from "aos";
 
 function ContentHome() {
@@ -144,7 +144,7 @@ function ContentHome() {
                 <ReactTwitchEmbedVideo
                   channel={channel || "valorant"}
                   width="100%"
-                  height="413"
+                  height="380"
                   layout="video"
                   autoplay="false"
                   targetClass="youtube__video"
@@ -158,4 +158,4 @@ function ContentHome() {
   );
 }
 
-export default ContentHome;
+export default memo(ContentHome);

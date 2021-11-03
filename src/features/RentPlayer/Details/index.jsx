@@ -1,27 +1,146 @@
-import React, { useEffect, useState } from "react";
-import { useHistory, useRouteMatch } from "react-router";
+import React, { useEffect, useState, useRef} from "react";
+import { useHistory, useRouteMatch, useParams } from "react-router";
 import { Image, Rate, Avatar } from "antd";
 import "./Details.scss";
-import Ha from "assets/Ha.jpg";
 import { useDispatch, useSelector } from "react-redux";
-import { AsyncLoadPlayerDetails } from "../PlayerSlice";
+import { AsyncLoadPlayerDetails, AsyncGetReviews, AsyncDonateMoney, AsyncFollowPlayer} from "../PlayerSlice";
 import "./Details.scss";
+import { Modal, Button, Select } from "antd";
+import socket from "utils/socket";
+import Swal from "sweetalert2";
+import timeAgo from "utils/timeAgo"
+import getRandomVideoYoutube from "utils/randomVideoYoutube";
+
 
 export default function PlayerDetails() {
   const match = useRouteMatch();
+  const params = useParams();
   const history = useHistory();
   const [visible, setVisible] = useState(false);
+  const ref = useRef("EcZ1OCJECvY");
+  const { Option } = Select;
 
-  // console.log(location);
-  const { player, error } = useSelector((state) => state.players);
+  const { player, error, reviews } = useSelector((state) => state.players);
+  const { user } = useSelector((state) => state.auth);
+  const [moneyState, setMoneyState] = useState("");
+  const [formRentPlayer, setformRentPlayer] = useState({
+    renterId: "",
+    playerId: "",
+    money: "",
+    time: 1,
+  });
 
   if (error) {
     history.push("/error");
   }
   const dispatch = useDispatch();
+
+  const handleDonate = async () => {
+    let { value: money } =  await Swal.fire({
+      title: 'Enter the amount you want to donate',
+      input: 'text',
+    })
+    money = parseInt(money)
+    if (money) {
+      if(money > user.balance){
+        Swal.fire({title: "You don't have enough money to donate", icon: "error"})
+      }else{
+        dispatch(AsyncDonateMoney({id: params.cardId, money}))
+      }
+    }else{
+      Swal.fire({title: "Please input money valid", icon: "error"})
+    }
+  }
+  // Modal rent player
+  const [isModalVisible, setIsModalVisible] = useState(false);
+
+  const showModal = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleSubmit = () => {
+    if (user.balance > (moneyState || player?.pricePerHour)) {
+      if (formRentPlayer.money && formRentPlayer.time) {
+        console.log({
+          ...formRentPlayer,
+          renterId: user._id,
+          playerId: player.user._id,
+        });
+        socket.emit("rent player", {
+          ...formRentPlayer,
+          renterId: user._id,
+          playerId: player.user._id,
+        });
+      } else {
+        socket.emit("rent player", {
+          time: 1,
+          money: player.pricePerHour,
+          renterId: user._id,
+          playerId: player.user._id,
+        });
+      }
+    } else {
+      Swal.fire({
+        position: "center",
+        icon: "info",
+        title: "Not enough money",
+        showConfirmButton: false,
+        timer: 1000,
+      });
+    }
+    setIsModalVisible(false);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+
+  const handleChangeHours = (values) => {
+    setMoneyState(player?.pricePerHour * values);
+    setformRentPlayer({
+      ...formRentPlayer,
+      time: values,
+      money: player?.pricePerHour * values,
+    });
+  };
+
+  const handleFollow = () => {
+    dispatch(AsyncFollowPlayer(params.cardId))
+  }
+
+  const handleMoreAmount = () => {
+    history.push("/setting/wallet");
+  };
+
+  const AverageRating = (data) => {
+    const a = data.reduce((prev, current) => {
+      return prev + current.rating;
+    }, 0);
+    const DecimalString = ((a / data.length) * 1.0).toString();
+    if (DecimalString.split(".")[1] > 5) {
+      return Math.ceil(a / data.length);
+    } else {
+      return Math.floor(a / data.length);
+    }
+  };
+
   useEffect(() => {
     dispatch(AsyncLoadPlayerDetails(match.params.cardId));
-  }, [dispatch, match.params.cardId]);
+  }, [dispatch, match.params.cardId], player?.user?.follower);
+
+  // const test = AverageRating(reviews);
+  // console.log(test);
+
+  useEffect(() => {
+    dispatch(AsyncGetReviews(params.cardId));
+  }, [dispatch, params.cardId]);
+
+  useEffect(() => {
+
+    getRandomVideoYoutube().then((res) => {
+      ref.current = res
+    })    
+  }, [])
 
   return (
     <div className="details">
@@ -45,7 +164,7 @@ export default function PlayerDetails() {
                       onVisibleChange: (vis) => setVisible(vis),
                     }}
                   >
-                    {player?.albums.map((item, index) => (
+                    {player?.albums?.map((item, index) => (
                       <Image key={index} src={item} />
                     ))}
                   </Image.PreviewGroup>
@@ -64,12 +183,12 @@ export default function PlayerDetails() {
                   target="_blank"
                   rel="noopener noreferrer"
                 >
-                  <i class="bi bi-facebook"></i>
+                  <i className="bi bi-facebook"></i>
                 </a>
               </div>
               <div className="member-since">
                 <span>Join Date: </span>
-                <span>1/3/2021</span>
+                <span>{new Date(player?.createdAt).toDateString()}</span>
               </div>
             </div>
 
@@ -77,15 +196,17 @@ export default function PlayerDetails() {
               <p className="price-profile">{player?.pricePerHour}.00 USD/G</p>
               <div className="rate-profile">
                 <Rate
-                  value={5}
+                  value={AverageRating(reviews)}
                   count={5}
                   disabled
                   style={{ fontSize: "16px" }}
                 />
               </div>
               <div className="action-profile">
-                <button className="btn-style purple">Rent</button>
-                <button className="btn-style white">Donate</button>
+                <button className="btn-style purple" onClick={showModal}>
+                  Rent
+                </button>
+                <button className="btn-style white" onClick={handleDonate}>Donate</button>
                 <button className="btn-style white">Chat</button>
               </div>
             </div>
@@ -93,7 +214,9 @@ export default function PlayerDetails() {
               <div className="name-profile">
                 <div className="center-item col-lg-12">
                   <span className="name__player">{player?.nickname} </span>
-                  <button className="btn-follow-player">Follow Me</button>
+                  {player?.user?.follower?.indexOf(user._id) === -1 ?
+                  <button className="btn-follow-player" onClick={handleFollow}>Following Me</button> : <button className="btn-follow-player" onClick={handleFollow}>Unfollowing me</button> 
+                  }
                 </div>
               </div>
               <div className="nav-player-profile row">
@@ -101,7 +224,7 @@ export default function PlayerDetails() {
                   <div className="nav__item-name">
                     <span>Followers</span>
                   </div>
-                  <div className="nav__item-value">82 people</div>
+                  <div className="nav__item-value">{player?.user?.follower?.length} people</div>
                 </div>
                 <div className="col-lg-3 col-6">
                   <div className="nav__item-name">
@@ -139,7 +262,7 @@ export default function PlayerDetails() {
                   <iframe
                     width="100%"
                     height="350"
-                    src="https://www.youtube.com/embed/1WLSitEnnCg"
+                    src={`https://www.youtube.com/embed/${ref.current}`}
                     title="YouTube video player"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -151,36 +274,88 @@ export default function PlayerDetails() {
                 <span>Comment</span>
               </div>
               <div className="text-center comment-player-profile">
-                <div className="col-lg-12">
-                  <div className="fullsize">
-                    <div className="comment-image">
-                      <Avatar src={Ha} size={40} />
-                    </div>
-                    <div className="comment-content">
-                      <div className="review-content">
-                        <p>Aix</p>
-                        <p className="review-time">23:47:55, 1/10/2021</p>
-                        <p className="content-player-comment">
-                          You are the number one.
-                        </p>
+                {reviews?.map((review) => (
+                  <div className="col-lg-12">
+                    <div className="fullsize">
+                      <div className="comment-image">
+                        <Avatar src={review.userId.avatar} size={40} />
                       </div>
-                      <div className="review-rating">
-                        <Rate
-                          value={5}
-                          count={5}
-                          disabled
-                          style={{ fontSize: "14px" }}
-                        />
+                      <div className="comment-content">
+                        <div className="review-content">
+                          <p>{review.userId.fullName}</p>
+                          <p className="review-time">
+                            {timeAgo(new Date(review.createdAt))}
+                          </p>
+                          <p className="content-player-comment">
+                            {review.content}
+                          </p>
+                        </div>
+                        <div className="review-rating">
+                          <Rate
+                            value={review.rating}
+                            count={5}
+                            disabled
+                            style={{ fontSize: "14px" }}
+                          />
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-                <div className="col-lg-12"></div>
+                ))}
               </div>
             </div>
           </div>
         </div>
       </div>
+      <Modal
+        title="Rent Player"
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={[
+          <Button className="submit-form" key="Submit" onClick={handleSubmit}>
+            Submit
+          </Button>,
+          <Button key="Cancel" onClick={handleCancel}>
+            Cancel
+          </Button>,
+        ]}
+      >
+        <table>
+          <tr>
+            <td>Player: </td>
+            <td>{player?.nickname}</td>
+          </tr>
+          <tr>
+            <td>Rent Time: </td>
+            <td>
+              <Select defaultValue="1" onChange={handleChangeHours}>
+                {[...Array(25)].map((x, i) =>
+                  i ? (
+                    <Option value={i} key={i}>
+                      {i}h
+                    </Option>
+                  ) : (
+                    ""
+                  )
+                )}
+              </Select>
+            </td>
+          </tr>
+          <tr>
+            <td>Final price: </td>
+            <td>{moneyState || player?.pricePerHour} usd</td>
+          </tr>
+          <tr>
+            <td>Current balance: </td>
+            <td>
+              <span className="total-amount">{user?.balance}usd</span>
+              <span className="more-amount" onClick={handleMoreAmount}>
+                +
+              </span>
+            </td>
+          </tr>
+        </table>
+      </Modal>
     </div>
   );
 }

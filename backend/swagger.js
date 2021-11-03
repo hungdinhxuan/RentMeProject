@@ -30,6 +30,10 @@ const doc = {
         "name": "Dev",
         "description": "Dev endpoints"
     },
+    {
+      "name": "Managements",
+      "description": "Managements endpoints"
+  },
 ],
   securityDefinitions: {
     Authorization: {
