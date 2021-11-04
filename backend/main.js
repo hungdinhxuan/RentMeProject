@@ -10,6 +10,7 @@ const hpp = require('hpp');
 const { loginLimiter } = require('./middlewares/limitRequests');
 
 const basicAuth = require('express-basic-auth');
+// require('dotenv').config({ path: 'prod.env' });
 if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
   require('dotenv').config();
 
