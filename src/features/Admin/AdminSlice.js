@@ -4,9 +4,10 @@ import {ToastSweet} from "components/SweetAlert2"
 
 const initialState = {
   userList: [],
+  bannedPlayers: [],
   userEdit: null,
   loading: false,
-  error: null,
+  error: null
 };
 
 export const getAllUsersAsync = createAsyncThunk(
@@ -54,6 +55,39 @@ export const forceDeleteUsersAsync = createAsyncThunk(
   }
 );
 
+export const getBannedPlayersAsync = createAsyncThunk(
+  "admin/players/banned",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axiosClient.get(`managements/players/banned`, {
+        data: {
+          ids: values
+        }
+      });
+      return response;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const unlockPlayersAsync = createAsyncThunk(
+  "admin/players/banned",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axiosClient.patch(`managements/players`, {
+        data: {
+          ids: values
+        }
+      });
+      return response;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+
 const AdminSlice = createSlice({
   name: "admin",
   initialState,
@@ -87,6 +121,19 @@ const AdminSlice = createSlice({
     },
     [softDeleteUsersAsync.rejected]: (state, action) => {
       
+      state.loading = false;
+      state.error = action.payload.message;
+      ToastSweet("error", action.payload.message || "Something Wrong Happened !!", "bottom-end")
+    },
+    [getBannedPlayersAsync.pending]: (state) => {
+      state.loading = true;
+    },
+    [getBannedPlayersAsync.fulfilled]: (state, action) => {
+      state.bannedPlayers = action.payload.players;
+      state.loading = false;
+      state.error = null;
+    },
+    [getBannedPlayersAsync.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
       ToastSweet("error", action.payload.message || "Something Wrong Happened !!", "bottom-end")

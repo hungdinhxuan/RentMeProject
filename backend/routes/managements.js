@@ -3,6 +3,7 @@ const router = express.Router();
 const passport = require('passport');
 const { AdminRole } = require('../middlewares/checkRole');
 const UsersManagement = require('../managements/users.management')
+const PlayersManagement = require('../managements/players.management')
 
 router.get(
   /*  
@@ -82,4 +83,17 @@ router.put(
   AdminRole,
   UsersManagement.updateUser,
 );
+
+
+router.get('/players/banned', 
+  /*  
+        #swagger.tags = ['Managements']
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
+  passport.authenticate('jwt', { session: false }),
+  AdminRole,
+  PlayersManagement.getBannedPlayers
+)
 module.exports = router;

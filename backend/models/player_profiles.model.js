@@ -26,7 +26,7 @@ const PlayerProfilesSchema = new Schema(
     status: {
       type: String,
       default: 'Under Review',
-      enum: ['Accepted', 'Rejected', 'Under Review'],
+      enum: ['Accepted', 'Under Review', 'Banned'],
     },
     services: {
       type: [{type: mongoose.Types.ObjectId, ref: 'services'}],

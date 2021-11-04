@@ -134,11 +134,6 @@ const AuthSlice = createSlice({
       state.user = null;
       state.loading = false;
       state.isAuthenticated = false;
-      Swal.fire({
-        icon: "error",
-        title: action.payload.message || "Something Wrong Happened ! Please login again",
-        showConfirmButton: true,
-      });
     },
 
     [AsyncSignin.pending]: (state) => {
