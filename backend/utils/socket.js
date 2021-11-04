@@ -342,7 +342,7 @@ module.exports = (app) => {
             const msgForRenter = await Message.create({
               senderId: system._id,
               receiverId: renter._id,
-              content: `Trading ${tradingId} accepted by ${socket.fullName}.\n Room ID: ${trading.roomId}, Room Password: ${trading.roomPassword}`,
+              content: `Trading ${tradingId} accepted by ${player.fullName}.\n Room ID: ${trading.roomId}, Room Password: ${trading.roomPassword}`,
             });
             const msgForPlayer = await Message.create({
               senderId: system._id,

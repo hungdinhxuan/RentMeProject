@@ -20,7 +20,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger-output.json');
 
 app.use(
-  '/api-docs',
+  '/api/docs',
   loginLimiter,
   basicAuth({
     users: {
