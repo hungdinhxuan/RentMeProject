@@ -1,13 +1,14 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axiosClient from "utils/axiosClient";
-import {ToastSweet} from "components/SweetAlert2"
+import { ToastSweet } from "components/SweetAlert2";
 
 const initialState = {
   userList: [],
+  deletedUsers: [],
   bannedPlayers: [],
   userEdit: null,
   loading: false,
-  error: null
+  error: null,
 };
 
 export const getAllUsersAsync = createAsyncThunk(
@@ -22,14 +23,26 @@ export const getAllUsersAsync = createAsyncThunk(
   }
 );
 
+export const updateUserAsync = createAsyncThunk(
+  "admin/users/update",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axiosClient.put(`managements/users`, values);
+      return response;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 export const softDeleteUsersAsync = createAsyncThunk(
   "admin/users/softDelete",
   async (values, { rejectWithValue }) => {
     try {
       const response = await axiosClient.delete(`managements/users/soft`, {
         data: {
-          ids: values
-        }
+          ids: values,
+        },
       });
       return response;
     } catch (err) {
@@ -38,15 +51,14 @@ export const softDeleteUsersAsync = createAsyncThunk(
   }
 );
 
-
 export const forceDeleteUsersAsync = createAsyncThunk(
   "admin/users/forceDelete",
   async (values, { rejectWithValue }) => {
     try {
       const response = await axiosClient.delete(`managements/users/force`, {
         data: {
-          ids: values
-        }
+          ids: values,
+        },
       });
       return response;
     } catch (err) {
@@ -61,8 +73,24 @@ export const getBannedPlayersAsync = createAsyncThunk(
     try {
       const response = await axiosClient.get(`managements/players/banned`, {
         data: {
-          ids: values
-        }
+          ids: values,
+        },
+      });
+      return response;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const banPlayersAsync = createAsyncThunk(
+  "admin/players/banned",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axiosClient.get(`managements/players/banned`, {
+        data: {
+          ids: values,
+        },
       });
       return response;
     } catch (err) {
@@ -77,8 +105,8 @@ export const unlockPlayersAsync = createAsyncThunk(
     try {
       const response = await axiosClient.patch(`managements/players`, {
         data: {
-          ids: values
-        }
+          ids: values,
+        },
       });
       return response;
     } catch (err) {
@@ -87,6 +115,31 @@ export const unlockPlayersAsync = createAsyncThunk(
   }
 );
 
+export const getDeletedUsersAsync = createAsyncThunk(
+  "admin/users/deleted",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axiosClient.get(`managements/users/deleted`);
+      return response;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
+export const restoreUsersAsync = createAsyncThunk(
+  "admin/users/restore",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axiosClient.patch(`managements/users`, {
+        ids: values,
+      });
+      return response;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
 
 const AdminSlice = createSlice({
   name: "admin",
@@ -110,20 +163,61 @@ const AdminSlice = createSlice({
       state.loading = false;
       state.error = action.payload.message;
     },
+    [updateUserAsync.pending]: (state) => {
+      state.loading = true;
+    },
+    [updateUserAsync.fulfilled]: (state, action) => {
+      state.userList = state.userList.map((user) =>
+        user._id === action.payload.user._id ? action.payload.user : user
+      );
+      state.loading = false;
+      state.error = null;
+      ToastSweet("success", action.payload.message, "bottom-end");
+    },
+    [updateUserAsync.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+      ToastSweet("success", action.payload.message, "bottom-end");
+    },
     [softDeleteUsersAsync.pending]: (state) => {
       state.loading = true;
     },
     [softDeleteUsersAsync.fulfilled]: (state, action) => {
-      state.userList = state.userList.filter(user => !action.payload.userIds.includes(user._id)) ;
+      state.userList = state.userList.filter(
+        (user) => !action.payload.userIds.includes(user._id)
+      );
       state.loading = false;
       state.error = null;
-      ToastSweet("success", action.payload.message, "bottom-end")
+      ToastSweet("success", action.payload.message, "bottom-end");
     },
     [softDeleteUsersAsync.rejected]: (state, action) => {
-      
       state.loading = false;
       state.error = action.payload.message;
-      ToastSweet("error", action.payload.message || "Something Wrong Happened !!", "bottom-end")
+      ToastSweet(
+        "error",
+        action.payload.message || "Something Wrong Happened !!",
+        "bottom-end"
+      );
+    },
+    [forceDeleteUsersAsync.pending]: (state) => {
+      state.loading = true;
+    },
+    [forceDeleteUsersAsync.fulfilled]: (state, action) => {
+      state.deletedUsers = state.deletedUsers.filter(
+        (user) => !action.payload.userIds.includes(user._id)
+      );
+      state.loading = false;
+      state.error = null;
+      ToastSweet("success", action.payload.message, "bottom-end");
+    },
+    [forceDeleteUsersAsync.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+      ToastSweet(
+        "error",
+        action.payload.message || "Something Wrong Happened !!",
+        "bottom-end"
+      );
     },
     [getBannedPlayersAsync.pending]: (state) => {
       state.loading = true;
@@ -136,7 +230,48 @@ const AdminSlice = createSlice({
     [getBannedPlayersAsync.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
-      ToastSweet("error", action.payload.message || "Something Wrong Happened !!", "bottom-end")
+      ToastSweet(
+        "error",
+        action.payload.message || "Something Wrong Happened !!",
+        "bottom-end"
+      );
+    },
+    [getDeletedUsersAsync.pending]: (state) => {
+      state.loading = true;
+    },
+    [getDeletedUsersAsync.fulfilled]: (state, action) => {
+      state.deletedUsers = action.payload.users;
+      state.loading = false;
+      state.error = null;
+    },
+    [getDeletedUsersAsync.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+      ToastSweet(
+        "error",
+        action.payload.message || "Something Wrong Happened !!",
+        "bottom-end"
+      );
+    },
+    [restoreUsersAsync.pending]: (state) => {
+      state.loading = true;
+    },
+    [restoreUsersAsync.fulfilled]: (state, action) => {
+      state.deletedUsers = state.deletedUsers.filter(
+        (user) => !action.payload.userIds.includes(user._id)
+      );
+      state.loading = false;
+      state.error = null;
+      ToastSweet("success", action.payload.message, "bottom-end");
+    },
+    [restoreUsersAsync.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+      ToastSweet(
+        "error",
+        action.payload.message || "Something Wrong Happened !!",
+        "bottom-end"
+      );
     },
   },
 });

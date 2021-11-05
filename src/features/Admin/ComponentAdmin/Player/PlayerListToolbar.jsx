@@ -5,7 +5,8 @@ import {
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { useDispatch } from "react-redux";
 import { AsyncLoadPlayer } from "features/RentPlayer/PlayerSlice";
-
+import { Badge } from 'antd';
+import DeleteIcon from '@material-ui/icons/Delete';
 const PlayerListToolbar = (props) => {
   const dispatch = useDispatch();
   const handleRefresh = () => {
@@ -26,6 +27,9 @@ const PlayerListToolbar = (props) => {
             style={{ cursor: "pointer", marginTop: 5 }}
           >
             <RefreshIcon />
+          <Badge count={99}>
+            <DeleteIcon />
+          </Badge>
           </div>
         </Box>
         <Button>Import</Button>

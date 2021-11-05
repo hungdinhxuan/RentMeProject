@@ -2,22 +2,20 @@ import { Box, Container } from "@material-ui/core";
 import { useEffect } from "react";
 import { Helmet } from "react-helmet";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllUsersAsync } from "../AdminSlice";
-import UserListResults from "../ComponentAdmin/User/UserListResults";
-import UserListToolbar from "../ComponentAdmin/User/UserListToolbar";
+import { getDeletedUsersAsync } from "../AdminSlice";
+import DeletedUersResults from "../ComponentAdmin/User/DeletedUersResults";
 
-const UserList = () => {
-  const { userList } = useSelector((state) => state.admin);
+const DeletedUers = () => {
+  const { deletedUsers} = useSelector((state) => state.admin);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllUsersAsync());
+    dispatch(getDeletedUsersAsync());
   }, [dispatch]);
-  
   
   return (
     <>
       <Helmet>
-        <title>List Players</title>
+        <title>List Deleted Users</title>
       </Helmet>
       <Box
         sx={{
@@ -27,9 +25,8 @@ const UserList = () => {
         }}
       >
         <Container maxWidth={false}>
-          <UserListToolbar />
           <Box sx={{ pt: 3 }}>
-            {userList && <UserListResults userList={userList} />}
+            {deletedUsers && <DeletedUersResults users={deletedUsers} />}
           </Box>
         </Container>
       </Box>
@@ -37,4 +34,4 @@ const UserList = () => {
   );
 };
 
-export default UserList;
+export default DeletedUers;
