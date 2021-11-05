@@ -8,7 +8,7 @@ import ChatRoom from "features/ChatRoom";
 import StreamHub from 'features/StreamHub'
 import Admin from "features/Admin";
 import AdminLayout from "components/Layouts/AdminLayout";
-import Dashboard from "features/Admin/pages/Dashboard";
+
 const Home = lazy(() => import("features/Home/index.jsx"));
 
 const ForgotPassword = lazy(() =>
@@ -45,10 +45,16 @@ const routes = [
     path: "/admin/players/banned",
     exact: true,
     layout: AdminLayout,
-    main: Dashboard
+    main: Admin
   },
   {
     path: "/admin/users",
+    exact: true,
+    layout: AdminLayout,
+    main: Admin
+  },
+  {
+    path: "/admin/users/deleted",
     exact: true,
     layout: AdminLayout,
     main: Admin

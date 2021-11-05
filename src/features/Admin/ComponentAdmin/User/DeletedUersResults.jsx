@@ -9,7 +9,7 @@ import OnlineStatus from "assets/onlineStatus.png";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { useCallback, useState } from "react";
-import { softDeleteUsersAsync, updateUserAsync } from "features/Admin/AdminSlice";
+import { forceDeleteUsersAsync, restoreUsersAsync } from "features/Admin/AdminSlice";
 import { useDispatch } from "react-redux";
 import {ToastSweet} from 'components/SweetAlert2'
 
@@ -28,25 +28,20 @@ function CustomToolbar() {
   );
 }
 
-const UserListResults = ({ userList, ...rest }) => {
+const DeletedUersResults = ({ users, ...rest }) => {
   const dispatch = useDispatch();
   const [editRows, setEditRows] = useState({});
   const [selectionModel, setSelectionModel] = useState([]);
-  const handleUpdateUser = () => {
-    if(editRows.length === 0) {
-      ToastSweet(
-         'error',
-         'Please select a user to update'
-      )
-      return
-    }else {
-      dispatch(updateUserAsync(editRows))
+  const handleRestoreUser = () => {
+    console.log(selectionModel);
+    if (selectionModel.length > 0) {
+      dispatch(restoreUsersAsync(selectionModel));
+    }else{
+      ToastSweet('error', 'Please select at least one user to delete', 'bottom-end')
     }
-    
   };
 
   const handleEditRowsModelChange = useCallback((model) => {
-    
     const temp = {};
     if (model && Object.entries(model).length !== 0) {
       let id = Object.entries(model)[0][0];
@@ -61,7 +56,7 @@ const UserListResults = ({ userList, ...rest }) => {
 
   const handleDeleteUser = () => {
     if(selectionModel.length > 0){
-      dispatch(softDeleteUsersAsync(selectionModel));
+      dispatch(forceDeleteUsersAsync(selectionModel));
     }
     else{
       ToastSweet('error', 'Please select at least one user to delete', 'bottom-end')
@@ -70,8 +65,8 @@ const UserListResults = ({ userList, ...rest }) => {
 
   const columns = [
     {
-      field: "fullName",
-      headerName: "Full Name",
+      field: "avatar",
+      headerName: "Avatar",
       width: 210,
       renderCell: (params) => {
         return (
@@ -81,7 +76,6 @@ const UserListResults = ({ userList, ...rest }) => {
           </div>
         );
       },
-      editable: true,
     },
     {
       field: "username",
@@ -155,9 +149,9 @@ const UserListResults = ({ userList, ...rest }) => {
             <button
               type="button"
               className="btn btn-outline-primary"
-              onClick={handleUpdateUser}
+              onClick={handleRestoreUser}
             >
-              Update
+              Restore
             </button>
             <button
               type="button"
@@ -175,7 +169,7 @@ const UserListResults = ({ userList, ...rest }) => {
     <Card {...rest}>
       <div style={{ height: "80vh", width: "100%" }}>
         <DataGrid
-          rows={userList}
+          rows={users}
           columns={columns}
           pageSize={12}
           rowsPerPageOptions={[5]}
@@ -194,8 +188,8 @@ const UserListResults = ({ userList, ...rest }) => {
   );
 };
 
-UserListResults.propTypes = {
-  userList: PropTypes.array.isRequired,
+DeletedUersResults.propTypes = {
+  users: PropTypes.array.isRequired,
 };
 
-export default UserListResults;
+export default DeletedUersResults;

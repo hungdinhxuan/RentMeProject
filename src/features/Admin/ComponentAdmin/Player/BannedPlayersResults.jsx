@@ -9,44 +9,28 @@ import OnlineStatus from "assets/onlineStatus.png";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { useCallback, useState } from "react";
-import { softDeleteUsersAsync, updateUserAsync } from "features/Admin/AdminSlice";
-import { useDispatch } from "react-redux";
-import {ToastSweet} from 'components/SweetAlert2'
+import "./Player.scss";
 
-import "./User.scss";
-const role = {
-  0: "admin",
-  1: "streamer",
-  2: "player",
-  3: "user",
-};
+// Export file CSV
 function CustomToolbar() {
   return (
     <GridToolbarContainer className={gridClasses.toolbarContainer}>
-      <GridToolbarExport />
+      <GridToolbarExport
+        csvOptions={{ fields: ["nickname", "longDesc"] }}
+        printoptions={{ allColumns: true }}
+      />
     </GridToolbarContainer>
   );
 }
 
-const UserListResults = ({ userList, ...rest }) => {
-  const dispatch = useDispatch();
+const PlayerListResults = ({ players, ...rest }) => {
   const [editRows, setEditRows] = useState({});
   const [selectionModel, setSelectionModel] = useState([]);
-  const handleUpdateUser = () => {
-    if(editRows.length === 0) {
-      ToastSweet(
-         'error',
-         'Please select a user to update'
-      )
-      return
-    }else {
-      dispatch(updateUserAsync(editRows))
-    }
-    
+  const handleClick = () => {
+    console.log(editRows);
   };
 
   const handleEditRowsModelChange = useCallback((model) => {
-    
     const temp = {};
     if (model && Object.entries(model).length !== 0) {
       let id = Object.entries(model)[0][0];
@@ -59,65 +43,31 @@ const UserListResults = ({ userList, ...rest }) => {
     setEditRows(temp);
   }, []);
 
-  const handleDeleteUser = () => {
-    if(selectionModel.length > 0){
-      dispatch(softDeleteUsersAsync(selectionModel));
-    }
-    else{
-      ToastSweet('error', 'Please select at least one user to delete', 'bottom-end')
-    }
-  };
-
   const columns = [
     {
-      field: "fullName",
-      headerName: "Full Name",
-      width: 210,
+      field: "nickname",
+      headerName: "Name",
+      width: 200,
+      editable: true,
       renderCell: (params) => {
         return (
           <div className="d-flex align-items-center">
-            <Avatar src={params.row.avatar} sx={{ mr: 2 }} />
-            {params.row.fullName}
+            <Avatar src={params.row.coverBackground} sx={{ mr: 2 }} />
+            {params.row.nickname}
           </div>
         );
       },
-      editable: true,
     },
     {
-      field: "username",
-      headerName: "Username",
-      width: 140,
-      editable: true,
-    },
-    {
-      field: "email",
-      headerName: "Email",
+      field: "shortDesc",
+      headerName: "Short Desc",
       width: 200,
       editable: true,
     },
     {
-      field: "password",
-      headerName: "Password",
-      width: 150,
-      editable: true,
-    },
-    {
-      field: "role",
-      headerName: "Role",
-      width: 140,
-      editable: true,
-      renderCell: (params) => {
-        return (
-          <div className="d-flex align-items-center">
-            {role[params.row.role]}
-          </div>
-        );
-      },
-    },
-    {
-      field: "province",
-      headerName: "City",
-      width: 140,
+      field: "longDesc",
+      headerName: "Long Desc",
+      width: 200,
       editable: true,
     },
     {
@@ -132,6 +82,26 @@ const UserListResults = ({ userList, ...rest }) => {
             ) : (
               <img src={OfflineStatus} alt="offline" />
             )}
+          </div>
+        );
+      },
+    },
+    {
+      field: "status",
+      headerName: "Account Status",
+      width: 200,
+      editable: true,
+    },
+    {
+      field: "services",
+      headerName: "Services",
+      width: 200,
+      renderCell: (params) => {
+        return (
+          <div>
+            {params.row.services.map((item, index) => {
+              return <p key={index}>{item.name}</p>;
+            })}
           </div>
         );
       },
@@ -155,27 +125,21 @@ const UserListResults = ({ userList, ...rest }) => {
             <button
               type="button"
               className="btn btn-outline-primary"
-              onClick={handleUpdateUser}
+              onClick={handleClick}
             >
-              Update
-            </button>
-            <button
-              type="button"
-              className=" mx-2 btn btn-outline-danger"
-              onClick={handleDeleteUser}
-            >
-              Delete
+              Unlock
             </button>
           </>
         );
       },
     },
   ];
+
   return (
     <Card {...rest}>
       <div style={{ height: "80vh", width: "100%" }}>
         <DataGrid
-          rows={userList}
+          rows={players}
           columns={columns}
           pageSize={12}
           rowsPerPageOptions={[5]}
@@ -194,8 +158,8 @@ const UserListResults = ({ userList, ...rest }) => {
   );
 };
 
-UserListResults.propTypes = {
-  userList: PropTypes.array.isRequired,
+PlayerListResults.propTypes = {
+  players: PropTypes.array.isRequired,
 };
 
-export default UserListResults;
+export default PlayerListResults;

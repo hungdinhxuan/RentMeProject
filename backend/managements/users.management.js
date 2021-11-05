@@ -147,7 +147,7 @@ class UsersManagement {
   async updateUser(req, res) {
     const { _id, fullName, username, email, password, province, role } =
       req.body;
-   
+    
     try {
       let user = await User.findById(_id);
       if (!user) {
@@ -156,7 +156,9 @@ class UsersManagement {
           message: 'User not found',
         });
       }
-      if(!await argon2.verify(user.password, password)){ // if changed password
+      
+      if(user.password !== password){ // if changed password
+        console.log('password changed ', isChangedPassword);
         user = await User.findOneAndUpdate(
           { _id },
           {
@@ -170,6 +172,7 @@ class UsersManagement {
           { new: true },
         );
       }else{
+        console.log('password is not changed');
         user = await User.findOneAndUpdate(
           { _id },
           {
@@ -186,6 +189,21 @@ class UsersManagement {
         success: true,
         message: 'updated successfully !!',
         user,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message || 'Some error occurred while retrieving data',
+        error,
+      });
+    }
+  }
+  async getDeletedUsers(req, res){
+    try {
+      const deletedUsers = await User.findDeleted();
+      return res.status(200).json({
+        success: true,
+        users: deletedUsers,
       });
     } catch (error) {
       return res.status(500).json({

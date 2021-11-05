@@ -9,6 +9,7 @@ import OnlineStatus from "assets/onlineStatus.png";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { useCallback, useState } from "react";
+
 import "./Player.scss";
 
 // Export file CSV
@@ -29,6 +30,9 @@ const PlayerListResults = ({ players, ...rest }) => {
   const handleClick = () => {
     console.log(editRows);
   };
+  const handleBanPlayers = () => {
+    console.log(selectionModel);
+  }
 
   const handleEditRowsModelChange = useCallback((model) => {
     const temp = {};
@@ -132,9 +136,9 @@ const PlayerListResults = ({ players, ...rest }) => {
             <button
               type="button"
               className=" mx-2 btn btn-outline-danger"
-              onClick={handleClick}
+              onClick={handleBanPlayers}
             >
-              Delete
+              Ban
             </button>
           </>
         );

@@ -1,19 +1,16 @@
-import { Box, Container } from "@material-ui/core";
-import { useEffect } from "react";
 import { Helmet } from "react-helmet";
+import { Box, Container } from "@material-ui/core";
+import BannedPlayersResults from "../ComponentAdmin/Player/BannedPlayersResults";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { getAllUsersAsync } from "../AdminSlice";
-import UserListResults from "../ComponentAdmin/User/UserListResults";
-import UserListToolbar from "../ComponentAdmin/User/UserListToolbar";
+import { getBannedPlayersAsync } from "features/Admin/AdminSlice";
 
-const UserList = () => {
-  const { userList } = useSelector((state) => state.admin);
+const BannedPlayers = () => {
+  const { bannedPlayers } = useSelector((state) => state.admin);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getAllUsersAsync());
-  }, [dispatch]);
-  
-  
+      dispatch(getBannedPlayersAsync());
+  },[dispatch])
   return (
     <>
       <Helmet>
@@ -27,9 +24,8 @@ const UserList = () => {
         }}
       >
         <Container maxWidth={false}>
-          <UserListToolbar />
           <Box sx={{ pt: 3 }}>
-            {userList && <UserListResults userList={userList} />}
+            {bannedPlayers && <BannedPlayersResults players={bannedPlayers} />}
           </Box>
         </Container>
       </Box>
@@ -37,4 +33,4 @@ const UserList = () => {
   );
 };
 
-export default UserList;
+export default BannedPlayers;

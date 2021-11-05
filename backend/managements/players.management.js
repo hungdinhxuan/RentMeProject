@@ -29,7 +29,7 @@ class PlayerManagement {
         });
         const userIds = player_profiles.map((player) => player.userId);
         await Player_Profile.restore({ _id: { $in: req.body.ids } });
-        await User.updateMany({ _id: { $in: userIds } }, { $set: { role: 2 } });
+        await User.updateManyWithDeleted({ _id: { $in: userIds } }, { $set: { role: 2 } });
         return res.status(200).json({
           success: true,
           message: 'Unlock players successfully',
@@ -44,7 +44,7 @@ class PlayerManagement {
   }
   async getBannedPlayers(req, res) {
     try {
-      const players = await Player_Profile.findDeleted({});
+      const players = await Player_Profile.findDeleted({}).populate('services') ;
       return res.status(200).json({
         success: true,
         message: 'Banned players fetched successfully',
