@@ -23,6 +23,18 @@ export const getAllUsersAsync = createAsyncThunk(
   }
 );
 
+export const createUserAsync = createAsyncThunk(
+  "admin/users/create",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axiosClient.post(`managements/users`, values);
+      return response;
+    } catch (err) {
+      return rejectWithValue(err.response.data);
+    }
+  }
+);
+
 export const updateUserAsync = createAsyncThunk(
   "admin/users/update",
   async (values, { rejectWithValue }) => {
@@ -162,6 +174,19 @@ const AdminSlice = createSlice({
       state.userList = [];
       state.loading = false;
       state.error = action.payload.message;
+    },
+    [createUserAsync.pending]: (state) => {
+      state.loading = true;
+    },
+    [createUserAsync.fulfilled]: (state, action) => {
+      state.loading = false;
+      state.error = null;
+      ToastSweet("success", action.payload.message  || "User created successfully");
+    },
+    [createUserAsync.rejected]: (state, action) => {
+      state.loading = false;
+      state.error = action.payload.message;
+      ToastSweet("error", action.payload.message || "Something wrong happend!");
     },
     [updateUserAsync.pending]: (state) => {
       state.loading = true;

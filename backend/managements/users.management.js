@@ -36,32 +36,29 @@ class UsersManagement {
       });
     }
   }
-  createUser(req, res) {
-    const { fullName, username, email, password, gender, province, role } =
+  async createUser(req, res) {
+    const { fullName, username, email, password, role } =
       req.body;
-    const user = new User({
-      fullName,
-      username,
-      email,
-      password,
-      gender,
-      province,
-      role,
-    });
-    user.save((err, user) => {
-      if (err) {
-        return res.status(500).json({
-          success: false,
-          message: err.message || 'Some error occurred while creating the User',
-          error: err,
-        });
-      }
+    try {
+      const user = await User.create({
+        fullName,
+        username,
+        email,
+        password: await argon2.hash(password),
+        role,
+      });
       return res.status(201).json({
         success: true,
         message: 'User created successfully',
         user,
       });
-    });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: err.message || 'Some error occurred while creating the User',
+        error: err,
+      });
+    }
   }
 
   async softDeleteUsers(req, res) {
