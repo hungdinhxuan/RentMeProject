@@ -15,7 +15,7 @@ const TradingsSchema = new Schema(
     expireIn: {type: Number, default: 20},
     roomId: {type: String, required: true, maxlength: 255},
     roomPassword: {type: String, required: true, maxlength: 255},
-    reason: {type: String, default: ''}
+    reason: {type: String, default: ''},
   },
   {
     timestamps: true,

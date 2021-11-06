@@ -16,11 +16,11 @@ class TradingsController {
           return res
             .status(403)
             .json({ success: false, message: 'This trading is aborted' });
-        } else if (trading === 'done') {
+        } else if (trading.status === 'done') {
           return res
             .status(403)
             .json({ success: false, message: 'This trading is done' });
-        } else if (trading === 'pending') {
+        } else if (trading.status === 'pending') {
           // Kiem tra giao dich do co phai la pending va da het han hay chua
           let expirePendingTradingDate = new Date(trading.createdAt);
           expirePendingTradingDate.setMinutes(

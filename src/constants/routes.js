@@ -1,20 +1,20 @@
-import { PublicLayout } from "components/Layouts/PublicLayout";
-import { PrivateLayout } from "components/Layouts/PrivateLayout";
-import SignIn from "features/Auth/SignIn";
-import SignUp from "features/Auth/SignUp";
-import Settings from "features/Settings";
-import { lazy} from "react";
-import ChatRoom from "features/ChatRoom";
-import StreamHub from 'features/StreamHub'
-import Admin from "features/Admin";
-import AdminLayout from "components/Layouts/AdminLayout";
+import { PublicLayout } from "components/Layouts/PublicLayout"
+import { PrivateLayout } from "components/Layouts/PrivateLayout"
+import SignIn from "features/Auth/SignIn"
+import SignUp from "features/Auth/SignUp"
+import Settings from "features/Settings"
+import { lazy } from "react"
+import ChatRoom from "features/ChatRoom"
+import StreamHub from "features/StreamHub"
+import Admin from "features/Admin"
+import AdminLayout from "components/Layouts/AdminLayout"
 
-const Home = lazy(() => import("features/Home/index.jsx"));
+const Home = lazy(() => import("features/Home/index.jsx"))
 
 const ForgotPassword = lazy(() =>
   import("features/Auth/ForgotPassword/index.jsx")
-);
-const RentPlayer = lazy(() => import("features/RentPlayer/index.jsx"));
+)
+const RentPlayer = lazy(() => import("features/RentPlayer/index.jsx"))
 
 const routes = [
   {
@@ -113,6 +113,6 @@ const routes = [
     layout: PrivateLayout,
     main: ChatRoom
   }
-];
+]
 
-export default routes;
+export default routes

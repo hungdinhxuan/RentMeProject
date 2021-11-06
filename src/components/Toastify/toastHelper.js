@@ -1,4 +1,4 @@
-import { toast } from "react-toastify";
+import { toast } from "react-toastify"
 
 export const toastSuccess = (text) => {
   toast.success(text, {
@@ -8,18 +8,18 @@ export const toastSuccess = (text) => {
     closeOnClick: false,
     pauseOnHover: false,
     draggable: false,
-    progress: undefined,
-    });
-};
+    progress: undefined
+  })
+}
 
 export const toastError = (text) => {
-  toast.error(text || 'Update failed!', {
+  toast.error(text || "Update failed!", {
     position: "bottom-left",
     autoClose: 3000,
     hideProgressBar: false,
     closeOnClick: false,
     pauseOnHover: false,
     draggable: false,
-    progress: undefined,
-    });
+    progress: undefined
+  })
 }
