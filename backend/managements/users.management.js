@@ -64,13 +64,22 @@ class UsersManagement {
   async softDeleteUsers(req, res) {
     if (Object.prototype.toString.call(req.body.ids) === '[object Array]') {
       try {
-        await Player_Profile.delete({userId: {$in: req.body.ids}})
-
-        await User.delete({ _id: { $in: req.body.ids } })
+        let ids = req.body.ids
+        if(ids.indexOf(req.user._id.toString()) > -1){ // if user try to delete himself
+          ids.splice(ids.indexOf(req.user._id), 1)
+          if(ids.length === 0){
+            return res.status(400).json({
+              success: false,
+              message: 'You can not delete yourself !!',
+            });
+          }
+        }
+        await Player_Profile.delete({userId: {$in: ids}})
+        await User.delete({ _id: { $in: ids }, role: { $gte: 1 } })
         return res.status(200).json({
           success: true,
           message: 'deleted successfully !!',
-          userIds: req.body.ids,
+          userIds: ids,
         });
       } catch (error) {
         return res.status(500).json({
@@ -112,7 +121,7 @@ class UsersManagement {
 
   async forceDeleteUsers(req, res) {
     if (Object.prototype.toString.call(req.body.ids) === '[object Array]') {
-      if (req.body.ids.indexOf(req.user._id) > -1) {
+      if (req.body.ids.indexOf(req.user._id.toString()) > -1) {
         return res.status(400).json({
           success: false,
           message: 'You can not delete yourself !!',
@@ -121,7 +130,7 @@ class UsersManagement {
       try {
         
         await Player_Profile.deleteMany({userId: {$in: req.body.ids}})
-        await User.deleteMany({ _id: { $in: req.body.ids } });
+        await User.deleteMany({ _id: { $in: req.body.ids }, role: { $gte: 1 }});
         return res.status(200).json({
           success: true,
           message: 'deleted successfully !!',

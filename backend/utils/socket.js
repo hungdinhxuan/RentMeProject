@@ -52,12 +52,19 @@ module.exports = (app) => {
         } else {
           // console.log(data);
           const { sub } = data;
-          const user = await User.findById(sub);
-
-          socket.auth = true;
-          socket.username = user.username;
-          socket.role = user.role;
-          addClientToObj(socket.username, socket.id, socket.role, io);
+          try {
+            
+            const user = await User.findById(sub);
+            if(user){
+              socket.auth = true;
+              socket.username = user.username;
+              socket.role = user.role;
+              addClientToObj(socket.username, socket.id, socket.role, io);
+            }
+          } catch (error) {
+            console.log("🚀 ~ file: socket.js ~ line 65 ~ jwt.verify ~ error", error)
+            
+          }
         }
       });
     });
@@ -504,9 +511,24 @@ module.exports = (app) => {
             );
           } else if(user._id.equals(trading.renterId)){
             // renter abort
-            await Trading.findByIdAndUpdate(tradingId, {status: 'done', reason: `${username} is finished trading soon ....`})
+            const trading = await Trading.findByIdAndUpdate(tradingId, {status: 'done', reason: `${username} is finished trading soon ....`}, {new: true})
+            const system = await Trading.findOne({username: 'system'})
             const player = await User.findById(trading.playerId)
-            const player_profile = PlayerProfile.findOne({userId: player._id})
+            const player_profile = await PlayerProfile.findOne({userId: player._id})
+            const transfer = await Transfer.findOne({tradingId: trading._id})
+
+            const profit = trading.money * transfer.rate
+            // console.log("🚀 ~ file: socket.js ~ line 521 ~ socket.on ~ trading", trading)
+            
+            transfer.profit = profit
+            transfer.money = trading.money - profit
+  
+            player.balance -= profit
+            system.balance += profit
+  
+            transfer.save()
+            player.save()
+            system.save()
             // emit to all current socket of player
             for(let socketId of userSocketIdObj[player.username]){
               io.to(socketId).emit('abort trading', `Trading is aborted by ${user.fullName}`)
@@ -531,7 +553,22 @@ module.exports = (app) => {
     socket.on('done trading', async (tradingId, path) => {
       if(socket.auth){
         try {
-          await Trading.findByIdAndUpdate(tradingId, { status: 'done' });
+          const trading = await Trading.findByIdAndUpdate(tradingId, { status: 'done' });
+          const player = await Trading.findById(trading.playerId)
+          const system = await Trading.findOne({username: 'system'})
+          const transfer = await Transfer.findOne({tradingId: trading._id})
+          const profit = trading.money * transfer.rate
+          
+          transfer.profit = profit
+          transfer.money = trading.money - profit
+
+          player.balance -= profit
+          system.balance += profit
+
+          transfer.save()
+          player.save()
+          system.save()
+
           io.to(path).emit('done trading', 'Trading is finished');
         } catch (error) {
           console.log(
