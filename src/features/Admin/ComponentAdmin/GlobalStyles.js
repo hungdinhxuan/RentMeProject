@@ -1,38 +1,38 @@
-import createStyles from '@material-ui/styles/createStyles';
-import makeStyles from '@material-ui/styles/makeStyles';
+import createStyles from "@material-ui/styles/createStyles"
+import makeStyles from "@material-ui/styles/makeStyles"
 
 const useStyles = makeStyles(() => createStyles({
-  '@global': {
-    '*': {
-      boxSizing: 'border-box',
+  "@global": {
+    "*": {
+      boxSizing: "border-box",
       margin: 0,
-      padding: 0,
+      padding: 0
     },
     html: {
-      '-webkit-font-smoothing': 'antialiased',
-      '-moz-osx-font-smoothing': 'grayscale',
-      height: '100%',
-      width: '100%'
+      "-webkit-font-smoothing": "antialiased",
+      "-moz-osx-font-smoothing": "grayscale",
+      height: "100%",
+      width: "100%"
     },
     body: {
-      backgroundColor: '#f4f6f8',
-      height: '100%',
-      width: '100%'
+      backgroundColor: "#f4f6f8",
+      height: "100%",
+      width: "100%"
     },
     a: {
-      textDecoration: 'none'
+      textDecoration: "none"
     },
-    '#root': {
-      height: '100%',
-      width: '100%'
+    "#root": {
+      height: "100%",
+      width: "100%"
     }
   }
-}));
+}))
 
 const GlobalStyles = () => {
-  useStyles();
+  useStyles()
 
-  return null;
-};
+  return null
+}
 
-export default GlobalStyles;
+export default GlobalStyles

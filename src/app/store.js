@@ -16,5 +16,5 @@ const rootReducer = {
   services: BecomePlaerReducer,
 };
 export const store = configureStore({
-  reducer: rootReducer,
-});
+  reducer: rootReducer
+})

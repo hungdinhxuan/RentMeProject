@@ -10,12 +10,12 @@ import Admin from "features/Admin";
 import AdminLayout from "components/Layouts/AdminLayout";
 import BecomePlayer from "features/BecomePlayer";
 
-const Home = lazy(() => import("features/Home/index.jsx"));
+const Home = lazy(() => import("features/Home/index.jsx"))
 
 const ForgotPassword = lazy(() =>
   import("features/Auth/ForgotPassword/index.jsx")
-);
-const RentPlayer = lazy(() => import("features/RentPlayer/index.jsx"));
+)
+const RentPlayer = lazy(() => import("features/RentPlayer/index.jsx"))
 
 const routes = [
   {
@@ -121,6 +121,6 @@ const routes = [
     layout: PrivateLayout,
     main: ChatRoom
   }
-];
+]
 
-export default routes;
+export default routes
