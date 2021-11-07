@@ -1,7 +1,8 @@
-import { Avatar, Drawer, Space, Switch  } from "antd";
+import { Avatar, Drawer, Space, Switch } from "antd";
 import OnlineStatus from "assets/onlineStatus.png";
 import React from "react";
 import "./Drawer.scss";
+import { useHistory } from "react-router-dom";
 
 import Wallet from "assets/wallet.png";
 import Coupon from "assets/coupon.png";
@@ -9,7 +10,8 @@ import { Link } from "react-router-dom";
 
 function Drawler(props) {
   const { visible, Close, avatar } = props;
-  
+  const history = useHistory();
+
   return (
     <>
       <Drawer
@@ -99,7 +101,14 @@ function Drawler(props) {
               </div>
             </div>
             <div className="operateList--plus player">
-              <div className="desc--plus">Become to a Professional Player</div>
+              <div
+                className="desc--plus"
+                onClick={() => {
+                  history.push("/player/register");
+                }}
+              >
+                Become to a Professional Player
+              </div>
               <div className="text">Earn extra cash by gaming with others.</div>
             </div>
             <div className="line"></div>
@@ -132,7 +141,7 @@ function Drawler(props) {
                   <div className="text--item">Light Mode</div>
                 </div>
                 <div className="right">
-                <Switch defaultChecked />
+                  <Switch defaultChecked />
                 </div>
               </Space>
             </div>
@@ -142,7 +151,7 @@ function Drawler(props) {
                   <div className="icon">
                     <i className="bi bi-gear"></i>
                   </div>
-                  <div className="text--item" >
+                  <div className="text--item">
                     <Link to="/setting/profile">Settings</Link>
                   </div>
                 </div>

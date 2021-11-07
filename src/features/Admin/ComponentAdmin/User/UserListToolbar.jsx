@@ -1,19 +1,44 @@
 import { Box, Button } from "@material-ui/core";
-import RefreshIcon from "@material-ui/icons/Refresh";
-import { useDispatch, useSelector } from "react-redux";
-import { getAllUsersAsync } from "features/Admin/AdminSlice";
-import { Badge } from "antd";
 import DeleteIcon from "@material-ui/icons/Delete";
-import { getDeletedUsersAsync } from "../../AdminSlice";
+import RefreshIcon from "@material-ui/icons/Refresh";
+import { Badge } from "antd";
+import { getAllUsersAsync } from "features/Admin/AdminSlice";
 import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import { getDeletedUsersAsync } from "../../AdminSlice";
+import { useState } from "react";
+import { Modal } from "antd";
+import AddUsersResults from "./AddUsersResults";
 
 const UserListToolbar = (props) => {
   const { deletedUsers, userList } = useSelector((state) => state.admin);
   const dispatch = useDispatch();
+  const [visible, setVisible] = useState(false);
+
   const handleRefresh = () => {
     dispatch(getAllUsersAsync());
   };
+
+  // Submit modal
+
+  // Cancel submit
+  const handleCancel = () => {
+    setVisible(!visible);
+  };
+  const tailFormItemLayout = {
+  wrapperCol: {
+    xs: {
+      span: 24,
+      offset: 0,
+    },
+    sm: {
+      span: 16,
+      offset: 8,
+    },
+  },
+};
+
   useEffect(() => {
     dispatch(getDeletedUsersAsync());
   }, [dispatch, userList]);
@@ -33,19 +58,41 @@ const UserListToolbar = (props) => {
             <RefreshIcon />
           </div>
         </Box>
-        <Box sx={{ maxWidth: 500 }}>
+        <Box
+          sx={{ maxWidth: 500 }}
+          style={{ display: "flex", alignItems: "center" }}
+        >
           <Badge count={deletedUsers && deletedUsers.length}>
             <Link to="/admin/users/deleted">
-              <DeleteIcon style={{ cursor: "pointer" }} />
+              <DeleteIcon style={{ cursor: "pointer", color: "black" }} />
             </Link>
           </Badge>
         </Box>
         <Button>Import</Button>
-        <Button sx={{ mx: 1 }}>Export</Button>
-        <Button color="primary" variant="contained">
-          Add Players
+
+        <Button
+          color="primary"
+          variant="contained"
+          onClick={() => {
+            setVisible(!visible);
+          }}
+        >
+          Add User Accounts
         </Button>
       </Box>
+      <Modal
+        visible={visible}
+        title="Add user account"
+        onCancel={handleCancel}
+        footer={[
+          <Button key="back" onClick={handleCancel}>
+            Cancel
+          </Button>,
+          
+        ]}
+      >
+        <AddUsersResults setVisible={setVisible}/>
+      </Modal>
     </Box>
   );
 };

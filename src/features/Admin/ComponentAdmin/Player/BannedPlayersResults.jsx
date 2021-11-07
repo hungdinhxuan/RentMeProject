@@ -15,10 +15,7 @@ import "./Player.scss";
 function CustomToolbar() {
   return (
     <GridToolbarContainer className={gridClasses.toolbarContainer}>
-      <GridToolbarExport
-        csvOptions={{ fields: ["nickname", "longDesc"] }}
-        printoptions={{ allColumns: true }}
-      />
+      <GridToolbarExport printoptions={{ allColumns: true }} />
     </GridToolbarContainer>
   );
 }
@@ -26,6 +23,8 @@ function CustomToolbar() {
 const PlayerListResults = ({ players, ...rest }) => {
   const [editRows, setEditRows] = useState({});
   const [selectionModel, setSelectionModel] = useState([]);
+
+  // Unblock players
   const handleClick = () => {
     console.log(editRows);
   };

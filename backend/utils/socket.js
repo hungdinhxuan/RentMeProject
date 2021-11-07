@@ -52,12 +52,15 @@ module.exports = (app) => {
         } else {
           // console.log(data);
           const { sub } = data;
+         try {
           const user = await User.findById(sub);
-
           socket.auth = true;
           socket.username = user.username;
           socket.role = user.role;
           addClientToObj(socket.username, socket.id, socket.role, io);
+         } catch (error) {
+           console.log(error);
+         }
         }
       });
     });

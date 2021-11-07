@@ -181,12 +181,20 @@ const AdminSlice = createSlice({
     [createUserAsync.fulfilled]: (state, action) => {
       state.loading = false;
       state.error = null;
-      ToastSweet("success", action.payload.message  || "User created successfully");
+      ToastSweet(
+        "success",
+        action.payload.message || "User created successfully",
+        "bottom-end"
+      );
     },
     [createUserAsync.rejected]: (state, action) => {
       state.loading = false;
       state.error = action.payload.message;
-      ToastSweet("error", action.payload.message || "Something wrong happend!");
+      ToastSweet(
+        "error",
+        action.payload.message || "Something wrong happend!",
+        "bottom-end"
+      );
     },
     [updateUserAsync.pending]: (state) => {
       state.loading = true;

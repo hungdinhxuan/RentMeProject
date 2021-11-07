@@ -5,14 +5,15 @@ import PlayerReducer from 'features/RentPlayer/PlayerSlice'
 import MessageReducer from 'features/Settings/MessageSlice'
 import ChatRoomReducer from 'features/ChatRoom/ChatRoomSlice'
 import AdminReducer from 'features/Admin/AdminSlice'
-
+import BecomePlaerReducer from 'features/BecomePlayer/BecomePlayerSlice'
 const rootReducer = {
   auth: AuthReducer,
   setting: SettingReducer,
   players: PlayerReducer,
   messages: MessageReducer,
   chatRoom: ChatRoomReducer,
-  admin: AdminReducer
+  admin: AdminReducer,
+  services: BecomePlaerReducer,
 };
 export const store = configureStore({
   reducer: rootReducer,
