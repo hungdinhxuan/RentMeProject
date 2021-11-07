@@ -24,8 +24,8 @@ export default function Admin() {
       <Route path="/admin/dashboard" component={Dashboard} />
       <Route path="/admin/players/banned" component={BannedPlayers} />
       <Route path="/admin/players" component={PlayerList} />
-      <Route exact path="/admin/users/deleted" component={DeletedUers} />
       <Route exact path="/admin/users" component={UserList} />
+      <Route path="/admin/users/deleted" component={DeletedUers} />
       <Route path="/admin/users/:action" component={Dashboard} />
 
     </Switch>

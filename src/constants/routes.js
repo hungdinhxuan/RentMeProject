@@ -8,6 +8,7 @@ import ChatRoom from "features/ChatRoom";
 import StreamHub from 'features/StreamHub'
 import Admin from "features/Admin";
 import AdminLayout from "components/Layouts/AdminLayout";
+import BecomePlayer from "features/BecomePlayer";
 
 const Home = lazy(() => import("features/Home/index.jsx"));
 
@@ -59,6 +60,13 @@ const routes = [
     layout: AdminLayout,
     main: Admin
   },
+  {
+    path: "/player/register",
+    exact: true,
+    layout: PrivateLayout,
+    main: BecomePlayer
+  },
+
   {
     path: "/signin",
     exact: true,
