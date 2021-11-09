@@ -14,7 +14,7 @@ const BannedPlayers = () => {
   return (
     <>
       <Helmet>
-        <title>List Players</title>
+        <title>List Banned Players</title>
       </Helmet>
       <Box
         sx={{
