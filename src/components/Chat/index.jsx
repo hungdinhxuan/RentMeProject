@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./Chat.scss";
 
-const Chat = () => {
+const Chat = ({setShowPrivateChat}) => {
   const [currentMessage, setCurrentMessage] = useState("");
   const sendMessage = () => {
     console.log(currentMessage);
@@ -46,13 +46,17 @@ const Chat = () => {
             Hey Peter receiver, you got something for me?
           </div>
         </div>
-
       </div>
       <div className="chat">
         <div className="contact bar">
           <div className="pic stark"></div>
-          <div className="name">Tony Stark</div>
-          <div className="seen">Today at 12:56</div>
+          <div>
+            <div className="name">Tony Stark</div>
+            <div className="seen">Today at 12:56</div>
+          </div>
+          <div className="icon-close" onClick={() => setShowPrivateChat(false)}>
+            <i class="bi bi-x"></i>
+          </div>
         </div>
         <div className="messages" id="chat">
           <div className="time">Today at 11:41</div>
