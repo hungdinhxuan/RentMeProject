@@ -17,7 +17,7 @@ const UserList = () => {
   return (
     <>
       <Helmet>
-        <title>List Players</title>
+        <title>List Users</title>
       </Helmet>
       <Box
         sx={{

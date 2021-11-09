@@ -5,24 +5,26 @@
     width: 100%;
     display: grid;
     place-items: center;
-
     .joinChatContainer {
         display: flex;
         flex-direction: column;
         text-align: center;
         h3 {
-            font-size: 2.5rem;
+            font-size: 40px;
             margin-bottom: 1rem;
             text-align: center;
+            font-weight: 800;
+            text-transform: uppercase;
         }
         input {
             width: 225px;
             height: 40px;
             margin: 7px;
-            border: 2px solid #43a047;
             border-radius: 5px;
             padding: 5px;
             font-size: 16px;
+            border: 2px solid var(--text-hover);
+            
         }
         button {
             width: 225px;
@@ -32,11 +34,11 @@
             border-radius: 5px;
             padding: 5px;
             font-size: 16px;
-            background: #43a047;
+            background: linear-gradient(90deg, rgba(146,83,171,1) 13%, rgba(181,94,218,1) 87%);
             color: #fff;
             cursor: pointer;
             &:hover {
-                background: #2e7d32;
+                background: var(--text-hover);
             }
         }
     }
