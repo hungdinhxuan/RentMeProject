@@ -1,70 +1,76 @@
-import React, { useState } from "react";
-import ScrollToBottom from "react-scroll-to-bottom";
-import "./Chat.scss";
-export default function Chat(props) {
-  const { username, room } = props;
-  const [currentMessage, setCurrentMessage] = useState("");
-  const [messageList, setMessageList] = useState([]);
-  const [isOdd, setIsOdd] = useState(1);
-  const sendMessage = () => {
-    if (currentMessage !== "") {
-      const messageData = {
-        room: room,
-        author: username,
-        message: currentMessage,
-        time:
-          new Date(Date.now()).getHours() +
-          ":" +
-          new Date(Date.now()).getMinutes(),
-      };
-      setMessageList((list) => [...list, messageData]);
-      setCurrentMessage("");
-      setIsOdd(isOdd + 1);
-    }
-  };
+import React from "react";
+import './Chat.scss'
+
+const Chat = () => {
   return (
-    <div className="chat-window">
-      <div className="chat-header">
-        <p>Live Chat</p>
+    <div class="center">
+      <div class="contacts">
+        <i class="fas fa-bars fa-2x"></i>
+        <h2>Contacts</h2>
+        <div class="contact">
+          <div class="pic rogers"></div>
+          <div class="badge">14</div>
+          <div class="name">Steve Rogers</div>
+          <div class="message">That is America's ass 🇺🇸🍑</div>
+        </div>
+        <div class="contact">
+          <div class="pic stark"></div>
+          <div class="name">Tony Stark</div>
+          <div class="message">
+            Uh, he's from space, he came here to steal a necklace from a wizard.
+          </div>
+        </div>
+        <div class="contact">
+          <div class="pic banner"></div>
+          <div class="badge">1</div>
+          <div class="name">Bruce Banner</div>
+          <div class="message">There's an Ant-Man *and* a Spider-Man?</div>
+        </div>
+        <div class="contact">
+          <div class="pic thor"></div>
+          <div class="name">Thor Odinson</div>
+          <div class="badge">3</div>
+          <div class="message">I like this one</div>
+        </div>
+        <div class="contact">
+          <div class="pic danvers"></div>
+          <div class="badge">2</div>
+          <div class="name">Carol Danvers</div>
+          <div class="message">Hey Peter receiver, you got something for me?</div>
+        </div>
       </div>
-      <div className="chat-body">
-        <ScrollToBottom className="message-container">
-          {messageList.map((messageContent, index) => {
-            return (
-              <div
-                className="message"
-                // id={username === messageContent.author ? "you" : "other"}
-                id={isOdd % 2 === 0 ? "you" : "other"}
-                key={index}
-              >
-                <div>
-                  <div className="message-content">
-                    <p>{messageContent.message}</p>
-                  </div>
-                  <div className="message-meta">
-                    <p id="time">{messageContent.time}</p>
-                    <p id="author"> {messageContent.author}</p>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </ScrollToBottom>
-      </div>
-      <div className="chat-footer">
-        <input
-          type="text"
-          value={currentMessage}
-          placeholder="Hey..."
-          onChange={(event) => {
-            setCurrentMessage(event.target.value);
-          }}
-          onKeyPress={(event) => {
-            event.key === "Enter" && sendMessage();
-          }}
-        />
-        <button onClick={sendMessage}>&#9658;</button>
+      <div class="chat">
+        <div class="contact bar">
+          <div class="pic stark"></div>
+          <div class="name">Tony Stark</div>
+          <div class="seen">Today at 12:56</div>
+        </div>
+        <div class="messages" id="chat">
+          <div class="time">Today at 11:41</div>
+          <div class="message receiver">Hey, man! What's up, Mr Stark? 👋</div>
+          <div class="message stark">Kid, where'd you come from?</div>
+          <div class="message receiver">Field trip! 🤣</div>
+          <div class="message receiver">
+            Uh, what is this guy's problem, Mr. Stark? 🤔
+          </div>
+          <div class="message stark">
+            Uh, he's from space, he came here to steal a necklace from a wizard.
+          </div>
+          <div class="message stark">
+            {/* <div class="typing typing-1"></div>
+            <div class="typing typing-2"></div>
+            <div class="typing typing-3"></div> */}
+          </div>
+        </div>
+        <div class="input">
+          <i class="fas fa-camera"></i>
+          <i class="far fa-laugh-beam"></i>
+          <input placeholder="Type your message here!" type="text" />
+          <i class="fas fa-microphone"></i>
+        </div>
       </div>
     </div>
   );
-}
+};
+
+export default Chat;

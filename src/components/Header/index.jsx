@@ -17,6 +17,8 @@ import Drawler from "./Drawler";
 import "./Header.scss";
 import Swal from "sweetalert2";
 import {ToastSweet} from "components/SweetAlert2"
+import PrivateChat from 'components/Chat'
+
 function Header() {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
@@ -24,6 +26,7 @@ function Header() {
   const [userHeader, setUserHeader] = useState(true);
   const [visible, setVisible] = useState(false);
   const [navScroll, setnavSroll] = useState("");
+  const [showPrivateChat, setShowPrivateChat] = useState(false);
 
   const navRef = useRef();
   navRef.current = navScroll;
@@ -34,6 +37,10 @@ function Header() {
 
   const handleClose = () => {
     setVisible(false);
+  };
+
+  const handleShowPrivateChat = () => {
+    setShowPrivateChat(!showPrivateChat);
   };
 
   const handleDeleteMessage = () => {
@@ -297,6 +304,11 @@ function Header() {
                 </>
               ) : (
                 <div className="message d-flex align-items-center">
+                   <div className="message__badge" onClick={handleShowPrivateChat}>
+                        <div className="message-icon">
+                          <i className="bi bi-envelope"></i>
+                        </div>
+                  </div>
                   <div className="message__badge">
                     <Dropdown overlay={menu} placement="bottomLeft" arrow>
                       <Badge
@@ -312,7 +324,7 @@ function Header() {
                       </Badge>
                     </Dropdown>
                   </div>
-
+                  
                   <div className="user__icon" onClick={handleShowDrawler}>
                     <Avatar size={28} src={user.avatar} />
                   </div>
@@ -359,6 +371,7 @@ function Header() {
           <p>{messages[idModal]?.content}</p>
         </Modal>
       </>
+      {showPrivateChat ? <PrivateChat/> : null}
     </header>
   );
 }
