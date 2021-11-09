@@ -130,6 +130,13 @@ $background: #f7f7f7;
     flex-shrink: 0;
     margin: 1rem;
     box-sizing: border-box;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-direction: row;
+    .icon-close {
+      font-size: 24px;
+      cursor: pointer;
+    }
   }
 
   .messages {

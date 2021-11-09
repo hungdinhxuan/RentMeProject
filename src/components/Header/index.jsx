@@ -331,7 +331,7 @@ function Header() {
                     </div>
                   </div>
                   <div className="message__badge">
-                    <Dropdown overlay={menu} placement="bottomLeft" arrow>
+                    <Dropdown overlay={menu} disabled placement="bottomLeft" arrow>
                       <Badge
                         count={
                           messages.filter(
@@ -392,7 +392,7 @@ function Header() {
           <p>{messages[idModal]?.content}</p>
         </Modal>
       </>
-      {showPrivateChat ? <PrivateChat /> : null}
+      {showPrivateChat ? <PrivateChat setShowPrivateChat={setShowPrivateChat}/> : null}
     </header>
   );
 }
