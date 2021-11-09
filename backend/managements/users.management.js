@@ -55,8 +55,8 @@ class UsersManagement {
     } catch (error) {
       return res.status(500).json({
         success: false,
-        message: err.message || 'Some error occurred while creating the User',
-        error: err,
+        message: error.message || 'Some error occurred while creating the User',
+        error: error,
       });
     }
   }
@@ -164,7 +164,7 @@ class UsersManagement {
       }
       
       if(user.password !== password){ // if changed password
-        console.log('password changed ', isChangedPassword);
+        
         user = await User.findOneAndUpdate(
           { _id },
           {

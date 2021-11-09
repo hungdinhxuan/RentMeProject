@@ -9,9 +9,12 @@ import OnlineStatus from "assets/onlineStatus.png";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { useCallback, useState } from "react";
-import { softDeleteUsersAsync, updateUserAsync } from "features/Admin/AdminSlice";
+import {
+  softDeleteUsersAsync,
+  updateUserAsync,
+} from "features/Admin/AdminSlice";
 import { useDispatch } from "react-redux";
-import {ToastSweet} from 'components/SweetAlert2'
+import { ToastSweet } from "components/SweetAlert2";
 
 import "./User.scss";
 const role = {
@@ -33,20 +36,15 @@ const UserListResults = ({ userList, ...rest }) => {
   const [editRows, setEditRows] = useState({});
   const [selectionModel, setSelectionModel] = useState([]);
   const handleUpdateUser = () => {
-    if(editRows.length === 0) {
-      ToastSweet(
-         'error',
-         'Please select a user to update'
-      )
-      return
-    }else {
-      dispatch(updateUserAsync(editRows))
+    if (editRows.length === 0) {
+      ToastSweet("error", "Please select a user to update");
+      return;
+    } else {
+      dispatch(updateUserAsync(editRows));
     }
-    
   };
 
   const handleEditRowsModelChange = useCallback((model) => {
-    
     const temp = {};
     if (model && Object.entries(model).length !== 0) {
       let id = Object.entries(model)[0][0];
@@ -60,11 +58,14 @@ const UserListResults = ({ userList, ...rest }) => {
   }, []);
 
   const handleDeleteUser = () => {
-    if(selectionModel.length > 0){
+    if (selectionModel.length > 0) {
       dispatch(softDeleteUsersAsync(selectionModel));
-    }
-    else{
-      ToastSweet('error', 'Please select at least one user to delete', 'bottom-end')
+    } else {
+      ToastSweet(
+        "error",
+        "Please select at least one user to delete",
+        "bottom-end"
+      );
     }
   };
 
