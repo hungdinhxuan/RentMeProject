@@ -331,7 +331,7 @@ function Header() {
                     </div>
                   </div>
                   <div className="message__badge">
-                    <Dropdown overlay={menu} disabled placement="bottomLeft" arrow>
+                    <Dropdown overlay={menu} placement="bottomLeft" arrow>
                       <Badge
                         count={
                           messages.filter(

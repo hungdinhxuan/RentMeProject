@@ -208,8 +208,10 @@ const AdminSlice = createSlice({
       state.loading = true
     },
     [softDeleteUsersAsync.fulfilled]: (state, action) => {
+      console.log(action.payload.userIds);
       state.userList = state.userList.filter(
-        (user) => !action.payload.userIds.includes(user._id)
+        // (user) => !action.payload.userIds.includes(user._id)
+        (user) => user._id !== action.payload.userIds[0]
       )
       state.loading = false
       state.error = null

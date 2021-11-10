@@ -37,9 +37,7 @@ const DashboardNavbar = ({ onMobileNavOpen, ...rest }) => {
               <NotificationsIcon />
             </Badge>
           </IconButton>
-          <IconButton color="inherit" size="large">
-            <InputIcon />
-          </IconButton>
+         
         </Hidden>
         <Hidden lgUp>
           <IconButton color="inherit" onClick={onMobileNavOpen} size="large">

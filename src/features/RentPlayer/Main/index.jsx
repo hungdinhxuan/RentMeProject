@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 import { Select } from "antd";
 import "./RentPlayer.scss";
@@ -11,9 +11,13 @@ import socket from "utils/socket";
 function MainRentPlayer() {
   //   Select
   const { Option } = Select;
+  const [filterValues, setFilterValues] = useState();
   const handleChange = (value) => {
-    console.log(`selected ${value}`);
+    // console.log(`selected ${value}`);
+    setFilterValues(value);
   };
+
+  console.log(filterValues);
 
   const { listPlayers } = useSelector((state) => state.players);
   const dispatch = useDispatch();
@@ -33,6 +37,18 @@ function MainRentPlayer() {
       socket.off("refreshPlayerList", handleRefresh);
     };
   }, [dispatch]);
+
+  // Filter gender
+  const filterData = listPlayers.filter((item) => {
+    return item.user[0]?.gender.toLowerCase() === filterValues?.toLowerCase();
+  });
+
+  // Filter status online or offline
+  const filterStatus = listPlayers.filter((item) => {
+   
+    return item.user[0]?.isOnline.toString() === filterValues;
+  });
+  // console.log(filterGender);
 
   return (
     <div className="main__layout">
@@ -62,8 +78,8 @@ function MainRentPlayer() {
                     style={{ width: 100 }}
                     onChange={handleChange}
                   >
-                    <Option value="Online">Online</Option>
-                    <Option value="Offline">Offline</Option>
+                    <Option value="true">Online</Option>
+                    <Option value="false">Offline</Option>
                   </Select>
                 </div>
 
@@ -73,7 +89,7 @@ function MainRentPlayer() {
                     style={{ width: 100 }}
                     onChange={handleChange}
                   >
-                    <Option value="1">1-5</Option>
+                    <Option value="5">1-5</Option>
                     <Option value="5.01">5.01-10</Option>
                     <Option value="10.01">10.01-20</Option>
                     <Option value="20.01">20+</Option>
@@ -98,10 +114,17 @@ function MainRentPlayer() {
         <div className="card__rent">
           <div className="card__container">
             <div className="cardList row">
-              {listPlayers &&
+              {/* {listPlayers &&
                 listPlayers.map((item) => {
                   return <CardList item={item} key={item._id} />;
-                })}
+                })} */}
+              {filterValues
+                ? filterStatus.map((item) => {
+                    return <CardList item={item} key={item._id} />;
+                  })
+                : listPlayers?.map((item) => {
+                    return <CardList item={item} key={item._id} />;
+                  })}
             </div>
           </div>
         </div>
