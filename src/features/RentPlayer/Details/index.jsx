@@ -10,9 +10,10 @@ import socket from "utils/socket";
 import Swal from "sweetalert2";
 import timeAgo from "utils/timeAgo"
 import getRandomVideoYoutube from "utils/randomVideoYoutube";
-
+import {addNewPrivateChat, loadConversations, setOther} from "features/PrivateChat/PrivateChatSlice";
 
 export default function PlayerDetails() {
+  const dispatch = useDispatch();
   const match = useRouteMatch();
   const params = useParams();
   const history = useHistory();
@@ -33,7 +34,7 @@ export default function PlayerDetails() {
   if (error) {
     history.push("/error");
   }
-  const dispatch = useDispatch();
+  
 
   const handleDonate = async () => {
     let { value: money } =  await Swal.fire({
@@ -124,6 +125,20 @@ export default function PlayerDetails() {
     }
   };
 
+  const handleStartPrivateChat = () => {
+    dispatch(addNewPrivateChat({
+      otherId: player.user._id,
+      otherAvatar: player.user.avatar,
+      otherFullName: player.user.fullName
+    }))
+    dispatch(setOther({
+      otherId: player.user._id,
+      otherAvatar: player.user.avatar,
+      otherFullName: player.user.fullName
+    }))
+    dispatch(loadConversations())
+  }
+
   useEffect(() => {
     dispatch(AsyncLoadPlayerDetails(match.params.cardId));
   }, [dispatch, match.params.cardId], player?.user?.follower);
@@ -207,7 +222,7 @@ export default function PlayerDetails() {
                   Rent
                 </button>
                 <button className="btn-style white" onClick={handleDonate}>Donate</button>
-                <button className="btn-style white">Chat</button>
+                <button className="btn-style white" onClick={handleStartPrivateChat}>Chat</button>
               </div>
             </div>
             <div className="player__profile--main col-lg-6 order-lg-1">

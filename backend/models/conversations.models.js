@@ -5,9 +5,9 @@ const ConversationsSchema = new Schema(
   {
     senderId: { type: mongoose.Types.ObjectId, ref: 'users' },
     receiverId: { type: mongoose.Types.ObjectId, ref: 'users' },
-    content: { type: String, maxLength: 3000, required: true},
-    tradingId: { type: mongoose.Types.ObjectId, ref: 'tradings' },
-   
+    nicknameSender: {type: String, default: ""},
+    nicknameReceiver: {type: String, default: ""},
+    content: { type: String, maxLength: 3000, required: true },
   },
   { timestamps: true, versionKey: false },
 );

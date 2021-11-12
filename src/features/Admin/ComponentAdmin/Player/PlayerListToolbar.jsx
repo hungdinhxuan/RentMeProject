@@ -2,8 +2,7 @@ import { Box, Button } from "@material-ui/core";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { useDispatch } from "react-redux";
 import { AsyncLoadPlayer } from "features/RentPlayer/PlayerSlice";
-import { Badge } from "antd";
-import DeleteIcon from "@material-ui/icons/Delete";
+
 const PlayerListToolbar = (props) => {
   const dispatch = useDispatch();
   const handleRefresh = () => {

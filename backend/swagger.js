@@ -31,6 +31,10 @@ const doc = {
         "description": "Dev endpoints"
     },
     {
+      "name": "Conversations",
+      "description": "Conversations endpoints"
+    },
+    {
       "name": "Managements",
       "description": "Managements endpoints"
   },

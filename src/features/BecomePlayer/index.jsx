@@ -1,4 +1,4 @@
-import { Avatar, Form, Input, InputNumber, Space, Select } from "antd";
+import { Avatar, Form, Input, InputNumber,  Select } from "antd";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
@@ -54,7 +54,7 @@ export default function BecomePlayer() {
 
   useEffect(() => {
     dispatch(getAllServicesAsync());
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     return () => {

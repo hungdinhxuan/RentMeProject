@@ -18,15 +18,22 @@ import "./Header.scss";
 import Swal from "sweetalert2";
 import { ToastSweet } from "components/SweetAlert2";
 import PrivateChat from "components/Chat";
+import {
+  setShowPrivateChat,
+  addNewMsgToConversations,
+  setCountNewMessagesIncrease,
+} from "features/PrivateChat/PrivateChatSlice";
 
 function Header() {
   const { user } = useSelector((state) => state.auth);
+  const { showPrivateChat, countNewMessages } = useSelector(
+    (state) => state.privateChat
+  );
   const dispatch = useDispatch();
   const { messages } = useSelector((state) => state.messages);
   const [userHeader, setUserHeader] = useState(true);
   const [visible, setVisible] = useState(false);
   const [navScroll, setnavSroll] = useState("");
-  const [showPrivateChat, setShowPrivateChat] = useState(false);
 
   const navRef = useRef();
   navRef.current = navScroll;
@@ -40,7 +47,7 @@ function Header() {
   };
 
   const handleShowPrivateChat = () => {
-    setShowPrivateChat(!showPrivateChat);
+    dispatch(setShowPrivateChat());
   };
 
   const handleDeleteMessage = () => {
@@ -213,6 +220,11 @@ function Header() {
       ToastSweet("success", data);
     };
 
+    const handlePrivateChatForReceiver = (newMsg) => {
+      dispatch(addNewMsgToConversations(newMsg));
+      dispatch(setCountNewMessagesIncrease());
+    };
+
     socket.on("response renter", loadData);
     socket.on("response player", loadData);
     socket.on("response confirm rent", confirmRentMsg);
@@ -225,6 +237,8 @@ function Header() {
       handleResponseDonateMoneyForPlayer
     );
     socket.on("follow player", handleFollowPlayer);
+
+    socket.on("private chat receiver", handlePrivateChatForReceiver);
     // Note: Clear socket when change state.
     return () => {
       socket.off("response decline rent", declineMsg);
@@ -239,6 +253,7 @@ function Header() {
         handleResponseDonateMoneyForPlayer
       );
       socket.off("follow player", handleFollowPlayer);
+      socket.off("private chat receiver", handlePrivateChatForReceiver);
     };
   }, [dispatch]);
 
@@ -326,10 +341,13 @@ function Header() {
                     className="message__badge"
                     onClick={handleShowPrivateChat}
                   >
+                    <Badge count={countNewMessages} />
+
                     <div className="message-icon">
                       <i className="bi bi-chat"></i>
                     </div>
                   </div>
+
                   <div className="message__badge">
                     <Dropdown overlay={menu} placement="bottomLeft" arrow>
                       <Badge
@@ -392,7 +410,7 @@ function Header() {
           <p>{messages[idModal]?.content}</p>
         </Modal>
       </>
-      {showPrivateChat ? <PrivateChat setShowPrivateChat={setShowPrivateChat}/> : null}
+      {showPrivateChat ? <PrivateChat /> : null}
     </header>
   );
 }

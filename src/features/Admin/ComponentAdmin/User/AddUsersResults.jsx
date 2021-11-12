@@ -1,17 +1,6 @@
 import React from "react";
 
-import {
-  Form,
-  Input,
-  InputNumber,
-  Cascader,
-  Select,
-  Row,
-  Col,
-  Checkbox,
-  Button,
-  AutoComplete,
-} from "antd";
+import { Form, Input, Select, Button } from "antd";
 import { useDispatch } from "react-redux";
 import { createUserAsync } from "features/Admin/AdminSlice";
 export default function AddUsersResults({ setVisible }) {
