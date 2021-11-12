@@ -15,6 +15,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^12.1.0",
     "@testing-library/user-event": "^13.2.1",
+    "add": "^2.0.6",
     "antd": "^4.16.13",
     "antd-img-crop": "^3.16.0",
     "aos": "^3.0.0-beta.6",
@@ -39,6 +40,7 @@
     "react-helmet": "^6.1.0",
     "react-hls-player": "^3.0.7",
     "react-hook-form": "^7.15.3",
+    "react-input-emoji": "^4.0.9",
     "react-lottie": "^1.2.3",
     "react-messenger-customer-chat": "^0.8.0",
     "react-perfect-scrollbar": "^1.5.8",
@@ -55,6 +57,7 @@
     "socket.io-client": "^4.2.0",
     "sweetalert2": "^11.1.5",
     "swiper": "6.8.4",
+    "yarn": "^1.22.17",
     "yup": "^0.32.9"
   },
   "eslintConfig": {
