@@ -4,7 +4,7 @@ const ExtractJwt = require('passport-jwt').ExtractJwt;
 const fs = require('fs');
 const path = require('path');
 const publicKey = fs.readFileSync(path.join(__dirname, '../public.pem'));
-const User = require('../models/users.models');
+const User = require('../models/users.model');
 
 module.exports = () => {
   var opts = {};

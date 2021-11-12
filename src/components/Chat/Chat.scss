@@ -1,121 +1,296 @@
-.chat-window {
-    width: 300px;
-    height: 420px;
-    p {
-        margin: 0;
+@import url("https://fonts.googleapis.com/css?family=Red+Hat+Display:400,500,900&display=swap");
+
+$text-1: #333;
+$text-2: #666;
+$text-3: #999;
+$line: #ccc;
+$time-bg: #eee;
+$background: #f7f7f7;
+
+.center {
+  position: fixed;
+  right: 0;
+  top: 20%;
+  //   left: calc(50% + 12rem);
+  //   transform: translate(-50%, -50%);
+}
+
+.pic {
+  width: 4rem;
+  height: 4rem;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+}
+
+.contact {
+  position: relative;
+  margin-bottom: 1rem;
+  padding-left: 5rem;
+  height: 4.5rem;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  .pic {
+    position: absolute;
+    left: 0;
+  }
+
+  .name {
+    font-weight: 500;
+    margin-bottom: 0.125rem;
+  }
+
+  .message,
+  .seen {
+    font-size: 0.9rem;
+    color: $text-3;
+  }
+
+  .badge {
+    box-sizing: border-box;
+    position: absolute;
+    width: 1.3rem;
+    height: 1.3rem;
+    text-align: center;
+    font-size: 0.9rem;
+    padding-top: 0.125rem;
+    border-radius: 1.5rem;
+    top: 0;
+    left: 2.5rem;
+    // background: $text-1;
+    color: white;
+    
+  }
+  .online {
+    background: #00b300;
+  }
+  .offline {
+    background: #ff0000;
+  }
+}
+
+.contacts {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translate(-6rem, -50%);
+  // Scroll when have many people chat
+  overflow-y: scroll;
+  width: 24rem;
+  height: 32rem;
+  padding: 1rem 2rem 1rem 1rem;
+  box-sizing: border-box;
+  border-radius: 1rem 0 0 1rem;
+
+  cursor: pointer;
+  background: white;
+  box-shadow: 0 0 8rem 0 rgba(black, 0.1), 2rem 2rem 4rem -3rem rgba(black, 0.5);
+
+  transition: transform 500ms;
+
+  h2 {
+    margin: 0.5rem 0 1.5rem 5rem;
+    color: var(--text-hover);
+  }
+
+  .fa-bars {
+    position: absolute;
+    left: 2.25rem;
+
+    color: $text-3;
+    transition: color 200ms;
+    &:hover {
+      color: $text-2;
     }
-    .chat-header {
-        height: 45px;
-        border-radius: 6px;
-        background: #263238;
-        position: relative;
-        cursor: pointer;
-        p {
-            display: block;
-            padding: 0 1em 0 2em;
-            color: #fff;
-            font-weight: 700;
-            line-height: 45px;
-        }
+  }
+
+  .contact:last-child {
+    margin: 0;
+  }
+
+  &:hover {
+    transform: translate(-23rem, -50%);
+  }
+}
+
+.chat {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  width: 24rem;
+  height: 38rem;
+  z-index: 2;
+  box-sizing: border-box;
+  border-radius: 1rem;
+
+  background: white;
+  box-shadow: 0 0 8rem 0 rgba(black, 0.1), 0rem 2rem 4rem -3rem rgba(black, 0.5);
+
+  .contact.bar {
+    flex-basis: 3.5rem;
+    flex-shrink: 0;
+    margin: 1rem;
+    box-sizing: border-box;
+    justify-content: space-between !important;
+    align-items: center !important;
+    flex-direction: row;
+    .icon-close {
+      font-size: 24px;
+      cursor: pointer;
     }
-    .chat-body {
-        height: calc(450px - (45px + 70px));
-        border: 1px solid #263238;
-        background: #fff;
-        position: relative;
-        .message-container {
-            width: 100%;
-            height: 100%;
-            overflow-y: scroll;
-            overflow-x: hidden;
-            &::-webkit-scrollbar {
-                display: none;
-            }
-        }
-        .message {
-            height: auto;
-            padding: 10px;
-            display: flex;
-            .message-content {
-                width: auto;
-                height: auto;
-                min-height: 40px;
-                max-width: 120px;
-                background-color: #43a047;
-                border-radius: 5px;
-                color: white;
-                display: flex;
-                align-items: center;
-                margin-right: 5px;
-                margin-left: 5px;
-                padding-right: 5px;
-                padding-left: 5px;
-                overflow-wrap: break-word;
-                word-break: break-word;
-            }
-            .message-meta {
-                display: flex;
-                font-size: 12px;
-            }
-        }
+  }
+
+  .messages {
+    padding: 1rem;
+
+    flex-shrink: 2;
+    overflow-y: auto;
+
+    .time {
+      font-size: 0.8rem;
+      background: $time-bg;
+      padding: 0.25rem 1rem;
+      border-radius: 2rem;
+      color: $text-3;
+      width: fit-content;
+      margin: 0 auto;
     }
 
-    .chat-footer {
-        height: 40px;
-        border: 1px solid #263238;
-        border-top: none;
-        display: flex;
-        input {
-            height: 100%;
-            flex: 85%;
-            border: 0;
-            padding: 0 0.7em;
-            font-size: 1em;
-            border-right: 1px dotted #607d8b;
-            outline: none;
-            font-family: "Open Sans", sans-serif;
+    .message {
+      box-sizing: border-box;
+      padding: 0.5rem 1rem;
+      margin: 1rem;
+      background: #fff;
+      border-radius: 1.125rem 1.125rem 1.125rem 0;
+      min-height: 2.25rem;
+      width: fit-content;
+      max-width: 66%;
+
+      box-shadow: 0 0 2rem rgba(black, 0.075), 0rem 1rem 1rem -1rem rgba(black, 0.1);
+
+      &.receiver {
+        margin: 1rem 1rem 1rem auto;
+        border-radius: 1.125rem 1.125rem 0 1.125rem;
+        background: blue;
+        color: white;
+      }
+
+      .typing {
+        display: inline-block;
+        width: 0.8rem;
+        height: 0.8rem;
+        margin-right: 0rem;
+        box-sizing: border-box;
+        background: #ccc;
+        border-radius: 50%;
+
+        &.typing-1 {
+          animation: typing 3s infinite;
         }
-        button {
-            border: 0;
-            display: grid;
-            place-items: center;
-            cursor: pointer;
-            flex: 15%;
-            height: 100%;
-            background: transparent;
-            outline: none;
-            font-size: 25px;
-            color: lightgray;
-            &:hover {
-                color: #43a047;
-            }
+        &.typing-2 {
+          animation: typing 3s 250ms infinite;
         }
+        &.typing-3 {
+          animation: typing 3s 500ms infinite;
+        }
+      }
+    }
+  }
+
+  .input {
+    box-sizing: border-box;
+    flex-basis: 4rem;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    padding: 0 0.5rem 0 1.5rem;
+
+    i {
+      font-size: 1.5rem;
+      margin-right: 1rem;
+      color: $text-2;
+      cursor: pointer;
+      transition: color 200ms;
+
+      &:hover {
+        color: $text-1;
+      }
     }
 
-    // Css message of player or renter
-    #you {
-        justify-content: flex-end;
-        .message-content {
-            justify-content: flex-end;
-        }
-        .message-meta {
-            justify-content: flex-end;
-            margin-right: 5px;
-        }
+    input {
+      border: none;
+      background-image: none;
+      background-color: white;
+      padding: 0.5rem 1rem;
+      margin-right: 1rem;
+      border-radius: 1.125rem;
+      flex-grow: 2;
+      box-shadow: 0 0 1rem rgba(black, 0.1), 0rem 1rem 1rem -1rem rgba(black, 0.2);
+
+      font-family: Red hat Display, sans-serif;
+      font-weight: 400;
+      letter-spacing: 0.025em;
+
+      &:placeholder {
+        color: $text-3;
+      }
     }
-    #other {
-        justify-content: flex-start;
-        .message-content {
-            justify-content: flex-start;
-            background-color: cornflowerblue;
-        }
-        .message-meta {
-            justify-content: flex-start;
-            margin-left: 5px;
-        }
+  }
+  .time-ago {
+    display: none;
+  }
+  #message-time-ago {
+    position: relative;
+    &:hover {
+      .time-ago {
+        position: absolute;
+        top: -10px;
+        right: 0;
+        display: inline;
+        width: 100%;
+        background: black;
+        color: white;
+        font-size: 12px;
+      }
     }
-    .message-meta #author {
-        margin-left: 5px;
-        font-weight: bold;
-    }
+  }
+}
+
+@keyframes typing {
+  0%,
+  75%,
+  100% {
+    transform: translate(0, 0.25rem) scale(0.9);
+    opacity: 0.5;
+  }
+
+  25% {
+    transform: translate(0, -0.25rem) scale(1);
+    opacity: 1;
+  }
+}
+
+// Obviously in a real app I would load this from a DB with JS
+// For now this is a nice quick and easy method to mockup
+
+.pic.stark {
+  background-image: url("https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/7/73/SMH_Mentor_6.png");
+}
+.pic.banner {
+  background-image: url("https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/4/4f/BruceHulk-Endgame-TravelingCapInPast.jpg");
+}
+.pic.thor {
+  background-image: url("https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/9/98/ThorFliesThroughTheAnus.jpg");
+}
+.pic.danvers {
+  background-image: url("https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/0/05/HeyPeterParker.png");
+}
+.pic.rogers {
+  background-image: url("https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/7/7c/Cap.America_%28We_Don%27t_Trade_Lives_Vision%29.png");
 }

@@ -1,4 +1,4 @@
-import React, { createRef, useState, useEffect, useRef } from "react";
+import React, { createRef, useState, useEffect } from "react";
 import { IconButton, Badge, Input, Button } from "@material-ui/core";
 import VideocamIcon from "@material-ui/icons/Videocam";
 import VideocamOffIcon from "@material-ui/icons/VideocamOff";
@@ -9,7 +9,7 @@ import StopScreenShareIcon from "@material-ui/icons/StopScreenShare";
 import CallEndIcon from "@material-ui/icons/CallEnd";
 import ChatIcon from "@material-ui/icons/Chat";
 import Modal from "react-bootstrap/Modal";
-import socket from "socket";
+import socket from "utils/socket";
 import { useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import "./VideoChat.scss";

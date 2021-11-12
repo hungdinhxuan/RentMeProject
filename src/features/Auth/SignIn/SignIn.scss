@@ -1,64 +1,68 @@
-.MuiGrid-root {
-    div {
-        img {
-            display: block;
-            font-size: 14px !important;
+.signIn {
+    .MuiGrid-root {
+        div {
+            img {
+                display: block;
+                font-size: 14px !important;
+            }
         }
-    }
-    .MuiInput-underline:after {
-        border-bottom: none;
-    }
-    .MuiInput-underline:not(.Mui-disabled):before {
-        border: none;
-    }
-    .MuiInput-underline:hover:not(.Mui-disabled):before {
-        border: none;
-    }
-    .MuiTypography-h5 {
-        font-weight: 500;
-        color: #fff;
-    }
+        .MuiInput-underline:after {
+            border-bottom: none;
+        }
+        .MuiInput-underline:not(.Mui-disabled):before {
+            border: none;
+        }
+        .MuiInput-underline:hover:not(.Mui-disabled):before {
+            border: none;
+        }
+        .MuiTypography-h5 {
+            font-weight: 500;
+            color: #fff;
+        }
 
-    .MuiCheckbox-colorPrimary.Mui-checked {
-        color: #7041e6;
-    }
-    .makeStyles-form-5 input:hover {
-        border: 1px solid #af93ef;
+        .MuiCheckbox-colorPrimary.Mui-checked {
+            color: #7041e6;
+        }
         
-    }
-    p {
-        margin-top: 5px;
-        margin-bottom: 0;
-        color: #ff4d4f;
-    }
-    
-}
-
-
-@media only screen and (max-width: 1024px) {
-    .MuiGrid-root {
-        padding: 10px 0 !important;
-        .capcha {
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
+        p {
+            margin-top: 5px;
+            margin-bottom: 0;
+            color: #ff4d4f;
         }
-        .MuiBox-root-9{
+        .css-1o2jng6-MuiOutlinedInput-notchedOutline {
             display: none;
         }
-    }
-}
-
-@media only screen and (max-width: 768px) {
-    .MuiGrid-root {
-        padding: 0 5px !important;
-        .capcha {
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
+        .css-1fu7jd5-MuiButtonBase-root-MuiButton-root.Mui-disabled{
+            pointer-events: all !important;
+            cursor: not-allowed;
         }
-        .MuiBox-root-9{
-            display: none;
+    }
+
+    @media only screen and (max-width: 1024px) {
+        .MuiGrid-root {
+            padding: 10px 0 !important;
+            .capcha {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            .MuiBox-root-9 {
+                display: none;
+            }
+        }
+    }
+
+    @media only screen and (max-width: 768px) {
+        .MuiGrid-root {
+            padding: 0 5px !important;
+            .capcha {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            .MuiBox-root-9 {
+                display: none;
+            }
         }
     }
 }

@@ -1,26 +1,70 @@
-@media only screen and (max-width: 768px) {
+.signUp {
     .MuiGrid-root {
-        padding: 0 !important;
-        .capcha {
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
+        height: 100%;
+        div {
+            img {
+                display: block;
+                font-size: 14px !important;
+            }
         }
-        .MuiBox-root-9 {
-            display: none;
+        .MuiInput-underline:after {
+            border-bottom: none;
         }
+        .MuiInput-underline:not(.Mui-disabled):before {
+            border: none;
+        }
+        .MuiInput-underline:hover:not(.Mui-disabled):before {
+            border: none;
+        }
+        .MuiTypography-h5 {
+            font-weight: 500;
+            color: #fff;
+        }
+
+        .MuiCheckbox-colorPrimary.Mui-checked {
+            color: #7041e6;
+        }
+        
         p {
             margin-top: 5px;
             margin-bottom: 0;
             color: #ff4d4f;
         }
+        .css-1o2jng6-MuiOutlinedInput-notchedOutline {
+            display: none;
+        }
+        .css-1fu7jd5-MuiButtonBase-root-MuiButton-root.Mui-disabled {
+            pointer-events: all !important;
+            cursor: not-allowed;
+        }
     }
-}
-@media only screen and (max-width: 576px) {
-    .MuiGrid-root {
-        .MuiInput-formControl {
-            input {
-                height: 20px;
+    .css-1o2jng6-MuiOutlinedInput-notchedOutline {
+        display: none;
+    }
+    @media only screen and (max-width: 768px) {
+        .MuiGrid-root {
+            padding: 0 !important;
+            .capcha {
+                flex-direction: column;
+                align-items: center;
+                gap: 10px;
+            }
+            .MuiBox-root-9 {
+                display: none;
+            }
+            p {
+                margin-top: 5px;
+                margin-bottom: 0;
+                color: #ff4d4f;
+            }
+        }
+    }
+    @media only screen and (max-width: 576px) {
+        .MuiGrid-root {
+            .MuiInput-formControl {
+                input {
+                    height: 20px;
+                }
             }
         }
     }

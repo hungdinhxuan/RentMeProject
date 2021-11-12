@@ -1,9 +1,9 @@
 import { Table, Tag } from "antd";
-import React from "react";
+import React, {memo} from "react";
 import { useSelector } from "react-redux";
 import "./TableWallet.scss";
 
-export default function TableWallet() {
+function TableWallet() {
   const { historyTransact } = useSelector((state) => state.setting);
   
 
@@ -58,3 +58,4 @@ export default function TableWallet() {
     </div>
   );
 }
+export default memo(TableWallet);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, {memo} from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import SwiperCore, { Navigation,Autoplay } from "swiper";
 import "swiper/swiper.min.css";
@@ -131,4 +131,4 @@ function Stories() {
   );
 }
 
-export default Stories;
+export default memo(Stories);

@@ -1,34 +1,34 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import axiosClient from "axiosClient";
-import { ToastSweet } from "components/SweetAlert2";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit"
+import axiosClient from "utils/axiosClient"
+import { ToastSweet } from "components/SweetAlert2"
 
 const initialState = {
-  messages: [],
-};
+  messages: []
+}
 
 export const getAllMessagesAsync = createAsyncThunk(
   "messages/getAll",
   async (userId) => {
-    return await axiosClient.get(`/users/${userId}/messages`);
+    return await axiosClient.get(`/users/${userId}/messages`)
   }
-);
+)
 export const updateMessageAsync = createAsyncThunk(
   "messages/updateMessage",
   async (values) => {
     return await axiosClient.patch(
       `/users/${values.userId}/messages/${values.messageId}`
-    );
+    )
   }
-);
+)
 
 export const removeMessageAsync = createAsyncThunk(
   "messages/removeMessage",
   async (values) => {
     return await axiosClient.delete(
       `/users/${values.userId}/messages/${values.messageId}`
-    );
+    )
   }
-);
+)
 
 const MessageSlice = createSlice({
   name: "messages",
@@ -37,47 +37,47 @@ const MessageSlice = createSlice({
     //   playerDetails: (state,action) => {
     //     state.player = action.payload;
     //   }
-    addNewMessage(state, action) {
-      state.messages.push(action.payload);
+    addNewMessage (state, action) {
+      state.messages.push(action.payload)
     },
-    removeMessage(state, action) {
+    removeMessage (state, action) {
       state.messages = state.messages.filter(
         (msg) => msg._id !== action.payload
-      );
-      ToastSweet("success", "message removed");
+      )
+      ToastSweet("success", "message removed")
     },
-    updateMessage(state, action) {
+    updateMessage (state, action) {
       state.messages = state.messages.map((mess) => {
         if (mess._id === action.payload._id) {
-          mess = action.payload;
+          mess = action.payload
         }
-        return mess;
-      });
-    },
+        return mess
+      })
+    }
   },
   extraReducers: (builder) => {
     builder
       .addCase(getAllMessagesAsync.fulfilled, (state, action) => {
-        state.messages = action.payload;
+        state.messages = action.payload
       })
       .addCase(updateMessageAsync.fulfilled, (state, action) => {
         state.messages = state.messages.map((mess) => {
           if (mess._id === action.payload.newMessage._id) {
-            mess.status = "read";
+            mess.status = "read"
           }
-          return mess;
-        });
+          return mess
+        })
       })
       .addCase(removeMessageAsync.fulfilled, (state, action) => {
         state.messages = state.messages.filter(
           (msg) => msg._id !== action.payload.msgId
-        );
-        ToastSweet("success", "message removed");
-      });
-  },
-});
+        )
+        ToastSweet("success", "message removed")
+      })
+  }
+})
 
-const { reducer } = MessageSlice;
+const { reducer } = MessageSlice
 export const { addNewMessage, removeMessage, updateMessage } =
-  MessageSlice.actions;
-export default reducer;
+  MessageSlice.actions
+export default reducer

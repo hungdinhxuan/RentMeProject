@@ -1,6 +1,6 @@
 const xlsx = require('xlsx');
 const multer = require('multer');
-const User = require('../models/users.models');
+const User = require('../models/users.model');
 const argon2 = require('argon2');
 
 const upload = multer({
