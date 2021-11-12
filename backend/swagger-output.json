@@ -27,6 +27,14 @@
     {
       "name": "Dev",
       "description": "Dev endpoints"
+    },
+    {
+      "name": "Conversations",
+      "description": "Conversations endpoints"
+    },
+    {
+      "name": "Managements",
+      "description": "Managements endpoints"
     }
   ],
   "schemes": [
@@ -691,6 +699,52 @@
         ]
       }
     },
+    "/api/players/{id}/donate": {
+      "post": {
+        "tags": [
+          "Players"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Player ID"
+          }
+        ],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/api/players/{id}/follow": {
+      "patch": {
+        "tags": [
+          "Players"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Player ID"
+          }
+        ],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
     "/api/files/users": {
       "post": {
         "tags": [
@@ -709,13 +763,169 @@
         "responses": {}
       }
     },
-    "/api/tradings/": {
+    "/api/tradings/auth": {
       "post": {
         "tags": [
           "Tradings"
         ],
         "description": "",
         "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/managements/users": {
+      "get": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "patch": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "put": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/api/managements/users/soft": {
+      "delete": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/api/managements/users/force": {
+      "delete": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/api/managements/users/deleted": {
+      "get": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/api/managements/players/banned": {
+      "get": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/api/conversations/others": {
+      "get": {
+        "tags": [
+          "Conversations"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/conversations/{userId}": {
+      "get": {
+        "tags": [
+          "Conversations"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      },
+      "post": {
+        "tags": [
+          "Conversations"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {}
       }
     }

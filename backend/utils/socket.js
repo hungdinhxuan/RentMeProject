@@ -1,21 +1,23 @@
 module.exports = (app) => {
+  const path = require('path');
   const { createServer } = require('http');
   const { Server } = require('socket.io');
-  const User = require('../models/users.models');
+  const User = require('../models/users.model');
   const {
     userSocketIdObj,
     addClientToObj,
     removeClientFromObj,
   } = require('./client');
-  const Message = require('../models/messages.models');
+  const Message = require('../models/messages.model');
   const httpServer = createServer(app);
   const io = new Server(httpServer, { cors: '*', path: '/mysocket' });
   const jwt = require('jsonwebtoken');
   const fs = require('fs');
   const publicKey = fs.readFileSync('public.pem');
-  const Trading = require('../models/tradings.models');
-  const Transfer = require('../models/transfers.models')
-  const PlayerProfile = require('../models/player_profiles.models')
+  const Trading = require('../models/tradings.model');
+  const Transfer = require('../models/transfers.model');
+  const PlayerProfile = require('../models/player_profiles.model');
+  const Conversations = require('../models/conversations.models');
   const xss = require('xss');
   const sanitizeString = (str) => {
     return xss(str);
@@ -32,6 +34,10 @@ module.exports = (app) => {
   let messages = {};
   let timeOnline = {};
 
+  /// [room1: set(user1: set(socket id ) ), room2: set(user2: set(socket id ) ), ]
+  let connectionsStreamhub = {};
+  let messagesStreamhub = {};
+
   io.on('connection', (socket) => {
     socket.auth = false;
 
@@ -44,48 +50,61 @@ module.exports = (app) => {
         } else {
           // console.log(data);
           const { sub } = data;
-          const user = await User.findById(sub);
-
-          socket.auth = true;
-          socket.username = user.username;
-          socket.role = user.role;
-          addClientToObj(socket.username, socket.id, socket.role, io);
+          try {
+            const user = await User.findById(sub);
+            if (user) {
+              socket.auth = true;
+              socket.username = user.username;
+              socket.userId = user._id;
+              socket.role = user.role;
+              addClientToObj(socket.username, socket.id, socket.role, io);
+            }
+          } catch (error) {
+            console.log(
+              '🚀 ~ file: socket.js ~ line 65 ~ jwt.verify ~ error',
+              error,
+            );
+          }
         }
       });
     });
 
-    // runing per 20p to check if status is pending then emit to user and remove 
+    // runing per 20p to check if status is pending then emit to user and remove
     setInterval(async () => {
-      const tradings = await Trading.find().lean()
-      let expireTradingDate 
-      
+      const tradings = await Trading.find().lean();
+      let expireTradingDate;
+
       tradings.forEach(async (trading, index) => {
-
-        if(trading.status === 'pending'){
-
+        if (trading.status === 'pending') {
           expireTradingDate = new Date(trading.createdAt);
           expireTradingDate.setMinutes(
             expireTradingDate.getMinutes() + trading.expireIn,
           );
           // Het han roi ma van pending
-          if(expireTradingDate.getTime() < new Date().getTime()){
+          if (expireTradingDate.getTime() < new Date().getTime()) {
             try {
-              await Trading.findByIdAndDelete(trading._id)
-              const player = await User.findById(trading.playerId)
-              const renter = await User.findById(trading.renterId)
-              if(userSocketIdObj[renter.username]){
-                for(let socketId of userSocketIdObj[renter.username]){
-                    console.log('emitted because expire');
-                    io.to(socketId).emit('expire rent player',`Your trading between you and ${player.fullName} is automatically removed because time is expired` )
+              await Trading.findByIdAndDelete(trading._id);
+              const player = await User.findById(trading.playerId);
+              const renter = await User.findById(trading.renterId);
+              if (userSocketIdObj[renter.username]) {
+                for (let socketId of userSocketIdObj[renter.username]) {
+                  console.log('emitted because expire');
+                  io.to(socketId).emit(
+                    'expire rent player',
+                    `Your trading between you and ${player.fullName} is automatically removed because time is expired`,
+                  );
                 }
               }
             } catch (error) {
-              console.log("🚀 ~ file: socket.js ~ line 75 ~ tradings.forEach ~ error", error)
+              console.log(
+                '🚀 ~ file: socket.js ~ line 75 ~ tradings.forEach ~ error',
+                error,
+              );
             }
           }
         }
-      })
-    }, 20 * 60 * 1000) 
+      });
+    }, 20 * 60 * 1000);
 
     socket.on('logout', () => {
       if (socket.auth) {
@@ -123,6 +142,24 @@ module.exports = (app) => {
               delete messages[key];
             }
             break;
+          }
+        }
+      }
+
+      // Streamhub
+      for (const [path, setUsers] of Object.entries(connectionsStreamhub)) {
+        for (let user of setUsers) {
+          //delete socket id out of user
+          if (connectionsStreamhub[path][user]) {
+            connectionsStreamhub[path][user].delete(socket.id);
+            if (connectionsStreamhub[path][user].size === 0) {
+              delete connectionsStreamhub[path][user];
+            }
+          }
+          // if no user in room then delete room
+          if (connectionsStreamhub[path].size === 0) {
+            delete connectionsStreamhub[path];
+            delete messagesStreamhub[path];
           }
         }
       }
@@ -268,15 +305,19 @@ module.exports = (app) => {
     });
     socket.on('confirm rent', async (data) => {
       if (socket.auth) {
-        let trading
+        let trading;
         const { content, receiverId, _id } = data;
         try {
           const tradingId = content.split(' Current trading ID: ')[1];
-          trading = await Trading.findById(tradingId)
-          if(!trading){ /// Trading is not exist anymore
-            await Message.findByIdAndDelete(_id)
-            socket.emit('error trading', 'Trading is removed by system because overcome time')
-            return
+          trading = await Trading.findById(tradingId);
+          if (!trading) {
+            /// Trading is not exist anymore
+            await Message.findByIdAndDelete(_id);
+            socket.emit(
+              'error trading',
+              'Trading is removed by system because overcome time',
+            );
+            return;
           }
           trading = await Trading.findByIdAndUpdate(
             tradingId,
@@ -284,14 +325,14 @@ module.exports = (app) => {
             { new: true },
           );
           const renter = await User.findById(trading.renterId);
-          const player = await User.findOne({username: socket.username})
+          const player = await User.findOne({ username: socket.username });
           await new Transfer({
             sender: renter._id,
             receiver: player._id,
             money: trading.money,
-            type: "trade",
-            tradingId: trading._id
-          }).save()
+            type: 'trade',
+            tradingId: trading._id,
+          }).save();
           const system = await User.findOne({ username: 'system' });
           const updatedMessage = await Message.findByIdAndUpdate(
             _id,
@@ -305,15 +346,15 @@ module.exports = (app) => {
               expireTradingDate.getMinutes() + trading.expireIn,
             );
 
-            if(expireTradingDate.getTime() < new Date().getTime()){
-              socket.emit('trading error', 'Trading expired and removed')
-              await Trading.findByIdAndDelete(tradingId)
-               return               
+            if (expireTradingDate.getTime() < new Date().getTime()) {
+              socket.emit('trading error', 'Trading expired and removed');
+              await Trading.findByIdAndDelete(tradingId);
+              return;
             }
             const msgForRenter = await Message.create({
               senderId: system._id,
               receiverId: renter._id,
-              content: `Trading ${tradingId} accepted by ${socket.fullName}.\n Room ID: ${trading.roomId}, Room Password: ${trading.roomPassword}`,
+              content: `Trading ${tradingId} accepted by ${player.fullName}.\n Room ID: ${trading.roomId}, Room Password: ${trading.roomPassword}`,
             });
             const msgForPlayer = await Message.create({
               senderId: system._id,
@@ -449,47 +490,87 @@ module.exports = (app) => {
       if (socket.auth) {
         try {
           const user = await User.findOne({ username });
-          console.log("🚀 ~ file: socket.js ~ line 400 ~ socket.on ~ user", user)
+          console.log(
+            '🚀 ~ file: socket.js ~ line 400 ~ socket.on ~ user',
+            user,
+          );
           const trading = await Trading.findById(tradingId);
           /// Nguoi huy la player thi hoan lai tien
           if (user._id.equals(trading.playerId)) {
-          console.log("🚀 ~ file: socket.js ~ line 403 ~ socket.on ~ trading", trading)
-            
+            console.log(
+              '🚀 ~ file: socket.js ~ line 403 ~ socket.on ~ trading',
+              trading,
+            );
+
             await new Transfer({
               sender: trading.playerId,
               receiver: trading.renterId,
               money: trading.money,
-              type: "trade",
-              tradingId: trading._id
+              type: 'trade',
+              tradingId: trading._id,
             }).save((err, transfer) => {
-              if(err){
-                console.log("🚀 ~ file: socket.js ~ line 411 ~ socket.on ~ err", err)
+              if (err) {
+                console.log(
+                  '🚀 ~ file: socket.js ~ line 411 ~ socket.on ~ err',
+                  err,
+                );
               }
-            })
-            await Trading.findByIdAndUpdate(tradingId, {status: 'aborted', reason: `Trading is aborted by ${username}`})
+            });
+            await Trading.findByIdAndUpdate(tradingId, {
+              status: 'aborted',
+              reason: `Trading is aborted by ${username}`,
+            });
 
             // emit cho ca 2
             io.to(path).emit(
               'abort trading',
               `Trading is aborted by ${user.fullName}`,
             );
-          } else if(user._id.equals(trading.renterId)){
+          } else if (user._id.equals(trading.renterId)) {
             // renter abort
-            await Trading.findByIdAndUpdate(tradingId, {status: 'done', reason: `${username} is finished trading soon ....`})
-            const player = await User.findById(trading.playerId)
-            const player_profile = PlayerProfile.findOne({userId: player._id})
+            const trading = await Trading.findByIdAndUpdate(
+              tradingId,
+              {
+                status: 'done',
+                reason: `${username} is finished trading soon ....`,
+              },
+              { new: true },
+            );
+            const system = await Trading.findOne({ username: 'system' });
+            const player = await User.findById(trading.playerId);
+            const player_profile = await PlayerProfile.findOne({
+              userId: player._id,
+            });
+            const transfer = await Transfer.findOne({ tradingId: trading._id });
+
+            const profit = trading.money * transfer.rate;
+            // console.log("🚀 ~ file: socket.js ~ line 521 ~ socket.on ~ trading", trading)
+
+            transfer.profit = profit;
+            transfer.money = trading.money - profit;
+
+            player.balance -= profit;
+            system.balance += profit;
+
+            transfer.save();
+            player.save();
+            system.save();
             // emit to all current socket of player
-            for(let socketId of userSocketIdObj[player.username]){
-              io.to(socketId).emit('abort trading', `Trading is aborted by ${user.fullName}`)
+            for (let socketId of userSocketIdObj[player.username]) {
+              io.to(socketId).emit(
+                'abort trading',
+                `Trading is aborted by ${user.fullName}`,
+              );
             }
-            
+
             /// emit to all current socket of renter
-            for(let socketId of userSocketIdObj[user.username]){
-              io.to(socketId).emit('response abort trading for renter', player_profile._id)
+            for (let socketId of userSocketIdObj[user.username]) {
+              io.to(socketId).emit(
+                'response abort trading for renter',
+                player_profile._id,
+              );
             }
           }
-          
-        
         } catch (error) {
           console.log(
             '🚀 ~ file: socket.js ~ line 391 ~ socket.on ~ error',
@@ -500,9 +581,26 @@ module.exports = (app) => {
     });
 
     socket.on('done trading', async (tradingId, path) => {
-      if(socket.auth){
+      if (socket.auth) {
         try {
-          await Trading.findByIdAndUpdate(tradingId, { status: 'done' });
+          const trading = await Trading.findByIdAndUpdate(tradingId, {
+            status: 'done',
+          });
+          const player = await Trading.findById(trading.playerId);
+          const system = await Trading.findOne({ username: 'system' });
+          const transfer = await Transfer.findOne({ tradingId: trading._id });
+          const profit = trading.money * transfer.rate;
+
+          transfer.profit = profit;
+          transfer.money = trading.money - profit;
+
+          player.balance -= profit;
+          system.balance += profit;
+
+          transfer.save();
+          player.save();
+          system.save();
+
           io.to(path).emit('done trading', 'Trading is finished');
         } catch (error) {
           console.log(
@@ -514,15 +612,99 @@ module.exports = (app) => {
     });
 
     socket.on('donate money', async (playerName, money) => {
-      if(socket.auth){
-        if(userSocketIdObj[playerName]){
-          const sender = await User.findOne({username: socket.username})
-          for(let socketId of userSocketIdObj[playerName]){
-            io.to(socketId).emit('response donate money player', `${sender.fullName} donate ${money} $ for you !!!!`)
+      if (socket.auth) {
+        if (userSocketIdObj[playerName]) {
+          const sender = await User.findOne({ username: socket.username });
+          for (let socketId of userSocketIdObj[playerName]) {
+            io.to(socketId).emit(
+              'response donate money player',
+              `${sender.fullName} donate ${money} $ for you !!!!`,
+            );
           }
         }
       }
-    })
+    });
+
+    socket.on('follow player', async (playerName) => {
+      if (socket.auth) {
+        if (userSocketIdObj[playerName]) {
+          const sender = await User.findOne({ username: socket.username });
+          for (let socketId of userSocketIdObj[playerName]) {
+            io.to(socketId).emit(
+              'follow player',
+              `${sender.fullName} is following you !!!!`,
+            );
+          }
+        }
+      }
+    });
+    /// Chat Stream
+    socket.on('user-join-streamhub', (path) => {
+      if (socket.auth) {
+        if (!connectionsStreamhub[path]) {
+          // Neu chua co room thi tao room = new Set()
+          connectionsStreamhub[path] = new Set();
+        } else {
+          if (!connectionsStreamhub[path][socket.username]) {
+            // Neu username do chua vao room
+            connectionsStreamhub[path].add(socket.username);
+          } else {
+            connectionsStreamhub[path][socket.username].add(socket.id);
+          }
+        }
+        socket.join(path);
+      }
+    });
+
+    socket.on('message-streamhub', async (path, message) => {
+      if (socket.auth) {
+        try {
+          const user = await User.findOne({ username: socket.username });
+          if (!messagesStreamhub[path]) {
+            messagesStreamhub[path] = [];
+          }
+          const newMsg = {
+            sender: user.fullName,
+            content: message,
+            avatar: user.avatar,
+          };
+          console.log(
+            '🚀 ~ file: socket.js ~ line 594 ~ socket.on ~ newMsg',
+            newMsg,
+          );
+          messagesStreamhub[path].push(newMsg);
+
+          io.to(path).emit('message-streamhub', newMsg);
+        } catch (error) {
+          console.log(
+            '🚀 ~ file: socket.js ~ line 594 ~ socket.on ~ error',
+            error,
+          );
+        }
+      }
+    });
+
+    socket.on('private chat', async (data) => {
+      if (socket.auth) {
+        const { receiverId, content } = data;
+  
+        const receiver = await User.findById(receiverId);
+        const newMsg = await Conversations.create({
+          senderId: socket.userId,
+          receiverId,
+          content,
+        });
+        
+        if (userSocketIdObj[receiver.username]) {
+          for (let socketId of userSocketIdObj[receiver.username])
+            io.to(socketId).emit('private chat receiver', newMsg);
+        }
+        if (userSocketIdObj[socket.username]) {
+          for (let socketId of userSocketIdObj[socket.username])
+            io.to(socketId).emit('private chat', newMsg);
+        }
+      }
+    });
   });
 
   httpServer.listen(4000);

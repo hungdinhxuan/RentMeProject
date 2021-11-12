@@ -1,25 +1,24 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef} from "react";
 import { useHistory, useRouteMatch, useParams } from "react-router";
 import { Image, Rate, Avatar } from "antd";
 import "./Details.scss";
 import { useDispatch, useSelector } from "react-redux";
-import { AsyncLoadPlayerDetails, AsyncGetReviews, AsyncDonateMoney } from "../PlayerSlice";
+import { AsyncLoadPlayerDetails, AsyncGetReviews, AsyncDonateMoney, AsyncFollowPlayer} from "../PlayerSlice";
 import "./Details.scss";
 import { Modal, Button, Select } from "antd";
-import socket from "socket";
+import socket from "utils/socket";
 import Swal from "sweetalert2";
-import TimeAgo from "javascript-time-ago";
-import en from "javascript-time-ago/locale/en.json";
-TimeAgo.addDefaultLocale(en);
-
-const timeAgo = new TimeAgo("en-US");
+import timeAgo from "utils/timeAgo"
+import getRandomVideoYoutube from "utils/randomVideoYoutube";
+import {addNewPrivateChat, loadConversations, setOther} from "features/PrivateChat/PrivateChatSlice";
 
 export default function PlayerDetails() {
+  const dispatch = useDispatch();
   const match = useRouteMatch();
   const params = useParams();
   const history = useHistory();
   const [visible, setVisible] = useState(false);
-
+  const ref = useRef("EcZ1OCJECvY");
   const { Option } = Select;
 
   const { player, error, reviews } = useSelector((state) => state.players);
@@ -35,7 +34,7 @@ export default function PlayerDetails() {
   if (error) {
     history.push("/error");
   }
-  const dispatch = useDispatch();
+  
 
   const handleDonate = async () => {
     let { value: money } =  await Swal.fire({
@@ -106,7 +105,9 @@ export default function PlayerDetails() {
     });
   };
 
-  
+  const handleFollow = () => {
+    dispatch(AsyncFollowPlayer(params.cardId))
+  }
 
   const handleMoreAmount = () => {
     history.push("/setting/wallet");
@@ -124,9 +125,24 @@ export default function PlayerDetails() {
     }
   };
 
+  const handleStartPrivateChat = () => {
+    dispatch(addNewPrivateChat({
+      otherId: player.user._id,
+      otherAvatar: player.user.avatar,
+      otherFullName: player.user.fullName
+    }))
+    dispatch(setOther({
+      otherId: player.user._id,
+      otherAvatar: player.user.avatar,
+      otherFullName: player.user.fullName,
+      isOnline: player.user.isOnline
+    }))
+    dispatch(loadConversations())
+  }
+
   useEffect(() => {
     dispatch(AsyncLoadPlayerDetails(match.params.cardId));
-  }, [dispatch, match.params.cardId]);
+  }, [dispatch, match.params.cardId], player?.user?.follower);
 
   // const test = AverageRating(reviews);
   // console.log(test);
@@ -134,6 +150,13 @@ export default function PlayerDetails() {
   useEffect(() => {
     dispatch(AsyncGetReviews(params.cardId));
   }, [dispatch, params.cardId]);
+
+  useEffect(() => {
+
+    getRandomVideoYoutube().then((res) => {
+      ref.current = res
+    })    
+  }, [])
 
   return (
     <div className="details">
@@ -157,7 +180,7 @@ export default function PlayerDetails() {
                       onVisibleChange: (vis) => setVisible(vis),
                     }}
                   >
-                    {player?.albums.map((item, index) => (
+                    {player?.albums?.map((item, index) => (
                       <Image key={index} src={item} />
                     ))}
                   </Image.PreviewGroup>
@@ -200,14 +223,16 @@ export default function PlayerDetails() {
                   Rent
                 </button>
                 <button className="btn-style white" onClick={handleDonate}>Donate</button>
-                <button className="btn-style white">Chat</button>
+                <button className="btn-style white" onClick={handleStartPrivateChat}>Chat</button>
               </div>
             </div>
             <div className="player__profile--main col-lg-6 order-lg-1">
               <div className="name-profile">
                 <div className="center-item col-lg-12">
                   <span className="name__player">{player?.nickname} </span>
-                  <button className="btn-follow-player">Follow Me</button>
+                  {player?.user?.follower?.indexOf(user._id) === -1 ?
+                  <button className="btn-follow-player" onClick={handleFollow}>Following Me</button> : <button className="btn-follow-player" onClick={handleFollow}>Unfollowing me</button> 
+                  }
                 </div>
               </div>
               <div className="nav-player-profile row">
@@ -215,7 +240,7 @@ export default function PlayerDetails() {
                   <div className="nav__item-name">
                     <span>Followers</span>
                   </div>
-                  <div className="nav__item-value">82 people</div>
+                  <div className="nav__item-value">{player?.user?.follower?.length} people</div>
                 </div>
                 <div className="col-lg-3 col-6">
                   <div className="nav__item-name">
@@ -253,7 +278,7 @@ export default function PlayerDetails() {
                   <iframe
                     width="100%"
                     height="350"
-                    src="https://www.youtube.com/embed/1WLSitEnnCg"
+                    src={`https://www.youtube.com/embed/${ref.current}`}
                     title="YouTube video player"
                     frameBorder="0"
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -265,8 +290,8 @@ export default function PlayerDetails() {
                 <span>Comment</span>
               </div>
               <div className="text-center comment-player-profile">
-                {reviews.map((review) => (
-                  <div className="col-lg-12">
+                {reviews?.map((review,index) => (
+                  <div className="col-lg-12" key={review._id}>
                     <div className="fullsize">
                       <div className="comment-image">
                         <Avatar src={review.userId.avatar} size={40} />
@@ -275,7 +300,7 @@ export default function PlayerDetails() {
                         <div className="review-content">
                           <p>{review.userId.fullName}</p>
                           <p className="review-time">
-                            {timeAgo.format(new Date(review.createdAt))}
+                            {timeAgo(new Date(review.createdAt))}
                           </p>
                           <p className="content-player-comment">
                             {review.content}

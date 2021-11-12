@@ -1,4 +1,4 @@
-import VideoChat from "components/VideoChat";
+ import VideoChat from "components/VideoChat";
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import "./ChatRoom.scss";
