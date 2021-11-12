@@ -172,7 +172,13 @@ function Header() {
   }, [dispatch, user]);
 
   useEffect(() => {
-    const loadData = (data) => dispatch(addNewMessage(data));
+    const loadData = (data) => {
+      if (data === "this player is offline") {
+        ToastSweet("error", "this player is offline");
+      } else {
+        dispatch(addNewMessage(data));
+      }
+    };
 
     const confirmRentMsg = (data) => {
       if (data.updatedMessage) {
@@ -340,12 +346,13 @@ function Header() {
                   <div
                     className="message__badge"
                     onClick={handleShowPrivateChat}
+                    style={{ marginRight: "5px" }}
                   >
-                    <Badge count={countNewMessages} />
-
-                    <div className="message-icon">
-                      <i className="bi bi-chat"></i>
-                    </div>
+                    <Badge count={countNewMessages}>
+                      <div className="message-icon">
+                        <i className="bi bi-chat"></i>
+                      </div>
+                    </Badge>
                   </div>
 
                   <div className="message__badge">
@@ -380,6 +387,7 @@ function Header() {
           visible={isModalVisible}
           onCancel={handleCancel}
           footer={
+            messages[idModal]?.content &&
             messages[idModal]?.content.includes("Current trading ID:")
               ? [
                   <Button

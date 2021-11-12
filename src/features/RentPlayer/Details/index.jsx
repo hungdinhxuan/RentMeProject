@@ -290,8 +290,8 @@ export default function PlayerDetails() {
                 <span>Comment</span>
               </div>
               <div className="text-center comment-player-profile">
-                {reviews?.map((review) => (
-                  <div className="col-lg-12">
+                {reviews?.map((review,index) => (
+                  <div className="col-lg-12" key={review._id}>
                     <div className="fullsize">
                       <div className="comment-image">
                         <Avatar src={review.userId.avatar} size={40} />

@@ -81,7 +81,12 @@ function Drawler(props) {
           </div>
           <div className="options__drawer">
             <div className="options--card">
-              <div className="title">
+              <div
+                className="title"
+                onClick={() => {
+                  history.push("/setting/wallet");
+                }}
+              >
                 <img src={Wallet} alt="wallet" />
               </div>
               <div className="text">Wallet</div>
