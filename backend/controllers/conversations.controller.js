@@ -1,7 +1,6 @@
 const Conversations = require('../models/conversations.models');
 class ConversationsController {
   async getAllWithUserId(req, res) {
-    console.log(req.params);
     try {
       const conversations = await Conversations.find({
         $or: [
@@ -96,6 +95,7 @@ class ConversationsController {
             otherFullName: senderConversation.senderId.fullName,
             lastestMessage: senderConversation.content,
             createdAt: senderConversation.createdAt,
+            isOnline: senderConversation.senderId.isOnline,
           });
         } else if (receiverConversation) {
           others.push({
@@ -104,6 +104,7 @@ class ConversationsController {
             otherFullName: receiverConversation.receiverId.fullName,
             lastestMessage: receiverConversation.content,
             createdAt: receiverConversation.createdAt,
+            isOnline: receiverConversation.receiverId.isOnline,
           });
         }
       }

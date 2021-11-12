@@ -11,6 +11,8 @@ import {
 import socket from "utils/socket";
 import ScrollToBottom from "react-scroll-to-bottom";
 import TimeAgo from 'utils/timeAgo'
+import OnlineStatus from "assets/onlineStatus.png";
+import OfflineStatus from "assets/offlineStatus.png";
 
 const Chat = () => {
   const dispatch = useDispatch();
@@ -67,7 +69,10 @@ const Chat = () => {
               >
                 <img className="pic" src={newContact.otherAvatar} alt="" />
                 <div className="name">{newContact.otherFullName}</div>
-                <div className="badge">3</div>
+                {/* <div className="badge">3</div> */}
+                <div className={newContact.isOnline ? "badge online": "badge offline"}>
+                  <div></div>
+                </div>
                 <div className="message">
                   Say Hi With {newContact.otherFullName}
                 </div>
@@ -82,6 +87,9 @@ const Chat = () => {
                 <img className="pic" src={value.otherAvatar} alt="" />
                 <div className="name">{value.otherFullName}</div>
                 {/* <div className="badge">3</div> */}
+                <div className={value.isOnline ? "badge online": "badge offline"}>
+                  <div></div>
+                </div>
                 <div className="message">{value.lastestMessage}</div>
               </div>
             ))}
@@ -96,7 +104,9 @@ const Chat = () => {
               >
                 <img className="pic" src={value.otherAvatar} alt="" />
                 <div className="name">{value.otherFullName}</div>
-                {/* <div className="badge">3</div> */}
+                <div className={value.isOnline ? "badge online": "badge offline"}>
+                  <div></div>
+                </div>
                 <div className="message">{value.lastestMessage}</div>
               </div>
             ))}
@@ -111,7 +121,7 @@ const Chat = () => {
               <img className="pic" src={other.otherAvatar} />
               <div>
                 <div className="name">{other.otherFullName}</div>
-                <div className="seen">Today at 12:56</div>
+                <div className={other.isOnline ? "badge online": "badge offline"}><div></div></div>
               </div>
             </>
           ) : (

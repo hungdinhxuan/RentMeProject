@@ -52,16 +52,23 @@ $background: #f7f7f7;
   .badge {
     box-sizing: border-box;
     position: absolute;
-    width: 1.5rem;
-    height: 1.5rem;
+    width: 1.3rem;
+    height: 1.3rem;
     text-align: center;
     font-size: 0.9rem;
     padding-top: 0.125rem;
-    border-radius: 1rem;
+    border-radius: 1.5rem;
     top: 0;
     left: 2.5rem;
-    background: $text-1;
+    // background: $text-1;
     color: white;
+    
+  }
+  .online {
+    background: #00b300;
+  }
+  .offline {
+    background: #ff0000;
   }
 }
 
