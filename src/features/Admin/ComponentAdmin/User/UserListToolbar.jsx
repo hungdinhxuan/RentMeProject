@@ -26,18 +26,6 @@ const UserListToolbar = (props) => {
   const handleCancel = () => {
     setVisible(!visible);
   };
-  const tailFormItemLayout = {
-  wrapperCol: {
-    xs: {
-      span: 24,
-      offset: 0,
-    },
-    sm: {
-      span: 16,
-      offset: 8,
-    },
-  },
-};
 
   useEffect(() => {
     dispatch(getDeletedUsersAsync());

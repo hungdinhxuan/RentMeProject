@@ -29,6 +29,10 @@
       "description": "Dev endpoints"
     },
     {
+      "name": "Conversations",
+      "description": "Conversations endpoints"
+    },
+    {
       "name": "Managements",
       "description": "Managements endpoints"
     }
@@ -851,6 +855,78 @@
             "Authorization": []
           }
         ]
+      }
+    },
+    "/api/managements/users/deleted": {
+      "get": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/api/managements/players/banned": {
+      "get": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/api/conversations/others": {
+      "get": {
+        "tags": [
+          "Conversations"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {}
+      }
+    },
+    "/api/conversations/{userId}": {
+      "get": {
+        "tags": [
+          "Conversations"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
+      },
+      "post": {
+        "tags": [
+          "Conversations"
+        ],
+        "description": "",
+        "parameters": [
+          {
+            "name": "userId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {}
       }
     }
   },

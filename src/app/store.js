@@ -6,6 +6,8 @@ import MessageReducer from 'features/Settings/MessageSlice'
 import ChatRoomReducer from 'features/ChatRoom/ChatRoomSlice'
 import AdminReducer from 'features/Admin/AdminSlice'
 import BecomePlaerReducer from 'features/BecomePlayer/BecomePlayerSlice'
+import PrivateChatReducer from "features/PrivateChat/PrivateChatSlice";
+
 const rootReducer = {
   auth: AuthReducer,
   setting: SettingReducer,
@@ -14,6 +16,7 @@ const rootReducer = {
   chatRoom: ChatRoomReducer,
   admin: AdminReducer,
   services: BecomePlaerReducer,
+  privateChat: PrivateChatReducer
 };
 export const store = configureStore({
   reducer: rootReducer
