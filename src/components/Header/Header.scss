@@ -99,6 +99,7 @@ header {
                 // UI khi đăng nhập thành công
                 .message {
                     .message__badge {
+                        display: flex;
                         .message-icon {
                             width: 28px;
                             height: 28px;

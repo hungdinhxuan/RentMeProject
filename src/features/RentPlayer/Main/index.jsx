@@ -11,16 +11,69 @@ import socket from "utils/socket";
 function MainRentPlayer() {
   //   Select
   const { Option } = Select;
-  const [filterValues, setFilterValues] = useState();
+  const [filterValues, setFilterValues] = useState('false');
+  const [filterPriceValues, setFilterPriceValues] = useState();
+  const { listPlayers } = useSelector((state) => state.players);
+  const dispatch = useDispatch();
+
   const handleChange = (value) => {
-    // console.log(`selected ${value}`);
     setFilterValues(value);
   };
 
-  console.log(filterValues);
+  // Price
+  const handleChangePrice = (value) => {
+    setFilterPriceValues(value);
+  };
 
-  const { listPlayers } = useSelector((state) => state.players);
-  const dispatch = useDispatch();
+  // Filter gender
+  const filterData = listPlayers.filter((item) => {
+    return item.user[0]?.gender.toLowerCase() === filterValues?.toLowerCase();
+  });
+
+  // Filter status online or offline
+  const filterStatus = listPlayers.filter((item) => {
+    return item.user[0]?.isOnline.toString() === filterValues;
+  });
+
+  const filterPrice = listPlayers.filter((item) => {
+    switch (filterValues) {
+      case "5":
+        return item.pricePerHour <= 5;
+      case "10.01":
+        return item.pricePerHour > 10;
+      case "10.01":
+        return item.pricePerHour > 10;
+      case "20.01":
+        return item.pricePerHour > 20;
+      default:
+        return item.pricePerHour > 5;
+    }
+  });
+
+  const filterAll = () => {
+    if (filterValues) {
+      return listPlayers.filter((item) => {
+        return item.user[0]?.isOnline.toString() === filterValues;
+      });
+    } else {
+      return filterValues?.filter((item) => {
+        switch (filterPriceValues) {
+          case "5":
+            return item.pricePerHour <= 5;
+          case "10.01":
+            return item.pricePerHour > 10;
+          case "10.01":
+            return item.pricePerHour > 10;
+          case "20.01":
+            return item.pricePerHour > 20;
+          default:
+            return item.pricePerHour > 5;
+        }
+      });
+    }
+  };
+
+  console.log(filterAll());
 
   useEffect(() => {
     dispatch(AsyncLoadUser());
@@ -37,18 +90,6 @@ function MainRentPlayer() {
       socket.off("refreshPlayerList", handleRefresh);
     };
   }, [dispatch]);
-
-  // Filter gender
-  const filterData = listPlayers.filter((item) => {
-    return item.user[0]?.gender.toLowerCase() === filterValues?.toLowerCase();
-  });
-
-  // Filter status online or offline
-  const filterStatus = listPlayers.filter((item) => {
-   
-    return item.user[0]?.isOnline.toString() === filterValues;
-  });
-  // console.log(filterGender);
 
   return (
     <div className="main__layout">
@@ -87,7 +128,7 @@ function MainRentPlayer() {
                   <Select
                     placeholder="Price"
                     style={{ width: 100 }}
-                    onChange={handleChange}
+                    onChange={handleChangePrice}
                   >
                     <Option value="5">1-5</Option>
                     <Option value="5.01">5.01-10</Option>
@@ -119,7 +160,7 @@ function MainRentPlayer() {
                   return <CardList item={item} key={item._id} />;
                 })} */}
               {filterValues
-                ? filterStatus.map((item) => {
+                ? filterAll()?.map((item) => {
                     return <CardList item={item} key={item._id} />;
                   })
                 : listPlayers?.map((item) => {
