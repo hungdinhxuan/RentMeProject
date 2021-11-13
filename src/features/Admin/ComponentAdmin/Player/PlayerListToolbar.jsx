@@ -1,7 +1,4 @@
-import {
-  Box,
-  Button
-} from "@material-ui/core";
+import { Box, Button } from "@material-ui/core";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { useDispatch } from "react-redux";
 import { AsyncLoadPlayer } from "features/RentPlayer/PlayerSlice";
@@ -11,7 +8,7 @@ const PlayerListToolbar = (props) => {
   const handleRefresh = () => {
     dispatch(AsyncLoadPlayer());
   };
-  
+
   return (
     <Box {...props}>
       <Box
@@ -29,10 +26,6 @@ const PlayerListToolbar = (props) => {
           </div>
         </Box>
         <Button>Import</Button>
-        <Button sx={{ mx: 1 }}>Export</Button>
-        <Button color="primary" variant="contained">
-          Add Players
-        </Button>
       </Box>
     </Box>
   );

@@ -3,6 +3,7 @@ const router = express.Router();
 const passport = require('passport');
 const { AdminRole } = require('../middlewares/checkRole');
 const UsersManagement = require('../managements/users.management')
+const PlayersManagement = require('../managements/players.management')
 
 router.get(
   /*  
@@ -44,6 +45,19 @@ router.patch(
   UsersManagement.restoreUsers,
 );
 
+router.put(
+  '/users',
+  /*  
+        #swagger.tags = ['Managements']
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
+  passport.authenticate('jwt', { session: false }),
+  AdminRole,
+  UsersManagement.updateUser,
+);
+
 router.delete(
   /*  
         #swagger.tags = ['Managements']
@@ -70,8 +84,22 @@ router.delete(
   UsersManagement.forceDeleteUsers,
 );
 
-router.put(
-  '/users',
+
+
+router.get('/users/deleted', 
+  /*  
+        #swagger.tags = ['Managements']
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
+passport.authenticate('jwt', { session: false }),
+AdminRole,
+UsersManagement.getDeletedUsers,
+)
+
+
+router.get('/players/banned', 
   /*  
         #swagger.tags = ['Managements']
         #swagger.security = [{
@@ -80,6 +108,6 @@ router.put(
     */
   passport.authenticate('jwt', { session: false }),
   AdminRole,
-  UsersManagement.updateUser,
-);
+  PlayersManagement.getBannedPlayers
+)
 module.exports = router;

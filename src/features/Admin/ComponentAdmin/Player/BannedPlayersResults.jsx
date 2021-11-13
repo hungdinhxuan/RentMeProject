@@ -9,17 +9,13 @@ import OnlineStatus from "assets/onlineStatus.png";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { useCallback, useState } from "react";
-
 import "./Player.scss";
 
 // Export file CSV
 function CustomToolbar() {
   return (
     <GridToolbarContainer className={gridClasses.toolbarContainer}>
-      <GridToolbarExport
-        csvOptions={{ fields: ["nickname", "longDesc"] }}
-        printoptions={{ allColumns: true }}
-      />
+      <GridToolbarExport printoptions={{ allColumns: true }} />
     </GridToolbarContainer>
   );
 }
@@ -27,12 +23,11 @@ function CustomToolbar() {
 const PlayerListResults = ({ players, ...rest }) => {
   const [editRows, setEditRows] = useState({});
   const [selectionModel, setSelectionModel] = useState([]);
+
+  // Unblock players
   const handleClick = () => {
     console.log(editRows);
   };
-  const handleBanPlayers = () => {
-    console.log(selectionModel);
-  }
 
   const handleEditRowsModelChange = useCallback((model) => {
     const temp = {};
@@ -131,14 +126,7 @@ const PlayerListResults = ({ players, ...rest }) => {
               className="btn btn-outline-primary"
               onClick={handleClick}
             >
-              Update
-            </button>
-            <button
-              type="button"
-              className=" mx-2 btn btn-outline-danger"
-              onClick={handleBanPlayers}
-            >
-              Ban
+              Unlock
             </button>
           </>
         );

@@ -1,13 +1,14 @@
 import {
   Avatar,
-  Box, Divider,
+  Box,
+  Divider,
   Drawer,
   Hidden,
   List,
-  Typography
-} from '@material-ui/core';
-import PropTypes from 'prop-types';
-import { useEffect } from 'react';
+  Typography,
+} from "@material-ui/core";
+import PropTypes from "prop-types";
+import { useEffect } from "react";
 import {
   AlertCircle as AlertCircleIcon,
   BarChart as BarChartIcon,
@@ -16,62 +17,57 @@ import {
   ShoppingBag as ShoppingBagIcon,
   User as UserIcon,
   UserPlus as UserPlusIcon,
-  Users as UsersIcon
-} from 'react-feather';
-import { useSelector } from 'react-redux';
-import { Link as RouterLink } from 'react-router-dom';
-import NavItem from './NavItem';
-
-
+  Users as UsersIcon,
+} from "react-feather";
+import { useSelector } from "react-redux";
+import { Link as RouterLink } from "react-router-dom";
+import NavItem from "./NavItem";
 
 const items = [
   {
-    href: '/admin/dashboard',
+    href: "/admin/dashboard",
     icon: BarChartIcon,
-    title: 'Dashboard'
+    title: "Dashboard",
   },
   {
-    href: '/admin/players',
+    href: "/admin/players",
     icon: UsersIcon,
-    title: 'Players Management'
+    title: "Players Management",
   },
   {
-    href: '/admin/users',
+    href: "/admin/users",
     icon: UserIcon,
-    title: 'Users Management'
+    title: "Users Management",
   },
   {
-    href: '/admin/products',
+    href: "/admin/products",
     icon: ShoppingBagIcon,
-    title: 'Products'
+    title: "Products",
   },
   {
-    href: '/admin/settings',
+    href: "/admin/settings",
     icon: SettingsIcon,
-    title: 'Settings'
+    title: "Settings",
   },
   {
-    href: '/login',
+    href: "/login",
     icon: LockIcon,
-    title: 'Login'
+    title: "Login",
   },
   {
-    href: '/register',
+    href: "/register",
     icon: UserPlusIcon,
-    title: 'Register'
+    title: "Register",
   },
   {
-    href: '/404',
+    href: "/",
     icon: AlertCircleIcon,
-    title: 'Error'
-  }
+    title: "Home Rentme",
+  },
 ];
 
-const DashboardSidebar = ({ onMobileClose, openMobile,location }) => {
-  
-  
-
-  const {user}= useSelector(state=>state.auth)
+const DashboardSidebar = ({ onMobileClose, openMobile, location }) => {
+  const { user } = useSelector((state) => state.auth);
   useEffect(() => {
     if (openMobile && onMobileClose) {
       onMobileClose();
@@ -81,32 +77,32 @@ const DashboardSidebar = ({ onMobileClose, openMobile,location }) => {
   const content = (
     <Box
       sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        height: '100%'
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
       }}
     >
       <Box
         sx={{
-          alignItems: 'center',
-          display: 'flex',
-          flexDirection: 'column',
-          p: 2
+          alignItems: "center",
+          display: "flex",
+          flexDirection: "column",
+          p: 2,
         }}
       >
         <Avatar
           component={RouterLink}
-          src={user.avatar}
+          src={user?.avatar}
           sx={{
-            cursor: 'pointer',
+            cursor: "pointer",
             width: 64,
-            height: 64
+            height: 64,
           }}
           to="/admin/account"
         />
-        
+
         <Typography color="textSecondary" variant="body2">
-          {user.fullName}
+          {user?.fullName}
         </Typography>
       </Box>
       <Divider />
@@ -136,8 +132,8 @@ const DashboardSidebar = ({ onMobileClose, openMobile,location }) => {
           variant="temporary"
           PaperProps={{
             sx: {
-              width: 256
-            }
+              width: 256,
+            },
           }}
         >
           {content}
@@ -152,8 +148,8 @@ const DashboardSidebar = ({ onMobileClose, openMobile,location }) => {
             sx: {
               width: 256,
               top: 64,
-              height: 'calc(100% - 64px)'
-            }
+              height: "calc(100% - 64px)",
+            },
           }}
         >
           {content}
@@ -165,12 +161,12 @@ const DashboardSidebar = ({ onMobileClose, openMobile,location }) => {
 
 DashboardSidebar.propTypes = {
   onMobileClose: PropTypes.func,
-  openMobile: PropTypes.bool
+  openMobile: PropTypes.bool,
 };
 
 DashboardSidebar.defaultProps = {
   onMobileClose: () => {},
-  openMobile: false
+  openMobile: false,
 };
 
 export default DashboardSidebar;

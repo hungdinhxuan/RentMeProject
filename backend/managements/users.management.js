@@ -36,44 +36,50 @@ class UsersManagement {
       });
     }
   }
-  createUser(req, res) {
-    const { fullName, username, email, password, gender, province, role } =
+  async createUser(req, res) {
+    const { fullName, username, email, password, role } =
       req.body;
-    const user = new User({
-      fullName,
-      username,
-      email,
-      password,
-      gender,
-      province,
-      role,
-    });
-    user.save((err, user) => {
-      if (err) {
-        return res.status(500).json({
-          success: false,
-          message: err.message || 'Some error occurred while creating the User',
-          error: err,
-        });
-      }
+    try {
+      const user = await User.create({
+        fullName,
+        username,
+        email,
+        password: await argon2.hash(password),
+        role,
+      });
       return res.status(201).json({
         success: true,
         message: 'User created successfully',
         user,
       });
-    });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message || 'Some error occurred while creating the User',
+        error: error,
+      });
+    }
   }
 
   async softDeleteUsers(req, res) {
     if (Object.prototype.toString.call(req.body.ids) === '[object Array]') {
       try {
-        await Player_Profile.delete({userId: {$in: req.body.ids}})
-
-        await User.delete({ _id: { $in: req.body.ids } })
+        let ids = req.body.ids
+        if(ids.indexOf(req.user._id.toString()) > -1){ // if user try to delete himself
+          ids.splice(ids.indexOf(req.user._id), 1)
+          if(ids.length === 0){
+            return res.status(400).json({
+              success: false,
+              message: 'You can not delete yourself !!',
+            });
+          }
+        }
+        await Player_Profile.delete({userId: {$in: ids}})
+        await User.delete({ _id: { $in: ids }, role: { $gte: 1 } })
         return res.status(200).json({
           success: true,
           message: 'deleted successfully !!',
-          userIds: req.body.ids,
+          userIds: ids,
         });
       } catch (error) {
         return res.status(500).json({
@@ -115,7 +121,7 @@ class UsersManagement {
 
   async forceDeleteUsers(req, res) {
     if (Object.prototype.toString.call(req.body.ids) === '[object Array]') {
-      if (req.body.ids.indexOf(req.user._id) > -1) {
+      if (req.body.ids.indexOf(req.user._id.toString()) > -1) {
         return res.status(400).json({
           success: false,
           message: 'You can not delete yourself !!',
@@ -124,7 +130,7 @@ class UsersManagement {
       try {
         
         await Player_Profile.deleteMany({userId: {$in: req.body.ids}})
-        await User.deleteMany({ _id: { $in: req.body.ids } });
+        await User.deleteMany({ _id: { $in: req.body.ids }, role: { $gte: 1 }});
         return res.status(200).json({
           success: true,
           message: 'deleted successfully !!',
@@ -147,7 +153,7 @@ class UsersManagement {
   async updateUser(req, res) {
     const { _id, fullName, username, email, password, province, role } =
       req.body;
-   
+    
     try {
       let user = await User.findById(_id);
       if (!user) {
@@ -156,7 +162,9 @@ class UsersManagement {
           message: 'User not found',
         });
       }
-      if(!await argon2.verify(user.password, password)){ // if changed password
+      
+      if(user.password !== password){ // if changed password
+        
         user = await User.findOneAndUpdate(
           { _id },
           {
@@ -170,6 +178,7 @@ class UsersManagement {
           { new: true },
         );
       }else{
+        console.log('password is not changed');
         user = await User.findOneAndUpdate(
           { _id },
           {
@@ -186,6 +195,21 @@ class UsersManagement {
         success: true,
         message: 'updated successfully !!',
         user,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message || 'Some error occurred while retrieving data',
+        error,
+      });
+    }
+  }
+  async getDeletedUsers(req, res){
+    try {
+      const deletedUsers = await User.findDeleted();
+      return res.status(200).json({
+        success: true,
+        users: deletedUsers,
       });
     } catch (error) {
       return res.status(500).json({
