@@ -317,6 +317,15 @@ function Header() {
                 </NavLink>
               </Nav.Link>
               <Nav.Link href="#">
+                <NavLink
+                  to="/privacy"
+                  className="nav__item"
+                  activeClassName="nav__item--active"
+                >
+                  Privacy Policy
+                </NavLink>
+              </Nav.Link>
+              <Nav.Link href="#">
                 <button
                   className="nav__item user__mobile"
                   activeclassname="nav__item--active"
