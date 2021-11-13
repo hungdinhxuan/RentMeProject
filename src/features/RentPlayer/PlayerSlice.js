@@ -11,12 +11,28 @@ const initialState = {
   reviews: []
 }
 
+// export const AsyncLoadPlayer = createAsyncThunk(
+//   "player/loadplayer",
+//   async (values, { rejectWithValue }) => {
+//     try {
+//       const response = await axiosClient.get(
+//         "/players?page=1&limit=50&status=false"
+//       )
+//       return response
+//     } catch (err) {
+//       return rejectWithValue(err.response.data)
+//     }
+//   }
+// )
+
 export const AsyncLoadPlayer = createAsyncThunk(
-  "player/loadplayer",
+  "player/loadplayerbyfilter",
   async (values, { rejectWithValue }) => {
     try {
       const response = await axiosClient.get(
-        "/players?page=1&limit=50&status=true"
+        "/players"
+        ,
+        {params: values}
       )
       return response
     } catch (err) {
@@ -24,6 +40,7 @@ export const AsyncLoadPlayer = createAsyncThunk(
     }
   }
 )
+
 
 export const AsyncLoadPlayerDetails = createAsyncThunk(
   "player/loadplayerdetails",
