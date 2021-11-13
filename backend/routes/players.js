@@ -10,8 +10,11 @@ router.get(
         #swagger.tags = ['Players']  
        
     */
-  PlayerController.filterPlayers,
+  PlayerController.filterPlayerProfiles,
 );
+
+// router.get('/v1', PlayerController.filterPlayerProfiles);
+
 router.get(
   '/:id',
   /*  

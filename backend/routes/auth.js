@@ -19,10 +19,12 @@ router.get(
     */
 
   '/',
-  passport.authenticate('jwt', { session: false }),
+  passport.authenticate('jwt', { session: false }), // jsonwebtoken
   checkValidAccount,
   (req, res) => res.status(200).send(req.user),
 );
+
+
 
 if (process.env.NODE_ENV === 'production') {
   router.post(

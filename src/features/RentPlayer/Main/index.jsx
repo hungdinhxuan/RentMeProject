@@ -14,6 +14,13 @@ function MainRentPlayer() {
   const [filterValues, setFilterValues] = useState('false');
   const [filterPriceValues, setFilterPriceValues] = useState();
   const { listPlayers } = useSelector((state) => state.players);
+  const [filters, setFilters] = useState({
+    gender: "",
+    status: "",
+    price: "",
+    age: "",
+  });
+
   const dispatch = useDispatch();
 
   const handleChange = (value) => {
@@ -60,8 +67,6 @@ function MainRentPlayer() {
         switch (filterPriceValues) {
           case "5":
             return item.pricePerHour <= 5;
-          case "10.01":
-            return item.pricePerHour > 10;
           case "10.01":
             return item.pricePerHour > 10;
           case "20.01":
