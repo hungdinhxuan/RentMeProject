@@ -6,7 +6,10 @@ const passport = require('passport');
 
 router.get('/others', 
 /*  
-        #swagger.tags = ['Conversations']  
+        #swagger.tags = ['Conversations'] 
+        #swagger.security = [{
+            "Authorization": []
+        }]
     */
     passport.authenticate('jwt', { session: false }),
     ConversationsController.getOthersInConversation
@@ -15,6 +18,9 @@ router.get('/others',
 router.get(
     /*  
         #swagger.tags = ['Conversations']  
+        #swagger.security = [{
+            "Authorization": []
+        }]
     */
   '/:userId',
   passport.authenticate('jwt', { session: false }),
@@ -24,6 +30,9 @@ router.get(
 router.post('/:userId', 
     /*  
         #swagger.tags = ['Conversations']  
+        #swagger.security = [{
+            "Authorization": []
+        }]
     */
 passport.authenticate('jwt', { session: false }),
 ConversationsController.sendMessage
