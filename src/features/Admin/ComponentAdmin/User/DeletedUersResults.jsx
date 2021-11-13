@@ -9,30 +9,37 @@ import OnlineStatus from "assets/onlineStatus.png";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { useCallback, useState } from "react";
+import { forceDeleteUsersAsync, restoreUsersAsync } from "features/Admin/AdminSlice";
+import { useDispatch } from "react-redux";
+import {ToastSweet} from 'components/SweetAlert2'
 
-import "./Player.scss";
-
-// Export file CSV
+import "./User.scss";
+const role = {
+  0: "admin",
+  1: "streamer",
+  2: "player",
+  3: "user",
+};
 function CustomToolbar() {
   return (
     <GridToolbarContainer className={gridClasses.toolbarContainer}>
-      <GridToolbarExport
-        csvOptions={{ fields: ["nickname", "longDesc"] }}
-        printoptions={{ allColumns: true }}
-      />
+      <GridToolbarExport />
     </GridToolbarContainer>
   );
 }
 
-const PlayerListResults = ({ players, ...rest }) => {
+const DeletedUersResults = ({ users, ...rest }) => {
+  const dispatch = useDispatch();
   const [editRows, setEditRows] = useState({});
   const [selectionModel, setSelectionModel] = useState([]);
-  const handleClick = () => {
-    console.log(editRows);
-  };
-  const handleBanPlayers = () => {
+  const handleRestoreUser = () => {
     console.log(selectionModel);
-  }
+    if (selectionModel.length > 0) {
+      dispatch(restoreUsersAsync(selectionModel));
+    }else{
+      ToastSweet('error', 'Please select at least one user to delete', 'bottom-end')
+    }
+  };
 
   const handleEditRowsModelChange = useCallback((model) => {
     const temp = {};
@@ -47,31 +54,64 @@ const PlayerListResults = ({ players, ...rest }) => {
     setEditRows(temp);
   }, []);
 
+  const handleDeleteUser = () => {
+    if(selectionModel.length > 0){
+      dispatch(forceDeleteUsersAsync(selectionModel));
+    }
+    else{
+      ToastSweet('error', 'Please select at least one user to delete', 'bottom-end')
+    }
+  };
+
   const columns = [
     {
-      field: "nickname",
-      headerName: "Name",
-      width: 200,
-      editable: true,
+      field: "avatar",
+      headerName: "Avatar",
+      width: 210,
       renderCell: (params) => {
         return (
           <div className="d-flex align-items-center">
-            <Avatar src={params.row.coverBackground} sx={{ mr: 2 }} />
-            {params.row.nickname}
+            <Avatar src={params.row.avatar} sx={{ mr: 2 }} />
+            {params.row.fullName}
           </div>
         );
       },
     },
     {
-      field: "shortDesc",
-      headerName: "Short Desc",
+      field: "username",
+      headerName: "Username",
+      width: 140,
+      editable: true,
+    },
+    {
+      field: "email",
+      headerName: "Email",
       width: 200,
       editable: true,
     },
     {
-      field: "longDesc",
-      headerName: "Long Desc",
-      width: 200,
+      field: "password",
+      headerName: "Password",
+      width: 150,
+      editable: true,
+    },
+    {
+      field: "role",
+      headerName: "Role",
+      width: 140,
+      editable: true,
+      renderCell: (params) => {
+        return (
+          <div className="d-flex align-items-center">
+            {role[params.row.role]}
+          </div>
+        );
+      },
+    },
+    {
+      field: "province",
+      headerName: "City",
+      width: 140,
       editable: true,
     },
     {
@@ -86,26 +126,6 @@ const PlayerListResults = ({ players, ...rest }) => {
             ) : (
               <img src={OfflineStatus} alt="offline" />
             )}
-          </div>
-        );
-      },
-    },
-    {
-      field: "status",
-      headerName: "Account Status",
-      width: 200,
-      editable: true,
-    },
-    {
-      field: "services",
-      headerName: "Services",
-      width: 200,
-      renderCell: (params) => {
-        return (
-          <div>
-            {params.row.services.map((item, index) => {
-              return <p key={index}>{item.name}</p>;
-            })}
           </div>
         );
       },
@@ -129,28 +149,27 @@ const PlayerListResults = ({ players, ...rest }) => {
             <button
               type="button"
               className="btn btn-outline-primary"
-              onClick={handleClick}
+              onClick={handleRestoreUser}
             >
-              Update
+              Restore
             </button>
             <button
               type="button"
               className=" mx-2 btn btn-outline-danger"
-              onClick={handleBanPlayers}
+              onClick={handleDeleteUser}
             >
-              Ban
+              Delete
             </button>
           </>
         );
       },
     },
   ];
-
   return (
     <Card {...rest}>
       <div style={{ height: "80vh", width: "100%" }}>
         <DataGrid
-          rows={players}
+          rows={users}
           columns={columns}
           pageSize={12}
           rowsPerPageOptions={[5]}
@@ -169,8 +188,8 @@ const PlayerListResults = ({ players, ...rest }) => {
   );
 };
 
-PlayerListResults.propTypes = {
-  players: PropTypes.array.isRequired,
+DeletedUersResults.propTypes = {
+  users: PropTypes.array.isRequired,
 };
 
-export default PlayerListResults;
+export default DeletedUersResults;

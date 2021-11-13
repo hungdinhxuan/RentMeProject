@@ -1,22 +1,22 @@
-import "antd/dist/antd.css";
-import AOS from "aos";
-import "aos/dist/aos.css";
-import "bootstrap/dist/css/bootstrap.min.css";
-import { PrivateRoute } from "components/Layouts/PrivateRoute";
-import { PublicRoute } from "components/Layouts/PublicRoute";
-import { AdminRoute } from "components/Layouts/AdminRoute";
-import Loading from "components/Loading";
-import PageNotFound from "components/PageNotFound";
-import routes from "constants/routes";
-import { React, Suspense } from "react";
-import MessengerCustomerChat from "react-messenger-customer-chat";
-import { BrowserRouter, Route, Switch } from "react-router-dom";
-import "react-toastify/dist/ReactToastify.css";
-import 'react-perfect-scrollbar/dist/css/styles.css';
+import "antd/dist/antd.css"
+import AOS from "aos"
+import "aos/dist/aos.css"
+import "bootstrap/dist/css/bootstrap.min.css"
+import { PrivateRoute } from "components/Layouts/PrivateRoute"
+import { PublicRoute } from "components/Layouts/PublicRoute"
+import { AdminRoute } from "components/Layouts/AdminRoute"
+import Loading from "components/Loading"
+import PageNotFound from "components/PageNotFound"
+import routes from "constants/routes"
+import { React, Suspense } from "react"
+import MessengerCustomerChat from "react-messenger-customer-chat"
+import { BrowserRouter, Route, Switch } from "react-router-dom"
+import "react-toastify/dist/ReactToastify.css"
+import "react-perfect-scrollbar/dist/css/styles.css"
 
-AOS.init();
+AOS.init()
 
-function App() {
+function App () {
   const showLayout = (routes) => {
     if (routes && routes.length > 0) {
       return routes.map((route, index) => {
@@ -44,7 +44,7 @@ function App() {
               component={route.main}
               layout={route.layout}
             />
-          );
+          )
         } else {
           // Private route yêu cầu authentication
           return (
@@ -55,11 +55,11 @@ function App() {
               component={route.main}
               layout={route.layout}
             />
-          );
+          )
         }
-      });
+      })
     }
-  };
+  }
   return (
     <Suspense fallback={<Loading />}>
       <BrowserRouter>
@@ -75,6 +75,6 @@ function App() {
         />
       </BrowserRouter>
     </Suspense>
-  );
+  )
 }
-export default App;
+export default App

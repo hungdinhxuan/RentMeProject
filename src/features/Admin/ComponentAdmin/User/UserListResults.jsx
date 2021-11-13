@@ -9,8 +9,12 @@ import OnlineStatus from "assets/onlineStatus.png";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { useCallback, useState } from "react";
-import { softDeleteUsersAsync } from "features/Admin/AdminSlice";
+import {
+  softDeleteUsersAsync,
+  updateUserAsync,
+} from "features/Admin/AdminSlice";
 import { useDispatch } from "react-redux";
+import { ToastSweet } from "components/SweetAlert2";
 
 import "./User.scss";
 const role = {
@@ -31,8 +35,13 @@ const UserListResults = ({ userList, ...rest }) => {
   const dispatch = useDispatch();
   const [editRows, setEditRows] = useState({});
   const [selectionModel, setSelectionModel] = useState([]);
-  const handleClick = () => {
-    console.log(selectionModel);
+  const handleUpdateUser = () => {
+    if (editRows.length === 0) {
+      ToastSweet("error", "Please select a user to update");
+      return;
+    } else {
+      dispatch(updateUserAsync(editRows));
+    }
   };
 
   const handleEditRowsModelChange = useCallback((model) => {
@@ -48,10 +57,22 @@ const UserListResults = ({ userList, ...rest }) => {
     setEditRows(temp);
   }, []);
 
+  const handleDeleteUser = () => {
+    if (selectionModel.length > 0) {
+      dispatch(softDeleteUsersAsync(selectionModel));
+    } else {
+      ToastSweet(
+        "error",
+        "Please select at least one user to delete",
+        "bottom-end"
+      );
+    }
+  };
+
   const columns = [
     {
-      field: "avatar",
-      headerName: "Avatar",
+      field: "fullName",
+      headerName: "Full Name",
       width: 210,
       renderCell: (params) => {
         return (
@@ -61,6 +82,7 @@ const UserListResults = ({ userList, ...rest }) => {
           </div>
         );
       },
+      editable: true,
     },
     {
       field: "username",
@@ -134,18 +156,14 @@ const UserListResults = ({ userList, ...rest }) => {
             <button
               type="button"
               className="btn btn-outline-primary"
-              onClick={handleClick}
+              onClick={handleUpdateUser}
             >
               Update
             </button>
             <button
               type="button"
               className=" mx-2 btn btn-outline-danger"
-              onClick={() => {
-                
-                dispatch(softDeleteUsersAsync(selectionModel))
-                console.log("🚀 ~ file: UserListResults.jsx ~ line 147 ~ UserListResults ~ selectionModel", selectionModel)
-              }}
+              onClick={handleDeleteUser}
             >
               Delete
             </button>

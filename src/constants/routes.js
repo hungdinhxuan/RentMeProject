@@ -8,13 +8,14 @@ import ChatRoom from "features/ChatRoom";
 import StreamHub from 'features/StreamHub'
 import Admin from "features/Admin";
 import AdminLayout from "components/Layouts/AdminLayout";
-import Dashboard from "features/Admin/pages/Dashboard";
-const Home = lazy(() => import("features/Home/index.jsx"));
+import BecomePlayer from "features/BecomePlayer";
+
+const Home = lazy(() => import("features/Home/index.jsx"))
 
 const ForgotPassword = lazy(() =>
   import("features/Auth/ForgotPassword/index.jsx")
-);
-const RentPlayer = lazy(() => import("features/RentPlayer/index.jsx"));
+)
+const RentPlayer = lazy(() => import("features/RentPlayer/index.jsx"))
 
 const routes = [
   {
@@ -45,7 +46,7 @@ const routes = [
     path: "/admin/players/banned",
     exact: true,
     layout: AdminLayout,
-    main: Dashboard
+    main: Admin
   },
   {
     path: "/admin/users",
@@ -53,6 +54,19 @@ const routes = [
     layout: AdminLayout,
     main: Admin
   },
+  {
+    path: "/admin/users/deleted",
+    exact: true,
+    layout: AdminLayout,
+    main: Admin
+  },
+  {
+    path: "/player/register",
+    exact: true,
+    layout: PrivateLayout,
+    main: BecomePlayer
+  },
+
   {
     path: "/signin",
     exact: true,
@@ -107,6 +121,6 @@ const routes = [
     layout: PrivateLayout,
     main: ChatRoom
   }
-];
+]
 
-export default routes;
+export default routes

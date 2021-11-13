@@ -1,4 +1,4 @@
-const Cities =  [
+const Cities = [
   "An Giang",
   "Bà Rịa Vũng Tàu",
   "Bình Dương",
@@ -63,7 +63,7 @@ const Cities =  [
   "Vĩnh Long",
   "Vĩnh Phúc",
   "Yên Bái",
-  "Khác",
-];
+  "Khác"
+]
 
-export default Cities;
+export default Cities

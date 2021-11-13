@@ -217,11 +217,11 @@ export default function SignIn(props) {
       history.push(referrer);
     } catch (error) {
       
-      Swal.fire({ 
-        icon: 'error',
-        title: error.response.data.message || 'Something Wrong Happened !',
-        showConfirmButton: true
-      })
+      // Swal.fire({ 
+      //   icon: 'error',
+      //   title: error.response.data.message || 'Something Wrong Happened !',
+      //   showConfirmButton: true
+      // })
     }
   };
 
@@ -242,11 +242,11 @@ export default function SignIn(props) {
       socket.emit("authenticate", res.token);
       history.push(referrer);
     } catch (error) {
-      Swal.fire({ 
-        icon: 'error',
-        title: error.response.data.message || 'Something Wrong Happened !',
-        showConfirmButton: true
-      })
+      // Swal.fire({ 
+      //   icon: 'error',
+      //   title: error.response.data.message || 'Something Wrong Happened !',
+      //   showConfirmButton: true
+      // })
     }
   };
 

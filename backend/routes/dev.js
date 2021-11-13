@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
   upload,
+  cloudinary
 } = require('../services/multer');
 const { multer } = require('../utils/config');
 const multerLib = require('multer');
@@ -12,6 +13,10 @@ const Message = require('../models/messages.model')
 const argon2 = require('argon2');
 const { girlName, longDesc, shortDesc } = require('../init-data');
 const Services = require('../models/services.model');
+const reviewsModel = require('../models/reviews.model');
+const tradingsModel = require('../models/tradings.model');
+const transfersModel = require('../models/transfers.model');
+const transactionsModel = require('../models/transactions.model');
 
 router.get('/', async (req, res) => {
   /*  
@@ -213,9 +218,16 @@ router.delete('/users', async (req, res) => {
        
     */
   try {
-    await User.deleteMany();
-    await PlayerProfiles.deleteMany();
-    return res.status(204).send('ok');
+    await Promise.all([
+      User.deleteMany(),
+      PlayerProfiles.deleteMany(),
+      Message.deleteMany(),
+      reviewsModel.deleteMany(),
+      tradingsModel.deleteMany(),
+      transfersModel.deleteMany(),
+      transactionsModel.deleteMany(),
+    ]);
+    return res.status(204)
   } catch (error) {
     return res
       .status(500)
@@ -264,7 +276,7 @@ router.post('/generate-sample-profile-player', async (req, res) => {
         fullName: 'System Administrator',
         role: 0
       });
-      messages = []
+      let messages = []
       users.map(user => {
         messages.push({
           senderId: system._id,

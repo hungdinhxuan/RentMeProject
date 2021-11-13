@@ -348,7 +348,7 @@ class PlayersControllers {
           success: true,
           message: `Donate to ${playerProfile.userId.fullName} successful!`,
           playerName: playerProfile.userId.username,
-          money,
+          money: transfer.money,
         });
       });
     } catch (error) {

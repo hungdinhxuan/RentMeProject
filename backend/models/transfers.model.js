@@ -12,7 +12,9 @@ const TransfersSchema = new Schema(
       enum: ['donate', 'trade'],
       required: true
     },
-    tradingId: {type: mongoose.Types.ObjectId, ref: "users"}
+    tradingId: {type: mongoose.Types.ObjectId, ref: "users"},
+    profit: {type: Number, default: 0},
+    rate: {type: Number, default: 0.05},
   },
   {
     timestamps: true,
@@ -25,6 +27,7 @@ TransfersSchema.pre('save', async function (next) {
   try {
     const sender = await User.findById(transfer.sender);
     const receiver = await User.findById(transfer.receiver);
+    const system = await User.findOne({ username: 'system' });
     if (transfer.type === 'donate') {
       if (sender.balance < transfer.money) {
         next(new Error(`Cannot donate with money greater than current balance`));
@@ -34,12 +37,18 @@ TransfersSchema.pre('save', async function (next) {
         next(new Error(`Cannot donate with zero or negative money`));
         return;
       }
+      const profit = transfer.money * transfer.rate;
+      system.balance += profit;
+
+      transfer.money -= profit;
+      transfer.profit = profit;
+      
       sender.balance = sender.balance - transfer.money;
       receiver.balance = receiver.balance + transfer.money
 
       sender.save();
       receiver.save()
-
+      system.save();
       return next();
     } else if (transfer.type === 'trade') {
       if (sender.balance < transfer.money) {

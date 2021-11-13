@@ -78,4 +78,13 @@
             }
         }
     }
+
+    // Background when input error - antd
+    .ant-form-item-has-error
+        :not(.ant-input-affix-wrapper-disabled):not(.ant-input-affix-wrapper-borderless).ant-input-affix-wrapper {
+        background: var(--color-button);
+    }
+    .ant-form-item-has-error :not(.ant-input-disabled):not(.ant-input-borderless).ant-input {
+        background: var(--color-button);
+    }
 }

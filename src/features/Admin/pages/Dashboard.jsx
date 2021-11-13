@@ -12,7 +12,7 @@ import TrafficByDevice from '../ComponentAdmin/Dashboard/TrafficByDevice';
 const Dashboard = () => (
   <>
     <Helmet>
-      <title>Dashboard | Material Kit</title>
+      <title>Dashboard</title>
     </Helmet>
     <Box
       sx={{
