@@ -14,12 +14,7 @@ function MainRentPlayer() {
   const [filterValues, setFilterValues] = useState('false');
   const [filterPriceValues, setFilterPriceValues] = useState();
   const { listPlayers } = useSelector((state) => state.players);
-  const [filters, setFilters] = useState({
-    gender: "",
-    status: "",
-    price: "",
-    age: "",
-  });
+
 
   const dispatch = useDispatch();
 

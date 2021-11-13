@@ -872,7 +872,52 @@
         ]
       }
     },
+    "/api/managements/players": {
+      "get": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
     "/api/managements/players/banned": {
+      "get": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/api/managements/statistics/profits": {
+      "get": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/api/managements/statistics/summary": {
       "get": {
         "tags": [
           "Managements"
@@ -894,7 +939,12 @@
         ],
         "description": "",
         "parameters": [],
-        "responses": {}
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       }
     },
     "/api/conversations/{userId}": {
@@ -911,7 +961,12 @@
             "type": "string"
           }
         ],
-        "responses": {}
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       },
       "post": {
         "tags": [
@@ -926,7 +981,12 @@
             "type": "string"
           }
         ],
-        "responses": {}
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       }
     }
   },

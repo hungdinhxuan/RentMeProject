@@ -28,7 +28,7 @@ import {
               color="textPrimary"
               variant="h3"
             >
-              $23,200
+              ${props.data.profit}
             </Typography>
           </Grid>
           <Grid item>
