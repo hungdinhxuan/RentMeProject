@@ -89,7 +89,7 @@ class PlayersControllers {
   }
 
   async filterPlayers(req, res) {
-    let { page, limit, status } = req.query;
+    let { page, limit, status, gender, price, age } = req.query;
     let player_profiles;
 
     try {
@@ -202,6 +202,97 @@ class PlayersControllers {
       });
     }
   }
+
+  async filterPlayerProfiles(req, res) {
+    let { page, limit, status, gender, minPrice, maxPrice, minAge, maxAge } =
+      req.query;
+
+    gender = gender || 'female';
+    minPrice = Number(minPrice) || 1;
+    maxPrice = Number(maxPrice) || 1000;
+    minAge = parseInt(minAge) || 16;
+    maxAge = parseInt(maxAge) || 70;
+    status = status || 'true';
+
+    page = parseInt(page) || 1;
+    limit = parseInt(limit) || 50;
+    let skip = (page - 1) * limit;
+
+    function calculateBirthDateFromAge(age) {
+      let today = new Date();
+      let birthDate = new Date();
+      birthDate.setFullYear(today.getFullYear() - age);
+      return birthDate;
+    }
+
+    try {
+      let player_profiles = await PlayerProfiles.aggregate([
+        {
+          $lookup: {
+            from: 'users',
+            localField: 'userId',
+            foreignField: '_id',
+            as: 'user',
+          },
+        },
+        {
+          $lookup: {
+            from: 'services',
+            localField: 'services',
+            foreignField: '_id',
+            as: 'services',
+          },
+        },
+        // { $unwind: '$user' },
+        {
+          $project: {
+            'user.password': 0,
+            'user.username': 0,
+            'user.email': 0,
+            'user.role': 0,
+            'user.balance': 0,
+            'user.following': 0,
+            'user.follower': 0,
+            'user.blockList': 0,
+            'user.typeAccount': 0,
+            'user.deleted': 0,
+            'user.createdAt': 0,
+            'user.updatedAt': 0,
+            'services.desc': 0,
+            'services.deleted': 0,
+            'services.createdAt': 0,
+            'services.updatedAt': 0,
+          },
+        },
+        { $sort: { 'user.isOnline': -1 } },
+        {
+          $match: {
+            'user.isOnline': status === 'true',
+            'user.gender': gender,
+            'user.birthDate': {
+              $lte: calculateBirthDateFromAge(minAge), /// ngay sinh nho hon thi nhieu tuoi hon
+              $gte: calculateBirthDateFromAge(maxAge),
+            },
+            pricePerHour: {
+              $gte: minPrice,
+              $lte: maxPrice,
+            },
+          },
+        },
+        { $skip: skip },
+        { $limit: limit },
+      ]);
+
+      return res.status(200).send(player_profiles);
+    } catch (error) {
+      console.log(error);
+      return res.status(500).json({
+        success: false,
+        message: error.message || 'Internal Server Error',
+      });
+    }
+  }
+
   async uploadAlbumsPlayer(req, res) {
     upload(
       multer.mimeTypes.image,
@@ -384,10 +475,10 @@ class PlayersControllers {
             }
             renter.following.push(player._id);
             await renter.save();
-            
+
             return res
               .status(200)
-              .json({ success: true, message: 'following success', player});
+              .json({ success: true, message: 'following success', player });
           });
         } else {
           player.follower.splice(index, 1);
@@ -405,7 +496,7 @@ class PlayersControllers {
             console.log(player);
             return res
               .status(200)
-              .json({ success: true, message: 'unfollowing success', player});
+              .json({ success: true, message: 'unfollowing success', player });
           });
         }
       });
