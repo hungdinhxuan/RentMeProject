@@ -1,4 +1,4 @@
-import { Bar } from 'react-chartjs-2';
+import { Bar } from "react-chartjs-2";
 import {
   Box,
   Button,
@@ -7,39 +7,59 @@ import {
   CardHeader,
   Divider,
   useTheme,
-  colors
-} from '@material-ui/core';
-import ArrowDropDownIcon from '@material-ui/icons/ArrowDropDown';
-import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+  colors,
+} from "@material-ui/core";
+import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
+import ArrowRightIcon from "@material-ui/icons/ArrowRight";
+import { useEffect, useState } from "react";
+import axiosClient from "utils/axiosClient";
 
 const Sales = (props) => {
   const theme = useTheme();
+  const [data, setData] = useState(
+    {
+      datasets: [
+        {
+          backgroundColor: colors.indigo[500],
+          barPercentage: 0.5,
+          barThickness: 12,
+          borderRadius: 4,
+          categoryPercentage: 0.5,
+          data: [18, 5, 19, 27, 29, 19, 20],
+          label: "30 day",
+          maxBarThickness: 10,
+        },
+      ],
+      labels: ["1 Aug", "2 Aug", "3 Aug", "4 Aug", "5 Aug", "6 Aug"],
+    }
+  )
 
-  const data = {
-    datasets: [
-      {
-        backgroundColor: colors.indigo[500],
-        barPercentage: 0.5,
-        barThickness: 12,
-        borderRadius: 4,
-        categoryPercentage: 0.5,
-        data: [18, 5, 19, 27, 29, 19, 20],
-        label: 'This year',
-        maxBarThickness: 10
-      },
-      {
-        backgroundColor: colors.grey[200],
-        barPercentage: 0.5,
-        barThickness: 12,
-        borderRadius: 4,
-        categoryPercentage: 0.5,
-        data: [11, 20, 12, 29, 30, 25, 13],
-        label: 'Last year',
-        maxBarThickness: 10
-      }
-    ],
-    labels: ['1 Aug', '2 Aug', '3 Aug', '4 Aug', '5 Aug', '6 Aug']
-  };
+
+  useEffect(() => {
+    axiosClient
+      .get("managements/statistics/profits?time=30d")
+      .then((res) => {
+        
+        setData({
+         datasets: [
+            {
+              backgroundColor: colors.indigo[500],
+              barPercentage: 0.5,
+              barThickness: 12,
+              borderRadius: 4,
+              categoryPercentage: 0.5,
+              data: res.map((item) => item.profit),
+              label: "30 day",
+              maxBarThickness: 10,
+            },
+          ],
+          labels: res.map((item) => item.date ),
+        })
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const options = {
     animation: false,
@@ -52,20 +72,20 @@ const Sales = (props) => {
       xAxes: [
         {
           ticks: {
-            fontColor: theme.palette.text.secondary
+            fontColor: theme.palette.text.secondary,
           },
           gridLines: {
             display: false,
-            drawBorder: false
-          }
-        }
+            drawBorder: false,
+          },
+        },
       ],
       yAxes: [
         {
           ticks: {
             fontColor: theme.palette.text.secondary,
             beginAtZero: true,
-            min: 0
+            min: 0,
           },
           gridLines: {
             borderDash: [2],
@@ -74,10 +94,10 @@ const Sales = (props) => {
             drawBorder: false,
             zeroLineBorderDash: [2],
             zeroLineBorderDashOffset: [2],
-            zeroLineColor: theme.palette.divider
-          }
-        }
-      ]
+            zeroLineColor: theme.palette.divider,
+          },
+        },
+      ],
     },
     tooltips: {
       backgroundColor: theme.palette.background.paper,
@@ -87,45 +107,42 @@ const Sales = (props) => {
       enabled: true,
       footerFontColor: theme.palette.text.secondary,
       intersect: false,
-      mode: 'index',
-      titleFontColor: theme.palette.text.primary
-    }
+      mode: "index",
+      titleFontColor: theme.palette.text.primary,
+    },
   };
 
   return (
     <Card {...props}>
+      
       <CardHeader
-        action={(
-          <Button
-            endIcon={<ArrowDropDownIcon />}
-            size="small"
-            variant="text"
-          >
-            Last 7 days
+        action={
+          <Button endIcon={<ArrowDropDownIcon />} size="small" variant="text">
+            Last 30 days
           </Button>
-        )}
+        }
+        
         title="Latest Sales"
+        
       />
+      
       <Divider />
       <CardContent>
         <Box
           sx={{
             height: 400,
-            position: 'relative'
+            position: "relative",
           }}
         >
-          <Bar
-            data={data}
-            options={options}
-          />
+          <Bar data={data} options={options} />
         </Box>
       </CardContent>
       <Divider />
       <Box
         sx={{
-          display: 'flex',
-          justifyContent: 'flex-end',
-          p: 2
+          display: "flex",
+          justifyContent: "flex-end",
+          p: 2,
         }}
       >
         <Button
