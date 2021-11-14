@@ -230,7 +230,9 @@ function Header() {
       dispatch(addNewMsgToConversations(newMsg));
       dispatch(setCountNewMessagesIncrease());
     };
-
+    const handleNotifyRegisterPlayer = (data) => {
+      ToastSweet("success", data);
+    }
     socket.on("response renter", loadData);
     socket.on("response player", loadData);
     socket.on("response confirm rent", confirmRentMsg);
@@ -245,6 +247,8 @@ function Header() {
     socket.on("follow player", handleFollowPlayer);
 
     socket.on("private chat receiver", handlePrivateChatForReceiver);
+
+    socket.on('notify register player',handleNotifyRegisterPlayer)
     // Note: Clear socket when change state.
     return () => {
       socket.off("response decline rent", declineMsg);
@@ -260,6 +264,7 @@ function Header() {
       );
       socket.off("follow player", handleFollowPlayer);
       socket.off("private chat receiver", handlePrivateChatForReceiver);
+      socket.off('notify register player',handleNotifyRegisterPlayer)
     };
   }, [dispatch]);
 

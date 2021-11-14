@@ -84,7 +84,9 @@ export const getPlayersAsync = createAsyncThunk(
   "admin/players",
   async (values, { rejectWithValue }) => {
     try {
-      const response = await axiosClient.get("managements/players?page=1&limit=50")
+      const response = await axiosClient.get("managements/players/v1",
+      {params: values}
+      )
       return response
     } catch (err) {
       return rejectWithValue(err.response.data)

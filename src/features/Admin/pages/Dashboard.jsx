@@ -9,6 +9,7 @@ import TotalCustomers from "../ComponentAdmin/Dashboard/TotalCustomers";
 import TotalProfit from "../ComponentAdmin/Dashboard/TotalProfit";
 import TrafficByDevice from "../ComponentAdmin/Dashboard/TrafficByDevice";
 import { useEffect, useState } from "react";
+import socket from 'utils/socket'
 
 import axiosClient from "utils/axiosClient";
 
@@ -24,6 +25,22 @@ const Dashboard = () => {
         console.log(err);
       });
   }, []);
+
+  useEffect(() => {
+    const handleRegisterPlayer = (player) => {
+
+    }
+    const notifyStatusRegisterPlayer = (player) => {
+
+    }
+    
+    socket.on('register player', handleRegisterPlayer)
+    socket.on('notify status register player', notifyStatusRegisterPlayer)
+    return () => {
+      socket.off('register player', handleRegisterPlayer)
+      socket.off('notify status register player', notifyStatusRegisterPlayer)
+    }
+  }, [])
   return(
   <>
     <Helmet>
