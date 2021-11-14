@@ -26,7 +26,7 @@ function Stories() {
       data-aos-duration="1000"
     >
       <div className="stories">
-        <div className="stories__title">Cảm nhận của người sử dụng</div>
+        <div className="stories__title">User Reviews</div>
         <div className="stories__content ">
           <Swiper
             navigation={false}
