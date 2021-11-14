@@ -111,6 +111,18 @@ router.get('/players',
         PlayersController.filterPlayers
 )
 
+router.get('/players/v1', 
+  /*  
+        #swagger.tags = ['Managements']
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
+        passport.authenticate('jwt', { session: false }),
+        AdminRole,
+        PlayersManagement.getPlayers,
+)
+
 router.get(
   '/players/banned',
   /*  
