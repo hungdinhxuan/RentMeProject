@@ -1,7 +1,4 @@
-import "antd/dist/antd.css"
 import AOS from "aos"
-import "aos/dist/aos.css"
-import "bootstrap/dist/css/bootstrap.min.css"
 import { PrivateRoute } from "components/Layouts/PrivateRoute"
 import { PublicRoute } from "components/Layouts/PublicRoute"
 import { AdminRoute } from "components/Layouts/AdminRoute"
@@ -11,8 +8,7 @@ import routes from "constants/routes"
 import { React, Suspense } from "react"
 import MessengerCustomerChat from "react-messenger-customer-chat"
 import { BrowserRouter, Route, Switch } from "react-router-dom"
-import "react-toastify/dist/ReactToastify.css"
-import "react-perfect-scrollbar/dist/css/styles.css"
+
 
 AOS.init()
 
