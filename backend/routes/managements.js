@@ -2,8 +2,10 @@ const express = require('express');
 const router = express.Router();
 const passport = require('passport');
 const { AdminRole } = require('../middlewares/checkRole');
-const UsersManagement = require('../managements/users.management')
-const PlayersManagement = require('../managements/players.management')
+const UsersManagement = require('../managements/users.management');
+const PlayersManagement = require('../managements/players.management');
+const StatisticManagement = require('../managements/statistics.management');
+const PlayersController = require('../controllers/players.controller')
 
 router.get(
   /*  
@@ -84,22 +86,8 @@ router.delete(
   UsersManagement.forceDeleteUsers,
 );
 
-
-
-router.get('/users/deleted', 
-  /*  
-        #swagger.tags = ['Managements']
-        #swagger.security = [{
-            "Authorization": []
-        }]
-    */
-passport.authenticate('jwt', { session: false }),
-AdminRole,
-UsersManagement.getDeletedUsers,
-)
-
-
-router.get('/players/banned', 
+router.get(
+  '/users/deleted',
   /*  
         #swagger.tags = ['Managements']
         #swagger.security = [{
@@ -108,6 +96,57 @@ router.get('/players/banned',
     */
   passport.authenticate('jwt', { session: false }),
   AdminRole,
-  PlayersManagement.getBannedPlayers
+  UsersManagement.getDeletedUsers,
+);
+
+router.get('/players', 
+  /*  
+        #swagger.tags = ['Managements']
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
+        passport.authenticate('jwt', { session: false }),
+        AdminRole,
+        PlayersController.filterPlayers
 )
+
+router.get(
+  '/players/banned',
+  /*  
+        #swagger.tags = ['Managements']
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
+  passport.authenticate('jwt', { session: false }),
+  AdminRole,
+  PlayersManagement.getBannedPlayers,
+);
+
+router.get(
+  '/statistics/profits',
+    /*  
+        #swagger.tags = ['Managements']
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
+  passport.authenticate('jwt', { session: false }),
+  AdminRole,
+  StatisticManagement.profitsBasedOnIntervalTime,
+);
+
+router.get(
+  '/statistics/summary',
+    /*  
+        #swagger.tags = ['Managements']
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
+  passport.authenticate('jwt', { session: false }),
+  AdminRole,
+  StatisticManagement.summary,
+);
 module.exports = router;
