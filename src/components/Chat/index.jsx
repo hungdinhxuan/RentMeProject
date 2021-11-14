@@ -10,7 +10,7 @@ import {
 } from "features/PrivateChat/PrivateChatSlice";
 import socket from "utils/socket";
 import ScrollToBottom from "react-scroll-to-bottom";
-import TimeAgo from 'utils/timeAgo'
+import TimeAgo from "utils/timeAgo";
 import InputEmoji from "react-input-emoji";
 
 const Chat = () => {
@@ -77,7 +77,11 @@ const Chat = () => {
                 <img className="pic" src={newContact.otherAvatar} alt="" />
                 <div className="name">{newContact.otherFullName}</div>
                 {/* <div className="badge">3</div> */}
-                <div className={newContact.isOnline ? "badge online": "badge offline"}>
+                <div
+                  className={
+                    newContact.isOnline ? "badge online" : "badge offline"
+                  }
+                >
                   <div></div>
                 </div>
                 <div className="message">
@@ -94,7 +98,9 @@ const Chat = () => {
                 <img className="pic" src={value.otherAvatar} alt="" />
                 <div className="name">{value.otherFullName}</div>
                 {/* <div className="badge">3</div> */}
-                <div className={value.isOnline ? "badge online": "badge offline"}>
+                <div
+                  className={value.isOnline ? "badge online" : "badge offline"}
+                >
                   <div></div>
                 </div>
                 <div className="message">{value.lastestMessage}</div>
@@ -111,7 +117,9 @@ const Chat = () => {
               >
                 <img className="pic" src={value.otherAvatar} alt="" />
                 <div className="name">{value.otherFullName}</div>
-                <div className={value.isOnline ? "badge online": "badge offline"}>
+                <div
+                  className={value.isOnline ? "badge online" : "badge offline"}
+                >
                   <div></div>
                 </div>
                 <div className="message">{value.lastestMessage}</div>
@@ -128,8 +136,16 @@ const Chat = () => {
               <img className="pic" src={other.otherAvatar} alt="avatar" />
               <div>
                 <div className="name">{other.otherFullName}</div>
-                <div className={other.isOnline ? "badge online": "badge offline"}><div></div></div>
-                <div className="seen">{TimeAgo(new Date(other.createdAt))}</div>
+                <div
+                  className={other.isOnline ? "badge online" : "badge offline"}
+                >
+                  <div></div>
+                </div>
+                <div className="seen">
+                  {other.createdAt
+                    ? TimeAgo(new Date(other.createdAt))
+                    : "Just now"}
+                </div>
               </div>
             </>
           ) : (
