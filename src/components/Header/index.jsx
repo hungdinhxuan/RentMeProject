@@ -304,7 +304,7 @@ function Header() {
                   className="nav__item"
                   activeClassName="nav__item--active"
                 >
-                  Thuê người chơi
+                  Rent Players
                 </NavLink>
               </Nav.Link>
               <Nav.Link href="#">
