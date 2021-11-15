@@ -6,10 +6,12 @@ import { authRoomAsync } from "./ChatRoomSlice";
 
 export default function ChatRoom() {
   const dispatch = useDispatch();
-  const [roomId, setRoomId] = useState("");
-  const [roomPassword, setRoomPassword] = useState("");
+  
   const { authRoom } = useSelector((state) => state.chatRoom);
-
+  const chatRoom = useSelector((state) => state.chatRoom);
+  
+  const [roomId, setRoomId] = useState(chatRoom.roomId);
+  const [roomPassword, setRoomPassword] = useState(chatRoom.roomPassword);
   const joinRoom = () => {
     
     if (roomId !== "" && roomPassword !== "") {
