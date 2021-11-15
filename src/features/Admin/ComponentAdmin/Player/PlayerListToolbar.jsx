@@ -6,7 +6,14 @@ import { getPlayersAsync } from "features/Admin/AdminSlice";
 const PlayerListToolbar = (props) => {
   const dispatch = useDispatch();
   const handleRefresh = () => {
-    dispatch(getPlayersAsync());
+    dispatch(getPlayersAsync(
+      {
+        page: 1,
+        limit: 50,
+        status: "Accepted",
+
+      }
+    ));
   };
 
   return (

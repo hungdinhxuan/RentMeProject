@@ -10,7 +10,13 @@ const PlayerList = () => {
   const { players } = useSelector((state) => state.admin);
   const dispatch = useDispatch();
   useEffect(() => {
-      dispatch(getPlayersAsync());
+      dispatch(getPlayersAsync(
+        {
+          page: 1,
+          limit: 50,
+          status: "Accepted",
+        }
+      ));
   },[dispatch])
   return (
     <>
