@@ -5,7 +5,7 @@ const { multer } = require('../utils/config');
 const multerLib = require('multer');
 const Transfer = require('../models/transfers.model');
 const { cloudinary, upload } = require('../services/multer');
-const PlayerProfile = require('../models/player_profiles.model')
+
 
 /* 
 WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW

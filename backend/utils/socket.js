@@ -687,24 +687,73 @@ module.exports = (app) => {
     socket.on('private chat', async (data) => {
       if (socket.auth) {
         const { receiverId, content } = data;
-  
-        const receiver = await User.findById(receiverId);
-        const newMsg = await Conversations.create({
-          senderId: socket.userId,
-          receiverId,
-          content,
-        });
-        
-        if (userSocketIdObj[receiver.username]) {
-          for (let socketId of userSocketIdObj[receiver.username])
-            io.to(socketId).emit('private chat receiver', newMsg);
-        }
-        if (userSocketIdObj[socket.username]) {
-          for (let socketId of userSocketIdObj[socket.username])
-            io.to(socketId).emit('private chat', newMsg);
+        try {
+          const receiver = await User.findById(receiverId);
+          const newMsg = await Conversations.create({
+            senderId: socket.userId,
+            receiverId,
+            content,
+          });
+
+          if (userSocketIdObj[receiver.username]) {
+            for (let socketId of userSocketIdObj[receiver.username])
+              io.to(socketId).emit('private chat receiver', newMsg);
+          }
+          if (userSocketIdObj[socket.username]) {
+            for (let socketId of userSocketIdObj[socket.username])
+              io.to(socketId).emit('private chat', newMsg);
+          }
+        } catch (error) {
+          console.log(
+            '🚀 ~ file: socket.js ~ line 707 ~ socket.on ~ error',
+            error,
+          );
         }
       }
     });
+
+    socket.on('register player', async (player) => {
+      if (socket.auth) {
+        try {
+          const admins = await User.find({ role: 0 });
+          // send notification to all admin
+          for (let admin of admins) {
+            if (userSocketIdObj[admin.username]) {
+              for (let socketId of userSocketIdObj[admin.username])
+                io.to(socketId).emit('register player', player);
+            }
+          }
+        } catch (error) {
+          console.log("🚀 ~ file: socket.js ~ line 720 ~ socket.on ~ error", error)
+        }
+      }
+    });
+
+    socket.on('handle register player', async (data) => {
+      if (socket.auth) {
+        try {
+          const { playerId, status } = data;
+          const player = await PlayerProfile.findByIdAndUpdate(playerId, {
+            status,
+          }, {new: true});
+          const admins = await User.find({ role: 0 });
+          // send notification to all admin
+          for (let admin of admins) {
+            if (userSocketIdObj[admin.username]) {
+              for (let socketId of userSocketIdObj[admin.username])
+                io.to(socketId).emit('notify status register player', player);
+            }
+          }
+          if(userSocketIdObj[player.username]) {
+            for (let socketId of userSocketIdObj[player.username])
+              io.to(socketId).emit('notify register player', 'Admin approval your request ! Congratulations from now you have become professional player !!!');
+            
+          }
+        } catch (error) {
+          console.log("🚀 ~ file: socket.js ~ line 732 ~ socket.on ~ error", error)
+        }
+      }
+    })
   });
 
   httpServer.listen(4000);

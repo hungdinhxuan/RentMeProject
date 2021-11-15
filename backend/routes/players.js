@@ -13,6 +13,18 @@ router.get(
   PlayerController.filterPlayerProfiles,
 );
 
+router.post('/', 
+  /*  
+        #swagger.tags = ['Players']  
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
+        passport.authenticate('jwt', { session: false }),
+        PlayerController.registerPlayer
+)
+
+
 // router.get('/v1', PlayerController.filterPlayerProfiles);
 
 router.get(

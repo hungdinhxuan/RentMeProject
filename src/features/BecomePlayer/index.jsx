@@ -1,12 +1,15 @@
-import { Avatar, Form, Input, InputNumber, Select } from "antd";
+import { Avatar, Form, Input, InputNumber,  Select } from "antd";
+import { Button } from "antd/lib/radio";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import "./BecomePlayer.scss";
-import { getAllServicesAsync } from "./BecomePlayerSlice";
+import { getAllServicesAsync, registerToBecomePlayerAsync } from "./BecomePlayerSlice";
+
 
 export default function BecomePlayer() {
   const { serviceGames } = useSelector((state) => state.services);
+  const {user} = useSelector((state) => state.auth);
   const { Option } = Select;
   const [form] = Form.useForm();
   const { TextArea } = Input;
@@ -49,6 +52,7 @@ export default function BecomePlayer() {
     file.preview = URL.createObjectURL(file);
     setDataForm({ ...dataForm, coverBackground: e.target.files[0] });
     setAvatar(file);
+    
   };
 
   const handlePreviewListAvatar = (e) => {
@@ -59,7 +63,7 @@ export default function BecomePlayer() {
       value.preview = URL.createObjectURL(value);
       temp.push(value);
     }
-    setListAvatar(temp);
+    setListAvatar(temp);   
   };
 
   function handleChange(value) {
@@ -83,6 +87,26 @@ export default function BecomePlayer() {
         });
     };
   }, [listAvatar]);
+
+  const handleSubmitForm = () => {
+    
+    const formData = new FormData();
+    formData.append('userId', user._id);
+    
+    for(const [key, val] of Object.entries(form.getFieldsValue())) {
+      formData.append(key, JSON.stringify(val));
+    }
+    
+    formData.append('albums', avatar);
+    listAvatar.forEach((item) => {
+      formData.append('albums', item);
+    })
+    console.log(formData.getAll('albums'));
+    dispatch(registerToBecomePlayerAsync(formData));
+    form.resetFields();
+    setAvatar(null);
+    setListAvatar([]);
+  }
   return (
     <div className="become-player">
       <div className="player-container">
@@ -180,7 +204,7 @@ export default function BecomePlayer() {
             </Form.Item>
 
             <Form.Item
-              name="coverBackground"
+              name="albums"
               label="Image"
               rules={[
                 {
@@ -227,6 +251,7 @@ export default function BecomePlayer() {
                   );
                 })}
             </Form.Item>
+            <Button onClick={handleSubmitForm}>Submit</Button>
           </Form>
         </div>
       </div>
