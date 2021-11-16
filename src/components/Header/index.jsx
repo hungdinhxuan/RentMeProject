@@ -23,12 +23,14 @@ import {
   addNewMsgToConversations,
   setCountNewMessagesIncrease,
 } from "features/PrivateChat/PrivateChatSlice";
+import {setRoomInfo} from "features/ChatRoom/ChatRoomSlice";
 
 function Header() {
   const { user } = useSelector((state) => state.auth);
   const { showPrivateChat, countNewMessages } = useSelector(
     (state) => state.privateChat
   );
+  
   const dispatch = useDispatch();
   const { messages } = useSelector((state) => state.messages);
   const [userHeader, setUserHeader] = useState(true);
@@ -93,6 +95,17 @@ function Header() {
   };
 
   const history = useHistory();
+
+  const handleGoToChatRoom = () => {  
+    const roomId = messages[idModal].content.match(/Room ID:.*,/g)[0].split(":")[1].trim().split(",")[0];
+    const roomPassword = messages[idModal].content.match(/Room Password:.*/g)[0].split(":")[1].trim()
+    console.log(roomId, roomPassword);
+    dispatch(setRoomInfo({
+      roomId,
+      roomPassword
+    }))
+    history.push("/chat-room");
+  }
 
   const handleLogin = () => {
     history.push("/signin");
@@ -415,7 +428,29 @@ function Header() {
                     Decline
                   </Button>,
                 ]
-              : [
+              : messages[idModal]?.content.match(
+                /^Trading [a-z 0-9]* accepted by .*\s Room ID: .*, Room Password: .*/g
+              ) || messages[idModal]?.content.match(
+                /^You are accepted [a-z 0-9]* with .*\s Room ID: .*, Room Password: .*/g
+              ) ? [
+                <Button
+                key="Delete"
+                onClick={handleDeleteMessage}
+                style={{ color: "red", borderColor: "red" }}
+              >
+                Delete
+              </Button>,
+                <Button
+                key="GoToChatRoom"
+                onClick={handleGoToChatRoom}
+                style={{ color: "blue", borderColor: "blue" }}
+              >
+                Go to chat room
+              </Button>,
+              <Button key="Cancel" onClick={handleCancel}>
+                Cancel
+              </Button>,
+              ] : [
                   <Button
                     key="Delete"
                     onClick={handleDeleteMessage}
