@@ -13,11 +13,15 @@ import TasksProgress from "../ComponentAdmin/Dashboard/TasksProgress";
 import TotalCustomers from "../ComponentAdmin/Dashboard/TotalCustomers";
 import TotalProfit from "../ComponentAdmin/Dashboard/TotalProfit";
 import TrafficByDevice from "../ComponentAdmin/Dashboard/TrafficByDevice";
-
+import {addPlayerRegistration, removePlayerRegistration} from '../AdminSlice'
+import {ToastSweet} from 'components/SweetAlert2'
 
 const Dashboard = () => {
   const { players } = useSelector((state) => state.admin);
   const [data, setData] = useState([]);
+   
+  const dispatch = useDispatch();
+
   useEffect(() => {
     axiosClient
       .get("managements/statistics/summary")
@@ -29,7 +33,6 @@ const Dashboard = () => {
       });
   }, []);
 
-  const dispatch = useDispatch();
   useEffect(() => {
     dispatch(
       getPlayersAsync({
@@ -42,10 +45,11 @@ const Dashboard = () => {
 
   useEffect(() => {
     const handleRegisterPlayer = (player) => {
-
+      dispatch(addPlayerRegistration(player));
     }
-    const notifyStatusRegisterPlayer = (player) => {
-
+    const notifyStatusRegisterPlayer = ({message, player}) => {
+      ToastSweet('success', message, 'bottom-end')
+      dispatch(removePlayerRegistration(player));
     }
     
     socket.on('register player', handleRegisterPlayer)

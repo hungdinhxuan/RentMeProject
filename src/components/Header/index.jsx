@@ -244,7 +244,7 @@ function Header() {
       dispatch(setCountNewMessagesIncrease());
     };
     const handleNotifyRegisterPlayer = (data) => {
-      ToastSweet("success", data);
+      ToastSweet(data.success ? "success": "error", data.message, 'bottom-end');
     }
     socket.on("response renter", loadData);
     socket.on("response player", loadData);

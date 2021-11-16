@@ -6,6 +6,7 @@ import {
 import { DataGrid } from "@mui/x-data-grid";
 import { Avatar, Input, Modal } from "antd";
 import { useState } from "react";
+import socket from 'utils/socket'
 
 const LatestPlayerRegistration = (props) => {
   const { items } = props;
@@ -19,8 +20,19 @@ const LatestPlayerRegistration = (props) => {
   const handleViewClick = () => {
     setIsModalVisible(true);
   };
-  const handleAccept = () => {};
-  const handleDecline = () => {};
+  const handleAccept = () => {
+    console.log(playerDetail);
+    socket.emit('handle register player', {
+      player: playerDetail,
+      status: 'Accepted'
+    })
+  };
+  const handleDecline = () => {
+    socket.emit('handle register player', {
+      player: playerDetail,
+      status: 'Rejected'
+    })
+  };
   const columns = [
     {
       field: "userId",

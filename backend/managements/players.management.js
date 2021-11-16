@@ -27,7 +27,6 @@ class PlayerManagement {
         {
           $project: {
             'user.password': 0,
-            'user.username': 0,
             'user.email': 0,
             'user.role': 0,
           },
