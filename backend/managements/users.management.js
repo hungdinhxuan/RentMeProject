@@ -219,6 +219,7 @@ class UsersManagement {
       });
     }
   }
+
 }
 
 module.exports = new UsersManagement();

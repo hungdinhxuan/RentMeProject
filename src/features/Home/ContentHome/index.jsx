@@ -64,7 +64,7 @@ function ContentHome() {
             <div className="left__items col-6">
               <div>
                 <div className="left__items--games mb-3">
-                  <div className="game__title">* Trò chơi</div>
+                  <div className="game__title">* Games</div>
                   <div className="games__infor mt-2">
                     <p>1 on 1, Coaching, Matching, Team up, Streamer</p>
                     <div className="d-flex align-items-center">
@@ -96,7 +96,7 @@ function ContentHome() {
                   </div>
                 </div>
                 <div className="left__items--lifestyle mb-3">
-                  <div className="game__title">* Phong cách</div>
+                  <div className="game__title">* Styles</div>
                   <div className="games__infor mt-2">
                     <p>Find ePals to carry and enrich your life</p>
                     <div className="d-flex align-items-center">

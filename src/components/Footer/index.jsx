@@ -11,7 +11,7 @@ export default function Footer() {
             <img src="/player-dou-a.jpg" alt="Logo" className="logo__footer" />
             <div className="desc">
               <div className="title">RENTME FOUNDED</div>
-              <p>Sản phẩm © 2021 </p>
+              <p>Product © 2021 </p>
               Co-founder: Xuân Hùng, Đình Khang
             </div>
           </div>
