@@ -79,9 +79,10 @@ const PlayerListResults = ({ players, ...rest }) => {
       headerName: "Status",
       width: 140,
       renderCell: (params) => {
+        
         return (
           <div>
-            {params.row.isOnline ? (
+            {params.row.user[0].isOnline ? (
               <img src={OnlineStatus} alt="online" />
             ) : (
               <img src={OfflineStatus} alt="offline" />
