@@ -6,7 +6,7 @@ import axiosClient from "utils/axiosClient";
 import socket from 'utils/socket';
 import { getPlayersAsync } from "../AdminSlice";
 import Budget from "../ComponentAdmin/Dashboard/Budget";
-import LatestOrders from "../ComponentAdmin/Dashboard/LatestOrders";
+import LatestPlayerRegistration from "../ComponentAdmin/Dashboard/LatestPlayerRegistration";
 import LatestProducts from "../ComponentAdmin/Dashboard/LatestProducts";
 import Sales from "../ComponentAdmin/Dashboard/Sales";
 import TasksProgress from "../ComponentAdmin/Dashboard/TasksProgress";
@@ -92,7 +92,7 @@ const Dashboard = () => {
             <LatestProducts sx={{ height: "100%" }} />
           </Grid>
           <Grid item lg={8} md={12} xl={9} xs={12}>
-            <LatestOrders items={players} />
+            <LatestPlayerRegistration items={players} />
           </Grid>
         </Grid>
       </Container>

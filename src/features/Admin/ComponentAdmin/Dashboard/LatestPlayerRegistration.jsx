@@ -7,7 +7,7 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Avatar, Input, Modal } from "antd";
 import { useState } from "react";
 
-const LatestOrders = (props) => {
+const LatestPlayerRegistration = (props) => {
   const { items } = props;
   const { TextArea } = Input;
   const [isModalVisible, setIsModalVisible] = useState(false);
@@ -171,4 +171,4 @@ const LatestOrders = (props) => {
   );
 };
 
-export default LatestOrders;
+export default LatestPlayerRegistration;
