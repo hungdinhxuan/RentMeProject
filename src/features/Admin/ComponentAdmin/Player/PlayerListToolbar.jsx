@@ -1,12 +1,19 @@
 import { Box, Button } from "@material-ui/core";
 import RefreshIcon from "@material-ui/icons/Refresh";
 import { useDispatch } from "react-redux";
-import { AsyncLoadPlayer } from "features/RentPlayer/PlayerSlice";
+import { getPlayersAsync } from "features/Admin/AdminSlice";
 
 const PlayerListToolbar = (props) => {
   const dispatch = useDispatch();
   const handleRefresh = () => {
-    dispatch(AsyncLoadPlayer());
+    dispatch(getPlayersAsync(
+      {
+        page: 1,
+        limit: 50,
+        status: "Accepted",
+
+      }
+    ));
   };
 
   return (

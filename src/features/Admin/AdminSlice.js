@@ -4,6 +4,7 @@ import { ToastSweet } from "components/SweetAlert2"
 
 const initialState = {
   userList: [],
+  players: [],
   deletedUsers: [],
   bannedPlayers: [],
   userEdit: null,
@@ -79,6 +80,22 @@ export const forceDeleteUsersAsync = createAsyncThunk(
   }
 )
 
+export const getPlayersAsync = createAsyncThunk(
+  "admin/players",
+  async (values, { rejectWithValue }) => {
+    try {
+      const response = await axiosClient.get("managements/players/v1",
+      {params: values}
+      )
+      return response
+    } catch (err) {
+      return rejectWithValue(err.response.data)
+    }
+  }
+)
+
+
+
 export const getBannedPlayersAsync = createAsyncThunk(
   "admin/players/banned",
   async (values, { rejectWithValue }) => {
@@ -94,6 +111,8 @@ export const getBannedPlayersAsync = createAsyncThunk(
     }
   }
 )
+
+
 
 export const banPlayersAsync = createAsyncThunk(
   "admin/players/banned",
@@ -159,6 +178,14 @@ const AdminSlice = createSlice({
   reducers: {
     EditUser (state, action) {
       state.userEdit = action.payload
+    },
+    addPlayerRegistration (state, action) {
+      state.players.push(action.payload)
+    },
+    removePlayerRegistration (state, action) {
+      state.players = state.players.filter(
+        player => player._id !== action.payload._id
+      )
     }
   },
   extraReducers: {
@@ -263,6 +290,23 @@ const AdminSlice = createSlice({
         "bottom-end"
       )
     },
+    [getPlayersAsync.pending]: (state) => {
+      state.loading = true
+    },
+    [getPlayersAsync.fulfilled]: (state, action) => {
+      state.players = action.payload
+      state.loading = false
+      state.error = null
+    },
+    [getPlayersAsync.rejected]: (state, action) => {
+      state.loading = false
+      state.error = action.payload.message
+      ToastSweet(
+        "error",
+        action.payload.message || "Something Wrong Happened !!",
+        "bottom-end"
+      )
+    },
     [getDeletedUsersAsync.pending]: (state) => {
       state.loading = true
     },
@@ -304,5 +348,5 @@ const AdminSlice = createSlice({
 })
 
 const { reducer } = AdminSlice
-export const { EditUser } = AdminSlice.actions
+export const { EditUser, addPlayerRegistration, removePlayerRegistration} = AdminSlice.actions
 export default reducer
