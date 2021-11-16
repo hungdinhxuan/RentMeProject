@@ -1,15 +1,17 @@
-import { Avatar, Form, Input, InputNumber,  Select } from "antd";
+import { Avatar, Form, Input, InputNumber, Select } from "antd";
 import { Button } from "antd/lib/radio";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import "./BecomePlayer.scss";
-import { getAllServicesAsync, registerToBecomePlayerAsync } from "./BecomePlayerSlice";
-
+import {
+  getAllServicesAsync,
+  registerToBecomePlayerAsync,
+} from "./BecomePlayerSlice";
 
 export default function BecomePlayer() {
   const { serviceGames } = useSelector((state) => state.services);
-  const {user} = useSelector((state) => state.auth);
+  const { user } = useSelector((state) => state.auth);
   const { Option } = Select;
   const [form] = Form.useForm();
   const { TextArea } = Input;
@@ -24,10 +26,12 @@ export default function BecomePlayer() {
     coverBackground: null,
     albums: [],
   });
+
+  
   const dispatch = useDispatch();
 
   const handleSubmit = (values) => {
-    // console.log(values);
+    console.log(values);
   };
 
   const formItemLayout = {
@@ -45,14 +49,11 @@ export default function BecomePlayer() {
     setDataForm({ ...dataForm, [e.target.name]: e.target.value });
   }
 
-  console.log(dataForm);
-
   const handlePreviewAvatar = (e) => {
     const file = e.target.files[0];
     file.preview = URL.createObjectURL(file);
     setDataForm({ ...dataForm, coverBackground: e.target.files[0] });
     setAvatar(file);
-    
   };
 
   const handlePreviewListAvatar = (e) => {
@@ -63,7 +64,7 @@ export default function BecomePlayer() {
       value.preview = URL.createObjectURL(value);
       temp.push(value);
     }
-    setListAvatar(temp);   
+    setListAvatar(temp);
   };
 
   function handleChange(value) {
@@ -89,24 +90,26 @@ export default function BecomePlayer() {
   }, [listAvatar]);
 
   const handleSubmitForm = () => {
-    
     const formData = new FormData();
-    formData.append('userId', user._id);
+    formData.append("userId", user._id);
+
     
-    for(const [key, val] of Object.entries(form.getFieldsValue())) {
+    for (const [key, val] of Object.entries(form.getFieldsValue())) {
       formData.append(key, JSON.stringify(val));
     }
-    
-    formData.append('albums', avatar);
+
+    // Coverbackground
+    formData.append("albums", avatar);
+    // Albums
     listAvatar.forEach((item) => {
-      formData.append('albums', item);
-    })
-    console.log(formData.getAll('albums'));
+      formData.append("albums", item);
+    });
+    console.log(formData.getAll("albums"));
     dispatch(registerToBecomePlayerAsync(formData));
     form.resetFields();
     setAvatar(null);
     setListAvatar([]);
-  }
+  };
   return (
     <div className="become-player">
       <div className="player-container">
@@ -126,6 +129,7 @@ export default function BecomePlayer() {
             onFinish={handleSubmit}
           >
             <Form.Item
+              name="nickname"
               label="Nick name"
               rules={[
                 {
@@ -134,9 +138,10 @@ export default function BecomePlayer() {
                 },
               ]}
             >
-              <Input name="nickname" onChange={onChange} />
+              <Input />
             </Form.Item>
             <Form.Item
+              name="shortDesc"
               label="Short Describe"
               rules={[
                 {
@@ -145,9 +150,10 @@ export default function BecomePlayer() {
                 },
               ]}
             >
-              <Input name="shortDesc" onChange={onChange} />
+              <Input />
             </Form.Item>
             <Form.Item
+              name="longDesc"
               label="Detailed Describe"
               rules={[
                 {
@@ -156,9 +162,10 @@ export default function BecomePlayer() {
                 },
               ]}
             >
-              <TextArea name="longDesc" rows={4} onChange={onChange} />
+              <TextArea rows={4} />
             </Form.Item>
             <Form.Item
+              name="pricePerHour"
               label="Price"
               rules={[
                 {
@@ -168,14 +175,13 @@ export default function BecomePlayer() {
               ]}
             >
               <InputNumber
-                name="pricePerHour"
                 formatter={(value) =>
                   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 }
                 parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                onChange={(value) => {
-                  setDataForm({ ...dataForm, pricePerHour: value });
-                }}
+                // onChange={(value) => {
+                //   setDataForm({ ...dataForm, pricePerHour: value });
+                // }}
                 style={{ width: "100%" }}
               />
             </Form.Item>
@@ -194,11 +200,11 @@ export default function BecomePlayer() {
                 allowClear
                 style={{ width: "100%" }}
                 placeholder="Please select"
-                onChange={handleChange}
+                // onChange={handleChange}
               >
                 {serviceGames &&
                   serviceGames.map((item) => {
-                    return <Option key={item.name}>{item.name}</Option>;
+                    return <Option key={item._id}>{item.name}</Option>;
                   })}
               </Select>
             </Form.Item>

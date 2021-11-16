@@ -1,141 +1,174 @@
-import moment from "moment";
-import { v4 as uuid } from "uuid";
-import PerfectScrollbar from "react-perfect-scrollbar";
 import {
-  Box,
   Button,
   Card,
-  CardHeader,
-  Chip,
-  Divider,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  TableSortLabel,
-  Tooltip,
+  CardHeader, Divider
 } from "@material-ui/core";
-import ArrowRightIcon from "@material-ui/icons/ArrowRight";
+import { DataGrid } from "@mui/x-data-grid";
+import { Avatar, Input, Modal } from "antd";
+import { useState } from "react";
 
-const orders = [
-  {
-    id: uuid(),
-    ref: "CDD1049",
-    amount: 30.5,
-    customer: {
-      name: "Minh Long",
-    },
-    createdAt: new Date(),
-    status: "pending",
-  },
-  {
-    id: uuid(),
-    ref: "CDD1048",
-    amount: 25.1,
-    customer: {
-      name: "Phong Vũ",
-    },
-    createdAt: new Date(),
-    status: "delivered",
-  },
-  {
-    id: uuid(),
-    ref: "CDD1047",
-    amount: 10.99,
-    customer: {
-      name: "Khánh Vân",
-    },
-    createdAt: new Date(),
-    status: "refunded",
-  },
-  {
-    id: uuid(),
-    ref: "CDD1046",
-    amount: 96.43,
-    customer: {
-      name: "Toàn Mỹ",
-    },
-    createdAt: new Date(),
-    status: "pending",
-  },
-  {
-    id: uuid(),
-    ref: "CDD1045",
-    amount: 32.54,
-    customer: {
-      name: "John Vũ",
-    },
-    createdAt: new Date(),
-    status: "delivered",
-  },
-  {
-    id: uuid(),
-    ref: "CDD1044",
-    amount: 16.76,
-    customer: {
-      name: "Long Nhật",
-    },
-    createdAt: new Date(),
-    status: "delivered",
-  },
-];
+const LatestOrders = (props) => {
+  const { items } = props;
+  const { TextArea } = Input;
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [playerDetail, setPlayerDetail] = useState();
 
-const LatestOrders = (props) => (
-  <Card {...props}>
-    <CardHeader title="Latest Orders" />
-    <Divider />
-    <PerfectScrollbar>
-      <Box sx={{ minWidth: 800 }}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Order Ref</TableCell>
-              <TableCell>Customer</TableCell>
-              <TableCell sortDirection="desc">
-                <Tooltip enterDelay={300} title="Sort">
-                  <TableSortLabel active direction="desc">
-                    Date
-                  </TableSortLabel>
-                </Tooltip>
-              </TableCell>
-              <TableCell>Status</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {orders.map((order) => (
-              <TableRow hover key={order.id}>
-                <TableCell>{order.ref}</TableCell>
-                <TableCell>{order.customer.name}</TableCell>
-                <TableCell>
-                  {moment(order.createdAt).format("DD/MM/YYYY")}
-                </TableCell>
-                <TableCell>
-                  <Chip color="primary" label={order.status} size="small" />
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Box>
-    </PerfectScrollbar>
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "flex-end",
-        p: 2,
-      }}
-    >
-      <Button
-        color="primary"
-        endIcon={<ArrowRightIcon />}
-        size="small"
-        variant="text"
+  const handleCancel = () => {
+    setIsModalVisible(false);
+  };
+  const handleViewClick = () => {
+    setIsModalVisible(true);
+  };
+  const handleAccept = () => {};
+  const handleDecline = () => {};
+  const columns = [
+    {
+      field: "userId",
+      headerName: "ID",
+      width: 200,
+    },
+    {
+      field: "nickname",
+      headerName: "Nick Name",
+      width: 200,
+    },
+    {
+      field: "shortDesc",
+      headerName: "Short Desc",
+      width: 200,
+    },
+    {
+      field: "pricePerHour",
+      headerName: "Price",
+      width: 150,
+    },
+    {
+      field: "moreDetailed",
+      headerName: "More Details",
+      width: 150,
+      sortable: false,
+      renderCell: () => {
+        return (
+          <>
+            <button
+              type="button"
+              className="btn btn-outline-warning"
+              onClick={handleViewClick}
+            >
+              View
+            </button>
+          </>
+        );
+      },
+    },
+    {
+      field: "action",
+      headerName: "Action",
+      width: 200,
+      sortable: false,
+      renderCell: () => {
+        return (
+          <>
+            <button
+              type="button"
+              className="btn btn-outline-primary"
+              onClick={handleAccept}
+            >
+              Accept
+            </button>
+            <button
+              type="button"
+              className=" mx-2 btn btn-outline-danger"
+              onClick={handleDecline}
+            >
+              Decline
+            </button>
+          </>
+        );
+      },
+    },
+  ];
+
+ 
+  return (
+    <Card {...props}>
+      <CardHeader title="Registration Players" />
+      <Divider />
+      <div style={{ height: "80vh", width: "100%" }}>
+        <DataGrid
+          rows={items}
+          columns={columns}
+          pageSize={12}
+          rowsPerPageOptions={[5]}
+          checkboxSelection
+          disableSelectionOnClick
+          getRowId={(row) => row._id}
+          onSelectionModelChange={(id) => {
+            setPlayerDetail(
+              items.filter((item) => {
+                return item._id === id[0];
+              })[0]
+            );
+          }}
+        />
+      </div>
+
+      {/* Modal detail */}
+      <Modal
+        title="Detail Request Player"
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={[
+          <Button key="cancel" onClick={handleCancel}>
+            Cancel
+          </Button>,
+        ]}
       >
-        View all
-      </Button>
-    </Box>
-  </Card>
-);
+        <div className="container">
+          <div>
+            <label htmlFor="nickname">Nickname</label>
+          </div>
+          <Input type="text" disabled value={playerDetail?.nickname} />
+          <div>
+            <label htmlFor="shortDesc">Short Describe</label>
+          </div>
+          <Input type="text" disabled value={playerDetail?.shortDesc} />
+
+          <div>
+            <label htmlFor="shortDesc">Long Describe</label>
+          </div>
+          <TextArea type="text" disabled value={playerDetail?.longDesc} />
+          <div>
+            <label htmlFor="pricePerHour">Price</label>
+          </div>
+          <Input className="price" disabled value={playerDetail?.pricePerHour} />
+          <div>
+            <label htmlFor="coverBackground">Cover Background</label>
+          </div>
+          <Avatar
+            src={playerDetail?.coverBackground}
+            alt="Anh"
+            size={250}
+            shape="square"
+          />
+          <div>
+            <label htmlFor="albums">Albums</label>
+          </div>
+          {playerDetail?.albums.map((item, index) => {
+            return (
+              <Avatar
+                src={item}
+                alt="Anh"
+                size={200}
+                shape="square"
+                key={index}
+              />
+            );
+          })}
+        </div>
+      </Modal>
+    </Card>
+  );
+};
 
 export default LatestOrders;
