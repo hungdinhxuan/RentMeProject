@@ -18,6 +18,7 @@ const tradingsModel = require('../models/tradings.model');
 const transfersModel = require('../models/transfers.model');
 const transactionsModel = require('../models/transactions.model');
 
+
 router.get('/', async (req, res) => {
   /*  
         #swagger.tags = ['Dev']  

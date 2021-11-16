@@ -30,8 +30,8 @@
     "passport-jwt": "^4.0.0",
     "socket.io": "^4.2.0",
     "streamifier": "^0.1.1",
-    "swagger-ui-express": "^4.1.6",
     "swagger-autogen": "^2.12.4",
+    "swagger-ui-express": "^4.1.6",
     "xlsx": "^0.17.2",
     "xss": "^1.0.10"
   },

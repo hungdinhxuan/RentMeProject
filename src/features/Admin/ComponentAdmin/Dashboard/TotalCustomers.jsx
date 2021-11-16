@@ -10,6 +10,7 @@ import {
   import ArrowUpwardIcon from '@material-ui/icons/ArrowUpward';
   import PeopleIcon from '@material-ui/icons/PeopleOutlined';
   
+  
   const TotalCustomers = (props) => (
     <Card {...props}>
       <CardContent>
@@ -30,7 +31,7 @@ import {
               color="textPrimary"
               variant="h3"
             >
-              1,600
+              {props.data.usersCount}
             </Typography>
           </Grid>
           <Grid item>

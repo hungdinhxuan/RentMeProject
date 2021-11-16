@@ -9,6 +9,7 @@ import StreamHub from 'features/StreamHub'
 import Admin from "features/Admin";
 import AdminLayout from "components/Layouts/AdminLayout";
 import BecomePlayer from "features/BecomePlayer";
+import Privacy from "features/About/Privacy";
 
 const Home = lazy(() => import("features/Home/index.jsx"))
 
@@ -114,6 +115,12 @@ const routes = [
     exact: false,
     layout: PublicLayout,
     main: StreamHub
+  },
+  {
+    path: "/privacy",
+    exact: false,
+    layout: PrivateLayout,
+    main: Privacy
   },
   {
     path: "/chat-room",

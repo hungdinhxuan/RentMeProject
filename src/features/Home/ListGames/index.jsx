@@ -1,4 +1,4 @@
-import React, {memo} from "react";
+import React, { memo } from "react";
 
 import Games from "constants/Games";
 import shadow from "assets/ListGames/shadow.png";
@@ -93,7 +93,8 @@ function ListGame() {
         </div>
         <div className="footer__listgames ">
           <p className="text text-center">
-            RentMe hiện đang có rất nhiều điều thú vị đang chờ bạn trải nghiệm
+            RentMe currently has a lot of interesting things waiting for you to
+            experience
           </p>
         </div>
       </div>

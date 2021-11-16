@@ -4,8 +4,8 @@ import Swal from "sweetalert2"
 import { ToastSweet } from "components/SweetAlert2"
 
 const initialState = {
-  roomId: null,
-  roomPassword: null,
+  roomId: "",
+  roomPassword: "",
   tradingId: null,
   authRoom: false,
   expireTime: null
@@ -39,6 +39,10 @@ const ChatRoomSlice = createSlice({
       state.tradingId = null
       state.authRoom = false
       state.expireTime = null
+    },
+    setRoomInfo: (state, action) => {
+      state.roomId = action.payload.roomId
+      state.roomPassword = action.payload.roomPassword
     }
   },
   extraReducers: (builder) => {
@@ -64,5 +68,5 @@ const ChatRoomSlice = createSlice({
   }
 })
 
-export const { abortTrading } = ChatRoomSlice.actions
+export const { abortTrading, setRoomInfo } = ChatRoomSlice.actions
 export default ChatRoomSlice.reducer

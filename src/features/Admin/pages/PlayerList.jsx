@@ -4,13 +4,19 @@ import PlayerListResults from "../ComponentAdmin/Player/PlayerListResults";
 import PlayerListToolbar from "../ComponentAdmin/Player/PlayerListToolbar";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { AsyncLoadPlayer } from "features/RentPlayer/PlayerSlice";
+import { getPlayersAsync } from "features/Admin/AdminSlice";
 
 const PlayerList = () => {
-  const { listPlayers } = useSelector((state) => state.players);
+  const { players } = useSelector((state) => state.admin);
   const dispatch = useDispatch();
   useEffect(() => {
-      dispatch(AsyncLoadPlayer());
+      dispatch(getPlayersAsync(
+        {
+          page: 1,
+          limit: 50,
+          status: "Accepted",
+        }
+      ));
   },[dispatch])
   return (
     <>
@@ -27,7 +33,7 @@ const PlayerList = () => {
         <Container maxWidth={false}>
           <PlayerListToolbar />
           <Box sx={{ pt: 3 }}>
-            {listPlayers && <PlayerListResults players={listPlayers} />}
+            {players && <PlayerListResults players={players} />}
           </Box>
         </Container>
       </Box>

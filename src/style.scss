@@ -1,0 +1,65 @@
+@import "antd/dist/antd.css";
+@import "aos/dist/aos.css";
+@import "bootstrap/dist/css/bootstrap.min.css";
+@import "react-toastify/dist/ReactToastify.css";
+@import "react-perfect-scrollbar/dist/css/styles.css";
+
+:root {
+    --text-hover: #7041e6;
+    --text-field: #af93ef;
+    --color-button: #21212c;
+    --button-hover: #4f4e60;
+    --button-hover1: #8d65ea;
+    --text-footer: #c4c3e6;
+    --background-color: #120e1b;
+    --color-default: #fff;
+    --text-card: #bdbcde;
+    --background-card: #302f3d;
+}
+* {
+    padding: 0;
+    margin: 0;
+}
+#root,
+body,
+html {
+    /* overflow: hidden; */
+    background: #120e1b;
+    height: 100vh;
+    margin: 0 auto;
+    padding: 0;
+    font-size: 16px;
+    // user-select: none;
+    // -webkit-user-select: none;
+    // -webkit-touch-callout: none;
+}
+body {
+    margin: 0;
+    font-family: "Roboto", "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu",
+        "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
+}
+
+::-webkit-scrollbar {
+    width: 0;
+}
+.container {
+    height: 100%;
+}
+.button {
+    padding: 0 16px;
+    min-width: 80px;
+    font-size: 100%;
+    font-weight: 500;
+    border-radius: 20px;
+    height: 32px;
+}
+a {
+    text-decoration: none !important;
+    outline: none;
+}

@@ -1,17 +1,33 @@
-import { Avatar, Form, Input, InputNumber,  Select } from "antd";
+import { Avatar, Form, Input, InputNumber, Select } from "antd";
+import { Button } from "antd/lib/radio";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import "./BecomePlayer.scss";
-import { getAllServicesAsync } from "./BecomePlayerSlice";
+import {
+  getAllServicesAsync,
+  registerToBecomePlayerAsync,
+} from "./BecomePlayerSlice";
 
 export default function BecomePlayer() {
   const { serviceGames } = useSelector((state) => state.services);
+  const { user } = useSelector((state) => state.auth);
   const { Option } = Select;
   const [form] = Form.useForm();
   const { TextArea } = Input;
   const [avatar, setAvatar] = useState();
   const [listAvatar, setListAvatar] = useState([]);
+  const [dataForm, setDataForm] = useState({
+    nickname: "",
+    shortDesc: "",
+    longDesc: "",
+    pricePerHour: "",
+    services: [],
+    coverBackground: null,
+    albums: [],
+  });
+
+  
   const dispatch = useDispatch();
 
   const handleSubmit = (values) => {
@@ -29,17 +45,20 @@ export default function BecomePlayer() {
     },
   };
 
-  function onChange(value) {
-    console.log(value);
+  function onChange(e) {
+    setDataForm({ ...dataForm, [e.target.name]: e.target.value });
   }
+
   const handlePreviewAvatar = (e) => {
     const file = e.target.files[0];
     file.preview = URL.createObjectURL(file);
+    setDataForm({ ...dataForm, coverBackground: e.target.files[0] });
     setAvatar(file);
   };
 
   const handlePreviewListAvatar = (e) => {
     const files = e.target.files;
+    setDataForm({ ...dataForm, albums: [...files] });
     let temp = [];
     for (const [key, value] of Object.entries(files)) {
       value.preview = URL.createObjectURL(value);
@@ -49,7 +68,7 @@ export default function BecomePlayer() {
   };
 
   function handleChange(value) {
-    console.log(`selected ${value}`);
+    setDataForm({ ...dataForm, services: [...value] });
   }
 
   useEffect(() => {
@@ -65,10 +84,34 @@ export default function BecomePlayer() {
     return () => {
       listAvatar &&
         listAvatar.map((item) => {
-          URL.revokeObjectURL(item.preview);
+          return URL.revokeObjectURL(item.preview);
         });
     };
   }, [listAvatar]);
+
+  const handleSubmitForm = () => {
+    const formData = new FormData();
+    formData.append("userId", user._id);
+
+    function isArray(obj) {
+      return Object.prototype.toString.call(obj) === "[object Array]";
+    }
+    for (const [key, val] of Object.entries(form.getFieldsValue())) {
+      formData.append(key, isArray(val) ? JSON.stringify(val) : val);
+    }
+
+    // Coverbackground
+    formData.append("albums", avatar);
+    // Albums
+    listAvatar.forEach((item) => {
+      formData.append("albums", item);
+    });
+    console.log(formData.getAll("albums"));
+    dispatch(registerToBecomePlayerAsync(formData));
+    form.resetFields();
+    setAvatar(null);
+    setListAvatar([]);
+  };
   return (
     <div className="become-player">
       <div className="player-container">
@@ -138,7 +181,9 @@ export default function BecomePlayer() {
                   `$ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
                 }
                 parser={(value) => value.replace(/\$\s?|(,*)/g, "")}
-                onChange={onChange}
+                // onChange={(value) => {
+                //   setDataForm({ ...dataForm, pricePerHour: value });
+                // }}
                 style={{ width: "100%" }}
               />
             </Form.Item>
@@ -157,7 +202,7 @@ export default function BecomePlayer() {
                 allowClear
                 style={{ width: "100%" }}
                 placeholder="Please select"
-                onChange={handleChange}
+                // onChange={handleChange}
               >
                 {serviceGames &&
                   serviceGames.map((item) => {
@@ -167,7 +212,7 @@ export default function BecomePlayer() {
             </Form.Item>
 
             <Form.Item
-              name="coverBackground"
+              name="albums"
               label="Image"
               rules={[
                 {
@@ -214,6 +259,7 @@ export default function BecomePlayer() {
                   );
                 })}
             </Form.Item>
+            <Button onClick={handleSubmitForm}>Submit</Button>
           </Form>
         </div>
       </div>
