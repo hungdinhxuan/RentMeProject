@@ -93,9 +93,11 @@ export default function BecomePlayer() {
     const formData = new FormData();
     formData.append("userId", user._id);
 
-    
+    function isArray(obj) {
+      return Object.prototype.toString.call(obj) === "[object Array]";
+    }
     for (const [key, val] of Object.entries(form.getFieldsValue())) {
-      formData.append(key, JSON.stringify(val));
+      formData.append(key, isArray(val) ? JSON.stringify(val) : val);
     }
 
     // Coverbackground

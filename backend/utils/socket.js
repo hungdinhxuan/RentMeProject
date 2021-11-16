@@ -724,7 +724,10 @@ module.exports = (app) => {
             }
           }
         } catch (error) {
-          console.log("🚀 ~ file: socket.js ~ line 720 ~ socket.on ~ error", error)
+          console.log(
+            '🚀 ~ file: socket.js ~ line 720 ~ socket.on ~ error',
+            error,
+          );
         }
       }
     });
@@ -732,28 +735,55 @@ module.exports = (app) => {
     socket.on('handle register player', async (data) => {
       if (socket.auth) {
         try {
-          const { playerId, status } = data;
-          const player = await PlayerProfile.findByIdAndUpdate(playerId, {
-            status,
-          }, {new: true});
+          let { player, status } = data;
+
           const admins = await User.find({ role: 0 });
+          let user = await User.findById(player.userId);
+          if (status === 'Accepted') {
+            player = await PlayerProfile.findByIdAndUpdate(
+              player._id,
+              {
+                status,
+              },
+              { new: true },
+            )
+            await User.findByIdAndUpdate(player.userId, {
+              role: 2,
+            })
+          } else {
+            await PlayerProfile.findByIdAndDelete(player._id);
+          }
+          
+          if (userSocketIdObj[user.username]) {
+            for (let socketId of userSocketIdObj[user.username])
+              io.to(socketId).emit(
+                'notify register player',
+                status === 'Accepted'
+                  ? {message: 'Admin approval your request ! Congratulations from now you have become professional player !!!', success: true}
+                  : {message: 'Your request to become professional player have declined by admin', success: false},
+              );
+          }
           // send notification to all admin
           for (let admin of admins) {
             if (userSocketIdObj[admin.username]) {
               for (let socketId of userSocketIdObj[admin.username])
-                io.to(socketId).emit('notify status register player', player);
+                io.to(socketId).emit('notify status register player', {
+                  player,
+                  message:
+                    status === 'Accepted'
+                      ? `${player.nickname} have official become profressional player`
+                      : `${player.nickname} is declined to become profressional player`,
+                });
             }
           }
-          if(userSocketIdObj[player.username]) {
-            for (let socketId of userSocketIdObj[player.username])
-              io.to(socketId).emit('notify register player', 'Admin approval your request ! Congratulations from now you have become professional player !!!');
-            
-          }
         } catch (error) {
-          console.log("🚀 ~ file: socket.js ~ line 732 ~ socket.on ~ error", error)
+          console.log(
+            '🚀 ~ file: socket.js ~ line 732 ~ socket.on ~ error',
+            error,
+          );
         }
       }
-    })
+    });
   });
 
   httpServer.listen(4000);

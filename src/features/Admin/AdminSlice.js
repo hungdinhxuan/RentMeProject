@@ -178,6 +178,14 @@ const AdminSlice = createSlice({
   reducers: {
     EditUser (state, action) {
       state.userEdit = action.payload
+    },
+    addPlayerRegistration (state, action) {
+      state.players.push(action.payload)
+    },
+    removePlayerRegistration (state, action) {
+      state.players = state.players.filter(
+        player => player._id !== action.payload._id
+      )
     }
   },
   extraReducers: {
@@ -340,5 +348,5 @@ const AdminSlice = createSlice({
 })
 
 const { reducer } = AdminSlice
-export const { EditUser } = AdminSlice.actions
+export const { EditUser, addPlayerRegistration, removePlayerRegistration} = AdminSlice.actions
 export default reducer

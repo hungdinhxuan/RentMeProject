@@ -14,12 +14,12 @@ function MainRentPlayer() {
   const [filterValues, setFilterValues] = useState({
     page: 1,
     limit: 50,
-    status: false,
+    status: "",
     minAge: 16,
     maxAge: 30,
     minPrice: 1,
     maxPrice: 1000,
-    gender: "female",
+    gender: "",
   });
 
   const { listPlayers } = useSelector((state) => state.players);
@@ -69,9 +69,11 @@ function MainRentPlayer() {
     }
   };
   const handleChangeStatus = (value) => {
-    if (value === "") {
-      setFilterValues({ ...filterValues, status: false });
-    } else setFilterValues({ ...filterValues, status: value });
+    // if (value === "") {
+    //   setFilterValues({ ...filterValues, status: false });
+    // } else setFilterValues({ ...filterValues, status: value });
+    console.log(value);
+    setFilterValues({ ...filterValues, status: value });
   };
   const handleChangeAge = (value) => {
     switch (value) {

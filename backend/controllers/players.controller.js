@@ -168,12 +168,12 @@ class PlayersControllers {
     let { page, limit, status, gender, minPrice, maxPrice, minAge, maxAge } =
       req.query;
 
-    gender = gender || 'female';
+    // gender = gender || 'female';
     minPrice = Number(minPrice) || 1;
     maxPrice = Number(maxPrice) || 1000;
     minAge = parseInt(minAge) || 16;
     maxAge = parseInt(maxAge) || 70;
-    status = status || 'true';
+    
 
     page = parseInt(page) || 1;
     limit = parseInt(limit) || 50;
@@ -228,8 +228,20 @@ class PlayersControllers {
         { $sort: { 'user.isOnline': -1 } },
         {
           $match: {
-            'user.isOnline': status === 'true',
-            'user.gender': gender,
+            $or: [
+              {'user.isOnline': status ? status : 'true'},
+              {'user.isOnline': status ? status : 'false'},
+            ],
+            // 'user.isOnline': status === 'true',
+            // 'user.gender': gender,
+            $or: [
+              {
+                'user.gender': gender ? gender : 'female'
+              },
+              {
+                'user.gender': gender ? gender : 'male'
+              }
+            ],
             'user.birthDate': {
               $lte: calculateBirthDateFromAge(minAge), /// ngay sinh nho hon thi nhieu tuoi hon
               $gte: calculateBirthDateFromAge(maxAge),
