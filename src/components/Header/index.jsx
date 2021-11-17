@@ -1,5 +1,6 @@
 import { Avatar, Badge, Button, Dropdown, Menu, Modal } from "antd";
-import Logo from "assets/player-dou-a.jpg";
+// import Logo from "assets/player-dou-a.jpg";
+import Logo from 'assets/logo.svg'
 import {
   addNewMessage,
   removeMessage,
@@ -289,11 +290,11 @@ function Header() {
             <img
               alt="Logo Home"
               src={Logo}
-              width="50"
+              width="120"
               height="50"
               className="d-inline-block align-top"
             />{" "}
-            <span style={{ color: "orange" }}>Rent Me</span>
+            {/* <span style={{ color: "orange" }}>Rent Me</span> */}
           </NavLink>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
