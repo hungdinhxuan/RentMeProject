@@ -16,17 +16,17 @@ function TryRentme() {
         <div className="try__content--steps row">
           <div className="col-lg-4 col-sm-12">
             <div className="content__steps--items items__1">
-              <div className="text">Choose a service</div>
+              
             </div>
           </div>
           <div className="col-lg-4 col-sm-12">
             <div className="content__steps--items items__2">
-              <div className="text">Choose to hire players</div>
+              
             </div>
           </div>
           <div className="col-lg-4 col-sm-12">
             <div className="content__steps--items items__3">
-              <div className="text">Confirm transaction</div>
+              
             </div>
           </div>
         </div>
