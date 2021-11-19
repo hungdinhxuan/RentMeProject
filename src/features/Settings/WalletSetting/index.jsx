@@ -96,7 +96,7 @@ export default function WalletSetting() {
                               <Avatar src={IconMoney} size={20} />
                             </div>
                             <div className="money">
-                              <span>{user?.balance}</span>
+                              <span>{(user?.balance).toFixed(2)}</span>
                             </div>
                           </Space>
                         </div>
@@ -224,7 +224,7 @@ export default function WalletSetting() {
                 <TableWallet />
               </TabPane>
               {/* History transact */}
-              <TabPane tab={<span>History</span>} key="4">
+              <TabPane tab={<span>Transaction</span>} key="4">
                 <TableTransact />
               </TabPane>
             </Tabs>

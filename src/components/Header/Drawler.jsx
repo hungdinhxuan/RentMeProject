@@ -100,11 +100,11 @@ function Drawler(props) {
           </div>
           <div className="operateList__drawer">
             <div className="line"></div>
-            <div className="operateList--plus">
+            {/* <div className="operateList--plus">
               <div className="desc--plus">
                 Subscribe to receive up to more 211.00 free buff/year
               </div>
-            </div>
+            </div> */}
             <div className="operateList--plus player">
               <div
                 className="desc--plus"
