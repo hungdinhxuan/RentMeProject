@@ -7,6 +7,7 @@ const passport = require('passport');
 router.get('/others', 
 /*  
         #swagger.tags = ['Conversations'] 
+        #swagger.description = 'Endpoint to get recent contact'
         #swagger.security = [{
             "Authorization": []
         }]
@@ -17,7 +18,8 @@ router.get('/others',
 
 router.get(
     /*  
-        #swagger.tags = ['Conversations']  
+        #swagger.tags = ['Conversations']
+        #swagger.description = 'Endpoint to get all message of user with specific id'
         #swagger.security = [{
             "Authorization": []
         }]
@@ -30,6 +32,7 @@ router.get(
 router.post('/:userId', 
     /*  
         #swagger.tags = ['Conversations']  
+        #swagger.description = 'Endpoint to send a message of user with specific id'
         #swagger.security = [{
             "Authorization": []
         }]

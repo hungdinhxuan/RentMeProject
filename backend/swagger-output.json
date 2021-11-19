@@ -62,7 +62,7 @@
         "tags": [
           "Auth"
         ],
-        "description": "",
+        "description": "Endpoint to get user info",
         "parameters": [],
         "responses": {
           "200": {
@@ -81,7 +81,7 @@
         "tags": [
           "Auth"
         ],
-        "description": "",
+        "description": "Endpoint to login user",
         "parameters": [
           {
             "name": "obj",
@@ -110,7 +110,7 @@
         "tags": [
           "Auth"
         ],
-        "description": "",
+        "description": "Endpoint to login user with google account",
         "parameters": [],
         "responses": {}
       }
@@ -120,7 +120,7 @@
         "tags": [
           "Auth"
         ],
-        "description": "",
+        "description": "Endpoint to login user with facebook account",
         "parameters": [],
         "responses": {}
       }
@@ -130,8 +130,35 @@
         "tags": [
           "Auth"
         ],
-        "description": "",
-        "parameters": [],
+        "description": "Endpoint to register user",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "Adding new user.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "example": "rentme1234"
+                },
+                "email": {
+                  "type": "string",
+                  "example": "rentme1244@rentme.games"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "Str0ng!Passw0rd"
+                },
+                "fullName": {
+                  "type": "string",
+                  "example": "RentMe Games 1234"
+                }
+              }
+            }
+          }
+        ],
         "responses": {}
       }
     },
@@ -140,7 +167,7 @@
         "tags": [
           "Auth"
         ],
-        "description": "",
+        "description": "Endpoint to forgot password",
         "parameters": [],
         "responses": {}
       }
@@ -150,26 +177,43 @@
         "tags": [
           "Auth"
         ],
-        "description": "",
-        "parameters": [],
+        "description": "Endpoint to reset password",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "params",
+            "description": "token to reset password",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "example": "token"
+                }
+              }
+            }
+          }
+        ],
         "responses": {}
       }
     },
     "/api/users/": {
-      "get": {
-        "tags": [
-          "Users"
-        ],
-        "description": "",
-        "parameters": [],
-        "responses": {}
-      },
       "post": {
         "tags": [
           "Users"
         ],
-        "description": "",
-        "parameters": [],
+        "description": "Endpoint to register a specific user with specific role (ADMIN ONLY)",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "User information.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateUser"
+            }
+          }
+        ],
         "responses": {},
         "security": [
           {
@@ -183,7 +227,7 @@
         "tags": [
           "Users"
         ],
-        "description": "",
+        "description": "Endpoint to get one users with specific id",
         "parameters": [
           {
             "name": "id",
@@ -204,7 +248,7 @@
         "tags": [
           "Users"
         ],
-        "description": "",
+        "description": "Endpoint to update user info with specific id",
         "parameters": [
           {
             "name": "id",
@@ -212,6 +256,15 @@
             "required": true,
             "type": "string",
             "description": "User ID"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "User information.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdateUserInfo"
+            }
           }
         ],
         "responses": {},
@@ -227,7 +280,7 @@
         "tags": [
           "Users"
         ],
-        "description": "",
+        "description": "Endpoint to perform transaction (deposit or withdraw money)",
         "parameters": [
           {
             "name": "id",
@@ -235,6 +288,15 @@
             "required": true,
             "type": "string",
             "description": "User ID"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "User information.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/PerformTransaction"
+            }
           }
         ],
         "responses": {},
@@ -248,7 +310,7 @@
         "tags": [
           "Users"
         ],
-        "description": "",
+        "description": "Endpoint to get transactions of user with with specific id",
         "parameters": [
           {
             "name": "id",
@@ -271,7 +333,10 @@
         "tags": [
           "Users"
         ],
-        "description": "",
+        "description": "Endpoint to update avatar of user with with specific id",
+        "consumes": [
+          "multipart/form-data"
+        ],
         "parameters": [
           {
             "name": "id",
@@ -279,6 +344,12 @@
             "required": true,
             "type": "string",
             "description": "User ID"
+          },
+          {
+            "name": "image",
+            "in": "formData",
+            "type": "file",
+            "required": "true"
           }
         ],
         "responses": {},
@@ -294,7 +365,7 @@
         "tags": [
           "Users"
         ],
-        "description": "",
+        "description": "Endpoint to change password of user with with specific id",
         "parameters": [
           {
             "name": "id",
@@ -302,6 +373,15 @@
             "required": true,
             "type": "string",
             "description": "User ID"
+          },
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "User information.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UpdatePassword"
+            }
           }
         ],
         "responses": {},
@@ -317,7 +397,7 @@
         "tags": [
           "Users"
         ],
-        "description": "",
+        "description": "Endpoint to perform soft delete user (move user to bin) with with specific id",
         "parameters": [
           {
             "name": "id",
@@ -340,7 +420,7 @@
         "tags": [
           "Users"
         ],
-        "description": "",
+        "description": "Endpoint to get all notifications with with specific id",
         "parameters": [
           {
             "name": "id",
@@ -361,7 +441,7 @@
         "tags": [
           "Users"
         ],
-        "description": "",
+        "description": "Endpoint to perform delete all notifications of user with with specific id",
         "parameters": [
           {
             "name": "id",
@@ -384,7 +464,7 @@
         "tags": [
           "Users"
         ],
-        "description": "",
+        "description": "Endpoint to perform mark message as read of user with specific id as well message with specific id",
         "parameters": [
           {
             "name": "id",
@@ -412,7 +492,7 @@
         "tags": [
           "Users"
         ],
-        "description": "",
+        "description": "Endpoint to perform delete a notification of user with with specific id as well message with specific id",
         "parameters": [
           {
             "name": "id",
@@ -442,7 +522,7 @@
         "tags": [
           "Users"
         ],
-        "description": "",
+        "description": "Endpoint to get all transfers of user with with specific id",
         "parameters": [
           {
             "name": "id",
@@ -465,7 +545,7 @@
         "tags": [
           "Services"
         ],
-        "description": "",
+        "description": "Endpoint to create service (ADMIN ONLY)",
         "parameters": [],
         "responses": {},
         "security": [
@@ -478,7 +558,7 @@
         "tags": [
           "Services"
         ],
-        "description": "",
+        "description": "Endpoint to get all services",
         "parameters": [],
         "responses": {}
       }
@@ -488,7 +568,7 @@
         "tags": [
           "Services"
         ],
-        "description": "",
+        "description": "Endpoint to get a service",
         "parameters": [
           {
             "name": "id",
@@ -637,9 +717,22 @@
         "tags": [
           "Players"
         ],
-        "description": "",
+        "description": "Endpoint to get all players",
         "parameters": [],
         "responses": {}
+      },
+      "post": {
+        "tags": [
+          "Players"
+        ],
+        "description": "Endpoint to register to become player",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       }
     },
     "/api/players/{id}": {
@@ -647,7 +740,7 @@
         "tags": [
           "Players"
         ],
-        "description": "",
+        "description": "Endpoint to get one player",
         "parameters": [
           {
             "name": "id",
@@ -665,7 +758,7 @@
         "tags": [
           "Players"
         ],
-        "description": "",
+        "description": "Endpoint to get all reviews of a player",
         "parameters": [
           {
             "name": "id",
@@ -681,7 +774,7 @@
         "tags": [
           "Players"
         ],
-        "description": "",
+        "description": "Endpoint to create review on player profile",
         "parameters": [
           {
             "name": "id",
@@ -704,7 +797,7 @@
         "tags": [
           "Players"
         ],
-        "description": "",
+        "description": "Endpoint to donate to a player",
         "parameters": [
           {
             "name": "id",
@@ -727,7 +820,7 @@
         "tags": [
           "Players"
         ],
-        "description": "",
+        "description": "Endpoint to follow a player",
         "parameters": [
           {
             "name": "id",
@@ -768,9 +861,14 @@
         "tags": [
           "Tradings"
         ],
-        "description": "",
+        "description": "Endpoint to auth user when access chat room",
         "parameters": [],
-        "responses": {}
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       }
     },
     "/api/managements/users": {
@@ -778,7 +876,7 @@
         "tags": [
           "Managements"
         ],
-        "description": "",
+        "description": "Endpoint to get all users",
         "parameters": [],
         "responses": {},
         "security": [
@@ -791,8 +889,18 @@
         "tags": [
           "Managements"
         ],
-        "description": "",
-        "parameters": [],
+        "description": "Endpoint to get create users with specific role",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "User information.",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/CreateUser"
+            }
+          }
+        ],
         "responses": {},
         "security": [
           {
@@ -804,8 +912,30 @@
         "tags": [
           "Managements"
         ],
-        "description": "",
-        "parameters": [],
+        "description": "Endpoint to restore delete users",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "UserId array",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ids": {
+                  "type": "array",
+                  "example": [
+                    "abc",
+                    "xyz"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ],
         "responses": {},
         "security": [
           {
@@ -817,8 +947,48 @@
         "tags": [
           "Managements"
         ],
-        "description": "",
-        "parameters": [],
+        "description": "Endpoint to update user info",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "User information.",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "_id": {
+                  "type": "string",
+                  "example": ""
+                },
+                "fullName": {
+                  "type": "string",
+                  "example": ""
+                },
+                "username": {
+                  "type": "string",
+                  "example": ""
+                },
+                "email": {
+                  "type": "string",
+                  "example": ""
+                },
+                "password": {
+                  "type": "string",
+                  "example": ""
+                },
+                "province": {
+                  "type": "string",
+                  "example": ""
+                },
+                "role": {
+                  "type": "number",
+                  "example": 3
+                }
+              }
+            }
+          }
+        ],
         "responses": {},
         "security": [
           {
@@ -832,8 +1002,30 @@
         "tags": [
           "Managements"
         ],
-        "description": "",
-        "parameters": [],
+        "description": "Endpoint to soft delete users",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "UserId array",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ids": {
+                  "type": "array",
+                  "example": [
+                    "abc",
+                    "xyz"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ],
         "responses": {},
         "security": [
           {
@@ -847,8 +1039,30 @@
         "tags": [
           "Managements"
         ],
-        "description": "",
-        "parameters": [],
+        "description": "Endpoint to force delete users",
+        "parameters": [
+          {
+            "name": "obj",
+            "in": "body",
+            "description": "UserId array",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "ids": {
+                  "type": "array",
+                  "example": [
+                    "abc",
+                    "xyz"
+                  ],
+                  "items": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ],
         "responses": {},
         "security": [
           {
@@ -862,7 +1076,7 @@
         "tags": [
           "Managements"
         ],
-        "description": "",
+        "description": "Endpoint to get delete users",
         "parameters": [],
         "responses": {},
         "security": [
@@ -873,6 +1087,57 @@
       }
     },
     "/api/managements/players": {
+      "get": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "Endpoint to filter players",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "Endpoint to get ban players",
+        "parameters": [],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/api/managements/players/{id}": {
+      "put": {
+        "tags": [
+          "Managements"
+        ],
+        "description": "Endpoint to update player information",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "Player ID"
+          }
+        ],
+        "responses": {},
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
+      }
+    },
+    "/api/managements/players/v1": {
       "get": {
         "tags": [
           "Managements"
@@ -892,7 +1157,7 @@
         "tags": [
           "Managements"
         ],
-        "description": "",
+        "description": "Endpoint to get banned players information",
         "parameters": [],
         "responses": {},
         "security": [
@@ -907,7 +1172,7 @@
         "tags": [
           "Managements"
         ],
-        "description": "",
+        "description": "Endpoint to calculate profits of rentme",
         "parameters": [],
         "responses": {},
         "security": [
@@ -937,7 +1202,7 @@
         "tags": [
           "Conversations"
         ],
-        "description": "",
+        "description": "Endpoint to get recent contact",
         "parameters": [],
         "responses": {},
         "security": [
@@ -952,7 +1217,7 @@
         "tags": [
           "Conversations"
         ],
-        "description": "",
+        "description": "Endpoint to get all message of user with specific id",
         "parameters": [
           {
             "name": "userId",
@@ -972,7 +1237,7 @@
         "tags": [
           "Conversations"
         ],
-        "description": "",
+        "description": "Endpoint to send a message of user with specific id",
         "parameters": [
           {
             "name": "userId",
@@ -990,5 +1255,109 @@
       }
     }
   },
-  "definitions": {}
+  "definitions": {
+    "CreateUser": {
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string",
+          "example": "test123"
+        },
+        "password": {
+          "type": "string",
+          "example": "Test!Passw0rd"
+        },
+        "email": {
+          "type": "string",
+          "example": "test123@gmail.com"
+        },
+        "fullName": {
+          "type": "string",
+          "example": "test"
+        },
+        "role": {
+          "type": "number",
+          "example": 3
+        }
+      },
+      "required": [
+        "username",
+        "password",
+        "email",
+        "fullName",
+        "role"
+      ]
+    },
+    "UpdateUserInfo": {
+      "type": "object",
+      "properties": {
+        "fullName": {
+          "type": "string",
+          "example": ""
+        },
+        "nickname": {
+          "type": "string",
+          "example": ""
+        },
+        "birthDate": {
+          "type": "string",
+          "example": ""
+        },
+        "gender": {
+          "type": "string",
+          "example": ""
+        },
+        "province": {
+          "type": "string",
+          "example": ""
+        }
+      },
+      "required": [
+        "fullName",
+        "nickname",
+        "birthDate",
+        "gender",
+        "province"
+      ]
+    },
+    "UpdatePassword": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string",
+          "example": ""
+        },
+        "newPassword": {
+          "type": "string",
+          "example": ""
+        }
+      },
+      "required": [
+        "password",
+        "newPassword"
+      ]
+    },
+    "PerformTransaction": {
+      "type": "object",
+      "properties": {
+        "money": {
+          "type": "number",
+          "example": 1
+        },
+        "type": {
+          "type": "string",
+          "example": "deposit"
+        },
+        "paymentMethod": {
+          "type": "string",
+          "example": "momo"
+        }
+      },
+      "required": [
+        "money",
+        "type",
+        "paymentMethod"
+      ]
+    }
+  }
 }

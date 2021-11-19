@@ -13,6 +13,7 @@ const checkValidAccount = require('../middlewares/checkValidAccount');
 router.get(
       /*
         #swagger.tags = ['Auth']
+        #swagger.description = 'Endpoint to get user info'
         #swagger.security = [{
             "Authorization": []
         }]
@@ -28,6 +29,22 @@ router.get(
 
 if (process.env.NODE_ENV === 'production') {
   router.post(
+     /*
+        #swagger.tags = ['Auth']
+        #swagger.description = 'Endpoint to login user'
+        #swagger.security = [{
+            "Authorization": []
+        }]
+        #swagger.parameters['obj'] = {
+                in: 'body',
+                description: 'Adding new user.',
+                schema: {
+                    username: 'rentme1',
+                    password: 'Str0ng!Passw0rd',
+                    captcha: 'google recaptcha'
+                }
+        }
+    */
     '/login',
     verifyRecaptcha,
     validate.validateLogin(),
@@ -39,6 +56,7 @@ if (process.env.NODE_ENV === 'production') {
   router.post(
     /*  
         #swagger.tags = ['Auth']  
+        #swagger.description = 'Endpoint to login user'
         #swagger.parameters['obj'] = {
                 in: 'body',
                 description: 'Adding new user.',
@@ -46,7 +64,8 @@ if (process.env.NODE_ENV === 'production') {
                     username: 'rentme1',
                     password: 'Str0ng!Passw0rd',
                 }
-        } */
+        } 
+      */
     '/login',
     validate.validateLogin(),
     validate.handleValidationErrors,
@@ -57,7 +76,8 @@ if (process.env.NODE_ENV === 'production') {
 router.post(
   '/google',
   /*  
-        #swagger.tags = ['Auth']  
+        #swagger.tags = ['Auth'] 
+        #swagger.description = 'Endpoint to login user with google account'
          */
   authController.googleLogin,
 );
@@ -65,6 +85,7 @@ router.post(
   '/facebook',
   /*  
         #swagger.tags = ['Auth']  
+        #swagger.description = 'Endpoint to login user with facebook account'
         */
   authController.facebookLogin,
 );
@@ -72,7 +93,17 @@ router.post(
 router.post(
   /*  
         #swagger.tags = ['Auth']  
-        
+        #swagger.description = 'Endpoint to register user'
+        #swagger.parameters['obj'] = {
+                in: 'body',
+                description: 'Adding new user.',
+                schema: {
+                    username: 'rentme1234', 
+                    email: 'rentme1244@rentme.games', 
+                    password: 'Str0ng!Passw0rd', 
+                    fullName: 'RentMe Games 1234',
+                }
+              }
    */
   '/register',
   validate.validateRegisterUser(),
@@ -85,6 +116,7 @@ router.patch(
   '/forgot-password',
   /*  
         #swagger.tags = ['Auth']  
+        #swagger.description = 'Endpoint to forgot password'
         
 */
   authController.forgotPassword,
@@ -93,8 +125,15 @@ router.get(
   '/reset-password',
   /*  
         #swagger.tags = ['Auth']  
-        
-*/
+        #swagger.description = 'Endpoint to reset password'
+         #swagger.parameters['obj'] = {
+                in: 'params',
+                description: 'token to reset password',
+                schema: {
+                    token: 'token'
+                }
+      }
+        */
   authController.resetPassword,
 );
 

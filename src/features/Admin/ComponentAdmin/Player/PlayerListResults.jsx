@@ -9,6 +9,9 @@ import OnlineStatus from "assets/onlineStatus.png";
 import moment from "moment";
 import PropTypes from "prop-types";
 import { useCallback, useState } from "react";
+import {changeStatusPlayersAsync} from 'features/Admin/AdminSlice'
+import {useDispatch} from 'react-redux'
+import {ToastSweet} from "components/SweetAlert2";
 
 import "./Player.scss";
 
@@ -27,11 +30,21 @@ function CustomToolbar() {
 const PlayerListResults = ({ players, ...rest }) => {
   const [editRows, setEditRows] = useState({});
   const [selectionModel, setSelectionModel] = useState([]);
-  const handleClick = () => {
+  const dispatch = useDispatch()
+  const handleUpdatePlayer = () => {
     console.log(editRows);
   };
   const handleBanPlayers = () => {
-    console.log(selectionModel);
+    if (selectionModel.length > 0) {
+      console.log(selectionModel);
+      dispatch(changeStatusPlayersAsync({ids: selectionModel, status: 'ban'}));
+    } else {
+      ToastSweet(
+        "error",
+        "Please select at least one user to delete",
+        "bottom-end"
+      );
+    }
   }
 
   const handleEditRowsModelChange = useCallback((model) => {
@@ -104,9 +117,11 @@ const PlayerListResults = ({ players, ...rest }) => {
       renderCell: (params) => {
         return (
           <div>
-            {params.row.services.map((item, index) => {
-              return <p key={index}>{item.name}</p>;
-            })}
+            {
+              params.row.services.length > 1 ? (<p> {params.row.services[0].name}, ... </p>)
+              :(<p>{params.row.services[0].name} </p>)
+            }
+
           </div>
         );
       },
@@ -130,7 +145,7 @@ const PlayerListResults = ({ players, ...rest }) => {
             <button
               type="button"
               className="btn btn-outline-primary"
-              onClick={handleClick}
+              onClick={handleUpdatePlayer}
             >
               Update
             </button>

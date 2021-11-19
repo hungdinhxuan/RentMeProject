@@ -97,7 +97,7 @@ export const getPlayersAsync = createAsyncThunk(
 
 
 export const getBannedPlayersAsync = createAsyncThunk(
-  "admin/players/banned",
+  "admin/players/getBanned",
   async (values, { rejectWithValue }) => {
     try {
       const response = await axiosClient.get("managements/players/banned", {
@@ -113,31 +113,15 @@ export const getBannedPlayersAsync = createAsyncThunk(
 )
 
 
-
-export const banPlayersAsync = createAsyncThunk(
-  "admin/players/banned",
-  async (values, { rejectWithValue }) => {
+export const changeStatusPlayersAsync = createAsyncThunk(
+  "admin/players/changeStatus",
+  async ({ids, status}, { rejectWithValue }) => {
     try {
-      const response = await axiosClient.get("managements/players/banned", {
-        data: {
-          ids: values
-        }
-      })
-      return response
-    } catch (err) {
-      return rejectWithValue(err.response.data)
-    }
-  }
-)
-
-export const unlockPlayersAsync = createAsyncThunk(
-  "admin/players/banned",
-  async (values, { rejectWithValue }) => {
-    try {
-      const response = await axiosClient.patch("managements/players", {
-        data: {
-          ids: values
-        }
+      const response = await axiosClient.delete("managements/players", {
+          data: {
+            ids: ids,
+            status: status
+          }
       })
       return response
     } catch (err) {
@@ -237,8 +221,7 @@ const AdminSlice = createSlice({
     [softDeleteUsersAsync.fulfilled]: (state, action) => {
       console.log(action.payload.userIds);
       state.userList = state.userList.filter(
-        // (user) => !action.payload.userIds.includes(user._id)
-        (user) => user._id !== action.payload.userIds[0]
+        (user) => !action.payload.userIds.includes(user._id)
       )
       state.loading = false
       state.error = null
@@ -331,11 +314,43 @@ const AdminSlice = createSlice({
       state.deletedUsers = state.deletedUsers.filter(
         (user) => !action.payload.userIds.includes(user._id)
       )
+
       state.loading = false
       state.error = null
       ToastSweet("success", action.payload.message, "bottom-end")
     },
     [restoreUsersAsync.rejected]: (state, action) => {
+      state.loading = false
+      state.error = action.payload.message
+      ToastSweet(
+        "error",
+        action.payload.message || "Something Wrong Happened !!",
+        "bottom-end"
+      )
+    },
+    [changeStatusPlayersAsync.pending]: (state) => {
+      state.loading = true
+    },
+    [changeStatusPlayersAsync.fulfilled]: (state, action) => {
+      
+      state.loading = false
+      state.error = null
+      if(action.payload.status === "ban"){
+
+        state.players = state.players.filter( 
+          (player) => !action.payload.ids.includes(player._id)
+        )
+  
+        ToastSweet("success", action.payload.message, "bottom-end")
+      }else{
+        
+        state.bannedPlayers = state.bannedPlayers.filter( 
+          (player) => !action.payload.ids.includes(player._id)
+        )
+        ToastSweet("success", action.payload.message, "bottom-end")
+      }
+    },
+    [changeStatusPlayersAsync.rejected]: (state, action) => {
       state.loading = false
       state.error = action.payload.message
       ToastSweet(

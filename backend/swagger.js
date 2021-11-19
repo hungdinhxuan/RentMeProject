@@ -48,6 +48,31 @@ const doc = {
       scheme: 'bearer',
     },
   },
+  definitions: {
+    CreateUser: {
+      $username: "test123", 
+      $password: "Test!Passw0rd",
+      $email: "test123@gmail.com", 
+      $fullName: "test", 
+      $role: 3
+    },
+    UpdateUserInfo: {
+      $fullName: "", 
+      $nickname: "", 
+      $birthDate: "", 
+      $gender: "", 
+      $province: ""
+    },
+    UpdatePassword: {
+      $password: "", 
+      $newPassword: ""
+    },
+    PerformTransaction: {
+      $money: 1,
+      $type: 'deposit', 
+      $paymentMethod: 'momo'
+    }
+  }
 };
 
 const outputFile = './swagger-output.json';

@@ -299,7 +299,7 @@ function Header() {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="me-auto align-items-center">
-              <Nav.Link href="#">
+              {/* <Nav.Link href="#">
                 <NavLink
                   to="/streamhub"
                   className="nav__item"
@@ -307,8 +307,8 @@ function Header() {
                 >
                   StreamHub
                 </NavLink>
-              </Nav.Link>
-              <Nav.Link href="#">
+              </Nav.Link> */}
+              {/* <Nav.Link href="#">
                 <NavLink
                   to="/news"
                   className="nav__item"
@@ -316,7 +316,16 @@ function Header() {
                 >
                   News
                 </NavLink>
-              </Nav.Link>
+              </Nav.Link> */}
+                {/* <Nav.Link href="#">
+                <NavLink
+                  to="/"
+                  className="nav__item"
+                  activeClassName="nav__item--active"
+                >
+                  Home
+                </NavLink>
+              </Nav.Link> */}
               <Nav.Link href="#">
                 <NavLink
                   to="/playerdou"
@@ -351,6 +360,7 @@ function Header() {
                   onClick={handleShowDrawler}
                 >
                   Thông tin cá nhân
+                  User Information
                 </button>
                 <hr />
               </Nav.Link>
