@@ -20,6 +20,14 @@ class PlayerManagement {
           },
         },
         {
+          $lookup: {
+            from: 'services',
+            localField: 'services',
+            foreignField: '_id',
+            as: 'services',
+          },
+        },
+        {
           $match: {
             status
           },
@@ -44,6 +52,25 @@ class PlayerManagement {
       });
     }
   }
+
+  async updatePlayer(req, res){
+    try {
+      const player = await Player_Profile.findOneAndUpdate({_id: req.body._id}, {
+        
+      }, {new: true});
+      return res.status(200).json({
+        success: true,
+        message: 'Player updated successfully',
+        player,
+      });
+    } catch (error) {
+      return res.status(500).json({
+        success: false,
+        message: error.message || 'Internal Server error',
+      });
+    }
+  }
+
   async banPlayers(req, res) {
     try {
       const player_profiles = await Player_Profile.find({
@@ -52,6 +79,7 @@ class PlayerManagement {
       const userIds = player_profiles.map((player) => player.userId);
       await Player_Profile.delete({ _id: { $in: req.body.ids } });
       await User.updateMany({ _id: { $in: userIds } }, { $set: { role: 3 } });
+      console.log(req.body)
       return res.status(200).json({
         success: true,
         message: 'Players banned successfully',
@@ -64,7 +92,64 @@ class PlayerManagement {
       });
     }
   }
-  async unlockPlayers(req, res) {
+  async changeStatusPlayers(req, res) {
+    const {ids, status} = req.body;
+    console.log(ids, status);
+    switch (status) {
+      case 'ban':
+        try {
+          const player_profiles = await Player_Profile.find({
+            _id: { $in: req.body.ids },
+          });
+          const userIds = player_profiles.map((player) => player.userId);
+          await Player_Profile.delete({ _id: { $in: req.body.ids } });
+          await User.updateMany({ _id: { $in: userIds } }, { $set: { role: 3 } });
+          console.log(req.body)
+          return res.status(200).json({
+            success: true,
+            message: 'Players banned successfully',
+            ids: req.body.ids,
+            status
+          });
+        } catch (error) {
+          return res.status(500).json({
+            success: false,
+            message: error.message || 'Internal Server error',
+          });
+        }
+      case 'unblock':
+        try {
+          const player_profiles = await Player_Profile.findDeleted({
+            _id: { $in: req.body.ids },
+          });
+          const userIds = player_profiles.map((player) => player.userId);
+
+          await Player_Profile.restore({ _id: { $in: req.body.ids } });
+          await User.updateManyWithDeleted({ _id: { $in: userIds } }, { $set: { role: 2 } });
+          return res.status(200).json({
+            success: true,
+            message: 'unblock players successfully',
+            ids: req.body.ids,
+            status
+          });
+        } catch (error) {
+          return res.status(500).json({
+            success: false,
+            message: error.message || 'Internal Server error',
+          });
+        }
+      default:
+        return res.status(400).json({
+          success: false,
+          message: 'Invalid status',
+        });
+    }
+    return res.status(400).json({
+      success: false,
+      message: 'Invalid status',
+    });
+  }
+  async unblockPlayers(req, res) {
     try {
         const player_profiles = await Player_Profile.findOneWithDeleted({
           _id: { $in: req.body.ids },
@@ -74,7 +159,7 @@ class PlayerManagement {
         await User.updateManyWithDeleted({ _id: { $in: userIds } }, { $set: { role: 2 } });
         return res.status(200).json({
           success: true,
-          message: 'Unlock players successfully',
+          message: 'unblock players successfully',
           ids: req.body.ids,
         });
       } catch (error) {

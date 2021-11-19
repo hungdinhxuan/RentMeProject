@@ -98,7 +98,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile, location }) => {
             width: 64,
             height: 64,
           }}
-          to="/admin/account"
+          to="/setting/profile"
         />
 
         <Typography color="textSecondary" variant="body2">

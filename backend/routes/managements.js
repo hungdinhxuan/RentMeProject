@@ -10,6 +10,7 @@ const PlayersController = require('../controllers/players.controller')
 router.get(
   /*  
         #swagger.tags = ['Managements']
+        #swagger.description = 'Endpoint to get all users'
         #swagger.security = [{
             "Authorization": []
         }]
@@ -23,6 +24,13 @@ router.get(
 router.post(
   /*  
         #swagger.tags = ['Managements']
+        #swagger.description = 'Endpoint to get create users with specific role'
+        #swagger.parameters['obj'] = {
+            in: 'body',
+            description: 'User information.',
+            required: true,
+            schema: { $ref: "#/definitions/CreateUser" }
+        }
         #swagger.security = [{
             "Authorization": []
         }]
@@ -36,7 +44,16 @@ router.post(
 
 router.patch(
   /*  
-        #swagger.tags = ['Managements']
+       #swagger.tags = ['Managements']
+        #swagger.description = 'Endpoint to restore delete users'
+        #swagger.parameters['obj'] =  {
+            in: 'body',
+            description: 'UserId array',
+            required: true,
+            schema: {
+              ids: ['abc', 'xyz']
+            }
+        }
         #swagger.security = [{
             "Authorization": []
         }]
@@ -51,9 +68,24 @@ router.put(
   '/users',
   /*  
         #swagger.tags = ['Managements']
+        #swagger.description = 'Endpoint to update user info'
         #swagger.security = [{
             "Authorization": []
         }]
+        #swagger.parameters['obj'] =  {
+            in: 'body',
+            description: 'User information.',
+            required: true,
+            schema: { 
+              _id: "", 
+              fullName: "", 
+              username: "", 
+              email: "", 
+              password: "", 
+              province: "", 
+              role: 3
+            }
+        }
     */
   passport.authenticate('jwt', { session: false }),
   AdminRole,
@@ -63,6 +95,15 @@ router.put(
 router.delete(
   /*  
         #swagger.tags = ['Managements']
+        #swagger.description = 'Endpoint to soft delete users'
+        #swagger.parameters['obj'] =  {
+            in: 'body',
+            description: 'UserId array',
+            required: true,
+            schema: {
+              ids: ['abc', 'xyz']
+            }
+        }
         #swagger.security = [{
             "Authorization": []
         }]
@@ -75,7 +116,16 @@ router.delete(
 
 router.delete(
   /*  
-        #swagger.tags = ['Managements']
+       #swagger.tags = ['Managements']
+        #swagger.description = 'Endpoint to force delete users'
+        #swagger.parameters['obj'] =  {
+            in: 'body',
+            description: 'UserId array',
+            required: true,
+            schema: {
+              ids: ['abc', 'xyz']
+            }
+        }
         #swagger.security = [{
             "Authorization": []
         }]
@@ -90,6 +140,7 @@ router.get(
   '/users/deleted',
   /*  
         #swagger.tags = ['Managements']
+        #swagger.description = 'Endpoint to get delete users'
         #swagger.security = [{
             "Authorization": []
         }]
@@ -102,6 +153,7 @@ router.get(
 router.get('/players', 
   /*  
         #swagger.tags = ['Managements']
+        #swagger.description = 'Endpoint to filter players'
         #swagger.security = [{
             "Authorization": []
         }]
@@ -109,6 +161,20 @@ router.get('/players',
         passport.authenticate('jwt', { session: false }),
         AdminRole,
         PlayersController.filterPlayers
+)
+
+router.put('/players/:id', 
+  /*  
+        #swagger.tags = ['Managements']
+        #swagger.description = 'Endpoint to update player information'
+        #swagger.security = [{
+            "Authorization": []
+        }]
+        #swagger.parameters['id'] = { description: 'Player ID' }
+    */
+        passport.authenticate('jwt', { session: false }),
+        AdminRole,
+        PlayersManagement.updatePlayer
 )
 
 router.get('/players/v1', 
@@ -123,10 +189,13 @@ router.get('/players/v1',
         PlayersManagement.getPlayers,
 )
 
+
+
 router.get(
   '/players/banned',
   /*  
         #swagger.tags = ['Managements']
+        #swagger.description = 'Endpoint to get banned players information'
         #swagger.security = [{
             "Authorization": []
         }]
@@ -136,10 +205,25 @@ router.get(
   PlayersManagement.getBannedPlayers,
 );
 
+
+router.delete('/players', 
+/*  
+        #swagger.tags = ['Managements']
+        #swagger.description = 'Endpoint to get ban players'
+        #swagger.security = [{
+            "Authorization": []
+        }]
+    */
+  passport.authenticate('jwt', { session: false }),
+   AdminRole,
+  PlayersManagement.changeStatusPlayers
+)
+
 router.get(
   '/statistics/profits',
     /*  
         #swagger.tags = ['Managements']
+        #swagger.description = 'Endpoint to calculate profits of rentme'
         #swagger.security = [{
             "Authorization": []
         }]

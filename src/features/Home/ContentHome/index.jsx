@@ -4,7 +4,7 @@ import "./ContentHome.scss";
 import ReactTwitchEmbedVideo from "react-twitch-embed-video";
 import axios from "axios";
 import { useEffect, useState, memo } from "react";
-// import AOS from "aos";
+
 
 function ContentHome() {
   const history = useHistory();

@@ -52,7 +52,7 @@ const Chat = () => {
     return () => {
       socket.off("private chat", handleAddNewPrivateChat);
     };
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     if (other) {
