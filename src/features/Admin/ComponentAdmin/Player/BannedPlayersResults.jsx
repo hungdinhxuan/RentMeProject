@@ -10,6 +10,9 @@ import moment from "moment";
 import PropTypes from "prop-types";
 import { useCallback, useState } from "react";
 import "./Player.scss";
+import {changeStatusPlayersAsync} from 'features/Admin/AdminSlice'
+import {useDispatch} from 'react-redux'
+import {ToastSweet} from "components/SweetAlert2";
 
 // Export file CSV
 function CustomToolbar() {
@@ -23,10 +26,19 @@ function CustomToolbar() {
 const PlayerListResults = ({ players, ...rest }) => {
   const [editRows, setEditRows] = useState({});
   const [selectionModel, setSelectionModel] = useState([]);
-
+  const dispatch = useDispatch()
   // Unblock players
-  const handleClick = () => {
-    console.log(editRows);
+  const handleunblockPlayers = () => {
+    if (selectionModel.length > 0) {
+      console.log(selectionModel);
+      dispatch(changeStatusPlayersAsync({ids: selectionModel, status: 'unblock'}));
+    } else {
+      ToastSweet(
+        "error",
+        "Please select at least one user to delete",
+        "bottom-end"
+      );
+    }
   };
 
   const handleEditRowsModelChange = useCallback((model) => {
@@ -124,9 +136,9 @@ const PlayerListResults = ({ players, ...rest }) => {
             <button
               type="button"
               className="btn btn-outline-primary"
-              onClick={handleClick}
+              onClick={handleunblockPlayers}
             >
-              Unlock
+              unblock
             </button>
           </>
         );

@@ -41,7 +41,7 @@ const Dashboard = () => {
         status: "Under Review",
       })
     );
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     const handleRegisterPlayer = (player) => {

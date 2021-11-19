@@ -6,7 +6,12 @@ const passport = require('passport');
 router.post(
     /*  
         #swagger.tags = ['Tradings']  
+        #swagger.description = 'Endpoint to auth user when access chat room'
+        #swagger.security = [{
+            "Authorization": []
+        }]
     */
+   
   '/auth',
   passport.authenticate('jwt', { session: false }),
   TradingsController.authRoom,

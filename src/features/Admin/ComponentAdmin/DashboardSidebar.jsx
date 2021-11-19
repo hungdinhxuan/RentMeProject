@@ -39,26 +39,26 @@ const items = [
     icon: UserIcon,
     title: "Users Management",
   },
-  {
-    href: "/admin/products",
-    icon: ShoppingBagIcon,
-    title: "Products",
-  },
-  {
-    href: "/admin/settings",
-    icon: SettingsIcon,
-    title: "Settings",
-  },
-  {
-    href: "/login",
-    icon: LockIcon,
-    title: "Login",
-  },
-  {
-    href: "/register",
-    icon: UserPlusIcon,
-    title: "Register",
-  },
+  // {
+  //   href: "/admin/products",
+  //   icon: ShoppingBagIcon,
+  //   title: "Products",
+  // },
+  // {
+  //   href: "/admin/settings",
+  //   icon: SettingsIcon,
+  //   title: "Settings",
+  // },
+  // {
+  //   href: "/login",
+  //   icon: LockIcon,
+  //   title: "Login",
+  // },
+  // {
+  //   href: "/register",
+  //   icon: UserPlusIcon,
+  //   title: "Register",
+  // },
   {
     href: "/",
     icon: AlertCircleIcon,
@@ -98,7 +98,7 @@ const DashboardSidebar = ({ onMobileClose, openMobile, location }) => {
             width: 64,
             height: 64,
           }}
-          to="/admin/account"
+          to="/setting/profile"
         />
 
         <Typography color="textSecondary" variant="body2">

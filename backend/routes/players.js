@@ -8,6 +8,7 @@ router.get(
   '/',
   /*  
         #swagger.tags = ['Players']  
+        #swagger.description = 'Endpoint to get all players'
        
     */
   PlayerController.filterPlayerProfiles,
@@ -16,6 +17,7 @@ router.get(
 router.post('/', 
   /*  
         #swagger.tags = ['Players']  
+        #swagger.description = 'Endpoint to register to become player'
         #swagger.security = [{
             "Authorization": []
         }]
@@ -31,6 +33,7 @@ router.get(
   '/:id',
   /*  
         #swagger.tags = ['Players']  
+        #swagger.description = 'Endpoint to get one player'
         #swagger.parameters['id'] = { description: 'Player ID' }
 
     */
@@ -41,6 +44,7 @@ router.get(
   '/:id/reviews',
   /*  
         #swagger.tags = ['Players']  
+        #swagger.description = 'Endpoint to get all reviews of a player'
         #swagger.parameters['id'] = { description: 'Player ID' }
 
     */
@@ -51,6 +55,7 @@ router.post(
   '/:id/reviews',
   /*  
         #swagger.tags = ['Players']  
+        #swagger.description = 'Endpoint to create review on player profile'
         #swagger.security = [{
             "Authorization": []
         }]
@@ -65,6 +70,7 @@ router.post(
   '/:id/donate',
   /*  
         #swagger.tags = ['Players']  
+        #swagger.description = 'Endpoint to donate to a player'
         #swagger.security = [{
             "Authorization": []
         }]
@@ -79,6 +85,7 @@ router.patch(
   '/:id/follow',
   /*  
         #swagger.tags = ['Players']  
+        #swagger.description = 'Endpoint to follow a player'
         #swagger.security = [{
             "Authorization": []
         }]
