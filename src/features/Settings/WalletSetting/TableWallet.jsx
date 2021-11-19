@@ -9,7 +9,7 @@ function TableWallet() {
 
   const columns = [
     {
-      title: "Transaction ID",
+      title: "ID",
       dataIndex: "_id",
       render: (text,index) => {
         return {

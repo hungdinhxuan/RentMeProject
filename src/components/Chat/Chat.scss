@@ -263,35 +263,21 @@ $background: #f7f7f7;
   }
 }
 
-@keyframes typing {
-  0%,
-  75%,
-  100% {
-    transform: translate(0, 0.25rem) scale(0.9);
-    opacity: 0.5;
-  }
+// @keyframes typing {
+//   0%,
+//   75%,
+//   100% {
+//     transform: translate(0, 0.25rem) scale(0.9);
+//     opacity: 0.5;
+//   }
 
-  25% {
-    transform: translate(0, -0.25rem) scale(1);
-    opacity: 1;
-  }
-}
+//   25% {
+//     transform: translate(0, -0.25rem) scale(1);
+//     opacity: 1;
+//   }
+// }
 
 // Obviously in a real app I would load this from a DB with JS
 // For now this is a nice quick and easy method to mockup
 
-.pic.stark {
-  background-image: url("https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/7/73/SMH_Mentor_6.png");
-}
-.pic.banner {
-  background-image: url("https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/4/4f/BruceHulk-Endgame-TravelingCapInPast.jpg");
-}
-.pic.thor {
-  background-image: url("https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/9/98/ThorFliesThroughTheAnus.jpg");
-}
-.pic.danvers {
-  background-image: url("https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/0/05/HeyPeterParker.png");
-}
-.pic.rogers {
-  background-image: url("https://vignette.wikia.nocookie.net/marvelcinematicuniverse/images/7/7c/Cap.America_%28We_Don%27t_Trade_Lives_Vision%29.png");
-}
+
