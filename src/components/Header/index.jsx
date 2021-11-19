@@ -180,11 +180,13 @@ function Header() {
     };
   }, []);
 
+  // Get message
   useEffect(() => {
     dispatch(getAllMessagesAsync(user?._id));
     user ? setUserHeader(false) : setUserHeader(true);
   }, [dispatch, user]);
 
+  
   useEffect(() => {
     const loadData = (data) => {
       if (data === "this player is offline") {

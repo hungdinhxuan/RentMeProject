@@ -1,12 +1,10 @@
-import {
-  Button,
-  Card,
-  CardHeader, Divider
-} from "@material-ui/core";
+import { Button, Card, CardHeader, Divider } from "@material-ui/core";
 import { DataGrid } from "@mui/x-data-grid";
 import { Avatar, Input, Modal } from "antd";
 import { useState } from "react";
-import socket from 'utils/socket'
+import socket from "utils/socket";
+import { ToastSweet } from "components/SweetAlert2";
+import './PlayerRegistration.scss'
 
 const LatestPlayerRegistration = (props) => {
   const { items } = props;
@@ -18,20 +16,44 @@ const LatestPlayerRegistration = (props) => {
     setIsModalVisible(false);
   };
   const handleViewClick = () => {
-    setIsModalVisible(true);
+    if (playerDetail) {
+      setIsModalVisible(true);
+    } else {
+      ToastSweet(
+        "error",
+        "Please select at least one player request to accept",
+        "bottom-end"
+      );
+    }
   };
   const handleAccept = () => {
-    console.log(playerDetail);
-    socket.emit('handle register player', {
-      player: playerDetail,
-      status: 'Accepted'
-    })
+    if (playerDetail) {
+      socket.emit("handle register player", {
+        player: playerDetail,
+        status: "Accepted",
+      });
+    } else {
+      ToastSweet(
+        "error",
+        "Please select at least one player request to accept",
+        "bottom-end"
+      );
+    }
   };
   const handleDecline = () => {
-    socket.emit('handle register player', {
-      player: playerDetail,
-      status: 'Rejected'
-    })
+    if (playerDetail) {
+      socket.emit("handle register player", {
+        player: playerDetail,
+        status: "Rejected",
+      });
+    } else {
+      ToastSweet(
+        "error",
+        "Please select at least one player request to decline",
+        "bottom-end"
+      );
+    }
+    
   };
   const columns = [
     {
@@ -101,7 +123,6 @@ const LatestPlayerRegistration = (props) => {
     },
   ];
 
- 
   return (
     <Card {...props}>
       <CardHeader title="Registration Players" />
@@ -127,7 +148,7 @@ const LatestPlayerRegistration = (props) => {
 
       {/* Modal detail */}
       <Modal
-        title="Detail Request Player"
+        title="Request Detail"
         visible={isModalVisible}
         onCancel={handleCancel}
         footer={[
@@ -153,7 +174,11 @@ const LatestPlayerRegistration = (props) => {
           <div>
             <label htmlFor="pricePerHour">Price</label>
           </div>
-          <Input className="price" disabled value={playerDetail?.pricePerHour} />
+          <Input
+            className="price"
+            disabled
+            value={playerDetail?.pricePerHour}
+          />
           <div>
             <label htmlFor="coverBackground">Cover Background</label>
           </div>

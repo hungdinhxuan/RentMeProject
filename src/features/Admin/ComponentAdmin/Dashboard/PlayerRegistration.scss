@@ -1,0 +1,21 @@
+.ant-modal-title {
+    font-size: 20px;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--text-hover);
+}
+
+.container {
+    
+    label {
+        font-weight: 500;
+        text-transform: uppercase;
+        color: var(--text-hover);
+        margin-top: 5px;
+    }
+    .ant-input-disabled {
+        font-size: 18px;
+        background: transparent;
+        color: rgba(21, 21, 21, 0.70);
+    }
+}
