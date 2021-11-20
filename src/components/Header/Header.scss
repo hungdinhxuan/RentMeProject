@@ -17,6 +17,7 @@ header {
                 justify-content: center;
                 align-items: center;
                 text-decoration: none;
+                transform: translateY(15%);
                 img {
                     margin-right: 10px;
                 }
@@ -228,8 +229,8 @@ header {
         nav {
             .container {
                 .header__nav img {
-                    width: 30px;
-                    height: 30px;
+                    width: 120px;
+                    height: 40px;
                 }
                 #basic-navbar-nav {
                     .button__login,
