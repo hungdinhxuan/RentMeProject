@@ -185,6 +185,7 @@ class PlayersControllers {
       birthDate.setFullYear(today.getFullYear() - age);
       return birthDate;
     }
+    
 
     try {
       let player_profiles = await PlayerProfiles.aggregate([
@@ -228,20 +229,27 @@ class PlayersControllers {
         { $sort: { 'user.isOnline': -1 } },
         {
           $match: {
-            $or: [
-              {'user.isOnline': status ? status : 'true'},
-              {'user.isOnline': status ? status : 'false'},
-            ],
-            // 'user.isOnline': status === 'true',
-            // 'user.gender': gender,
-            $or: [
+            
+            $and: [
               {
-                'user.gender': gender ? gender : 'female'
+                $or: [
+                  {'user.isOnline': status ? status === 'true' : true},
+                  {'user.isOnline': status ? status === 'true' : false},
+                ],
               },
               {
-                'user.gender': gender ? gender : 'male'
-              }
+                $or: [
+                  {
+                    'user.gender': gender ? gender : 'female'
+                  },
+                  {
+                    'user.gender': gender ? gender : 'male'
+                  }
+                ],
+              },
             ],
+
+
             'user.birthDate': {
               $lte: calculateBirthDateFromAge(minAge), /// ngay sinh nho hon thi nhieu tuoi hon
               $gte: calculateBirthDateFromAge(maxAge),
