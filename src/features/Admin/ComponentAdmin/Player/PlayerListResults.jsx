@@ -31,17 +31,19 @@ const PlayerListResults = ({ players, ...rest }) => {
   const [editRows, setEditRows] = useState({});
   const [selectionModel, setSelectionModel] = useState([]);
   const dispatch = useDispatch()
+
+  
   const handleUpdatePlayer = () => {
     console.log(editRows);
   };
   const handleBanPlayers = () => {
     if (selectionModel.length > 0) {
-      console.log(selectionModel);
+      
       dispatch(changeStatusPlayersAsync({ids: selectionModel, status: 'ban'}));
     } else {
       ToastSweet(
         "error",
-        "Please select at least one user to delete",
+        "Please select at least one player to ban",
         "bottom-end"
       );
     }
