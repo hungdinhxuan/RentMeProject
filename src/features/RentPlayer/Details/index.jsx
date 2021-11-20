@@ -129,7 +129,8 @@ export default function PlayerDetails() {
     dispatch(addNewPrivateChat({
       otherId: player.user._id,
       otherAvatar: player.user.avatar,
-      otherFullName: player.user.fullName
+      otherFullName: player.user.fullName,
+      isOnline: player.user.isOnline
     }))
     dispatch(setOther({
       otherId: player.user._id,
