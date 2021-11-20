@@ -6,7 +6,6 @@ import Loading from "components/Loading"
 import PageNotFound from "components/PageNotFound"
 import routes from "constants/routes"
 import { React, Suspense } from "react"
-import MessengerCustomerChat from "react-messenger-customer-chat"
 import { BrowserRouter, Route, Switch } from "react-router-dom"
 
 
@@ -64,11 +63,7 @@ function App () {
           <Route path="*" component={PageNotFound} />
         </Switch>
 
-        <MessengerCustomerChat
-          pageId={process.env.REACT_APP_FACEBOOK_PAGE_ID}
-          appId={process.env.REACT_APP_FACEBOOK_APP_ID}
-          htmlRef={process.env.REACT_APP_FACEBOOK_HTML_REF}
-        />
+        
       </BrowserRouter>
     </Suspense>
   )
