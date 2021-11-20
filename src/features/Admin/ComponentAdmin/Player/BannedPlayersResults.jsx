@@ -35,7 +35,7 @@ const PlayerListResults = ({ players, ...rest }) => {
     } else {
       ToastSweet(
         "error",
-        "Please select at least one user to delete",
+        "Please select at least one player to unblock",
         "bottom-end"
       );
     }
