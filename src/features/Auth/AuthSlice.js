@@ -36,7 +36,7 @@ export const AsyncSignin = createAsyncThunk(
   async (values, { rejectWithValue }) => {
     try {
       const response = await axiosClient.post("/auth/login", values)
-      handleNoti("success", "Đăng nhập thành công", "")
+      handleNoti("success", "Login success", "")
 
       if (response.success) {
         localStorage.setItem("token", response.token)
@@ -54,7 +54,7 @@ export const AsyncSignup = createAsyncThunk(
   async (values, { rejectWithValue }) => {
     try {
       const response = await axiosClient.post("/auth/register", values)
-      handleNoti("success", "Đăng ký thành công", "")
+      handleNoti("success", "Signup success", "")
       return response
     } catch (err) {
       return rejectWithValue(err.response.data)
@@ -67,7 +67,7 @@ export const AsyncForgotPassword = createAsyncThunk(
   async (values, { rejectWithValue }) => {
     try {
       const response = await axiosClient.patch("/auth/forgot-password", values)
-      toast("Gửi email thành công", {
+      toast("Send an email success.Please check your mailbox", {
         position: "bottom-center",
         autoClose: 2000,
         hideProgressBar: false,
@@ -143,9 +143,9 @@ const AuthSlice = createSlice({
       state.isAuthenticated = true
     },
     [AsyncSignin.rejected]: (state, action) => {
-      state.error = action.payload.message || "Đăng nhập không thành công"
+      state.error = action.payload.message || "Login failed"
       state.loading = false
-      handleNoti("error", "Đăng nhập thất bại", `${state.error}`)
+      handleNoti("error", "Login error", `${state.error}`)
     },
 
     [AsyncSignup.pending]: (state) => {
@@ -157,7 +157,7 @@ const AuthSlice = createSlice({
       state.error = null
     },
     [AsyncSignup.rejected]: (state, action) => {
-      state.error = action.payload.message || "Đăng ký không thành công"
+      state.error = action.payload.message || "Signup failed"
       handleNoti("error", `${state.error}`, "")
     },
 
@@ -166,7 +166,7 @@ const AuthSlice = createSlice({
       state.error = null
     },
     [AsyncForgotPassword.rejected]: (state, action) => {
-      state.error = action.payload.message || "Gửi email không thành công"
+      state.error = action.payload.message || "An email sending failed"
       toast(`${state.error}`, {
         position: "bottom-center",
         autoClose: 2000,

@@ -28,7 +28,7 @@ import {
               color="textPrimary"
               variant="h3"
             >
-              ${props.data.profit.toFixed(2)}
+              ${props.data?.profit?.toFixed(2)}
             </Typography>
           </Grid>
           <Grid item>
