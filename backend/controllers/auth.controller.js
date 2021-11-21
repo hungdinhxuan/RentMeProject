@@ -13,7 +13,7 @@ class Auth {
     const { username, password } = req.body;
     try {
       const user = await User.findOneWithDeleted({ username });
-      // console.log(username);
+      
       if (!user) {
         return res.status(401).json({
           success: false,
@@ -22,7 +22,7 @@ class Auth {
       }
       const verify = await argon2.verify(user.password, password);
       if (verify) {
-        // console.log(verify);
+        
         if(user.deleted){
           return res.status(401).json({
             success: false,
@@ -110,7 +110,7 @@ class Auth {
       privateKey,
       {
         algorithm: 'RS256',
-        expiresIn: '2h',
+        expiresIn: '20m',
       },
     );
     const data = {
@@ -126,7 +126,7 @@ class Auth {
 <head>
     <meta content="text/html; charset=utf-8" http-equiv="Content-Type" />
     <title>Reset Password Email Template</title>
-    <meta name="description" content="Reset Password Email Template.">
+    <meta name="description" content="Reset Password Email">
     <style type="text/css">
         a:hover {text-decoration: underline !important;}
     </style>
@@ -169,7 +169,7 @@ class Auth {
                                         <p style="color:#455056; font-size:15px;line-height:24px; margin:0;">
                                             We cannot simply send you your old password. A unique link to reset your
                                             password has been generated for you. To reset your password, click the
-                                            following link and follow the instructions.
+                                            following link.
                                         </p>
                                         <b>Your new password is ${randPassword}</b> <br/>
                                         <a href="${process.env.SERVER_URL}/api/auth/reset-password/?token=${token}"
@@ -208,18 +208,20 @@ class Auth {
   }
 
   resetPassword(req, res, next) {
-    const token = req.params.token;
+    const {token} = req.query;
     jwt.verify(token, publicKey, async function(err, decoded) {
       if(err){
         return res.status(500).json({
           success: false,
-          message: error.message || 'Internal Server Error'
+          message: err.message || 'Internal Server Error'
         })
       }
       let {sub, newPassword} = decoded;
+
       try {
         newPassword = await argon2.hash(newPassword)
-        const user = await User.findByIdAndUpdate(sub, {password: newPassword})
+        const user = await User.findOneAndUpdate({email: sub}, {password: newPassword})
+        
         return res.json({ success: true, message: 'Password reset successful'})
       } catch (error) {
         return res.status(500).json({
@@ -280,7 +282,7 @@ class Auth {
         .status(403)
         .json({ success: true, message: 'Email is not verified' });
     } catch (error) {
-      // console.log(error);
+      
       return res.status(500).json({
         success: false,
         message: 'Internal Server Error',
@@ -296,7 +298,7 @@ class Auth {
         method: 'GET',
       });
       const data = await response.json();
-      // console.log(data);
+      
       const { id, email, name, picture } = data;
       let user = await User.findOneWithDeleted({ email });
       if (!user) {
@@ -331,7 +333,7 @@ class Auth {
         token,
       });
     } catch (error) {
-      console.log(error);
+      
       return res.status(500).json({
         success: false,
         message: 'Internal Server Error',
