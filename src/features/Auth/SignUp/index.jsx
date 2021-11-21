@@ -31,7 +31,7 @@ function Copyright() {
       align="center"
       style={{ color: "#C4C3E6", fontSize: "20px" }}
     >
-      {"Thuộc sở hữu © "}
+      {"Copyright © "}
       <Link color="inherit" to="/">
         RentMe
       </Link>{" "}
@@ -121,25 +121,25 @@ export default function SignUp() {
     email: "",
   };
   const schema = yup.object().shape({
-    username: yup.string().min(6, "Tài khoản phải trên 6 ký tự").required(),
-    password: yup.string().min(8, "Mật khẩu phải ít nhất 8 ký tự").required(),
+    username: yup.string().min(6, "Account with at least 6 characters").required(),
+    password: yup.string().min(8, "Password must be at least 8 characters").required(),
     confirmPassword: yup
       .string()
-      .oneOf([yup.ref("password"), null], "Mật khẩu không trùng khớp")
-      .required("Không được để trống"),
+      .oneOf([yup.ref("password"), null], "Password does not match")
+      .required("Cannot be empty"),
     fullName: yup
       .string()
       .matches(
         /^[a-zA-ZÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚĂĐĨŨƠàáâãèéêìíòóôõùúăđĩũơƯĂẠẢẤẦẨẪẬẮẰẲẴẶẸẺẼỀỀỂẾưăạảấầẩẫậắằẳẵặẹẻẽềềểếỄỆỈỊỌỎỐỒỔỖỘỚỜỞỠỢỤỦỨỪễệỉịọỏốồổỗộớờởỡợụủứừỬỮỰỲỴÝỶỸửữựỳỵỷỹ\s\W]*$/,
-        "Họ tên không hợp lệ"
+        "Your name is error"
       )
-      .min(5, "Tên quá ngắn")
-      .max(50, "Tên quá dài")
+      .min(5, "Name is too short")
+      .max(50, "Name is too long")
       .required(),
     email: yup
       .string()
-      .email("Không đúng định dạng email")
-      .required("Không được để trống"),
+      .email("Must be a valid email")
+      .required("Cannot be empty"),
   });
   const {
     register,
@@ -197,7 +197,7 @@ export default function SignUp() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Đăng Ký
+            Sign Up
           </Typography>
           <form
             className={classes.form}
@@ -206,45 +206,45 @@ export default function SignUp() {
             autoComplete="off"
             onSubmit={handleSubmit(onSubmit)}
           >
-            <FormLabel>Tài Khoản</FormLabel>
+            <FormLabel>Username</FormLabel>
             <TextField
               fullWidth
               id="username"
               name="username"
-              placeholder="Nhập tài khoản"
+              placeholder="Input username"
               autoFocus
               {...register("username")}
             />
             {errors.username && <p>{errors.username.message}</p>}
-            <FormLabel className="mt-3">Họ Tên</FormLabel>
+            <FormLabel className="mt-3">Full Name</FormLabel>
             <TextField
               fullWidth
               name="fullName"
               type="text"
               id="fullName"
-              placeholder="Nhập họ tên"
+              placeholder="Input full name"
               {...register("fullName")}
             />
             {errors.fullName && <p>{errors.fullName.message}</p>}
 
-            <FormLabel className="mt-3">Mật Khẩu</FormLabel>
+            <FormLabel className="mt-3">Password</FormLabel>
             <TextField
               fullWidth
               name="password"
               type="password"
               id="password"
-              placeholder="Nhập mật khẩu"
+              placeholder="Input password"
               {...register("password")}
             />
             {errors.password && <p>{errors.password.message}</p>}
 
-            <FormLabel className="mt-3">Xác Nhận Mật Khẩu</FormLabel>
+            <FormLabel className="mt-3">Confirm Password</FormLabel>
             <TextField
               fullWidth
               name="confirmPassword"
               type="password"
               id="confirmPassword"
-              placeholder="Xác nhận mật khẩu"
+              placeholder="Confirm password"
               {...register("confirmPassword")}
             />
             {errors.confirmPassword && <p>{errors.confirmPassword.message}</p>}
@@ -255,7 +255,7 @@ export default function SignUp() {
               name="email"
               type="text"
               id="email"
-              placeholder="Nhập email"
+              placeholder="Input email"
               {...register("email")}
             />
             {errors.email && <p>{errors.email.message}</p>}
@@ -267,7 +267,7 @@ export default function SignUp() {
               className={classes.submit}
               style={{ margin: "24px 0 16px" }}
             >
-              Đăng Ký
+              Register
             </Button>
             <Grid container>
               <Grid item xs>
@@ -276,7 +276,7 @@ export default function SignUp() {
                   style={{ color: "#AF93EF" }}
                   className={classes.Hover}
                 >
-                  Trở về Trang Chủ
+                  Back to Home
                 </Link>
               </Grid>
               <Grid item>
@@ -286,7 +286,7 @@ export default function SignUp() {
                   style={{ color: "#AF93EF" }}
                   className={classes.Hover}
                 >
-                  {"Đã có tài khoản? Đăng nhập"}
+                  {"Already have an account? Signin"}
                 </Link>
               </Grid>
             </Grid>

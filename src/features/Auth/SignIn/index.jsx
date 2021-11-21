@@ -37,7 +37,7 @@ function Copyright() {
       align="center"
       style={{ color: "#C4C3E6", fontSize: "20px" }}
     >
-      {"Thuộc sở hữu © "}
+      {"Copyright © "}
       <Link color="inherit" to="/">
         RentMe
       </Link>{" "}
@@ -125,12 +125,12 @@ export default function SignIn(props) {
   const schema = yup.object().shape({
     username: yup
       .string()
-      .min(6, "Tài khoản ít nhất 6 ký tự")
-      .required("Không được để trống"),
+      .min(6, "Account with at least 6 characters")
+      .required("Cannot be empty"),
     password: yup
       .string()
-      .min(8, "Mật khẩu ít nhất 8 ký tự")
-      .required("Không được để trống"),
+      .min(8, "Password must be at least 8 characters")
+      .required("Cannot be empty"),
     captcha: yup.string().required(),
   });
   const {
@@ -209,7 +209,7 @@ export default function SignIn(props) {
       localStorage.setItem("token", res.token);
       Swal.fire({ 
         icon: 'success',
-        title: 'Login successful',
+        title: 'Login success',
         showConfirmButton: false,
         timer: 1500
       })
@@ -235,7 +235,7 @@ export default function SignIn(props) {
       localStorage.setItem("token", res.token);
       Swal.fire({ 
         icon: 'success',
-        title: 'Login successful',
+        title: 'Login success',
         showConfirmButton: false,
         timer: 1500
       })
@@ -278,7 +278,7 @@ export default function SignIn(props) {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Đăng nhập
+            Sign In
           </Typography>
           <form
             noValidate
@@ -287,30 +287,30 @@ export default function SignIn(props) {
             className={classes.form}
             style={{ marginTop: 8 }}
           >
-            <FormLabel>Tài Khoản</FormLabel>
+            <FormLabel>Username</FormLabel>
             <TextField
               fullWidth
               id="username"
               name="username"
-              placeholder="Nhập tài khoản"
+              placeholder="Input username"
               autoFocus
               {...register("username")}
             />
 
             {errors.username && <p>{errors.username.message}</p>}
-            <FormLabel className="mt-3">Mật Khẩu</FormLabel>
+            <FormLabel className="mt-3">Password</FormLabel>
             <TextField
               fullWidth
               id="password"
               name="password"
               type="password"
-              placeholder="Nhập mật khẩu"
+              placeholder="Input password"
               {...register("password")}
             />
             {errors.password && <p>{errors.password.message}</p>}
             <Grid item xs style={{ marginTop: "5px" }}>
               <Link to="/forgot-password" style={{ color: "#AF93EF" }}>
-                Quên mật khẩu
+                Forgot Password
               </Link>
             </Grid>
             <Button
@@ -321,7 +321,7 @@ export default function SignIn(props) {
               disabled={capcha}
               style={{ margin: "24px 0 16px" }}
             >
-              Đăng nhập
+              Login
             </Button>
             <Grid container>
               <Grid item xs>
@@ -330,7 +330,7 @@ export default function SignIn(props) {
                   style={{ color: "#AF93EF" }}
                   className={classes.Hover}
                 >
-                  Trở về Trang Chủ
+                  Back to Home
                 </Link>
               </Grid>
               <Grid item>
@@ -340,7 +340,7 @@ export default function SignIn(props) {
                   style={{ color: "#AF93EF" }}
                   className={classes.Hover}
                 >
-                  {"Đăng ký tài khoản"}
+                  {"Sign Up account"}
                 </Link>
               </Grid>
             </Grid>
