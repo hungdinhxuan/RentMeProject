@@ -196,7 +196,7 @@ export default function PlayerDetails() {
               </div>
               <div className="social-icon">
                 <a
-                  href="https://facebook.com"
+                  href="https://www.facebook.com/Rentme-105038348609650"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
