@@ -7,6 +7,7 @@ const filesRouter = require('./files');
 const tradingsRouter = require('./tradings')
 const managemnentsRouter = require('./managements');
 const conversationsRouter = require('./conversations')
+const createError = require('http-errors')
 
 module.exports = (app) => {
   app.use('/api/auth', authRouter);
@@ -18,4 +19,14 @@ module.exports = (app) => {
   app.use('/api/tradings', tradingsRouter)
   app.use('/api/managements', managemnentsRouter)
   app.use('/api/conversations', conversationsRouter)
+  app.use((req, res, next) => {
+    next(createError(404, "Not found!"));
+  })
+  app.use((err, req, res, next) => {
+    res.status(err.status || 500).json({
+      success: false,
+      message: err.message,
+      error: err.message,
+    });
+  })
 };
