@@ -157,6 +157,7 @@ const AuthSlice = createSlice({
       state.error = null
     },
     [AsyncSignup.rejected]: (state, action) => {
+      state.loading = false;
       state.error = action.payload.message || "Signup failed"
       handleNoti("error", `${state.error}`, "")
     },
@@ -166,6 +167,7 @@ const AuthSlice = createSlice({
       state.error = null
     },
     [AsyncForgotPassword.rejected]: (state, action) => {
+      state.loading = false
       state.error = action.payload.message || "An email sending failed"
       toast(`${state.error}`, {
         position: "bottom-center",
