@@ -1,4 +1,4 @@
-const { uploadS3, bucket_name, s3, upload } = require('../services/s3');
+const { uploadS3, bucket_name, s3, upload } = require('../utils/s3');
 const multer = require('multer');
 const S3_URL = `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${process.env.AWS_S3_BUCKET_REGION}.amazonaws.com/`;
 

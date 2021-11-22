@@ -12,12 +12,11 @@ import Typography from "@material-ui/core/Typography";
 import { makeStyles } from "@material-ui/styles";
 import { Link } from "react-router-dom";
 import "./SignUp.scss";
-
 import { FormLabel } from "@material-ui/core";
 import AnhBackGround from "assets/acct_creation_bg.jpg";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { AsyncSignup } from "../AuthSlice";
+import { AsyncSignup, resetRedirectLogin} from "../AuthSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useHistory } from "react-router-dom";
 // React-hook-form
@@ -110,6 +109,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function SignUp() {
+
   const classes = useStyles();
 
   // Form
@@ -153,15 +153,21 @@ export default function SignUp() {
   });
 
   // Redux register
-  const { error, isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, redirectLogin } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const history = useHistory();
 
+  if(redirectLogin) {
+    history.push("/signin");
+    dispatch(resetRedirectLogin())
+  }
+
+
   const onSubmit = (data) => {
     dispatch(AsyncSignup(data));
-    if (!error) {
-      history.push("/signin");
-    }
+    // if (!error) {
+    //   history.push("/signin");
+    // }
     reset();
   };
 

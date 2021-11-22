@@ -37,7 +37,7 @@ app.use(
   swaggerUi.setup(swaggerDocument),
 );
 
-require('./services/mongo')();
+require('./utils/mongo')();
 
 app.use(mongoSanitize());
 
@@ -93,7 +93,7 @@ passport.deserializeUser(function (user, done) {
   done(null, user);
 });
 
-require('./services/passport')();
+require('./utils/passport')();
 
 require('./routes')(app);
 socket(app);

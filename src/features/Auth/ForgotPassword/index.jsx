@@ -1,6 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
 import Button from "@material-ui/core/Button";
-import TextField from "@material-ui/core/TextField";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -11,9 +10,17 @@ import { useSelector, useDispatch } from "react-redux";
 import { AsyncForgotPassword } from "../AuthSlice";
 import { ToastContainer } from "react-toastify";
 import AnhBackGround from "assets/acct_creation_bg.jpg";
+import { Form, Input } from "antd";
+
+const validateMessages = {
+  required: "${label} is required!",
+  types: {
+    email: "${label} is not a valid email!",
+  },
+};
 
 export default function ForgotPassword() {
-  const [values, setValues] = useState({ email: "" });
+  
   const history = useHistory();
   const handleBack = () => {
     history.push("/signin");
@@ -21,13 +28,14 @@ export default function ForgotPassword() {
 
   const { isAuthenticated } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
-  const handleSubmit = () => {
-    dispatch(AsyncForgotPassword(values));
-    setValues({ email: "" });
-  };
+
   if (isAuthenticated) {
     history.push("/");
   }
+  const onFinish = (values) => {
+    dispatch(AsyncForgotPassword(values));
+    
+  };
 
   return (
     <div
@@ -45,7 +53,7 @@ export default function ForgotPassword() {
               Vui lòng nhập email đã đăng ký tài khoản. Chúng tôi sẽ gửi một
               email xác nhận đến email của bạn.
             </DialogContentText>
-            <TextField
+            {/* <TextField
               autoFocus
               margin="dense"
               id="name"
@@ -54,16 +62,32 @@ export default function ForgotPassword() {
               fullWidth
               value={values.email}
               onChange={(e) => setValues({ email: e.target.value })}
-            />
+            /> */}
+            <Form
+              name="nest-messages"
+              onFinish={onFinish}
+              validateMessages={validateMessages}
+            >
+              <Form.Item
+                name={["email"]}
+                rules={[
+                  {
+                    type: "email",
+                  },
+                ]}
+              >
+                <Input placeholder="Input your email here" />
+              </Form.Item>
+              <DialogActions>
+                <Button onClick={handleBack} color="primary">
+                  Trở về đăng nhập
+                </Button>
+                <Button type="primary" htmlType="submit">
+                  Submit
+                </Button>
+              </DialogActions>
+            </Form>
           </DialogContent>
-          <DialogActions>
-            <Button onClick={handleBack} color="primary">
-              Trở về đăng nhập
-            </Button>
-            <Button onClick={handleSubmit} color="primary">
-              Gửi
-            </Button>
-          </DialogActions>
         </Dialog>
       </div>
       <ToastContainer pauseOnFocusLoss={false} />

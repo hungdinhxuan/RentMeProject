@@ -45,9 +45,7 @@ export default function BecomePlayer() {
     },
   };
 
-  function onChange(e) {
-    setDataForm({ ...dataForm, [e.target.name]: e.target.value });
-  }
+ 
 
   const handlePreviewAvatar = (e) => {
     const file = e.target.files[0];

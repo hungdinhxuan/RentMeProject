@@ -16,7 +16,8 @@ const initialState = {
   loading: false,
   error: null,
   isAuthenticated: false,
-  userSignup: null
+  userSignup: null,
+  redirectLogin: false
 }
 
 export const AsyncLoadUser = createAsyncThunk(
@@ -116,6 +117,9 @@ const AuthSlice = createSlice({
       state.user = null
       state.loading = false
       state.isAuthenticated = false
+    },
+    resetRedirectLogin: (state) => {
+      state.redirectLogin = false
     }
   },
   extraReducers: {
@@ -155,20 +159,24 @@ const AuthSlice = createSlice({
       state.userSignup = action.payload
       state.loading = false
       state.error = null
+      state.redirectLogin = true
     },
     [AsyncSignup.rejected]: (state, action) => {
       state.loading = false;
+      console.log(action.payload)
       state.error = action.payload.message || "Signup failed"
+      state.redirectLogin = false
       handleNoti("error", `${state.error}`, "")
     },
 
     [AsyncForgotPassword.fulfilled]: (state) => {
       state.loading = false
       state.error = null
+      
     },
     [AsyncForgotPassword.rejected]: (state, action) => {
       state.loading = false
-      state.error = action.payload.message || "An email sending failed"
+      state.error = action.payload.message || action.payload.errors[0].msg || "An email sending failed"
       toast(`${state.error}`, {
         position: "bottom-center",
         autoClose: 2000,
@@ -180,5 +188,5 @@ const AuthSlice = createSlice({
   }
 })
 
-export const { logout } = AuthSlice.actions
+export const { logout, resetRedirectLogin} = AuthSlice.actions
 export default AuthSlice.reducer
