@@ -1,5 +1,5 @@
 # BACKEND
-## Project Structure
+## Folder Structure
 
 ```
 backend\
