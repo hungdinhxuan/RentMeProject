@@ -8,7 +8,7 @@ export default function Footer() {
       <div className="footer__container">
         <div className="intro">
           <div className="intro--content">
-            <img src="/player-dou-a.jpg" alt="Logo" className="logo__footer" />
+            <img src="/rentme.png" alt="Logo" className="logo__footer" />
             <div className="desc">
               <div className="title">RENTME FOUNDED</div>
               <p>Product © 2021 </p>
