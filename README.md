@@ -3,7 +3,6 @@
 
 ```
 backend\
- |--config\         # Environment variables and configuration related things
  |--controllers\    # Route controllers and handle business logic
  |--middlewares\    # Custom express middlewares
  |--managements\    # Route controllers for admin usage
