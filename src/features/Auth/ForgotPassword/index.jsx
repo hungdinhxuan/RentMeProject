@@ -20,7 +20,6 @@ const validateMessages = {
 };
 
 export default function ForgotPassword() {
-  
   const history = useHistory();
   const handleBack = () => {
     history.push("/signin");
@@ -34,7 +33,6 @@ export default function ForgotPassword() {
   }
   const onFinish = (values) => {
     dispatch(AsyncForgotPassword(values));
-    
   };
 
   return (
@@ -47,22 +45,12 @@ export default function ForgotPassword() {
     >
       <div className="container">
         <Dialog open={true} aria-labelledby="form-dialog-title">
-          <DialogTitle id="form-dialog-title">Quên mật khẩu</DialogTitle>
+          <DialogTitle id="form-dialog-title">Forgot Password</DialogTitle>
           <DialogContent>
             <DialogContentText>
-              Vui lòng nhập email đã đăng ký tài khoản. Chúng tôi sẽ gửi một
-              email xác nhận đến email của bạn.
+              Please enter your registered email account. We will send a
+              confirmation email to your email.
             </DialogContentText>
-            {/* <TextField
-              autoFocus
-              margin="dense"
-              id="name"
-              label="Email Address"
-              type="email"
-              fullWidth
-              value={values.email}
-              onChange={(e) => setValues({ email: e.target.value })}
-            /> */}
             <Form
               name="nest-messages"
               onFinish={onFinish}
@@ -80,7 +68,7 @@ export default function ForgotPassword() {
               </Form.Item>
               <DialogActions>
                 <Button onClick={handleBack} color="primary">
-                  Trở về đăng nhập
+                  Back to Sign In
                 </Button>
                 <Button type="primary" htmlType="submit">
                   Submit
