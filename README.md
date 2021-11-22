@@ -53,5 +53,5 @@ src\
 - To start the server, run `yarn start`
 
 # Link demo: 
--Website: https://rentme.games
--API docs: https://rentme.games/api/docs
+- Website: https://rentme.games
+- API docs: https://rentme.games/api/docs
