@@ -1,6 +1,6 @@
 import { Avatar, Badge, Button, Dropdown, Menu, Modal } from "antd";
 // import Logo from "assets/player-dou-a.jpg";
-import Logo from 'assets/logo.svg'
+import Logo from 'assets/logo.png'
 import {
   addNewMessage,
   removeMessage,
