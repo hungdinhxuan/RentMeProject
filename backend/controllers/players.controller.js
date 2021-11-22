@@ -4,7 +4,7 @@ const Trading = require('../models/tradings.model');
 const Transfer = require('../models/transfers.model');
 const User = require('../models/users.model');
 const { multer } = require('../utils/config');
-const { cloudinary, upload } = require('../services/multer');
+const { cloudinary, upload } = require('../utils/multer');
 const multerLib = require('multer');
 const streamifier = require('streamifier');
 

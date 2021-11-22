@@ -1,44 +1,57 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+# BACKEND
+## Folder Structure
 
-## Available Scripts
+```
+backend\
+ |--controllers\    # Route controllers and handle business logic
+ |--middlewares\    # Custom express middlewares
+ |--managements\    # Route controllers for admin usage
+ |--test\           # test function
+ |--models\         # Mongoose models 
+ |--routes\         # Routes
+ |--utils\          # Utility classes and functions
+ |--main.js         # Entry point
+ ```
 
-In the project directory, you can run:
+## API Documentation
+To view the list of available APIs and their specifications, run the server and go to `http://localhost:4000/api/docs` in your browser.
+- username: admin
+- password: 25e4e931ee67c97bc504dc18c2574495139e63c18790f9e3b7418d49143d0f68
+## Start
+- To install dependencies, run `yarn install`
+- To start the server, run `yarn start`
+- To start the server in development mode, run `yarn dev`
+## Test
+- To run the test suite, run `yarn test`
+# FRONTEND
+## Folder Structure
 
-### `yarn start`
+```
+src\
+ |--app\            # Store of redux that includes all of reducers
+ |--assets\         #It includes images
+ |--component\      # Components that can be used in other place in the features
+ |--constants\      # Declare const variable and routes for app.js
+ |--features\       # It includes all of features of the rentme project. It also can be called PAGES.
+    |--About\       # Content about the privacy of the rentme.
+    |--Admin\       # All function of the admin - "update, delete, insert, manage profit, chart profit".
+    |--Auth\        # It includes Sign In, Sign Up, and Forgot password pages".
+    |--BecomePlayer\  # Form to user can register becombe to the professional player.
+    |--ChatRoom\    # User can interact with the player together when rent player trading is success.
+    |--Home\    # Layout root in the home page.
+    |--PrivateChat\ # Layout likes the messenger that help user can chat the players whom user want.
+    |--RentPlayer\  # It includes layout card contains short information of players. Besides, it includes details page - it shows more details of each that player. 
+    |--Setting\     # Setting helps user can Update user's information. Moreover, it includes Withdraw, Deposit, Setting privacy, and can see history of wallet as well as transaction.
+    |--Streamhub\   # The function will update in the future.
+ |--utils\          # Utility functions
+ |--style.scss\     # Setup scss style
+ |--index.js        # Entry point
+ ```
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Start
+- To install dependencies, run `yarn install`
+- To start the server, run `yarn start`
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
-
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+# Link demo: 
+-Website: https://rentme.games
+-API docs: https://rentme.games/api/docs
