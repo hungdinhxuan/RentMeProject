@@ -122,7 +122,7 @@ const Sales = (props) => {
           </Button>
         }
         
-        title="Latest Sales"
+        title="Profit Chart"
         
       />
       

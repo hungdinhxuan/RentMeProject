@@ -24,3 +24,34 @@ To view the list of available APIs and their specifications, run the server and 
 ## Test
 - To run the test suite, run `yarn test`
 # FRONTEND
+## Folder Structure
+
+```
+src\
+ |--app\            # Store of redux that includes all of reducers
+ |--assets\         #It includes images
+ |--component\      # Components that can be used in other place in the features
+ |--constants\      # Declare const variable and routes for app.js
+ |--features\       # It includes all of features of the rentme project. It also can be called PAGES.
+    |--About\       # Content about the privacy of the rentme.
+    |--Admin\       # All function of the admin - "update, delete, insert, manage profit, chart profit".
+    |--Auth\        # It includes Sign In, Sign Up, and Forgot password pages".
+    |--BecomePlayer\  # Form to user can register becombe to the professional player.
+    |--ChatRoom\    # User can interact with the player together when rent player trading is success.
+    |--Home\    # Layout root in the home page.
+    |--PrivateChat\ # Layout likes the messenger that help user can chat the players whom user want.
+    |--RentPlayer\  # It includes layout card contains short information of players. Besides, it includes details page - it shows more details of each that player. 
+    |--Setting\     # Setting helps user can Update user's information. Moreover, it includes Withdraw, Deposit, Setting privacy, and can see history of wallet as well as transaction.
+    |--Streamhub\   # The function will update in the future.
+ |--utils\          # Utility functions
+ |--style.scss\     # Setup scss style
+ |--index.js        # Entry point
+ ```
+
+## Start
+- To install dependencies, run `yarn install`
+- To start the server, run `yarn start`
+
+# Link demo: 
+-Website: https://rentme.games
+-API docs: https://rentme.games/api/docs
