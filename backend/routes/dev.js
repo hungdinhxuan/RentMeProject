@@ -3,7 +3,7 @@ const router = express.Router();
 const {
   upload,
   cloudinary
-} = require('../services/multer');
+} = require('../utils/multer');
 const { multer } = require('../utils/config');
 const multerLib = require('multer');
 const streamifier = require('streamifier');
