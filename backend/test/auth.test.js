@@ -1,5 +1,5 @@
 const dotenv = require('dotenv');
-dotenv.config({ path: './env.test' });
+dotenv.config({ path: './.env.test' });
 const User = require('../models/users.model');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
