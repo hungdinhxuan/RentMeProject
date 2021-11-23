@@ -24,14 +24,15 @@ const swaggerDocument = require('./swagger-output.json');
 app.use(
   '/api/docs',
   loginLimiter,
-  basicAuth({
-    users: {
-      'admin':
-        '25e4e931ee67c97bc504dc18c2574495139e63c18790f9e3b7418d49143d0f68',
-    },
-    challenge: true,
-    realm: 'Imb4T3st4pp',
-  }),
+  // basicAuth({
+  //   users: {
+  //     'admin':
+  //       '25e4e931ee67c97bc504dc18c2574495139e63c18790f9e3b7418d49143d0f68',
+  //   },
+  //   challenge: true,
+  //   realm: 'Imb4T3st4pp',
+  // }
+  // ),
   swaggerUi.serve,
 
   swaggerUi.setup(swaggerDocument),

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const mongoose_delete = require('mongoose-delete');
 const { ListCities } = require('../utils/config');
-const argon2 = require('argon2');
+
 
 const UsersSchema = new Schema(
   {
