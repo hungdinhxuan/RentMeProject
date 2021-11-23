@@ -13,6 +13,6 @@ services:
     build: ./backend
     ports:
       - 4000:4000
-    env_file: ./backend/prod.env
+    env_file: ./backend/.env.production
     restart: always
 

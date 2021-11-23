@@ -49,7 +49,7 @@ if (process.env.NODE_ENV === 'production') {
     verifyRecaptcha,
     validate.validateLogin(),
     validate.handleValidationErrors,
-    loginLimiter,
+    // loginLimiter,
     authController.login,
   );
 } else {
