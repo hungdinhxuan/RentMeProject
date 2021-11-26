@@ -2,6 +2,7 @@
   "name": "rentme",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://rentme.games",
   "dependencies": {
     "@emotion/react": "^11.4.1",
     "@emotion/styled": "^11.3.0",
@@ -67,7 +68,9 @@
     "start": "react-scripts start",
     "build": "CI=false react-scripts --max_old_space_size=2048 build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "yarn build",
+    "deploy": "gh-pages -d build"
   },
   "browserslist": {
     "production": [
@@ -80,5 +83,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^3.2.3"
   }
 }
