@@ -46,7 +46,7 @@ const LatestProducts = (props) => (
     />
     <Divider />
     <List>
-      {products.map((product, i) => (
+      {products?.map((product, i) => (
         <ListItem divider={i < products.length - 1} key={product.id}>
           <ListItemAvatar>
             <img

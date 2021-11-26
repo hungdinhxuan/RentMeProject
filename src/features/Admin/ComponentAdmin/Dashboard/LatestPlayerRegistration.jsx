@@ -191,7 +191,7 @@ const LatestPlayerRegistration = (props) => {
           <div>
             <label htmlFor="albums">Albums</label>
           </div>
-          {playerDetail?.albums.map((item, index) => {
+          {playerDetail?.albums?.map((item, index) => {
             return (
               <Avatar
                 src={item}

@@ -196,7 +196,7 @@ function MainRentPlayer() {
           <div className="card__container">
             <div className="cardList row">
               {listPlayers &&
-                listPlayers.map((item) => {
+                listPlayers?.map((item) => {
                   return <CardList item={item} key={item._id} />;
                 })}
             </div>

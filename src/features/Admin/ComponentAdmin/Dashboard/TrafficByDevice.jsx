@@ -99,7 +99,7 @@ const TrafficByDevice = (props) => {
             pt: 2
           }}
         >
-          {devices.map(({
+          {devices?.map(({
             color,
             icon: Icon,
             title,

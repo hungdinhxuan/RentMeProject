@@ -81,7 +81,7 @@ export default function BecomePlayer() {
   useEffect(() => {
     return () => {
       listAvatar &&
-        listAvatar.map((item) => {
+        listAvatar?.map((item) => {
           return URL.revokeObjectURL(item.preview);
         });
     };
@@ -203,7 +203,7 @@ export default function BecomePlayer() {
                 // onChange={handleChange}
               >
                 {serviceGames &&
-                  serviceGames.map((item) => {
+                  serviceGames?.map((item) => {
                     return <Option key={item._id}>{item.name}</Option>;
                   })}
               </Select>
@@ -245,7 +245,7 @@ export default function BecomePlayer() {
                 accept="image/png, image/jpeg"
               />
               {listAvatar &&
-                listAvatar.map((item, index) => {
+                listAvatar?.map((item, index) => {
                   return (
                     <Avatar
                       src={item.preview}

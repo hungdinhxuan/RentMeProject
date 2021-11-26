@@ -89,7 +89,7 @@ const Chat = () => {
                 </div>
               </div>
             ) : null}
-            {others.map((value) => (
+            {others?.map((value) => (
               <div
                 className="contact"
                 key={value.otherId}
@@ -109,7 +109,7 @@ const Chat = () => {
           </>
         ) : (
           <>
-            {others.map((value) => (
+            {others?.map((value) => (
               <div
                 className="contact"
                 key={value.otherId}
@@ -172,7 +172,7 @@ const Chat = () => {
           <div className="message sender">
             Uh, he's from space, he came here to steal a necklace from a wizard.
           </div> */}
-          {conversations.map((msg) => (
+          {conversations?.map((msg) => (
             <div
               className={
                 user._id === msg.senderId

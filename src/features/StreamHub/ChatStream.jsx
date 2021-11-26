@@ -52,7 +52,7 @@ export default function ChatStream() {
       <div className="global-chat__display">
         {/* Map message from API */}
         <ScrollToBottom className="scroll-message">
-          {messages.map((item, index) => (
+          {messages?.map((item, index) => (
             <div className="global_message__item" key={index}>
               <div className="message__item--left">
                 <Avatar size={40} src={item?.avatar} />

@@ -680,8 +680,8 @@ export default function VideoChat() {
               textAlign: "left",
             }}
           >
-            {state.messages.length > 0 ? (
-              state.messages.map((item, index) => (
+            {state?.messages?.length > 0 ? (
+              state?.messages?.map((item, index) => (
                 <div key={index} style={{ textAlign: "left" }}>
                   <p style={{ wordBreak: "break-all" }}>
                     <b>{item.sender}</b>: {item.data}
