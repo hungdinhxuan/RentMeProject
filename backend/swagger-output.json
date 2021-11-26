@@ -5,7 +5,7 @@
     "description": "",
     "version": "1.0.0"
   },
-  "host": "localhost:4000",
+  "host": "api.rentme.games",
   "basePath": "/",
   "tags": [
     {
@@ -38,8 +38,7 @@
     }
   ],
   "schemes": [
-    "https",
-    "http"
+    "https"
   ],
   "securityDefinitions": {
     "Authorization": {
