@@ -5,8 +5,8 @@ const doc = {
     title: 'RentMe API',
     description: '',
   },
-  host: process.env.NODE_ENV === 'production' ?  'rentme.games' :'localhost:4000',
-  schemes: ['http', 'https'],
+  host: process.env.NODE_ENV === 'production' ?  'api.rentme.games' :'localhost:4000',
+  schemes: ['https', 'http'],
   consumes: ['application/json'],
   produces: ['application/json'],
   tags: [
