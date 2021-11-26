@@ -23,7 +23,7 @@ const swaggerDocument = require('./swagger-output.json');
 
 app.use(
   '/api/docs',
-  loginLimiter,
+  // loginLimiter,
   // basicAuth({
   //   users: {
   //     'admin':
