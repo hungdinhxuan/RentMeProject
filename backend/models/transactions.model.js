@@ -18,16 +18,17 @@ const TransactionsSchema = new Schema(
 
 TransactionsSchema.pre('save', async function (next) {
   const transact = this;
+  const sesssion = await mongoose.startSession();
   try {
-    const user = await User.findById(transact.userId);
+    sesssion.startTransaction();
+    const user = await User.findById(transact.userId, {}, { session: sesssion });
+
     if (transact.type === 'withdraw') {
       if (user.balance < transact.money) {
-        next(new Error(`Cannot withdraw with money greater than balance (current balance: ${user.balance})`));
-        return;
+        throw new Error(`Cannot withdraw with money greater than balance (current balance: ${user.balance})`);
       }
       if(transact.money <= 0){
-        next(new Error(`Cannot withdraw with zero or negative money`));
-        return;
+        throw new Error(`Cannot withdraw with zero or negative money`);
       }
       user.balance = user.balance - transact.money;
       transact.money = -transact.money
@@ -35,18 +36,20 @@ TransactionsSchema.pre('save', async function (next) {
       return next();
     } else if (transact.type === 'deposit') {
       if(transact.money > 1000){
-        next(new Error(`Maximum deposit is 1000$`));
-        return;
+        throw new Error(`Maximum deposit is 1000$`);
       }
       if(transact.money <= 0){
-        next(new Error(`Cannot deposit with zero or negative money`));
-        return;
+        throw new Error(`Cannot deposit with zero or negative money`);
       }
       user.balance = user.balance + transact.money;
       user.save();
+      await sesssion.commitTransaction();
+      await sesssion.endSession();
       next();
     }
   } catch (error) {
+    await sesssion.abortTransaction();
+    await sesssion.endSession();
     next(error);
   }
 });

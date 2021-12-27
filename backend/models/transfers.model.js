@@ -28,9 +28,9 @@ TransfersSchema.pre('save', async function (next) {
   try {
     sesssion.startTransaction();
 
-    const sender = await User.findById(transfer.sender);
-    const receiver = await User.findById(transfer.receiver);
-    const system = await User.findOne({ username: 'system' });
+    const sender = await User.findById(transfer.sender, {}, { session: sesssion });
+    const receiver = await User.findById(transfer.receiver, {}, { session: sesssion });
+    const system = await User.findOne({ username: 'system' }, {}, { session: sesssion });
     if (transfer.type === 'donate') {
       if (sender.balance < transfer.money) {
         throw new Error(`Cannot donate with money greater than current balance`);
