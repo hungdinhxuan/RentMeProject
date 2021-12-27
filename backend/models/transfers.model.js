@@ -24,18 +24,19 @@ const TransfersSchema = new Schema(
 
 TransfersSchema.pre('save', async function (next) {
   const transfer = this;
+  const sesssion = await mongoose.startSession();
   try {
+    sesssion.startTransaction();
+
     const sender = await User.findById(transfer.sender);
     const receiver = await User.findById(transfer.receiver);
     const system = await User.findOne({ username: 'system' });
     if (transfer.type === 'donate') {
       if (sender.balance < transfer.money) {
-        next(new Error(`Cannot donate with money greater than current balance`));
-        return;
+        throw new Error(`Cannot donate with money greater than current balance`);
       }
       if(transfer.money <= 0){
-        next(new Error(`Cannot donate with zero or negative money`));
-        return;
+        throw new Error(`Cannot donate with zero or negative money`);
       }
       const profit = transfer.money * transfer.rate;
       system.balance += profit;
@@ -52,17 +53,14 @@ TransfersSchema.pre('save', async function (next) {
       return next();
     } else if (transfer.type === 'trade') {
       if (sender.balance < transfer.money) {
-        next(new Error(`Cannot trade with money greater than current balance`));
-        return;
+        throw new Error(`Cannot trade with money greater than current balance`);
       }
       if(transfer.money <= 0){
-        next(new Error(`Cannot trade with zero or negative money`));
-        return;
+        throw new Error(`Cannot trade with zero or negative money`);
       }
 
       if(!transfer.tradingId){
-        next(new Error(`Trading Code is not valid !!`));
-        return;
+        throw new Error(`Trading Code is not valid !!`);
       }
 
       sender.balance = sender.balance - transfer.money;
@@ -70,10 +68,13 @@ TransfersSchema.pre('save', async function (next) {
       
       sender.save();
       receiver.save()
-
+      sesssion.commitTransaction();
+      sesssion.endSession();
       return next();
     }
   } catch (error) {
+    sesssion.abortTransaction();
+    sesssion.endSession();
     next(error);
   }
 });
