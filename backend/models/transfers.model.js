@@ -68,13 +68,13 @@ TransfersSchema.pre('save', async function (next) {
       
       sender.save();
       receiver.save()
-      sesssion.commitTransaction();
-      sesssion.endSession();
+      await sesssion.commitTransaction();
+      await sesssion.endSession();
       return next();
     }
   } catch (error) {
-    sesssion.abortTransaction();
-    sesssion.endSession();
+    await sesssion.abortTransaction();
+    await sesssion.endSession();
     next(error);
   }
 });
