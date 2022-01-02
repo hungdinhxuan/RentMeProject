@@ -8,7 +8,8 @@ module.exports = {
       switch (time) {
         case '30d':
           const year = new Date().getFullYear();
-          const month = new Date().getMonth() + 1;
+          let month = new Date().getMonth() + 1;
+          month = month < 10 ? `0${month}` : month;
           const transfers = await Transfer.aggregate([
             {
               $group: {
@@ -22,7 +23,6 @@ module.exports = {
                 count: { $sum: 1 },
               },
             },
-            { $sort: { _id: 1 } },
             {
               $match: {
                 _id: {
@@ -44,6 +44,11 @@ module.exports = {
               },
             },
           ]);
+          console.log(`${year}-${month}-${new Date(
+            year,
+            month,
+            0,
+          ).getDate()}`);
           return res.status(200).send(transfers);
         default:
           return res.status(400).json({
