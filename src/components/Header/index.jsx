@@ -355,17 +355,18 @@ function Header() {
                   Privacy Policy
                 </NavLink>
               </Nav.Link>
-              <Nav.Link href="#">
+              {
+                user ? <Nav.Link href="#">
                 <button
                   className="nav__item user__mobile"
                   activeclassname="nav__item--active"
                   onClick={handleShowDrawler}
                 >
-                  Thông tin cá nhân
                   User Information
                 </button>
                 <hr />
-              </Nav.Link>
+              </Nav.Link> : null
+              }
             </Nav>
             <div className="justify-content-end">
               {userHeader ? (
