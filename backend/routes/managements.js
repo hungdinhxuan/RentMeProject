@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const passport = require('passport');
-const { AdminRole } = require('../middlewares/checkRole');
 const UsersManagement = require('../managements/users.management');
 const PlayersManagement = require('../managements/players.management');
 const StatisticManagement = require('../managements/statistics.management');
 const PlayersController = require('../controllers/players.controller')
+const authorize = require('../middlewares/authorize');
+const Role = require('../constants/role');
 
 router.get(
   /*  
@@ -17,7 +18,7 @@ router.get(
     */
   '/users',
   passport.authenticate('jwt', { session: false }),
-  AdminRole,
+  authorize(Role.ADMIN),
   UsersManagement.getUsers,
 );
 
@@ -38,7 +39,7 @@ router.post(
   '/users',
 
   passport.authenticate('jwt', { session: false }),
-  AdminRole,
+  authorize(Role.ADMIN),
   UsersManagement.createUser,
 );
 
@@ -60,7 +61,7 @@ router.patch(
     */
   '/users',
   passport.authenticate('jwt', { session: false }),
-  AdminRole,
+  authorize(Role.ADMIN),
   UsersManagement.restoreUsers,
 );
 
@@ -88,7 +89,7 @@ router.put(
         }
     */
   passport.authenticate('jwt', { session: false }),
-  AdminRole,
+  authorize(Role.ADMIN),
   UsersManagement.updateUser,
 );
 
@@ -110,7 +111,7 @@ router.delete(
     */
   '/users/soft',
   passport.authenticate('jwt', { session: false }),
-  AdminRole,
+  authorize(Role.ADMIN),
   UsersManagement.softDeleteUsers,
 );
 
@@ -132,7 +133,7 @@ router.delete(
     */
   '/users/force',
   passport.authenticate('jwt', { session: false }),
-  AdminRole,
+  authorize(Role.ADMIN),
   UsersManagement.forceDeleteUsers,
 );
 
@@ -146,7 +147,7 @@ router.get(
         }]
     */
   passport.authenticate('jwt', { session: false }),
-  AdminRole,
+  authorize(Role.ADMIN),
   UsersManagement.getDeletedUsers,
 );
 
@@ -159,7 +160,7 @@ router.get('/players',
         }]
     */
         passport.authenticate('jwt', { session: false }),
-        AdminRole,
+        authorize(Role.ADMIN),
         PlayersController.filterPlayers
 )
 
@@ -173,7 +174,7 @@ router.put('/players/:id',
         #swagger.parameters['id'] = { description: 'Player ID' }
     */
         passport.authenticate('jwt', { session: false }),
-        AdminRole,
+        authorize(Role.ADMIN),
         PlayersManagement.updatePlayer
 )
 
@@ -185,7 +186,7 @@ router.get('/players/v1',
         }]
     */
         passport.authenticate('jwt', { session: false }),
-        AdminRole,
+        authorize(Role.ADMIN),
         PlayersManagement.getPlayers,
 )
 
@@ -201,7 +202,7 @@ router.get(
         }]
     */
   passport.authenticate('jwt', { session: false }),
-  AdminRole,
+  authorize(Role.ADMIN),
   PlayersManagement.getBannedPlayers,
 );
 
@@ -215,7 +216,7 @@ router.delete('/players',
         }]
     */
   passport.authenticate('jwt', { session: false }),
-   AdminRole,
+   authorize(Role.ADMIN),
   PlayersManagement.changeStatusPlayers
 )
 
@@ -229,7 +230,7 @@ router.get(
         }]
     */
   passport.authenticate('jwt', { session: false }),
-  AdminRole,
+  authorize(Role.ADMIN),
   StatisticManagement.profitsBasedOnIntervalTime,
 );
 
@@ -242,7 +243,7 @@ router.get(
         }]
     */
   passport.authenticate('jwt', { session: false }),
-  AdminRole,
+  authorize(Role.ADMIN),
   StatisticManagement.summary,
 );
 module.exports = router;
