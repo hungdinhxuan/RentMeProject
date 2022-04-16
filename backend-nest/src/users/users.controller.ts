@@ -1,4 +1,3 @@
-import { JwtAuthGuard } from './../auth/jwt/jwt-auth.guard';
 import { SearchUserDto } from './dto/search-user.dto';
 import {
   Controller,
@@ -10,21 +9,20 @@ import {
   Delete,
   HttpCode,
   Query,
-  UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Types, PaginateResult } from 'mongoose';
 import { User } from './schemas/user.schema';
-import { ApiBearerAuth } from '@nestjs/swagger';
-import { Roles } from 'src/auth/roles.decorator';
 import { Role } from './enums/role';
-import { RolesGuard } from 'src/auth/roles.guard';
+import { Auth } from 'src/auth/auth.decorator';
+import { LoggingInterceptor } from 'src/interceptors/logging.interceptor';
+import { ValidateUserInterceptor } from 'src/interceptors/validate-user.interceptor';
 
-@ApiBearerAuth()
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(Role.ADMIN, Role.CUSTOMER)
+@Auth(Role.ADMIN, Role.CUSTOMER)
+@UseInterceptors(ValidateUserInterceptor)
 @Controller('api/v1/users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

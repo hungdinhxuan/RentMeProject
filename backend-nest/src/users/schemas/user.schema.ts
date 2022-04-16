@@ -6,11 +6,16 @@ import { Role } from '../enums/role';
 import { TypeAccount } from '../enums/type-account.enum';
 
 import * as mongoosePaginate from 'mongoose-paginate-v2';
+import * as mongooseDelete from 'mongoose-delete';
+import { Status } from '../enums/status.enum';
 
 export type UserDocument = User & Document;
 export type UserModel<T extends Document> = PaginateModel<T>;
 
-@Schema()
+@Schema({
+  timestamps: true,
+  versionKey: false,
+})
 export class User {
   @Prop({
     type: String,
@@ -112,10 +117,10 @@ export class User {
   @Prop({ type: String, default: Province['Hồ Chí Minh'], maxlength: 500 })
   public province: Province;
 
-  public createdAt?: Date;
-
-  public updatedAt?: Date;
+  @Prop({ type: String, default: Status.FREE })
+  public status: Status;
 }
 
-export const UserSchema =
-  SchemaFactory.createForClass(User).plugin(mongoosePaginate);
+export const UserSchema = SchemaFactory.createForClass(User)
+  .plugin(mongoosePaginate)
+  .plugin(mongooseDelete);

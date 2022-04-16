@@ -1,6 +1,6 @@
 import { Types } from 'mongoose';
-export interface JwtPayload {  
-    sub: Types.ObjectId;
+export class validatedUser {
+    userId: Types.ObjectId;
     username: string;
     role: number;
     roleString: string;
