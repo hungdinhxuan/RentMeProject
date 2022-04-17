@@ -7,6 +7,7 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt/jwt.strategy';
 import { AuthController } from './auth.controller';
 import config from 'src/config/configuration';
+import { RedisService } from 'src/redis.service';
 
 @Module({
   imports: [UsersModule,  PassportModule,
@@ -25,7 +26,7 @@ import config from 'src/config/configuration';
       }
     }),
   ],
-  providers: [AuthService, JwtStrategy, SendgridService],
+  providers: [AuthService, JwtStrategy, SendgridService, RedisService],
   exports: [AuthService, PassportModule, JwtModule],
   controllers: [AuthController],
 })

@@ -1,5 +1,5 @@
+import { RedisService } from './redis.service';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
-import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -14,6 +14,7 @@ import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { UsersController } from './users/users.controller';
 import { MailController } from './mail.controller';
 import { SendgridService } from './sendgrid.service';
+import { AppGateway } from './app.gateway';
 
 
 
@@ -32,10 +33,12 @@ import { SendgridService } from './sendgrid.service';
     TradingsModule,
     TransfersModule
   ],
-  controllers: [AppController, MailController],
+  controllers: [ MailController],
   providers: [
     AppService,
-    SendgridService
+    SendgridService,
+    RedisService,
+    AppGateway
   ],
 })
 

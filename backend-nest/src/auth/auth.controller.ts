@@ -1,3 +1,4 @@
+import { RedisService } from './../redis.service';
 import { UsersService } from './../users/users.service';
 import {
   Controller,
@@ -19,6 +20,7 @@ import { ConfigService } from '@nestjs/config';
 import { SendgridService } from 'src/sendgrid.service';
 import { ApiQuery } from '@nestjs/swagger';
 
+
 @Controller('api/v1/auth')
 export class AuthController {
   constructor(
@@ -26,6 +28,7 @@ export class AuthController {
     private readonly usersService: UsersService,
     private readonly configService: ConfigService,
     private readonly sendgridService: SendgridService,
+    private readonly redisService: RedisService,
   ) {}
   @Post('login')
   async login(@Body() userLoginRequest: UserLoginDto, @Response() res) {
