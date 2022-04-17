@@ -123,4 +123,8 @@ export class User {
 
 export const UserSchema = SchemaFactory.createForClass(User)
   .plugin(mongoosePaginate)
-  .plugin(mongooseDelete);
+  .plugin(mongooseDelete, {
+    deletedAt: true,
+    deletedBy: true,
+    overrideMethods: 'all',
+  });

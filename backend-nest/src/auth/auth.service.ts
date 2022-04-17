@@ -1,9 +1,11 @@
+import { Status } from './../users/enums/status.enum';
 import BcryptHelper from 'src/utils/bcrypt.util';
 import { Injectable } from '@nestjs/common';
 import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { Role } from 'src/users/enums/role';
+import { ResetPasswordDto } from './dto/reset-password.dto';
 
 @Injectable()
 export class AuthService {
@@ -12,7 +14,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
   async validateUser(username: string, pass: string): Promise<any> {
-    const user = await this.usersService.findByUsername(username);
+    const user = await this.usersService.findOne({ username });
 
     if (user && (await BcryptHelper.comparePassword(pass, user.password))) {
       const { password, ...result } = user;
@@ -33,7 +35,32 @@ export class AuthService {
     };
   }
 
+  generateToken(payload: object) {
+    return this.jwtService.sign(payload);
+  }
+
   async register(user: CreateUserDto) {
     return this.usersService.create(user);
+  }
+
+  async resetPassword(token: string) {
+    try {
+      const decoded = await this.jwtService.verifyAsync(token);
+      let {sub, newPassword} = decoded;
+      const user: any = await this.usersService.findOne({ _id: decoded.sub });
+      if (!user.deleted || user.status !== Status.BANNED) {
+        await this.usersService.updatePassword(user._id, newPassword);
+        return {
+          message: 'Password reset successfully',
+        };
+      }
+      return null;
+    } catch (error) {
+      console.log(
+        '🚀 ~ file: auth.service.ts ~ line 49 ~ AuthService ~ resetPassword ~ error',
+        error,
+      );
+      return null;
+    }
   }
 }

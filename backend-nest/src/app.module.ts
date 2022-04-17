@@ -12,6 +12,8 @@ import { TradingsModule } from './tradings/tradings.module';
 import { TransfersModule } from './transfers/transfers.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { UsersController } from './users/users.controller';
+import { MailController } from './mail.controller';
+import { SendgridService } from './sendgrid.service';
 
 
 
@@ -30,9 +32,10 @@ import { UsersController } from './users/users.controller';
     TradingsModule,
     TransfersModule
   ],
-  controllers: [AppController],
+  controllers: [AppController, MailController],
   providers: [
-    AppService
+    AppService,
+    SendgridService
   ],
 })
 

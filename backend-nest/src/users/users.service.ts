@@ -29,10 +29,10 @@ export class UsersService {
     console.log(searchUser);
     return await this.userModel.paginate(
       {
-       $or: [
-        { username: { $regex: searchUser.keyword || '', $options: 'i' } },
-        { email: { $regex: searchUser.keyword || '', $options: 'i' } },
-      ],
+        $or: [
+          { username: { $regex: searchUser.keyword || '', $options: 'i' } },
+          { email: { $regex: searchUser.keyword || '', $options: 'i' } },
+        ],
       },
       {
         page: searchUser.page,
@@ -47,16 +47,18 @@ export class UsersService {
     return await this.userModel.findById(id).lean().exec();
   }
 
-  async findByUsername(username: string): Promise<User> {
-    return await this.userModel.findOne({ username }).lean().exec();
-  }
-
-  async findByEmail(email: string): Promise<User> {
-    return await this.userModel.findOne({ email }).lean().exec();
+  async findOne(obj: object): Promise<User> {
+    return await this.userModel.findOne(obj).lean().exec();
   }
 
   update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
+  }
+
+  async updatePassword(id: Types.ObjectId, newPassword: string) {
+    return await this.userModel.findByIdAndUpdate(id, {
+      password: await BcryptHelper.hashPassword(newPassword),
+    });
   }
 
   async remove(id: Types.ObjectId) {

@@ -1,3 +1,4 @@
+import { SendgridService } from './../sendgrid.service';
 import { UsersModule } from './../users/users.module';
 import { Module } from '@nestjs/common';
 import { PassportModule } from '@nestjs/passport';
@@ -22,8 +23,9 @@ import config from 'src/config/configuration';
         };
         return options; 
       }
-    }),],
-  providers: [AuthService, JwtStrategy],
+    }),
+  ],
+  providers: [AuthService, JwtStrategy, SendgridService],
   exports: [AuthService, PassportModule, JwtModule],
   controllers: [AuthController],
 })

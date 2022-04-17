@@ -1,3 +1,4 @@
+import { TypeAccount } from './enums/type-account.enum';
 import {
   registerDecorator,
   ValidationOptions,
@@ -17,7 +18,7 @@ export class IsUserAlreadyExistConstraint
   constructor(private readonly usersService: UsersService) {}
 
   validate(username: string, args: ValidationArguments) {
-    return this.usersService.findByUsername(username).then((user) => {
+    return this.usersService.findOne({username}).then((user) => {
       if (user) {
         return false;
       }
@@ -34,7 +35,7 @@ export class IsEmailAlreadyExistConstraint
   constructor(private usersService: UsersService) {}
 
   validate(email: string, args: ValidationArguments) {
-    return this.usersService.findByEmail(email).then((user) => {
+    return this.usersService.findOne({email}).then((user) => {
       if (user) {
         return false;
       }
@@ -46,10 +47,19 @@ export class IsEmailAlreadyExistConstraint
 @ValidatorConstraint({ async: true })
 @Injectable()
 export class IsValidRoleConstraint implements ValidatorConstraintInterface {
-  validate(role: number, args: ValidationArguments) {
+  validate(role: Role, args: ValidationArguments) {
     return Role[role] !== undefined;
   }
 }
+
+@ValidatorConstraint({ async: true })
+@Injectable()
+export class IsValidTypeAccountConstraint implements ValidatorConstraintInterface {
+  validate(typeAccount: TypeAccount, args: ValidationArguments) {
+    return Object.values(TypeAccount).includes(typeAccount);
+  }
+}
+
 
 export function IsUserAlreadyExist(validationOptions?: ValidationOptions) {
   return function (object: Object, propertyName: string) {
@@ -83,6 +93,18 @@ export function IsValidRole(validationOptions?: ValidationOptions) {
       options: validationOptions,
       constraints: [],
       validator: IsValidRoleConstraint,
+    });
+  };
+}
+
+export function IsValidTypeAccount(validationOptions?: ValidationOptions) {
+  return function (object: Object, propertyName: string) {
+    registerDecorator({
+      target: object.constructor,
+      propertyName: propertyName,
+      options: validationOptions,
+      constraints: [],
+      validator: IsValidTypeAccountConstraint,
     });
   };
 }
