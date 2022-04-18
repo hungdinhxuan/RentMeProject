@@ -1,3 +1,5 @@
+import { PaginateResult } from 'mongoose';
+import { Player, PlayerDocument } from './schemas/player.schema';
 import { RegisterPlayerFormDto } from './dto/register-player-form.dto';
 import {
   Controller,
@@ -13,21 +15,41 @@ import {
   UseInterceptors,
   UploadedFiles,
   Response,
+  Query,
+  ValidationPipe,
+  UsePipes,
 } from '@nestjs/common';
 import { PlayersService } from './players.service';
 import { UpdatePlayerDto } from './dto/update-player.dto';
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from 'src/cloudinary.service';
 import { Status } from './enums/status.enum';
+import { Auth } from 'src/auth/auth.decorator';
+import { ValidateUserInterceptor } from 'src/interceptors/validate-user.interceptor';
+import { Role } from 'src/users/enums/role';
+import { SearchPlayerDto } from './dto/search-player.dto';
 
-@Controller('players')
+
+@Controller('api/v1/players')
 export class PlayersController {
   constructor(
     private readonly playersService: PlayersService,
     private readonly cloudinaryService: CloudinaryService,
   ) {}
 
-  @Post()
+  @Get('search')
+  @UsePipes( new ValidationPipe( { transform: true, transformOptions: {enableImplicitConversion: true} }))
+  async searchPaged(
+    @Query() searchPlayer: SearchPlayerDto,
+  ) {
+    
+    return await this.playersService.search(searchPlayer);
+  }
+
+  @Auth(Role.CUSTOMER)
+  @UseInterceptors(ValidateUserInterceptor)
+  @Post('register')
+  @UsePipes( new ValidationPipe( { transform: true, transformOptions: {enableImplicitConversion: true} }))
   @UseInterceptors(
     FilesInterceptor('files', 4, {
       fileFilter: (req, file: Express.Multer.File, cb) => {
@@ -41,7 +63,7 @@ export class PlayersController {
         }
       },
       limits: {
-        fileSize: 1024 * 1024 * 5, // 5MB
+        fileSize: 1024 * 1024 * 4, // 4MB
       },
     }),
   )
@@ -49,9 +71,20 @@ export class PlayersController {
     @Body() registerPlayerForm: RegisterPlayerFormDto,
     @Request() req,
     @Response() res,
-    @UploadedFiles() files: Array<Express.Multer.File>,
+    @UploadedFiles() files: Array<Express.Multer.File> = [],
   ) {
-    if (!registerPlayerForm.userId.equals(req.user.id)) {
+    if (files.length === 0) {
+      throw new HttpException('No files were uploaded', HttpStatus.BAD_REQUEST);
+    }
+
+    if (files.length < 4) {
+      throw new HttpException(
+        'You must upload 4 images',
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (!registerPlayerForm.userId === req.user.userId) {
       throw new HttpException(
         'You are not allowed to register this player',
         HttpStatus.FORBIDDEN,

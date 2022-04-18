@@ -7,15 +7,21 @@ export class SearchPlayerDto extends SearchBase {
     enum: [Gender.MALE, Gender.FEMALE, Gender.OTHER],
   })
   gender?: string;
-  @ApiPropertyOptional()
-  minPrice?: number;
-  @ApiPropertyOptional()
-  maxPrice?: number;
+  @ApiPropertyOptional({
+    default: 1
+  })
+  minPrice?: number = 1;
+  @ApiPropertyOptional({
+    default: 1000
+  })
+  maxPrice?: number = 1000;
 
   @ApiPropertyOptional()
   minAge?: number = 18;
   @ApiPropertyOptional()
   maxAge?: number = 70;
-  @ApiPropertyOptional({})
+  @ApiPropertyOptional({
+    default: 'nickname'
+  })
   sort?: string;
 }

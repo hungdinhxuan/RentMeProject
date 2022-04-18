@@ -16,9 +16,7 @@ import { MailController } from './mail.controller';
 import { SendgridService } from './sendgrid.service';
 import { AppGateway } from './app.gateway';
 import { CloudinaryService } from './cloudinary.service';
-
-
-
+import { ServicesModule } from './services/services.module';
 
 @Module({
   imports: [
@@ -35,21 +33,19 @@ import { CloudinaryService } from './cloudinary.service';
     TransactionsModule,
     TradingsModule,
     TransfersModule,
+    ServicesModule,
   ],
-  controllers: [ MailController],
+  controllers: [MailController],
   providers: [
     AppService,
     SendgridService,
     RedisService,
     AppGateway,
-    CloudinaryService
+    CloudinaryService,
   ],
 })
-
-export class AppModule implements NestModule{
+export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer
-      .apply(LoggerMiddleware)
-      .forRoutes(UsersController);
+    consumer.apply(LoggerMiddleware).forRoutes(UsersController);
   }
 }

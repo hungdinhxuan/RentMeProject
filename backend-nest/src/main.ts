@@ -1,4 +1,4 @@
-import { ValidationPipe } from '@nestjs/common';
+
 import { NestFactory } from '@nestjs/core';
 import {
   SwaggerModule,
@@ -10,6 +10,8 @@ import { useContainer } from 'class-validator';
 import helmet from 'helmet';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { join } from 'path';
+import { ValidationPipe } from '@nestjs/common';
+
 
 
 async function bootstrap() {
@@ -17,6 +19,7 @@ async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.useStaticAssets(join(__dirname, '..', 'static'));
   app.use(helmet());
+  
   app.enableCors({
     origin: '*',
   });

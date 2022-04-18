@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types, PaginateModel } from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 import * as mongooseDelete from 'mongoose-delete';
+import * as  aggregatePaginatefrom from "mongoose-aggregate-paginate-v2";
 import { Status } from '../enums/status.enum';
 
 
@@ -16,6 +17,10 @@ export class Player {
   @Prop({
     type: String, default: '', maxlength: 255, required: true
   })
+  public nickname: string;
+  @Prop({
+    type: String, default: '', maxlength: 255, required: true
+  })
   public shortDesc: string;
 
   @Prop({
@@ -23,7 +28,7 @@ export class Player {
   })
   public longDesc: string;
 
-  @Prop({ type: Types.ObjectId, ref: 'users', required: true })
+  @Prop({ type: Types.ObjectId, ref: 'User', required: true })
   public userId: Types.ObjectId;
 
   @Prop({ type: String, required: true, maxlength: 1000 })
@@ -48,6 +53,7 @@ export class Player {
 
 export const PlayerSchema = SchemaFactory.createForClass(Player)
   .plugin(mongoosePaginate)
+  .plugin(aggregatePaginatefrom)
   .plugin(mongooseDelete, {
     deletedAt: true,
     deletedBy: true,

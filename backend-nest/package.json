@@ -43,6 +43,7 @@
     "google-auth-library": "^7.9.1",
     "helmet": "^5.0.2",
     "mongoose": "^6.3.0",
+    "mongoose-aggregate-paginate-v2": "^1.0.6",
     "mongoose-delete": "^0.5.4",
     "mongoose-paginate-v2": "^1.6.3",
     "passport": "^0.5.2",

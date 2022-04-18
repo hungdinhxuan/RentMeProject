@@ -1,9 +1,14 @@
 import { Types } from 'mongoose';
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsNotEmpty, MaxLength, Min } from 'class-validator';
+import { IsArray, IsNotEmpty, IsNumber, IsPositive, Max, MaxLength, Min } from 'class-validator';
 
 
 export class RegisterPlayerFormDto {
+  @ApiProperty()
+  @MaxLength(255)
+  @IsNotEmpty()
+  nickname: string;
+
   @ApiProperty()
   @MaxLength(255)
   @IsNotEmpty()
@@ -18,13 +23,8 @@ export class RegisterPlayerFormDto {
   @IsNotEmpty()
   
   userId: Types.ObjectId;
+
   @ApiProperty()
-  @IsNotEmpty()
-  
-  coverBackground: string;
-  @ApiProperty()
-  @Min(0)
-  
   pricePerHour: number;
   
   @ApiProperty()

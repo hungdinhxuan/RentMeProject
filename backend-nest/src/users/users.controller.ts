@@ -21,8 +21,8 @@ import { Auth } from 'src/auth/auth.decorator';
 import { LoggingInterceptor } from 'src/interceptors/logging.interceptor';
 import { ValidateUserInterceptor } from 'src/interceptors/validate-user.interceptor';
 
-@Auth(Role.ADMIN, Role.CUSTOMER)
-@UseInterceptors(ValidateUserInterceptor)
+// @Auth(Role.ADMIN, Role.CUSTOMER)
+// @UseInterceptors(ValidateUserInterceptor)
 @Controller('api/v1/users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

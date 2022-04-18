@@ -4,6 +4,13 @@ import { IsArray, IsNotEmpty, MaxLength, Min } from 'class-validator';
 
 
 export class RegisterPlayerDto {
+
+  @ApiProperty()
+  @MaxLength(255)
+  @IsNotEmpty()
+  nickname: string;
+  
+
   @ApiProperty()
   @MaxLength(255)
   @IsNotEmpty()
