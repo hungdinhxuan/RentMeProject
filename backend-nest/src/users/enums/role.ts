@@ -3,6 +3,7 @@ export enum Role {
     ADMIN = 1,
     STREAMER = 2,
     PLAYER = 3,
-    CUSTOMER = 4
+    CUSTOMER = 4,
+    ANY = "*"
 }
 

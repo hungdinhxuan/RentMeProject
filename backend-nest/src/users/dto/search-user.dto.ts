@@ -1,18 +1,15 @@
-import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
-import { IsValidRole } from "../user.validator";
+import { Role } from 'src/users/enums/role';
+import { ApiPropertyOptional } from '@nestjs/swagger';
+import { SearchBase } from 'src/base/search.base';
 
-export class SearchUserDto {
-    @ApiProperty({
-        default: 1,
-    })
-    page: number = 1;
-    @ApiProperty({
-        default: 20,
-    })
-    limit: number = 20;
-    @ApiPropertyOptional()
-    keyword?: string;
-    
-    @ApiPropertyOptional()
-    role?: number;
+export class SearchUserDto extends SearchBase {
+  @ApiPropertyOptional({
+      enum: [Role.ROOT, Role.ADMIN, Role.STREAMER, Role.PLAYER, Role.CUSTOMER]
+  })
+  role?: number;
+
+  @ApiPropertyOptional({
+    default: 'username',
+  })
+  sort?: string;
 }

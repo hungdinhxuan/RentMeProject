@@ -5,7 +5,7 @@ import { UsersService } from '../users/users.service';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto } from 'src/users/dto/create-user.dto';
 import { Role } from 'src/users/enums/role';
-import { ResetPasswordDto } from './dto/reset-password.dto';
+
 
 @Injectable()
 export class AuthService {
@@ -35,6 +35,14 @@ export class AuthService {
     };
   }
 
+  async verify(token: string) {
+    try {
+      return await this.jwtService.verifyAsync(token);
+    } catch (error) {
+      return null;
+    }
+  }
+
   generateToken(payload: object) {
     return this.jwtService.sign(payload);
   }
@@ -56,10 +64,7 @@ export class AuthService {
       }
       return null;
     } catch (error) {
-      console.log(
-        '🚀 ~ file: auth.service.ts ~ line 49 ~ AuthService ~ resetPassword ~ error',
-        error,
-      );
+     
       return null;
     }
   }

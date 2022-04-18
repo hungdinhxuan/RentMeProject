@@ -1,3 +1,4 @@
+import { AuthService } from './auth/auth.service';
 import {
   SubscribeMessage,
   WebSocketGateway,
@@ -8,6 +9,7 @@ import {
  } from '@nestjs/websockets';
  import { Logger } from '@nestjs/common';
  import { Socket, Server } from 'socket.io';
+
  
  @WebSocketGateway({
    cors: {
@@ -16,8 +18,13 @@ import {
    path: '/mysocket',
    
  })
- export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+
  
+ export class AppGateway implements OnGatewayInit, OnGatewayConnection, OnGatewayDisconnect {
+  
+  constructor(private readonly authService: AuthService){
+
+  }
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('AppGateway');
  
@@ -34,7 +41,14 @@ import {
    this.logger.log(`Client disconnected: ${client.id}`);
   }
  
-  handleConnection(client: Socket, ...args: any[]) {
+  async handleConnection(client: Socket, ...args: any[]) {
    this.logger.log(`Client connected: ${client.id}`);
+   const payload = await this.authService.verify(
+    client.handshake.headers.authorization,
+   );
+    if(!payload){
+      client.disconnect(true);
+    }
+    
   }
  }

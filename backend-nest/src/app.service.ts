@@ -1,8 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { CloudinaryService } from './cloudinary.service';
 
 @Injectable()
 export class AppService {
-  getHello(): string {
-    return 'Hello World!';
+  constructor(private cloudinary: CloudinaryService) {}
+  async uploadFileToCloudinary(file: Express.Multer.File) {
+    return await this.cloudinary.uploadFile(file).catch(() => {
+      throw new BadRequestException('Invalid file type.');
+    });
   }
 }

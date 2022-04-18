@@ -1,5 +1,6 @@
 import { ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
+import {JsonWebTokenError } from 'jsonwebtoken';
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard('jwt') {
@@ -12,9 +13,10 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
   handleRequest(err, user, info, context) {
     // You can throw an exception based on either "info" or "err" arguments
   
-    if (err || !user) {
-      throw err || new UnauthorizedException();
+    if (info instanceof JsonWebTokenError) {
+      throw new UnauthorizedException('Invalid Token!');
     }
-    return user;
+
+    return super.handleRequest(err, user, info, context);
   }
 }

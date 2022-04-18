@@ -15,6 +15,8 @@ import { UsersController } from './users/users.controller';
 import { MailController } from './mail.controller';
 import { SendgridService } from './sendgrid.service';
 import { AppGateway } from './app.gateway';
+import { CloudinaryService } from './cloudinary.service';
+
 
 
 
@@ -23,6 +25,7 @@ import { AppGateway } from './app.gateway';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
+
     UsersModule,
     MongooseModule.forRoot(process.env.MONGODB_URI),
     AuthModule,
@@ -31,14 +34,15 @@ import { AppGateway } from './app.gateway';
     MessagesModule,
     TransactionsModule,
     TradingsModule,
-    TransfersModule
+    TransfersModule,
   ],
   controllers: [ MailController],
   providers: [
     AppService,
     SendgridService,
     RedisService,
-    AppGateway
+    AppGateway,
+    CloudinaryService
   ],
 })
 

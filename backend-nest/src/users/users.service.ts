@@ -6,6 +6,7 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { SearchUserDto } from './dto/search-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User, UserDocument, UserModel } from './schemas/user.schema';
+import { LeanDocument } from 'mongoose';
 
 @Injectable()
 export class UsersService {
@@ -27,27 +28,36 @@ export class UsersService {
 
   async searchPaged(searchUser: SearchUserDto): Promise<PaginateResult<User>> {
     console.log(searchUser);
+
     return await this.userModel.paginate(
       {
         $or: [
-          { username: { $regex: searchUser.keyword || '', $options: 'i' } },
-          { email: { $regex: searchUser.keyword || '', $options: 'i' } },
+          { username: { $regex: searchUser.keyword || '' } },
+          { email: { $regex: searchUser.keyword || '' } },
         ],
+
+        role: {
+          $regex: searchUser.role || '',
+        },
       },
       {
         page: searchUser.page,
         limit: searchUser.limit,
+        sort: { [searchUser.sort]: searchUser.order },
         lean: true,
         select: '-password',
+        allowDiskUse: true,
       },
     );
   }
 
-  async findOneById(id: Types.ObjectId): Promise<User> {
+  async findOneById(
+    id: Types.ObjectId,
+  ): Promise<LeanDocument<User & UserDocument>> {
     return await this.userModel.findById(id).lean().exec();
   }
 
-  async findOne(obj: object): Promise<User> {
+  async findOne(obj: object): Promise<LeanDocument<User & UserDocument>> {
     return await this.userModel.findOne(obj).lean().exec();
   }
 
