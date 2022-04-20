@@ -1,3 +1,4 @@
+import { Detail } from './../../base/detail.base';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types, PaginateModel } from 'mongoose';
 import { Gender } from '../enums/gender.enum';
@@ -16,7 +17,7 @@ export type UserModel<T extends Document> = PaginateModel<T>;
   timestamps: true,
   versionKey: false,
 })
-export class User {
+export class User extends Detail{
   @Prop({
     type: String,
     required: true,

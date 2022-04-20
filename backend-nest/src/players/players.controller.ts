@@ -28,8 +28,10 @@ import { Auth } from 'src/auth/auth.decorator';
 import { ValidateUserInterceptor } from 'src/interceptors/validate-user.interceptor';
 import { Role } from 'src/users/enums/role';
 import { SearchPlayerDto } from './dto/search-player.dto';
+import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
+import { PicturesUploadDto } from './dto/pictures-upload.dto';
 
-
+@ApiTags('players')
 @Controller('api/v1/players')
 export class PlayersController {
   constructor(
@@ -67,6 +69,11 @@ export class PlayersController {
       },
     }),
   )
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'List of pictures',
+    type: PicturesUploadDto,
+  })
   async registerBecomePlayer(
     @Body() registerPlayerForm: RegisterPlayerFormDto,
     @Request() req,

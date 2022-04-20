@@ -4,6 +4,7 @@ import { ApiQuery } from "@nestjs/swagger";
 import { SendgridService } from "./sendgrid.service";
 
 @Controller('mail')
+
 export class MailController {
     constructor(
         private readonly sendgridService: SendgridService,

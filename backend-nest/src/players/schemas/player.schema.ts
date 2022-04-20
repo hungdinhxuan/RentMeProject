@@ -4,6 +4,7 @@ import * as mongoosePaginate from 'mongoose-paginate-v2';
 import * as mongooseDelete from 'mongoose-delete';
 import * as  aggregatePaginatefrom from "mongoose-aggregate-paginate-v2";
 import { Status } from '../enums/status.enum';
+import { Detail } from 'src/base/detail.base';
 
 
 export type PlayerDocument = Player & Document;
@@ -13,7 +14,7 @@ export type PlayerModel<T extends Document> = PaginateModel<T>;
   timestamps: true,
   versionKey: false,
 })
-export class Player {
+export class Player extends Detail{
   @Prop({
     type: String, default: '', maxlength: 255, required: true
   })

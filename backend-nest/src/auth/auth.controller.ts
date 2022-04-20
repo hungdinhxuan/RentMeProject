@@ -20,7 +20,9 @@ import { ConfigService } from '@nestjs/config';
 import { SendgridService } from 'src/sendgrid.service';
 import { ApiQuery } from '@nestjs/swagger';
 
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('auth')
 @Controller('api/v1/auth')
 export class AuthController {
   constructor(

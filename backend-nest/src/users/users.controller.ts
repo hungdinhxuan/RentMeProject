@@ -20,9 +20,11 @@ import { Role } from './enums/role';
 import { Auth } from 'src/auth/auth.decorator';
 import { LoggingInterceptor } from 'src/interceptors/logging.interceptor';
 import { ValidateUserInterceptor } from 'src/interceptors/validate-user.interceptor';
+import { ApiTags } from '@nestjs/swagger';
 
-// @Auth(Role.ADMIN, Role.CUSTOMER)
-// @UseInterceptors(ValidateUserInterceptor)
+@ApiTags('users')
+@Auth(Role.ADMIN, Role.CUSTOMER)
+@UseInterceptors(ValidateUserInterceptor)
 @Controller('api/v1/users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}

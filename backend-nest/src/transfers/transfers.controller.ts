@@ -3,6 +3,9 @@ import { TransfersService } from './transfers.service';
 import { CreateTransferDto } from './dto/create-transfer.dto';
 import { UpdateTransferDto } from './dto/update-transfer.dto';
 
+import { ApiTags } from '@nestjs/swagger';
+
+@ApiTags('transfers')
 @Controller('transfers')
 export class TransfersController {
   constructor(private readonly transfersService: TransfersService) {}
