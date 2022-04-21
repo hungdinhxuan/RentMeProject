@@ -6,7 +6,7 @@ import { UpdateCategoryDto } from './dto/update-category.dto';
 import { CategoryDocument, CategoryModel } from './schemas/category.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { PaginateResult } from 'mongoose';
-import {Types} from 'mongoose';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class CategoriesService {
@@ -14,11 +14,11 @@ export class CategoriesService {
     @InjectModel(Category.name)
     private categoryModel: CategoryModel<CategoryDocument>,
   ) {}
-  async create(createCategoryDto: CreateCategoryDto) {
+  async createAsync(createCategoryDto: CreateCategoryDto) {
     return await this.categoryModel.create(createCategoryDto);
   }
 
-  async searchPaged(
+  async searchPagedAsync(
     searchCategory: SearchCategoryDto,
   ): Promise<PaginateResult<Category>> {
     console.log(searchCategory);
@@ -41,23 +41,33 @@ export class CategoriesService {
     return `This action returns all categories`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} category`;
+  async findOneAsync(obj: object) {
+    return await this.categoryModel.findOne(obj);
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async updateAsync(id: Types.ObjectId, updateCategoryDto: UpdateCategoryDto) {
+    return await this.categoryModel.findByIdAndUpdate(id, updateCategoryDto, {
+      new: true,
+    });
   }
 
-  softRemove(id: Types.ObjectId) {
-    return `This action removes a #${id} category`;
+  async softRemoveAsync(id: Types.ObjectId) {
+    return await this.categoryModel.findByIdAndUpdate(
+      id,
+      { isDeleted: true },
+      { new: true },
+    );
   }
 
-  hardRemove(id: Types.ObjectId) {
-    return `This action removes a #${id} category`;
+  async hardRemoveAsync(id: Types.ObjectId) {
+    return await this.categoryModel.findByIdAndRemove(id);
   }
 
-  restore(id: Types.ObjectId) {
-    return `This action restores a #${id} category`;
+  async restoreAsync(id: Types.ObjectId) {
+    return await this.categoryModel.findByIdAndUpdate(
+      id,
+      { isDeleted: false },
+      { new: true },
+    );
   }
 }

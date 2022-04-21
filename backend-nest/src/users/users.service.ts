@@ -26,7 +26,7 @@ export class UsersService {
     return this.userModel.find().lean().exec();
   }
 
-  async searchPaged(searchUser: SearchUserDto): Promise<PaginateResult<User>> {
+  async searchPagedAsync(searchUser: SearchUserDto): Promise<PaginateResult<User>> {
     console.log(searchUser);
 
     return await this.userModel.paginate(
@@ -71,7 +71,23 @@ export class UsersService {
     });
   }
 
-  async remove(id: Types.ObjectId) {
-    return await this.userModel.findByIdAndDelete(id).exec();
+  async softRemoveAsync(id: Types.ObjectId) {
+    return await this.userModel.findByIdAndUpdate(
+      id,
+      { isDeleted: true },
+      { new: true },
+    );
+  }
+
+  async hardRemoveAsync(id: Types.ObjectId) {
+    return await this.userModel.findByIdAndRemove(id);
+  }
+
+  async restoreAsync(id: Types.ObjectId) {
+    return await this.userModel.findByIdAndUpdate(
+      id,
+      { isDeleted: false },
+      { new: true },
+    );
   }
 }

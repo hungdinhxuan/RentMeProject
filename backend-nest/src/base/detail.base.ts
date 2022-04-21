@@ -4,6 +4,11 @@ import {Types} from 'mongoose';
 export class Detail {
 
     @Prop({
+        type: Boolean, required: true, default: false
+    })
+    public isDeleted: boolean;
+
+    @Prop({
         type: Types.ObjectId, required: false, ref: 'User',
     })
     createdById?: Types.ObjectId;

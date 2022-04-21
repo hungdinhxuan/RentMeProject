@@ -7,9 +7,10 @@ import {
   Patch,
   Param,
   Delete,
-  HttpCode,
   Query,
   UseInterceptors,
+  ValidationPipe,
+  UsePipes,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -40,10 +41,10 @@ export class UsersController {
   }
 
   @Get('search')
-  async searchPaged(
+  async searchPagedAsync(
     @Query() searchUser: SearchUserDto,
   ): Promise<PaginateResult<User>> {
-    return await this.usersService.searchPaged(searchUser);
+    return await this.usersService.searchPagedAsync(searchUser);
   }
 
   @Get(':id')
@@ -56,9 +57,24 @@ export class UsersController {
     return this.usersService.update(+id, updateUserDto);
   }
 
-  @Delete(':id')
-  @HttpCode(204)
-  async remove(@Param('id') id: Types.ObjectId): Promise<void> {
-    await this.usersService.remove(id);
+  @Patch(':id/restore')
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  )
+  async restoreAsync(@Param('id') id: Types.ObjectId) {
+    return await this.usersService.restoreAsync(id);
+  }
+
+  @Delete(':id/soft')
+  async hardRemoveAsync(@Param('id') id: Types.ObjectId) {
+    return await this.usersService.hardRemoveAsync(id);
+  }
+
+  @Delete(':id/hard')
+  async softRemoveAsync(@Param('id') id: Types.ObjectId) {
+    return await this.usersService.softRemoveAsync(id);
   }
 }

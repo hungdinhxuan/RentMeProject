@@ -10,11 +10,11 @@ import {Types} from 'mongoose';
 @Injectable()
 export class GamesService {
   constructor(@InjectModel(Game.name) private gameModel: GameModel<GameDocument>,) {}
-  async create(createGameDto: CreateGameDto) {
+  async createAsync(createGameDto: CreateGameDto) {
     return await this.gameModel.create(createGameDto);
   }
 
-  async searchPaged(
+  async searchPagedAsync(
     searchGame: SearchGameDto,
   ): Promise<PaginateResult<Game>> {
     console.log(searchGame);
@@ -37,19 +37,31 @@ export class GamesService {
     return `This action returns all games`;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} game`;
+  async findOneAsync(obj: object) {
+    return await this.gameModel.findOne(obj);
   }
 
-  update(id: number, updateGameDto: UpdateGameDto) {
-    return `This action updates a #${id} game`;
+  async updateAsync(id: Types.ObjectId, updateGameDto: UpdateGameDto) {
+    return await this.gameModel.findByIdAndUpdate(id, updateGameDto, {new: true});
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} game`;
+  async softRemoveAsync(id: Types.ObjectId) {
+    return await this.gameModel.findByIdAndUpdate(
+      id,
+      { isDeleted: true },
+      { new: true },
+    );
   }
-  
-  restore(id: Types.ObjectId) {
-    return `This action restores a #${id} category`;
+
+  async hardRemoveAsync(id: Types.ObjectId) {
+    return await this.gameModel.findByIdAndRemove(id);
+  }
+
+  async restoreAsync(id: Types.ObjectId) {
+    return await this.gameModel.findByIdAndUpdate(
+      id,
+      { isDeleted: false },
+      { new: true },
+    );
   }
 }

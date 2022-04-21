@@ -30,6 +30,7 @@ import { Role } from 'src/users/enums/role';
 import { SearchPlayerDto } from './dto/search-player.dto';
 import { ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { PicturesUploadDto } from './dto/pictures-upload.dto';
+import {Types} from 'mongoose';
 
 @ApiTags('players')
 @Controller('api/v1/players')
@@ -41,7 +42,7 @@ export class PlayersController {
 
   @Get('search')
   @UsePipes( new ValidationPipe( { transform: true, transformOptions: {enableImplicitConversion: true} }))
-  async searchPaged(
+  async searchPagedAsync(
     @Query() searchPlayer: SearchPlayerDto,
   ) {
     
@@ -143,8 +144,23 @@ export class PlayersController {
     return this.playersService.update(+id, updatePlayerDto);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.playersService.remove(+id);
+  @Patch(':id/restore')
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  )
+  async restoreAsync(@Param('id') id: Types.ObjectId) {
+    return await this.playersService.restoreAsync(id);
+  }
+
+  @Delete(':id/soft')
+  async hardRemoveAsync(@Param('id') id: Types.ObjectId) {
+    return await this.playersService.hardRemoveAsync(id);
+  }
+  @Delete(':id/hard')
+  async softRemoveAsync(@Param('id') id: Types.ObjectId) {
+    return await this.playersService.softRemoveAsync(id);
   }
 }

@@ -1,6 +1,18 @@
+import { Query } from '@nestjs/common';
+import { SearchCategoryDto } from './dto/search-category.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { Types } from 'mongoose';
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  UsePipes,
+  ValidationPipe,
+} from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
@@ -11,8 +23,8 @@ export class CategoriesController {
   constructor(private readonly categoriesService: CategoriesService) {}
 
   @Post()
-  async create(@Body() createCategoryDto: CreateCategoryDto) {
-    return await this.categoriesService.create(createCategoryDto);
+  async createAsync(@Body() createCategoryDto: CreateCategoryDto) {
+    return await this.categoriesService.createAsync(createCategoryDto);
   }
 
   @Get()
@@ -20,22 +32,59 @@ export class CategoriesController {
     return this.categoriesService.findAll();
   }
 
+  @Get('search')
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  )
+  async searchPagedAsync(@Query() searchDto: SearchCategoryDto) {
+    return await this.categoriesService.searchPagedAsync(searchDto);
+  }
+
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.categoriesService.findOne(+id);
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  )
+  async findOneAsync(@Param('id') id: Types.ObjectId) {
+    return await this.categoriesService.findOneAsync({ _id: id });
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateCategoryDto: UpdateCategoryDto) {
-    return this.categoriesService.update(+id, updateCategoryDto);
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  )
+  async updateAsync(
+    @Param('id') id: Types.ObjectId,
+    @Body() updateCategoryDto: UpdateCategoryDto,
+  ) {
+    return await this.categoriesService.updateAsync(id, updateCategoryDto);
+  }
+
+  @Patch(':id/restore')
+  @UsePipes(
+    new ValidationPipe({
+      transform: true,
+      transformOptions: { enableImplicitConversion: true },
+    }),
+  )
+  async restoreAsync(@Param('id') id: Types.ObjectId) {
+    return await this.categoriesService.restoreAsync(id);
   }
 
   @Delete(':id/soft')
-  hardRemove(@Param('id') id: Types.ObjectId) {
-    return this.categoriesService.softRemove(id);
+  async hardRemoveAsync(@Param('id') id: Types.ObjectId) {
+    return await this.categoriesService.hardRemoveAsync(id);
   }
   @Delete(':id/hard')
-  softRemove(@Param('id') id: Types.ObjectId) {
-    return this.categoriesService.hardRemove(id);
+  async softRemoveAsync(@Param('id') id: Types.ObjectId) {
+    return await this.categoriesService.softRemoveAsync(id);
   }
 }

@@ -8,6 +8,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { LeanDocument } from 'mongoose';
 import { SearchPlayerDto } from './dto/search-player.dto';
 import { Status } from './enums/status.enum';
+import {Types} from 'mongoose';
 @Injectable()
 export class PlayersService {
   constructor(
@@ -149,8 +150,24 @@ export class PlayersService {
     return `This action updates a #${id} player`;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} player`;
+  async softRemoveAsync(id: Types.ObjectId) {
+    return await this.playerModel.findByIdAndUpdate(
+      id,
+      { isDeleted: true },
+      { new: true },
+    );
+  }
+
+  async hardRemoveAsync(id: Types.ObjectId) {
+    return await this.playerModel.findByIdAndRemove(id);
+  }
+
+  async restoreAsync(id: Types.ObjectId) {
+    return await this.playerModel.findByIdAndUpdate(
+      id,
+      { isDeleted: false },
+      { new: true },
+    );
   }
 
   private calculateBirthDateFromAge(age: number): Date {
