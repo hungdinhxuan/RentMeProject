@@ -52,5 +52,5 @@ export class RegisterPlayerDto {
   
   @ApiProperty()
   
-  services: Types.ObjectId[];
+  games: Types.ObjectId[];
 }

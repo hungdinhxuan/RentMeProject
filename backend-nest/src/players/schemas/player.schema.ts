@@ -1,11 +1,9 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types, PaginateModel } from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
-import * as mongooseDelete from 'mongoose-delete';
-import * as  aggregatePaginatefrom from "mongoose-aggregate-paginate-v2";
+
 import { Status } from '../enums/status.enum';
 import { Detail } from 'src/base/detail.base';
-
 
 export type PlayerDocument = Player & Document;
 export type PlayerModel<T extends Document> = PaginateModel<T>;
@@ -14,18 +12,26 @@ export type PlayerModel<T extends Document> = PaginateModel<T>;
   timestamps: true,
   versionKey: false,
 })
-export class Player extends Detail{
+export class Player extends Detail {
   @Prop({
-    type: String, default: '', maxlength: 255, required: true
+    type: String,
+    default: '',
+    maxlength: 255,
+    required: true,
   })
   public nickname: string;
   @Prop({
-    type: String, default: '', maxlength: 255, required: true
+    type: String,
+    default: '',
+    maxlength: 255,
+    required: true,
   })
   public shortDesc: string;
 
   @Prop({
-    type: String, default: '', maxlength: 2000
+    type: String,
+    default: '',
+    maxlength: 2000,
   })
   public longDesc: string;
 
@@ -47,16 +53,19 @@ export class Player extends Detail{
   @Prop({ type: [Number] })
   public timeCanReceive: number[];
 
-  @Prop({type: String})
+  @Prop({ type: String })
   public status: Status;
 
+  @Prop({
+    type: [
+      {
+        type: Types.ObjectId,
+        ref: 'Game',
+      },
+    ],
+  })
+  public games: Types.ObjectId[];
 }
 
-export const PlayerSchema = SchemaFactory.createForClass(Player)
-  .plugin(mongoosePaginate)
-  .plugin(aggregatePaginatefrom)
-  .plugin(mongooseDelete, {
-    deletedAt: true,
-    deletedBy: true,
-    overrideMethods: 'all',
-  });
+export const PlayerSchema =
+  SchemaFactory.createForClass(Player).plugin(mongoosePaginate);

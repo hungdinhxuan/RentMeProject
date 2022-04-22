@@ -9,4 +9,7 @@ export class AppService {
       throw new BadRequestException('Invalid file type.');
     });
   }
+  public static async SeedData(): Promise<void> {
+    
+  }
 }

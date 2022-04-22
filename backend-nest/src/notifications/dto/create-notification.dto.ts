@@ -1,16 +1,15 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsString, MaxLength } from "class-validator";
 
-export class CreateGameDto {
+export class CreateNotificationDto {
     @IsString()
     @IsNotEmpty()
-    @MaxLength(255)
+    @MaxLength(3000)
     @ApiProperty()
-    public name: string;
+    public content: string;
 
     @IsString()
     @IsNotEmpty()
-    @MaxLength(1000)
     @ApiProperty()
-    public description: string;
+    public userId: string;
 }

@@ -32,5 +32,5 @@ export class RegisterPlayerFormDto {
   pricePerHour: number;
 
   @ApiProperty()
-  services: Types.ObjectId[];
+  games: Types.ObjectId[];
 }

@@ -16,9 +16,9 @@ import { MailController } from './mail.controller';
 import { SendgridService } from './sendgrid.service';
 import { AppGateway } from './app.gateway';
 import { CloudinaryService } from './cloudinary.service';
-import { ServicesModule } from './services/services.module';
 import { CategoriesModule } from './categories/categories.module';
 import { GamesModule } from './games/games.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 
 @Module({
@@ -36,9 +36,9 @@ import { GamesModule } from './games/games.module';
     TransactionsModule,
     TradingsModule,
     TransfersModule,
-    ServicesModule,
     CategoriesModule,
-    GamesModule
+    GamesModule,
+    NotificationsModule
   ],
   controllers: [MailController],
   providers: [

@@ -134,14 +134,9 @@ export class PlayersController {
     }
   }
 
-  @Get()
-  findAll() {
-    return this.playersService.findAll();
-  }
-
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updatePlayerDto: UpdatePlayerDto) {
-    return this.playersService.update(+id, updatePlayerDto);
+  async update(@Param('id') id: Types.ObjectId, @Body() updatePlayerDto: UpdatePlayerDto) {
+    return await this.playersService.updateAsync(id, updatePlayerDto);
   }
 
   @Patch(':id/restore')
