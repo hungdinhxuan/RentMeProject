@@ -1,6 +1,5 @@
 import { RegisterPlayerDto } from './dto/register-player.dto';
-import { PlayerDocument, PlayerModel } from './schemas/player.schema';
-import { Player } from './entities/player.entity';
+import { Player, PlayerDocument, PlayerModel } from './schemas/player.schema';
 import { Injectable } from '@nestjs/common';
 import { UpdatePlayerDto } from './dto/update-player.dto';
 import { InjectModel } from '@nestjs/mongoose';

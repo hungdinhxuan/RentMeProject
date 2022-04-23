@@ -14,10 +14,6 @@ export class NotificationsController {
     return await this.notificationService.createAsync(createNotificationDto);
   }
 
-  @Get()
-  findAll() {
-    return this.notificationService.findAll();
-  }
 
   @Get('search')
   @UsePipes(

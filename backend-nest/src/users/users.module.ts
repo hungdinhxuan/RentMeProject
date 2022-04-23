@@ -1,3 +1,4 @@
+import { UsersGateway } from './users.gateway';
 import {
   IsEmailAlreadyExistConstraint,
   IsUserAlreadyExistConstraint,
@@ -21,6 +22,7 @@ import { User, UserSchema } from './schemas/user.schema';
     IsValidRoleConstraint,
     IsValidTypeAccountConstraint,
     UsersService,
+    UsersGateway
   ],
   exports: [UsersService],
 })

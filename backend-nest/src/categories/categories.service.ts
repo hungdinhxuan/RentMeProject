@@ -1,9 +1,8 @@
 import { SearchCategoryDto } from './dto/search-category.dto';
-import { Category } from './entities/category.entity';
 import { Injectable } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
-import { CategoryDocument, CategoryModel } from './schemas/category.schema';
+import { Category, CategoryDocument, CategoryModel } from './schemas/category.schema';
 import { InjectModel } from '@nestjs/mongoose';
 import { PaginateResult } from 'mongoose';
 import { Types } from 'mongoose';

@@ -61,8 +61,24 @@ export class UsersService {
     return await this.userModel.findOne(obj).lean().exec();
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async updateAsync(id: Types.ObjectId, updateUserDto: UpdateUserDto) {
+    return await this.userModel.findByIdAndUpdate(id, updateUserDto, {
+      new: true,
+    });
+  }
+
+  async findOneAndUpdateAsync(obj: object, updateUserDto: UpdateUserDto) {
+    return await this.userModel.findOneAndUpdate(obj, updateUserDto, {
+      new: true,
+    });
+  }
+
+  async findOneByUsernameAndUpdateStatus(username: string, isOnline: boolean) {
+    return await this.userModel.findOneAndUpdate(
+      { username },
+      { isOnline },
+      { new: true },
+    );
   }
 
   async updatePassword(id: Types.ObjectId, newPassword: string) {

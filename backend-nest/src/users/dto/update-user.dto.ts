@@ -27,5 +27,5 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
   })
   @IsString()
   @MaxLength(500)
-  public avatar: string;   
+  public avatar: string;
 }
