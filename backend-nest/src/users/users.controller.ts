@@ -16,7 +16,7 @@ import { UsersService } from './users.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { Types, PaginateResult } from 'mongoose';
-import { User } from './schemas/user.schema';
+import { User } from './user.schema';
 import { Role } from './enums/role';
 import { Auth } from 'src/auth/auth.decorator';
 import { LoggingInterceptor } from 'src/interceptors/logging.interceptor';

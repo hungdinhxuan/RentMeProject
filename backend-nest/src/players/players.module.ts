@@ -3,7 +3,7 @@ import { Module } from '@nestjs/common';
 import { PlayersService } from './players.service';
 import { PlayersController } from './players.controller';
 import { MongooseModule } from '@nestjs/mongoose';
-import { PlayerSchema, Player } from './schemas/player.schema';
+import { PlayerSchema, Player } from './player.schema';
 import { CloudinaryService } from 'src/cloudinary.service';
 
 

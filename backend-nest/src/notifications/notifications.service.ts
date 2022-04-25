@@ -2,7 +2,7 @@ import {
   NotificationDocument,
   NotificationModel,
   Notification
-} from './schemas/Notification.schema';
+} from './notification.schema';
 import { Injectable } from '@nestjs/common';
 import { CreateNotificationDto } from './dto/create-Notification.dto';
 import { UpdateNotificationDto } from './dto/update-Notification.dto';

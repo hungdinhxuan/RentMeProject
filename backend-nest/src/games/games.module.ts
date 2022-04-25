@@ -1,4 +1,4 @@
-import { Game, GameSchema } from './schemas/game.schema';
+import { Game, GameSchema } from './game.schema';
 import { Module } from '@nestjs/common';
 import { GamesService } from './games.service';
 import { GamesController } from './games.controller';

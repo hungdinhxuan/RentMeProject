@@ -1,4 +1,4 @@
-import { NotificationSchema, Notification } from './schemas/notification.schema';
+import { NotificationSchema, Notification } from './notification.schema';
 import { Module } from '@nestjs/common';
 import { NotificationService } from './notifications.service';
 import { NotificationsController } from './notifications.controller';

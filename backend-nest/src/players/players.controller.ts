@@ -1,5 +1,5 @@
 import { PaginateResult } from 'mongoose';
-import { Player, PlayerDocument } from './schemas/player.schema';
+import { Player, PlayerDocument } from './player.schema';
 import { RegisterPlayerFormDto } from './dto/register-player-form.dto';
 import {
   Controller,

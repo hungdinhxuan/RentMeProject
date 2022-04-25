@@ -2,7 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types, PaginateModel } from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 
-import { Status } from '../enums/status.enum';
+import { Status } from './enums/status.enum';
 import { Detail } from 'src/base/detail.base';
 
 export type PlayerDocument = Player & Document;

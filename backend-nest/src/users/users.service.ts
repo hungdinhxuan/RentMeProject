@@ -5,7 +5,7 @@ import BcryptHelper from 'src/utils/bcrypt.util';
 import { CreateUserDto } from './dto/create-user.dto';
 import { SearchUserDto } from './dto/search-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User, UserDocument, UserModel } from './schemas/user.schema';
+import { User, UserDocument, UserModel } from './user.schema';
 import { LeanDocument } from 'mongoose';
 
 @Injectable()

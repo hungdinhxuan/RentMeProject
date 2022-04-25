@@ -19,6 +19,8 @@ import { CloudinaryService } from './cloudinary.service';
 import { CategoriesModule } from './categories/categories.module';
 import { GamesModule } from './games/games.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { PostsModule } from './posts/posts.module';
+import { CommentsModule } from './comments/comments.module';
 
 
 
@@ -39,7 +41,9 @@ import { NotificationsModule } from './notifications/notifications.module';
     TransfersModule,
     CategoriesModule,
     GamesModule,
-    NotificationsModule
+    NotificationsModule,
+    PostsModule,
+    CommentsModule
   ],
   controllers: [MailController],
   providers: [

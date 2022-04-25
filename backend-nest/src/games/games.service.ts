@@ -3,7 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { CreateGameDto } from './dto/create-game.dto';
 import { SearchGameDto } from './dto/search-game.dto';
 import { UpdateGameDto } from './dto/update-game.dto';
-import { Game, GameDocument, GameModel } from './schemas/game.schema';
+import { Game, GameDocument, GameModel } from './game.schema';
 import {PaginateResult} from 'mongoose';
 import {Types} from 'mongoose';
 

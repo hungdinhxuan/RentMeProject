@@ -1,4 +1,4 @@
-import { Detail } from './../../base/detail.base';
+import { Detail } from '../base/detail.base';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types, PaginateModel } from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';

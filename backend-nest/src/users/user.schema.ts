@@ -1,14 +1,14 @@
-import { Detail } from './../../base/detail.base';
+import { Detail } from '../base/detail.base';
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import { Document, Types, PaginateModel } from 'mongoose';
-import { Gender } from '../enums/gender.enum';
-import { Province } from '../enums/province.enum';
-import { Role } from '../enums/role';
-import { TypeAccount } from '../enums/type-account.enum';
+import { Gender } from './enums/gender.enum';
+import { Province } from './enums/province.enum';
+import { Role } from './enums/role';
+import { TypeAccount } from './enums/type-account.enum';
 
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 import * as mongooseDelete from 'mongoose-delete';
-import { Status } from '../enums/status.enum';
+import { Status } from './enums/status.enum';
 
 export type UserDocument = User & Document;
 export type UserModel<T extends Document> = PaginateModel<T>;
@@ -51,9 +51,6 @@ export class User extends Detail{
     required: true,
   })
   public avatar: string;
-
-  @Prop({ type: Number, default: 0 })
-  public balance: number;
 
   @Prop({ type: String, default: '', maxlength: 200 })
   public nickname: string;
