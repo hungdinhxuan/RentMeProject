@@ -37,6 +37,7 @@ export class AuthService {
 
   async verify(token: string) {
     try {
+      token = token.replace('Bearer ', '');
       return await this.jwtService.verifyAsync(token);
     } catch (error) {
       return null;

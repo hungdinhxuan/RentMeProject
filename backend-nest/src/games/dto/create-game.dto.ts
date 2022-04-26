@@ -1,3 +1,4 @@
+import { Types } from 'mongoose';
 import { ApiProperty } from "@nestjs/swagger";
 import { IsNotEmpty, IsString, MaxLength } from "class-validator";
 
@@ -13,4 +14,7 @@ export class CreateGameDto {
     @MaxLength(1000)
     @ApiProperty()
     public description: string;
+
+    @ApiProperty()
+    public categories : Types.ObjectId [];
 }

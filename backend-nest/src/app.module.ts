@@ -1,3 +1,4 @@
+import { UsersGateway } from './users/users.gateway';
 import { RedisService } from './redis.service';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { AppService } from './app.service';
@@ -51,7 +52,7 @@ import { CommentsModule } from './comments/comments.module';
     SendgridService,
     RedisService,
     AppGateway,
-    CloudinaryService,
+    CloudinaryService
   ],
 })
 export class AppModule implements NestModule {

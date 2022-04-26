@@ -2,7 +2,6 @@ import { Role } from 'src/users/enums/role';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth/auth.service';
 import {
-  SubscribeMessage,
   WebSocketGateway,
   OnGatewayInit,
   WebSocketServer,
@@ -31,54 +30,78 @@ export class AppGateway
   @WebSocketServer() server: Server;
   private logger: Logger = new Logger('AppGateway');
 
-  @SubscribeMessage('msgToServer')
-  handleMessage(client: Socket, payload: string): void {
-    this.server.emit('msgToClient', payload);
-  }
 
   afterInit(server: Server) {
     this.logger.log('Init');
   }
 
-  handleDisconnect(client: Socket) {
+ 
+  async handleDisconnect(client: Socket) {
     this.logger.log(`Client disconnected: ${client.id}`);
+    await this.removeUserClientAsync(
+      client.data.username,
+      client.id,
+      client.data.role,
+      client,
+    );
   }
 
-  async handleConnection(@ConnectedSocket()  client: Socket, ...args: any[]) {
+  async handleConnection(@ConnectedSocket() client: Socket, ...args: any[]) {
     this.logger.log(`Client connected: ${client.id}`);
     const payload = await this.authService.verify(
       client.handshake.headers.authorization,
     );
+
     if (!payload) {
       client.disconnect(true);
-      client.data.username =  payload.username;
+      return;
     }
+    const { username, role } = payload;
+    client.data.username = username;
+    client.data.role = role;
+    client.data.isAuthenticated = true;
+    await this.addUserClientAsync(username, client.id, role, client);
   }
 
   private async addUserClientAsync(
     username: string,
     socketId: string,
     role: number,
-    io: any,
+    io: Socket,
   ): Promise<void> {
-    const userSocketIdObj: object = JSON.parse(
+    let userSocketIdObj: object = JSON.parse(
       await this.redisService.get('userSocketIdObj'),
     );
+    if (!userSocketIdObj) {
+      userSocketIdObj = {};
+    }
     if (!userSocketIdObj.hasOwnProperty(username)) {
-      userSocketIdObj[role] = socketId;
       //when user is joining first time
+      console.log(socketId);
       userSocketIdObj[username] = new Set([socketId]);
+      console.log(JSON.stringify(userSocketIdObj));
       await this.usersService.findOneByUsernameAndUpdateStatus(username, true);
-      this.logger.verbose(`${username} is online with role ${role}`);
+
       if (role === Role.PLAYER) {
         console.log('emitted');
         io.emit('refreshPlayerList');
-      } else {
-        userSocketIdObj[username].add(socketId);
       }
       await this.redisService.set(
         'userSocketIdObj',
-        JSON.stringify(userSocketIdObj),
+        JSON.stringify(userSocketIdObj, (_key, value) =>
+          value instanceof Set ? [...value] : value,
+        ),
+      );
+    } else {
+      userSocketIdObj[username] = new Set([
+        ...userSocketIdObj[username],
+        socketId,
+      ]);
+      await this.redisService.set(
+        'userSocketIdObj',
+        JSON.stringify(userSocketIdObj, (_key, value) =>
+          value instanceof Set ? [...value] : value,
+        ),
       );
     }
   }
@@ -87,14 +110,19 @@ export class AppGateway
     username: string,
     socketId: string,
     role: number,
-    io: any,
+    io: Socket,
     event: string = null,
   ) {
     const userSocketIdObj: object = JSON.parse(
       await this.redisService.get('userSocketIdObj'),
     );
-    if (userSocketIdObj.hasOwnProperty(username)) {
+    if (userSocketIdObj && userSocketIdObj.hasOwnProperty(username)) {
+      userSocketIdObj[username] = new Set(userSocketIdObj[username]);
       let userSocketIdSet = userSocketIdObj[username];
+      console.log(
+        '🚀 ~ file: app.gateway.ts ~ line 116 ~ userSocketIdSet',
+        userSocketIdSet,
+      );
       userSocketIdSet.delete(socketId);
       //if there are no clients for a user, remove that user from online list(Obj) and set status to offline;
       if (userSocketIdSet.size == 0) {
@@ -133,6 +161,12 @@ export class AppGateway
           }
         }
       }
+      await this.redisService.set(
+        'userSocketIdObj',
+        JSON.stringify(userSocketIdObj, (_key, value) =>
+          value instanceof Set ? [...value] : value,
+        ),
+      );
     }
   }
 }
