@@ -11,6 +11,7 @@ export class RedisService {
       url: this.configService.get<string>('REDIS_URL'),
     });
     this.connect();
+    this.clean();
   }
 
   public getRedisClient() {
@@ -39,5 +40,9 @@ export class RedisService {
     } catch (error) {
       console.log('🚀 ~ file: redis.util.ts ~ line 12 ~ error', error);
     }
+  }
+
+  async clean() {
+    await this.redisClient.flushAll();
   }
 }

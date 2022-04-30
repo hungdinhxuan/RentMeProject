@@ -27,11 +27,6 @@ export class CategoriesController {
     return await this.categoriesService.createAsync(createCategoryDto);
   }
 
-  @Get()
-  findAll() {
-    return this.categoriesService.findAll();
-  }
-
   @Get('search')
   @UsePipes(
     new ValidationPipe({

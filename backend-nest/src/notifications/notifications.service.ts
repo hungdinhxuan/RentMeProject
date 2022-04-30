@@ -4,8 +4,8 @@ import {
   Notification
 } from './notification.schema';
 import { Injectable } from '@nestjs/common';
-import { CreateNotificationDto } from './dto/create-Notification.dto';
-import { UpdateNotificationDto } from './dto/update-Notification.dto';
+import { CreateNotificationDto } from './dto/create-notification.dto';
+import { UpdateNotificationDto } from './dto/update-notification.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
 import { SearchNotificationDto } from './dto/search-notification.dto';
