@@ -38,10 +38,6 @@ export class Post extends Detail{
   })
   public comments: Types.ObjectId[];
 
-  @Prop({
-    type: String, default: '', maxlength: 1000, required: false
-  })
-  public description: string;
 
   @Prop({ type: String, default: '', maxlength: 255, required: false})
   public backgroundUrl: string;
