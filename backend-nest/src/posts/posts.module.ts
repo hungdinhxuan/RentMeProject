@@ -1,3 +1,4 @@
+import { CommentsModule } from './../comments/comments.module';
 import { Module } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { PostsController } from './posts.controller';
@@ -7,6 +8,7 @@ import { PostSchema, Post } from './post.chema';
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: Post.name, schema: PostSchema }]),
+    CommentsModule,
   ],
   controllers: [PostsController],
   providers: [PostsService],

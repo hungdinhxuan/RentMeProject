@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, Query } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, Query, HttpException, BadRequestException } from '@nestjs/common';
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
@@ -70,5 +70,18 @@ export class CommentsController {
   @Delete(':id/hard')
   async softRemoveAsync(@Param('id') id: Types.ObjectId) {
     return await this.commentsService.softRemoveAsync(id);
+  }
+
+  @Patch(':id/like')
+  async likeCommentAsync(@Param('id') id: Types.ObjectId, @Body() userId: Types.ObjectId) {
+    if(await this.commentsService.IsCommentLikedAsync(id, userId)){
+      throw new BadRequestException('You already liked this comment');
+    }
+    return await this.commentsService.likeCommentAsync(id, userId);
+  }
+
+  @Patch(':id/unlike')
+  async unlikeCommentAsync(@Param('id') id: Types.ObjectId, @Body() userId: Types.ObjectId) {
+    return await this.commentsService.unlikeCommentAsync(id, userId);
   }
 }

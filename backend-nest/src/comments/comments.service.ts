@@ -4,8 +4,7 @@ import { CommentDocument, CommentModel, Comment } from './comment.schema';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import SearchCommentDto from './dto/search-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
-import {PaginateResult, Types} from 'mongoose';
-
+import { PaginateResult, Types } from 'mongoose';
 
 @Injectable()
 export class CommentsService {
@@ -13,7 +12,7 @@ export class CommentsService {
     @InjectModel(Comment.name)
     private commentModel: CommentModel<CommentDocument>,
   ) {}
-  
+
   async createAsync(createCommentDto: CreateCommentDto) {
     return await this.commentModel.create(createCommentDto);
   }
@@ -69,5 +68,26 @@ export class CommentsService {
       { isDeleted: false },
       { new: true },
     );
+  }
+
+  async likeCommentAsync(id: Types.ObjectId, userId: Types.ObjectId) {
+    return await this.commentModel.findByIdAndUpdate(
+      id,
+      { $addToSet: { likes: userId } },
+      { new: true },
+    );
+  }
+
+  async unlikeCommentAsync(id: Types.ObjectId, userId: Types.ObjectId) {
+    return await this.commentModel.findByIdAndUpdate(
+      id,
+      { $pull: { likes: userId } },
+      { new: true },
+    );
+  }
+
+  async IsCommentLikedAsync(id: Types.ObjectId, userId: Types.ObjectId) {
+    const comment = await this.commentModel.findById(id);
+    return comment.likes.includes(userId);
   }
 }

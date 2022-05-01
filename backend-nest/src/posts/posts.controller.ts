@@ -1,3 +1,4 @@
+import { CommentsService } from './../comments/comments.service';
 import { Controller, Get, Post, Body, Patch, Param, Delete, UsePipes, ValidationPipe, Query } from '@nestjs/common';
 import { PostsService } from './posts.service';
 import { CreatePostDto } from './dto/create-post.dto';
@@ -9,7 +10,9 @@ import { ApiTags } from '@nestjs/swagger';
 @ApiTags('posts')
 @Controller('api/v1/posts')
 export class PostsController {
-  constructor(private readonly postsService: PostsService) {}
+  constructor(private readonly postsService: PostsService, 
+    private readonly commentsService: CommentsService
+    ) {}
 
   @Post()
   async createAsync(@Body() createPostDto: CreatePostDto) {
