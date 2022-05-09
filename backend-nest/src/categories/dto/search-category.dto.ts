@@ -1,5 +1,6 @@
+import { SearchBase } from '../../base/search.base';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { SearchBase } from 'src/base/search.base';
+
 
 export class SearchCategoryDto extends SearchBase {
   
