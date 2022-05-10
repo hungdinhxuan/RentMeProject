@@ -15,7 +15,9 @@ import {
   IsValidTypeAccount,
 } from '../user.validator';
 
-export class CreateUserDto {
+import { CreateBase } from '../../base/dto/create.base.dto';
+
+export class CreateUserDto  {
   @ApiProperty()
   @IsNotEmpty()
   @IsString()

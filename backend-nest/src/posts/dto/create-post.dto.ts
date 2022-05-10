@@ -1,9 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-export class CreatePostDto  {
-    @ApiProperty()
+import {CreateBase} from '../../base/dto/create.base.dto';
+export class CreatePostDto extends CreateBase {
+    @ApiProperty({
+        example: 'test'
+    })
     public content: string;
-    @ApiProperty()
-    public createdById: string;
-    @ApiProperty()
-    public createdBy : string;
 }

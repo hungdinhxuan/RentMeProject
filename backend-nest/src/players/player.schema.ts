@@ -3,7 +3,7 @@ import { Document, Types, PaginateModel } from 'mongoose';
 import * as mongoosePaginate from 'mongoose-paginate-v2';
 
 import { Status } from './enums/status.enum';
-import { Detail } from 'src/base/detail.base';
+import { Detail } from 'src/base/schema/detail.base.schema';
 
 export type PlayerDocument = Player & Document;
 export type PlayerModel<T extends Document> = PaginateModel<T>;

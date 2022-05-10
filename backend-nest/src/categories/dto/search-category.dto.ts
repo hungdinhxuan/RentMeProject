@@ -1,4 +1,4 @@
-import { SearchBase } from '../../base/search.base';
+import { SearchBase } from '../../base/schema/search.base.schema';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 
