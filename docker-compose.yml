@@ -5,7 +5,6 @@ services:
     build: .
     ports:
       - 3000:80
-      # - 443:443
     restart: always
     env_file: ./.env.production
   backend:
